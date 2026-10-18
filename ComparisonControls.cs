@@ -1,0 +1,176 @@
+namespace FM26SimpleEditor;
+
+public sealed class ComparisonPanel : UserControl
+{
+    private readonly ComboBox source = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 175 };
+    private readonly TextBox query = new() { Width = 190, PlaceholderText = "Cerca nome o ID…" };
+    private readonly SearchablePlayerPicker candidates = new() { Width = 320 };
+    private readonly CheckBox raw = new() { Text = "Valori grezzi", AutoSize = true };
+    private readonly CheckBox hidden = new() { Text = "Attributi nascosti", AutoSize = true };
+    private readonly CheckBox showPitch = new() { Text = "Mostra campo", Checked = true, AutoSize = true };
+    private readonly Button remove = new() { Text = "Rimuovi dall'elenco", AutoSize = true };
+    private readonly Button clear = new() { Text = "Svuota elenco", AutoSize = true };
+    private readonly Label info = new() { AutoSize = true, ForeColor = Color.DimGray, MaximumSize = new Size(1150, 0) };
+    private readonly Label primaryName = new() { AutoSize = true, Font = new Font("Segoe UI", 14, FontStyle.Bold) };
+    private readonly Label otherName = new() { AutoSize = true, Font = new Font("Segoe UI", 14, FontStyle.Bold) };
+    private readonly Label primaryMeta = new() { AutoSize = true };
+    private readonly Label otherMeta = new() { AutoSize = true };
+    private readonly StarControl primaryStars = new();
+    private readonly StarControl otherStars = new();
+    private readonly StarControl primaryPotential = new();
+    private readonly StarControl otherPotential = new();
+    private readonly PitchControl primaryPitch = new() { MinimumSize = new Size(240, 210) };
+    private readonly PitchControl otherPitch = new() { MinimumSize = new Size(240, 210) };
+    private readonly DataGridView grid = new() { Dock = DockStyle.Fill, ReadOnly = true, AllowUserToAddRows = false, AllowUserToDeleteRows = false, RowHeadersVisible = false, ScrollBars = ScrollBars.Both, BackgroundColor = SystemColors.Window, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill, AllowUserToResizeRows = false };
+    private readonly Dictionary<uint, PlayerDetail> cache = new();
+    private Func<uint, Task<PlayerDetail>>? loader;
+    private IReadOnlyList<PlayerRow> catalog = [];
+    private IReadOnlySet<uint> pool = new HashSet<uint>();
+    private PlayerDetail? primary;
+    private PlayerDetail? other;
+    private int currentCa, currentPa;
+    private bool italian = true, dirty, updating;
+    private int version;
+    private uint? preferredUid;
+    public event Action<uint>? RemoveRequested;
+    public event Action? ClearRequested;
+
+    public ComparisonPanel()
+    {
+        Dock = DockStyle.Fill;
+        var root = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(12), ColumnCount = 1, RowCount = 5 };
+        root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.Absolute, 320)); root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        var toolbar = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true };
+        source.Items.AddRange(["Stessa squadra", "Elenco di confronto"]); source.SelectedIndex = 0;
+        toolbar.Controls.AddRange([source, query, candidates, remove, clear, showPitch, raw, hidden]);
+        var headers = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 2 };
+        headers.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); headers.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        headers.Controls.Add(Header(primaryName, primaryMeta, primaryStars, primaryPotential), 0, 0);
+        headers.Controls.Add(Header(otherName, otherMeta, otherStars, otherPotential), 1, 0);
+        var fields = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2 };
+        fields.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); fields.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        fields.Controls.Add(primaryPitch, 0, 0); fields.Controls.Add(otherPitch, 1, 0);
+        showPitch.CheckedChanged += (_, _) => { fields.Visible = showPitch.Checked; root.RowStyles[3].Height = showPitch.Checked ? 320 * DeviceDpi / 96f : 0; };
+        root.Controls.Add(toolbar, 0, 0); root.Controls.Add(info, 0, 1); root.Controls.Add(headers, 0, 2); root.Controls.Add(fields, 0, 3); root.Controls.Add(grid, 0, 4);
+        void FitFields() { root.RowStyles[3].Height = showPitch.Checked ? Math.Clamp(ClientSize.Height * .39f, 160 * DeviceDpi / 96f, 340 * DeviceDpi / 96f) : 0; }
+        SizeChanged += (_, _) => FitFields(); showPitch.CheckedChanged += (_, _) => FitFields();
+        primaryPitch.MinimumSize = otherPitch.MinimumSize = Size.Empty;
+        Controls.Add(root);
+        source.SelectedIndexChanged += (_, _) => RebuildPlayerChoices(); query.TextChanged += (_, _) => RebuildPlayerChoices();
+        candidates.SelectedIndexChanged += async (_, _) => { if (!updating) await LoadReference(); };
+        raw.CheckedChanged += (_, _) => Render(); hidden.CheckedChanged += (_, _) => Render();
+        remove.Click += (_, _) => { if (candidates.SelectedItem is PlayerChoice choice) RemoveRequested?.Invoke(choice.Uid); };
+        clear.Click += (_, _) => ClearRequested?.Invoke();
+    }
+
+    private static Control Header(Label name, Label meta, StarControl stars, StarControl potential)
+    {
+        var panel = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false };
+        var ratings = new FlowLayoutPanel { AutoSize = true, WrapContents = false };
+        stars.Width = potential.Width = 145;
+        ratings.Controls.AddRange([new Label { Text = "CA", AutoSize = true },stars,new Label { Text = "PA", AutoSize = true },potential]);
+        panel.Controls.AddRange([name, meta, ratings]); return panel;
+    }
+
+    public void ClearCache() { ++version; cache.Clear(); other = null; }
+    public void SetContext(PlayerDetail? current, int ca, int pa, bool hasEdits, IReadOnlyList<PlayerRow> players,
+        IReadOnlySet<uint> comparisonPool, bool useItalian, Func<uint, Task<PlayerDetail>> load)
+    {
+        primary = current; currentCa = ca; currentPa = pa; dirty = hasEdits; catalog = players; pool = comparisonPool;
+        italian = useItalian; loader = load;
+        RebuildPlayerChoices();
+    }
+
+    public void PreferReference(uint uid)
+    {
+        preferredUid = uid; updating = true; query.Clear(); source.SelectedIndex = 1; updating = false; RebuildPlayerChoices();
+    }
+
+    private async void RebuildPlayerChoices()
+    {
+        if (updating) return;
+        ++version;
+        uint? selected = preferredUid ?? (candidates.SelectedItem as PlayerChoice)?.Uid; preferredUid = null;
+        updating = true;
+        if (primary is null) candidates.SetItems([],null);
+        if (primary is not null)
+        {
+            var p = primary.Player;
+            var text = query.Text.Trim();
+            var choices = catalog.Where(row => row.Uid != p.Uid &&
+                (source.SelectedIndex == 1 ? pool.Contains(row.Uid) : p.TeamId.HasValue ? row.TeamId == p.TeamId : p.ClubUid.HasValue && row.ClubUid == p.ClubUid) &&
+                (text.Length == 0 || row.Name.Contains(text, StringComparison.OrdinalIgnoreCase) || row.Uid.ToString().Contains(text) || (row.Id?.ToString() ?? "").Contains(text)))
+                .OrderBy(row => PositionScheme.Rank(row.MainPosition)).ThenBy(row => row.Name, Labels.Comparer(italian)).ToList();
+            candidates.SetItems(choices.Select(row => new PlayerChoice(row.Uid,
+                $"{Labels.PositionCode(row.MainPosition, italian)} · {row.Name} · {row.Team}",
+                $"{row.Name} {row.Team} {row.Id} {row.Uid}")).ToList(),selected);
+        }
+        updating = false;
+        await LoadReference();
+    }
+
+    private async Task LoadReference()
+    {
+        int request = ++version;
+        other = null; Render();
+        if (candidates.SelectedItem is not PlayerChoice choice || loader is null) return;
+        otherName.Text = "Lettura del giocatore selezionato…";
+        try
+        {
+            if (!cache.TryGetValue(choice.Uid, out var loaded)) loaded = await loader(choice.Uid);
+            if (request != version || IsDisposed) return;
+            cache[choice.Uid] = loaded; other = loaded; Render();
+        }
+        catch (Exception exc) { if (request == version && !IsDisposed) info.Text = "Confronto non disponibile: " + exc.Message; }
+    }
+
+    private void Render()
+    {
+        remove.Enabled = candidates.SelectedItem is PlayerChoice entry && pool.Contains(entry.Uid);
+        clear.Enabled = pool.Count > 0;
+        grid.Columns.Clear(); grid.Rows.Clear();
+        primaryName.Text = primary?.Player.Name ?? "Apri un giocatore da Ricerca";
+        otherName.Text = other?.Player.Name ?? "Scegli un giocatore da confrontare";
+        primaryMeta.Text = primary is null ? "" : $"{primary.Player.Team} · CA {currentCa} · PA {(currentPa >= 0 ? currentPa.ToString() : "N/D")}";
+        otherMeta.Text = other is null ? "" : $"{other.Player.Team} · CA {other.Player.Ca} · PA {other.Player.Pa?.ToString() ?? "N/D"}";
+        List<PlayerRow> squad = primary is null ? [] : catalog.Where(row => row.Ca > 0 && (primary.Player.TeamId.HasValue ? row.TeamId == primary.Player.TeamId : primary.Player.ClubUid.HasValue && row.ClubUid == primary.Player.ClubUid)).ToList();
+        double? mean = squad.Count >= 3 ? squad.Average(row => row.Ca) : null;
+        primaryStars.Rating = PreviewMath.Stars(currentCa, mean); otherStars.Rating = PreviewMath.Stars(other?.Player.Ca, mean);
+        primaryPotential.Rating = PreviewMath.Stars(currentPa > 0 ? currentPa : null,mean); otherPotential.Rating = PreviewMath.Stars(other?.Player.Pa,mean);
+        info.Text = $"{pool.Count} giocatori nell'elenco · {(dirty ? "A include modifiche non salvate" : "A: giocatore aperto")} · B: valori del file. Stelle stimate rispetto alla squadra di A. Δ = A − B. " + ValuePalette.Legend;
+        primaryPitch.SetPositions(primary?.Positions ?? [], italian); otherPitch.SetPositions(other?.Positions ?? [], italian);
+        if (primary is null || other is null) return;
+        int maximum = raw.Checked ? 100 : 20;
+        grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = italian ? "Attributo" : "Attribute", Width = 260, SortMode = DataGridViewColumnSortMode.NotSortable });
+        grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = italian ? "Gruppo" : "Group", Width = 125, SortMode = DataGridViewColumnSortMode.NotSortable });
+        foreach (var title in new[] { "A · " + primary.Player.Name, "B · " + other.Player.Name })
+            grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = title, Width = 230, CellTemplate = new ValueBarCell(maximum), DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight }, SortMode = DataGridViewColumnSortMode.NotSortable });
+        grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Δ A − B", Width = 85, DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight }, SortMode = DataGridViewColumnSortMode.NotSortable });
+        grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = italian ? "Migliore" : "Winner", Width = 150, SortMode = DataGridViewColumnSortMode.NotSortable });
+        float[] weights = [25, 13, 19, 19, 9, 15];
+        for (int i = 0; i < grid.Columns.Count; i++) { grid.Columns[i].FillWeight = weights[i]; grid.Columns[i].MinimumWidth = i == 0 ? 130 : i == 4 ? 65 : 90; }
+        string Winner(int delta) => delta > 0 ? "A · " + primary.Player.Name : delta < 0 ? "B · " + other.Player.Name : italian ? "Pari" : "Equal";
+        info.Text += $"   CA: {Winner(currentCa-other.Player.Ca)} ({currentCa-other.Player.Ca:+0;-0;0})";
+        if (currentPa > 0 && other.Player.Pa is > 0) info.Text += $" · PA: {Winner(currentPa-other.Player.Pa.Value)} ({currentPa-other.Player.Pa.Value:+0;-0;0})";
+        grid.RowTemplate.Height = 41;
+        var otherFields = other.Attributes.ToDictionary(field => field.Key);
+        var order = new[] { "technical", "mental", "physical", "goalkeeping", "feet", "hidden" };
+        foreach (var group in order)
+        foreach (var field in Labels.Alphabetical(primary.Attributes.Where(field => Labels.Group(field.Key) == group && (hidden.Checked || group != "hidden")), italian))
+        {
+            if (!otherFields.TryGetValue(field.Key, out var right)) continue;
+            int a = raw.Checked ? field.Value : PreviewMath.Attribute20(field.Value);
+            int b = raw.Checked ? right.Value : PreviewMath.Attribute20(right.Value);
+            int row = grid.Rows.Add(Labels.Attribute(field.Key, italian), Labels.GroupTitle(group, italian), a, b, a-b);
+            grid.Rows[row].Tag = field.Key;
+            int qualityDelta = field.Key is "injury_proneness" or "dirtiness" ? b-a : a-b;
+            grid.Rows[row].Cells[5].Value = Winner(qualityDelta);
+            grid.Rows[row].Cells[5].Style.ForeColor = qualityDelta > 0 ? Color.SeaGreen : qualityDelta < 0 ? Color.Firebrick : Color.DimGray;
+            grid.Rows[row].Cells[4].Style.ForeColor = qualityDelta > 0 ? Color.SeaGreen : qualityDelta < 0 ? Color.Firebrick : Color.DimGray;
+            grid.Rows[row].Cells[4].ToolTipText = $"Differenza grezza: {field.Value-right.Value:+0;-0;0}";
+        }
+        grid.ClearSelection();
+    }
+}

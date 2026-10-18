@@ -1,0 +1,5 @@
+bin/
+obj/
+__pycache__/
+.vs/
+/FM26SimpleEditor.csproj.user

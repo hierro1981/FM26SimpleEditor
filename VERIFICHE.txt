@@ -1,0 +1,112 @@
+Versione 9 — avanzamento e ricerca nel menu di confronto
+- Sintassi degli 11 file C# verificata; nessuna compilazione/esecuzione Windows
+  disponibile in questo ambiente. Popup, tastiera e DPI da provare su Windows.
+- Protocollo con eventi JSON separati dalla risposta finale, percentuali
+  monotone, intervalli annidati, contatori e completamento verificati.
+- Progressi opzionali: le richieste senza eventi continuano a funzionare.
+- Protocollo reale su 76.726 giocatori: apertura completata con avanzamento
+  monotono e contatore finale completo. Salvataggio, compressione a blocchi,
+  scrittura, verifica completa delle sezioni e riapertura tutti riusciti.
+- Contatori di byte e sezioni raggiungono il totale anche quando gli eventi
+  intermedi sono limitati per frequenza. Nessun 100% dopo dati non validi.
+- Tecnica modificata nella copia, campioni storici invariati, hash SHA-256
+  dell'originale invariato. Richiesta successiva ancora sincronizzata.
+- Ricerca popup: filtro locale su etichetta e testo di ricerca comprendente
+  nome, squadra e ID; scelta separata dalla voce evidenziata, confermata solo
+  da clic/Invio. Ordine originale per posizione preservato.
+
+Versione 8 — storico interno e selezione multipla
+- Lettore integrato confrontato con 14 sequenze giocatore/salvataggio reali:
+  stesso conteggio e stessi 47 attributi dell'estrattore indipendente.
+- 31 campioni di D'Urso dal file attuale: tutti e 47 i campi coincidono
+  con l'estrazione separata; sequenza 1..31, date non assegnate, CA/PA null.
+- Esattamente i 47 attributi visibili delle etichette; esclusi piedi/nascosti.
+- Rifiuto di blocchi troncati, candidati multipli, marcatore o valore non
+  valido, singolo campione non verificabile, build non supportata.
+- Confine del buffer verificato con un blocco che termina all'ultimo byte.
+- Ripetute verifiche C# di sintassi (10 file), ricerca e ordinamento globali
+  su 76.486 giocatori, storico da due file e identificazione dei giocatori.
+- Protocollo JSON reale verificato dall'apertura ai 31 campioni interni.
+- Salvataggio di una nuova copia dopo incremento di Tecnica: nuovo valore
+  attuale confermato, tutti i 31 campioni storici e i loro 47 campi invariati.
+  Hash SHA-256 del file originale invariato; writer archivio identico alla v7.
+- UI: selezione multipla, colori/tratteggi e colonne separate implementati;
+  compilazione ed esecuzione Windows non disponibili in questo ambiente.
+
+Versione 7 — verifiche aggiuntive
+- Sintassi dei 10 file C# controllata con tree-sitter.
+- Ordinamento posizioni identico in C# e Python; parità, posizione sconosciuta,
+  ordinamento globale crescente/decrescente prima del limite risultati.
+- Coorte di campionato: media dei team ID esatti, ambiguità e assenza di dati.
+- Geometria dei campi: proporzioni e punti senza sovrapposizioni alle dimensioni
+  compatte e ampie considerate (calcolo geometrico, non prova UI Windows).
+- Ripetuti controlli su 76.486 giocatori e storico reale di due salvataggi;
+  hash del file originale invariato; writer archivio identico a quello validato.
+- Nessuna compilazione o esecuzione Windows possibile in questo ambiente.
+  Layout, DPI e rendering richiedono verifica nell'app su Windows.
+
+VERIFICHE ESEGUITE - VERSIONE 6
+
+Nuove verifiche:
+
+- Sintassi di tutti i 9 file C# e compilazione sintattica Python.
+- Ordinamento numerico crescente/decrescente con valori mancanti in
+  fondo, incluse differenze come 20 e 100.
+- Ordinamento globale di CA su 76.486 giocatori prima del limite
+  delle 2.500 righe visualizzate.
+- Dati di confronto di due giocatori della stessa squadra: 54 chiavi
+  di attributi allineate e 15 posizioni per ciascuno.
+- Punti storici reali dello stesso giocatore da due salvataggi:
+  7 novembre 2027 e 2 febbraio 2028. Tutti i 54 valori sono letti dai
+  file, non ricostruiti. Nessuno storico incorporato viene dichiarato
+  decodificato.
+- Eliminazione dei percorsi duplicati, esclusione di un file non
+  leggibile e corrispondenza con il punto del salvataggio aperto.
+- Casi di identita': nascita modificata accettata con nota soltanto
+  con ID pubblico/interno e nome coerenti; ID diversi respinti;
+  senza ID pubblico si richiede una nascita coerente.
+- Hash del salvataggio prima e dopo: le nuove letture non modificano
+  il file. La funzione di scrittura coincide con la versione validata.
+
+Verifiche della versione 5, conservate come base:
+
+Nuove verifiche:
+
+- Sintassi di tutti i 6 file C# e compilazione sintattica Python.
+- Test sui confini degli intervalli eta', soglie posizione 12/15,
+  PA sconosciuta, margine di crescita, piede, prestito e combinazioni.
+- Scadenze con estremi inclusi, mesi di calendario, fine mese e anno
+  bisestile. I contratti scaduti e non disponibili restano separati.
+- Protocollo di ricerca sul salvataggio reale: 76.486 giocatori;
+  594 risultati con squadra contenente tri, 73 con Triestina esatta.
+- Query reali per ciascuno stato del contratto e intervalli combinati
+  di eta', posizione, CA e PA. Riferimento: 2 febbraio 2028 nel file.
+- Coerenza fra metadati dei risultati e scheda dettagli del giocatore.
+
+Verifiche gia' eseguite nella versione 4, sulla cui scrittura questa
+versione si basa:
+
+- Controllo della sintassi di tutti i 5 file C# con parser C#.
+- Compilazione sintattica Python dei due moduli.
+- Avvio del servizio Python e scambio reale di richieste/risposte JSON.
+- Lettura del salvataggio riparato: 76.486 giocatori, inclusi i 6 con
+  ID pubblico mancante.
+- Copertura delle etichette: 54 attributi in italiano e inglese,
+  15 posizioni in entrambe le lingue.
+- Conservazione degli indici e dei valori sotto entrambi gli
+  ordinamenti alfabetici.
+- Rifiuto di un numero di attributi errato prima di scrivere il file.
+- Scrittura e rilettura di una modifica a data di nascita, CA, Tecnica
+  e posizione AMR su un giocatore della Triestina.
+- Secondo salvataggio con una modifica al dribbling di un giocatore
+  senza ID pubblico, conservando le modifiche del primo giocatore.
+- Verifica completa di tutte le 1.366 voci dell'indice e delle sezioni
+  compresse durante ogni scrittura di prova.
+- Chiusura regolare del servizio Python.
+
+LIMITI DELLA VERIFICA
+
+La compilazione .NET non e' stata completata: il runtime CoreCLR non
+riesce ad avviarsi in questo ambiente Linux. L'interfaccia Windows non
+e' stata eseguita qui. Compilazione, resa della finestra e caricamento
+del file nel gioco vanno verificati sul computer Windows.

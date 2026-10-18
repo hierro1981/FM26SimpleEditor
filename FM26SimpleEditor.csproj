@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Update="editor.py" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="operation_progress.py" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="history_reader.py" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="archive_rewrite.py" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

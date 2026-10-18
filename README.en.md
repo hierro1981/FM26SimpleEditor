@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v11 (in development)
+# FM26 Simple Editor · v11
 
 [Italiano](README.md) | English
 
@@ -45,7 +45,7 @@ Internal attribute history from a single supported save, charts with multiple se
 - **Ready-to-use Windows distribution:** GitHub Actions builds and checks the Windows x64 ZIP with the .NET runtime included, then attaches it to newly published releases. Corresponding source is included.
 - **Bilingual documentation:** Italian and English READMEs with instructions for the compiled package and building from source.
 
-## Changes in version 11 — development branch
+## Changes in version 11
 
 - **Highlighted loans:** confirmed loans have ochre rows, including a distinct selection colour, a legend and tooltips showing the playing and parent clubs. An unknown loan status is not highlighted as a confirmed loan.
 - **Loan team view:** **Prestiti nella squadra** defaults to **In cui gioca** (playing club); choose **Proprietaria** (parent club) to list loaned-out players with their owner. The Team column, team picker, text search and team sorting all use the selected view. Unreadable owners are shown as unavailable. The selector remains visible when optional filters are hidden; clearing filters preserves this session display preference. Previews, comparison cohorts and stars continue to use the playing squad.

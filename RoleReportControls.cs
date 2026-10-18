@@ -30,7 +30,23 @@ public sealed class RoleReportPanel : UserControl
         right.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         right.RowStyles.Add(new RowStyle(SizeType.AutoSize)); right.RowStyles.Add(new RowStyle(SizeType.Absolute, 155)); right.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); right.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         right.Controls.Add(scores, 0, 0); right.Controls.Add(summary, 0, 1); right.Controls.Add(table, 0, 2); right.Controls.Add(method, 0, 3);
-        right.SizeChanged += (_, _) => { scores.MaximumSize = method.MaximumSize = new Size(Math.Max(100, right.ClientSize.Width - right.Padding.Horizontal - 8), 0); };
+        bool fitting = false;
+        void FitSummary()
+        {
+            if (fitting || right.ClientSize.Height <= 0) return;
+            fitting = true;
+            try
+            {
+                int width = Math.Max(100, right.ClientSize.Width - right.Padding.Horizontal - 8);
+                scores.MaximumSize = method.MaximumSize = new Size(width, 0);
+                int fixedHeight = scores.GetPreferredSize(new Size(width, 0)).Height + method.GetPreferredSize(new Size(width, 0)).Height + 24;
+                float scale = DeviceDpi / 96f;
+                float height = Math.Clamp((right.ClientSize.Height - fixedHeight) * .38f, 45 * scale, 155 * scale);
+                if (Math.Abs(right.RowStyles[1].Height - height) > .5f) right.RowStyles[1].Height = height;
+            }
+            finally { fitting = false; }
+        }
+        right.SizeChanged += (_, _) => FitSummary(); scores.TextChanged += (_, _) => FitSummary(); method.TextChanged += (_, _) => FitSummary();
         root.Controls.Add(selector, 0, 0); root.Controls.Add(right, 1, 0); Controls.Add(root);
         pitch.PositionSelected += key => { int index = Array.IndexOf(PositionScheme.Order, key); if (index >= 0) position.SelectedIndex = index; };
         position.SelectedIndexChanged += (_, _) => { if (!binding) Render(); };

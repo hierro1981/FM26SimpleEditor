@@ -92,6 +92,8 @@ internal static class Checks
         var selector = Descendants(report).OfType<ComboBox>().Single(); selector.SelectedIndex = 0; Application.DoEvents();
         Check(Descendants(report).OfType<Label>().Any(l => l.Text.StartsWith("Portiere")), "position picker refreshes report");
         Check(Descendants(report).OfType<DataGridView>().Single().Rows.Count > 0, "report shows relevant keeper attributes");
+        host.Size = new Size(900, 560); Application.DoEvents();
+        Check(Descendants(report).OfType<DataGridView>().Single().ClientSize.Height >= 50, "short windows retain report table space");
         host.Hide();
         using var main = new MainForm("python");
         foreach (int width in new[] { 900, 1360 })

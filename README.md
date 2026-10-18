@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v11
+# FM26 Simple Editor · v12 (in sviluppo)
 
 Italiano | [English](README.en.md)
 
@@ -45,11 +45,18 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 - **Distribuzione Windows pronta all’uso:** GitHub Actions compila e verifica lo ZIP Windows x64 con runtime .NET incluso e lo allega alle nuove release. Il pacchetto include anche i sorgenti corrispondenti.
 - **Documentazione bilingue:** README in italiano e inglese, con istruzioni per il pacchetto compilato e per l’avvio dai sorgenti.
 
-## Novità della versione 11
+## Novità precedenti della versione 11
 
 - **Prestiti riconoscibili nell’elenco:** righe evidenziate in ocra, anche quando selezionate, con legenda e tooltip che indica squadra attuale e proprietaria. I prestiti con stato non disponibile non vengono colorati come confermati.
 - **Squadra di riferimento dei prestiti:** il selettore **Prestiti nella squadra** usa **In cui gioca** come impostazione iniziale; scegli **Proprietaria** per vedere i prestiti tra i giocatori del club proprietario. Colonna Squadra, elenco delle squadre, ricerca per testo e ordinamento usano tutti il riferimento scelto. Se la proprietaria non è leggibile, viene indicata come non disponibile. Il selettore resta visibile anche nascondendo i filtri opzionali; **Azzera filtri** conserva questa preferenza di visualizzazione per la sessione. Anteprima, confronto e stelle restano riferiti alla squadra in cui il calciatore gioca.
 - **Salvataggio sempre raggiungibile:** **Salva modifiche** è nella barra superiore, vicino ad **Apri salvataggio**, insieme all’indicazione delle modifiche non salvate. È accessibile da tutte le schede e si abilita quando ci sono modifiche, anche durante l’editing di una cella. I pannelli della barra e della ricerca si ridimensionano al contenuto, riducendo gli spazi vuoti sopra le schede e i filtri. Continua a creare una nuova copia verificata del salvataggio.
+
+## Novità della versione 12 — branch di sviluppo
+
+- Confronto con colonne **Gruppo → Attributo → A → Δ → B → Migliore**, frecce verso il giocatore favorito e segno numerico della differenza conservato.
+- Nuova sottoscheda **Report per ruolo**, con scelta della posizione cliccando sul campo o tramite elenco, attributi rilevanti, punteggi, familiarità, vantaggi e suggerimento motivato.
+- Sigle raggruppate nella colonna **Ruolo principale** per riconoscere i multiposizione: per esempio `D (SC), M, C (C)`. La lingua scelta alterna le sigle italiane e inglesi.
+- Verifica C# su Windows con compilazione di sole DLL e test dei calcoli e dei controlli. I branch non generano EXE, ZIP o artefatti scaricabili.
 
 ## Avvio
 
@@ -84,7 +91,7 @@ I filtri sono tutti disattivati all'avvio. Ogni intervallo si attiva con la case
 
 **Senza contratto rilevato** richiede contemporaneamente l'assenza di un contratto letto e di una squadra/club associati. Un giocatore associato a un club ma con contratto non leggibile va fra i **dati non disponibili**, non fra quelli senza contratto. Una scadenza mancante non viene inventata.
 
-Le colonne numeriche sono allineate a destra. I risultati hanno scrollbar orizzontale e verticale quando servono; le colonne hanno larghezze ridimensionabili e tutte le colonne scorrono orizzontalmente. Cliccando un'intestazione si ordina in modo crescente, cliccandola di nuovo in modo decrescente. L'ordinamento è applicato a **tutti** i risultati, prima del limite di 2.500 righe: età, CA, PA e ID sono ordinati numericamente, le date cronologicamente. I valori mancanti restano in fondo in entrambe le direzioni. Il ruolo principale usa la familiarità più alta; a parità prevale la prima posizione nello schema del campo. La sua colonna si ordina da portiere a punta, con sinistra–centro–destra per linea.
+Le colonne numeriche sono allineate a destra. I risultati hanno scrollbar orizzontale e verticale quando servono; le colonne hanno larghezze ridimensionabili e tutte le colonne scorrono orizzontalmente. Cliccando un'intestazione si ordina in modo crescente, cliccandola di nuovo in modo decrescente. L'ordinamento è applicato a **tutti** i risultati, prima del limite di 2.500 righe: età, CA, PA e ID sono ordinati numericamente, le date cronologicamente. I valori mancanti restano in fondo in entrambe le direzioni. Il ruolo principale usa la familiarità più alta; a parità prevale la prima posizione nello schema del campo. La sua colonna si ordina da portiere a punta, con sinistra–centro–destra per linea. Dalla v12 visualizza sigle raggruppate per tutte le posizioni con familiarità almeno 15/20; se nessuna raggiunge 15 mostra la migliore conosciuta, oppure — quando non disponibile. Il tooltip elenca le posizioni e i valori esatti; l’ordinamento resta riferito alla posizione con familiarità più alta.
 
 **Mostra filtri opzionali** nasconde o mostra i controlli mantenendo i criteri attivi. Il contatore resta visibile. **Azzera filtri** cancella testo, scelta della squadra e tutti i filtri opzionali. Le ricerche non modificano il salvataggio.
 
@@ -109,6 +116,18 @@ Ogni giocatore aperto viene aggiunto automaticamente all'elenco di confronto, se
 Apri un giocatore, poi scegli **Confronta…** dalla modifica o vai nella quarta scheda. Il giocatore A è quello aperto, con gli eventuali attributi, posizioni, CA e PA ancora non salvati. Per B puoi usare i compagni della stessa squadra oppure gli altri giocatori dell'elenco, filtrandoli per nome o ID. Se manca il riferimento alla squadra, si usa il club. Puoi rimuovere il selezionato dall'elenco o svuotare l'elenco.
 
 Il confronto è in sola lettura: mostra stelle CA/PA stimate, le due mappe del campo e una tabella con barre, valori e differenza **A − B**. Entrambi sono valutati in stelle rispetto alla squadra di A. Puoi nascondere il campo per dare più spazio agli attributi. La tabella può mostrare scala 1–20 o grezza e includere gli attributi nascosti. Le differenze inferiori a un punto possono sparire sulla scala 1–20: attiva i valori grezzi o passa sulla differenza per leggerle. L'elenco dura nella sessione, viene mantenuto dopo il salvataggio di una copia e si azzera aprendo un altro file.
+
+### Report per ruolo — versione 12
+
+Nel confronto apri **Report per ruolo** e clicca una posizione sul campo; puoi usare anche l’elenco, accessibile da tastiera. La selezione iniziale è il ruolo principale di A. Il punto giallo indica la posizione valutata. Il report usa gli attributi e la familiarità di A comprese le modifiche non salvate, e i valori di B letti dal file. Le mappe doppie lasciano spazio al report quando questa sottoscheda è aperta; le opzioni scala grezza e attributi nascosti riguardano la tabella generale.
+
+È un confronto **per posizione**, con i profili editoriali già usati per colorare gli attributi nell’editing: non riproduce un compito tattico o la formula del motore partita. La media usa i valori 1–20 visibili (`clamp((grezzo + 2) / 5, 1, 20)`, divisione intera) e pesi **3 fondamentale, 2 importante, 1 utile**. CA/PA, stelle e attributi estranei al profilo non entrano nel punteggio. Valori grezzi potenziati vengono limitati a 20; valori assenti, duplicati o non validi non vengono inventati. Punteggi uguali sulla scala del gioco rimangono uguali anche se i grezzi differiscono.
+
+Il suggerimento segue regole esplicite: se manca un attributo del profilo o la familiarità, non propone un preferito; sotto 12/20 per entrambi segnala necessità di adattamento. Se solo uno raggiunge 12/20, lo preferisce per prontezza nella posizione, mostrando comunque i due punteggi senza penalità nascoste. Se entrambi sono almeno a 12, preferisce la media maggiore; uno scarto inferiore a **0,25/20** è considerato equivalente, con eventuale preferenza per chi ha almeno **3 punti** di familiarità in più. La familiarità resta sempre visibile separatamente. Le soglie sono scelte dell’editor, non regole ufficiali di FM.
+
+Il riepilogo mostra copertura degli attributi e fino a tre vantaggi per ciascun giocatore, ordinati per differenza × peso. La tabella riporta rilevanza e valori che giustificano il suggerimento. Si tratta di caratteristiche favorevoli per la posizione scelta, non di una previsione di gol, voti o rendimento in una tattica specifica.
+
+Nella tabella generale, **Δ = A − B** rimane numerico e la freccia punta a **sinistra per A** o **destra per B**. Per propensione agli infortuni e scorrettezza vince il valore più basso: la direzione può quindi essere opposta al segno. `0 =` indica parità sulla scala selezionata. Il tooltip conserva la differenza grezza.
 
 ## Storico degli attributi — versione 8
 
@@ -140,3 +159,6 @@ Dopo aver installato le dipendenze, esegui `python -m unittest discover -s tests
 
 Il lettore e il protocollo sono verificati su salvataggi reali usati per le prove, compresi i giocatori con ID pubblico mancante e nomi Unicode. La verifica della scrittura controlla le modifiche ai campi e l'integrità dell'archivio, anche dopo modifiche successive a giocatori diversi. L'interfaccia Windows e il caricamento effettivo in Football Manager richiedono una prova sul computer Windows.
 
+
+
+La verifica C# si esegue su Windows con `dotnet run --project tests/ComparisonChecks/ComparisonChecks.csproj --configuration Release -p:UseAppHost=false`. Il workflow **Validate comparison (DLL only)** esegue i controlli senza produrre EXE o ZIP; la verifica comprende anche l’ordine delle colonne, il cambio della posizione nel report e lo spazio della barra superiore.

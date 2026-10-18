@@ -137,6 +137,7 @@ public sealed class HistoryResult
 
 public static class PreviewMath
 {
+    public static string DeltaText(int delta, int qualityDelta) => qualityDelta > 0 ? $"← {delta:+0;-0;0}" : qualityDelta < 0 ? $"{delta:+0;-0;0} →" : "0 =";
     public static double? AbsoluteStars(int? ability) => ability is null or <= 0 ? null : Math.Clamp(Math.Round(ability.Value / 40.0 * 2, MidpointRounding.AwayFromZero) / 2, 0.5, 5);
 
     public static int Attribute20(int raw) => Math.Clamp((raw + 2) / 5, 1, 20);
@@ -165,4 +166,5 @@ public sealed class BackendProgress
     public long? Total { get; set; }
     public string Unit { get; set; } = "";
 }
+
 

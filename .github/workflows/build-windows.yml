@@ -46,6 +46,9 @@ jobs:
       - name: Test Python backend and startup
         run: python -m unittest discover -s tests -v
 
+      - name: Validate comparison calculations and controls
+        run: dotnet run --project tests/ComparisonChecks/ComparisonChecks.csproj --configuration Release -p:UseAppHost=false
+
       - name: Publish self-contained Windows application
         shell: pwsh
         run: |
@@ -115,4 +118,5 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: gh release upload "$RELEASE_TAG" dist/FM26SimpleEditor-win-x64.zip
+
 

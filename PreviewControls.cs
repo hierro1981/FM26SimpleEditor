@@ -49,6 +49,10 @@ public sealed class PitchControl : Control
     private Dictionary<string, int> ratings = new();
     private bool italian = true;
     private string lastKey = "";
+    private string selectedPosition = "";
+    public bool SelectionEnabled { get; set; }
+    public event Action<string>? PositionSelected;
+    public string SelectedPosition { get => selectedPosition; set { selectedPosition = value; Invalidate(); } }
     private static readonly (string Key, float X, float Y)[] Nodes =
     [
         ("GK", .5f, .92f), ("SW", .5f, .80f),
@@ -92,13 +96,13 @@ public sealed class PitchControl : Control
             var rating = ratings.GetValueOrDefault(key, 1);
             var box = new RectangleF(pitch.Left + x * pitch.Width - dot / 2, pitch.Top + y * pitch.Height - dot / 2, dot, dot);
             hitAreas[key] = box;
-            var color = rating >= 18 ? Color.FromArgb(89, 220, 126) : rating >= 15 ? Color.FromArgb(244, 203, 82) : rating >= 12 ? Color.FromArgb(223, 151, 76) : Color.FromArgb(73, 112, 93);
+            var color = SelectionEnabled ? key == SelectedPosition ? Color.Gold : Color.LightSteelBlue : rating >= 18 ? Color.FromArgb(89, 220, 126) : rating >= 15 ? Color.FromArgb(244, 203, 82) : rating >= 12 ? Color.FromArgb(223, 151, 76) : Color.FromArgb(73, 112, 93);
             using var fill = new SolidBrush(color);
             using var border = new Pen(Color.FromArgb(220, 242, 232), rating >= 15 ? 2 : 1);
             g.FillEllipse(fill, box); g.DrawEllipse(border, box);
             var text = Labels.PositionCode(key, italian);
             using var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
-            using var ink = new SolidBrush(rating >= 12 ? Color.FromArgb(20, 39, 30) : Color.FromArgb(212, 226, 216));
+            using var ink = new SolidBrush(SelectionEnabled || rating >= 12 ? Color.FromArgb(20, 39, 30) : Color.FromArgb(212, 226, 216));
             g.DrawString(text, dotFont, ink, box, format);
         }
     }
@@ -108,7 +112,16 @@ public sealed class PitchControl : Control
         var key = hitAreas.FirstOrDefault(pair => pair.Value.Contains(args.Location)).Key ?? "";
         if (key == lastKey) return;
         lastKey = key;
-        tip.SetToolTip(this, key.Length == 0 ? "" : $"{Labels.Position(key, italian)}: {ratings.GetValueOrDefault(key, 1)}/20");
+        Cursor = SelectionEnabled && key.Length > 0 ? Cursors.Hand : Cursors.Default;
+        tip.SetToolTip(this, key.Length == 0 ? "" : SelectionEnabled ? Labels.Position(key, italian) : $"{Labels.Position(key, italian)}: {ratings.GetValueOrDefault(key, 1)}/20");
+    }
+    protected override void OnMouseDown(MouseEventArgs args)
+    {
+        base.OnMouseDown(args);
+        if (!SelectionEnabled || args.Button != MouseButtons.Left) return;
+        var key = hitAreas.FirstOrDefault(pair => pair.Value.Contains(args.Location)).Key;
+        if (key is null) return;
+        SelectedPosition = key; PositionSelected?.Invoke(key);
     }
     protected override void Dispose(bool disposing) { if (disposing) tip.Dispose(); base.Dispose(disposing); }
 }
@@ -242,3 +255,4 @@ public sealed class PlayerPreview : UserControl
 
     protected override void Dispose(bool disposing) { if (disposing) valueFont.Dispose(); base.Dispose(disposing); }
 }
+

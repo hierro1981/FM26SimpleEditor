@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v11
+# FM26 Simple Editor · v12 (in development)
 
 [Italiano](README.md) | English
 
@@ -45,11 +45,18 @@ Internal attribute history from a single supported save, charts with multiple se
 - **Ready-to-use Windows distribution:** GitHub Actions builds and checks the Windows x64 ZIP with the .NET runtime included, then attaches it to newly published releases. Corresponding source is included.
 - **Bilingual documentation:** Italian and English READMEs with instructions for the compiled package and building from source.
 
-## Changes in version 11
+## Previous changes in version 11
 
 - **Highlighted loans:** confirmed loans have ochre rows, including a distinct selection colour, a legend and tooltips showing the playing and parent clubs. An unknown loan status is not highlighted as a confirmed loan.
 - **Loan team view:** **Prestiti nella squadra** defaults to **In cui gioca** (playing club); choose **Proprietaria** (parent club) to list loaned-out players with their owner. The Team column, team picker, text search and team sorting all use the selected view. Unreadable owners are shown as unavailable. The selector remains visible when optional filters are hidden; clearing filters preserves this session display preference. Previews, comparison cohorts and stars continue to use the playing squad.
 - **Global save controls:** **Salva modifiche** (Save changes) is in the top toolbar next to **Apri salvataggio**, together with the unsaved-changes indicator. It is available from every tab and becomes enabled for pending edits, including an edited cell. Toolbar and search panels shrink to their contents, reducing blank space above the tabs and filters. Saving still creates a new verified copy.
+
+## Changes in version 12 — development branch
+
+- Comparison columns: **Group → Attribute → A → Δ → B → Winner**, with directional winner arrows while preserving the numeric difference sign.
+- New **Position report** subtab: choose on the pitch or from a list to compare relevant attributes, weighted scores, familiarity, advantages and a reasoned suggestion.
+- Grouped position abbreviations in the main-position column identify versatile players, for example `D (LC), DM, M (C)`. Labels follow the Italian/English selector.
+- Windows C# validation builds DLLs only and checks calculations and controls. Development branches generate no EXE, ZIP or downloadable artifacts.
 
 ## Getting started
 
@@ -110,6 +117,20 @@ Open a player, then choose **Confronta…** from the editor or select the fourth
 
 Comparison is read-only: it shows estimated CA/PA stars, two pitch maps and an attribute table with bars, values and **A − B** differences. Both players' stars use A's squad as their reference. Hide the pitch maps to give attributes more space. The table supports raw or 1–20 values and optional hidden attributes. Differences below one displayed point may disappear on the 1–20 scale; enable raw values or hover over the difference to read the raw delta. The comparison list lasts for the session, survives saving a copy, and resets when another save is opened.
 
+### Position report — version 12
+
+Open **Report per ruolo** in Comparison and click a position on the pitch, or use the keyboard-accessible list. It initially selects A’s main position; yellow marks the selected node. The report includes A’s unsaved attribute and familiarity edits and B’s file values. The two overview pitches give way to the report while this subtab is selected. Raw-scale and hidden-attribute options apply to the general comparison table.
+
+The report evaluates a **position**, using the editor’s existing attribute-importance profiles. It does not reproduce a tactical duty or the match engine. Scores are weighted means of visible 1–20 values (`clamp((raw + 2) / 5, 1, 20)`, integer division), with weights **3 essential, 2 important, 1 useful**. CA/PA, stars and attributes outside the profile do not contribute. Boosted raw values clamp at 20. Missing, duplicated or invalid values are not invented. Values tied on the game scale remain tied even when raw values differ.
+
+Recommendation rules are explicit: missing profile attributes or familiarity prevent a preference; if both familiarity values are below 12/20, both need adaptation. If only one reaches 12, that player is preferred for readiness, while both unpenalized scores remain visible. When both reach 12, the higher attribute score wins; gaps below **0.25/20** count as broadly equal, with a possible tie-break for at least **3 more familiarity points**. Familiarity is always shown separately. These thresholds are editor choices, not official FM rules.
+
+The summary shows coverage and up to three advantages per player, ranked by difference × weight. The table exposes the relevant values behind the suggestion. It describes strengths for the selected position, without predicting goals, match ratings or performance in a specific tactic.
+
+In the general table, **Δ = A − B** keeps its numeric sign; arrows point **left for A**, **right for B**. Lower injury proneness and dirtiness are better, so the direction can oppose the numeric sign. `0 =` means equal on the selected scale. Tooltips retain the raw difference.
+
+The search main-position column includes every position rated at least 15/20, grouped using football position abbreviations. If none reaches 15, it shows the best known position, or — when unknown. Tooltips show exact familiarity; sorting still follows the highest-rated position.
+
 ## Attribute history — version 8
 
 The fifth tab automatically opens **Storico interno · sperimentale** when it recognises a sequence in the current file. No additional saves are required. The reader is limited to build 26.3.2 with game_db schema 4000, validated against the test saves. It requires at least two samples, a consistent repeated structure and exactly one candidate. Missing data, unsupported formats and ambiguous sequences remain unavailable; the dated-save mode is offered with an explanation.
@@ -140,3 +161,6 @@ After installing dependencies, run `python -m unittest discover -s tests -v` for
 
 The reader and protocol have been tested with real saves, including players without public IDs and names containing Unicode characters. Write verification checks field changes and archive integrity, including successive edits to different players. The Windows interface and actual loading in Football Manager still require testing on a Windows computer.
 
+
+
+On Windows, run C# checks with `dotnet run --project tests/ComparisonChecks/ComparisonChecks.csproj --configuration Release -p:UseAppHost=false`. The **Validate comparison (DLL only)** workflow checks calculations and controls without generating EXE or ZIP files, including column order, report position selection and compact toolbar spacing.

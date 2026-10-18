@@ -88,7 +88,7 @@ public sealed class MainForm : Form
     public MainForm(string pythonExecutable)
     {
         backend = new BackendClient(pythonExecutable);
-        Text = "FM26 Simple Editor · v11";
+        Text = "FM26 Simple Editor · v12";
         Font = new Font("Segoe UI", 10);
         Width = 1360; Height = 900;
         MinimumSize = new Size(900, 650);
@@ -230,7 +230,10 @@ public sealed class MainForm : Form
             args.CellStyle.SelectionForeColor = onLoan ? Color.White : SystemColors.HighlightText;
             players.Rows[args.RowIndex].Cells[args.ColumnIndex].ToolTipText = row.LoanDescription;
             if (args.RowIndex >= 0 && args.ColumnIndex >= 0 && players.Columns[args.ColumnIndex].DataPropertyName == "MainPosition" && players.Rows[args.RowIndex].DataBoundItem is PlayerRow mainRow)
-                args.Value = mainRow.MainPosition.Length == 0 ? "—" : Labels.Position(mainRow.MainPosition, italian.Checked);
+            {
+                args.Value = PositionScheme.Compact(mainRow.Positions, italian.Checked);
+                players.Rows[args.RowIndex].Cells[args.ColumnIndex].ToolTipText = string.Join("; ", mainRow.Positions.Where(p => p.Value > 1).OrderBy(p => PositionScheme.Rank(p.Key)).Select(p => $"{Labels.Position(p.Key, italian.Checked)}: {p.Value}/20")) + (mainRow.OnLoan is true ? "\n" + mainRow.LoanDescription : "");
+            }
             if (args.RowIndex >= 0 && players.Columns[args.ColumnIndex].DataPropertyName == "PositionSummary" && players.Rows[args.RowIndex].DataBoundItem is PlayerRow player)
                 args.Value = string.Join(", ", player.Positions.Where(pair => pair.Value >= 12).OrderByDescending(pair => pair.Value).Select(pair => $"{Labels.PositionCode(pair.Key, italian.Checked)} ({pair.Value})"));
         };
@@ -505,7 +508,7 @@ public sealed class MainForm : Form
         caMeter.Value = (int)ca.Value; paMeter.Value = pa.Value >= 0 ? (int)pa.Value : null;
         changes.Text = file.Text.Length == 0 ? "" : dirty ? "● Modifiche non salvate" : "Nessuna modifica da salvare";
         changes.ForeColor = dirty ? Color.FromArgb(161, 99, 16) : Color.DimGray;
-        Text = "FM26 Simple Editor · v11" + (dirty ? " *" : "");
+        Text = "FM26 Simple Editor · v12" + (dirty ? " *" : "");
         attributes.Invalidate(); previewStale = true; RefreshPreview(); RefreshComparison();
     }
 
@@ -614,4 +617,5 @@ public sealed class MainForm : Form
         base.Dispose(disposing);
     }
 }
+
 

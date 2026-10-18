@@ -84,7 +84,7 @@ public sealed class MainForm : Form
     public MainForm(string pythonExecutable)
     {
         backend = new BackendClient(pythonExecutable);
-        Text = "FM26 Simple Editor · v9";
+        Text = "FM26 Simple Editor · v10";
         Font = new Font("Segoe UI", 10);
         Width = 1360; Height = 900;
         MinimumSize = new Size(900, 650);
@@ -471,7 +471,7 @@ public sealed class MainForm : Form
         caMeter.Value = (int)ca.Value; paMeter.Value = pa.Value >= 0 ? (int)pa.Value : null;
         changes.Text = detail is null ? "" : dirty ? "● Modifiche non salvate" : "Valori del file aperto";
         changes.ForeColor = dirty ? Color.FromArgb(161, 99, 16) : Color.DimGray;
-        Text = "FM26 Simple Editor · v9" + (dirty ? " *" : "");
+        Text = "FM26 Simple Editor · v10" + (dirty ? " *" : "");
         attributes.Invalidate(); previewStale = true; RefreshPreview(); RefreshComparison();
     }
 

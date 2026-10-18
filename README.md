@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v9
+# FM26 Simple Editor · v10
 
 Italiano | [English](README.en.md)
 
@@ -31,11 +31,19 @@ Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Per
 
 Storico interno da un singolo salvataggio supportato, grafico con selezione multipla degli attributi, tabella con valori e Δ per ogni campo, ricerca e selezione rapida degli attributi, punto attuale opzionale. Vedi la sezione Storico per copertura e date.
 
-## Novità della versione 9
+## Novità precedenti della versione 9
 
 **Apertura e salvataggio:** barra con percentuale, descrizione della fase e contatori disponibili. Il catalogo mostra i giocatori elaborati; compressione e scrittura mostrano i MiB; la verifica mostra le sezioni completate. La percentuale complessiva usa intervalli pesati per fase e non è una stima del tempo restante. Può rimanere ferma mentre una fase indivisibile del lettore lavora, ad esempio la decodifica dei giocatori. Non usa un timer per simulare avanzamento. Il 100% viene mostrato solo dopo il successo dei controlli e la preparazione dei dati nell'interfaccia. Un errore non viene presentato come completamento. Le altre brevi letture prive di misure restano indicate come attività in corso.
 
 **Confronto:** aprendo la selezione del secondo giocatore compare un campo di ricerca dentro il menu. Digita una parte del nome, squadra, ID pubblico o interno; i risultati rispettano l'ordine per posizione. Il filtro esterno esistente rimane combinabile con quello del menu. Clic o Invio confermano, Esc o un clic fuori annullano senza cambiare il giocatore selezionato. Puoi aprire il menu con clic, F4 o freccia giù e usare le frecce per muoverti. Quando non ci sono corrispondenze, viene mostrato un messaggio e non è possibile confermare una voce inesistente. La ricerca nel menu non carica un giocatore a ogni carattere.
+
+## Novità della versione 10
+
+- **Controllo automatico dell’ambiente all’avvio:** ricerca Python 3.12 o successivo, verifica le versioni delle dipendenze e controlla che le librerie siano importabili.
+- **Installazione guidata di Python:** se manca un interprete compatibile, propone Python 3.13 tramite WinGet oppure il sito ufficiale.
+- **Dipendenze predisposte automaticamente:** se mancanti o non utilizzabili, vengono installate o riparate in un ambiente dedicato all’editor. Sono disponibili dettagli, annullamento e **Riprova**.
+- **Distribuzione Windows pronta all’uso:** GitHub Actions compila e verifica lo ZIP Windows x64 con runtime .NET incluso e lo allega alle nuove release. Il pacchetto include anche i sorgenti corrispondenti.
+- **Documentazione bilingue:** README in italiano e inglese, con istruzioni per il pacchetto compilato e per l’avvio dai sorgenti.
 
 ## Avvio
 

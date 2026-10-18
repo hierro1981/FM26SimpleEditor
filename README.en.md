@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v9
+# FM26 Simple Editor · v10
 
 [Italiano](README.md) | English
 
@@ -31,11 +31,19 @@ A C# Windows Forms project for Visual Studio 2026, with a local Python reader. B
 
 Internal attribute history from a single supported save, charts with multiple selected attributes, a table with values and Δ for each field, attribute search and bulk selection, and an optional current-value point. See Attribute history for coverage and date limitations.
 
-## Changes in version 9
+## Previous changes in version 9
 
 **Opening and saving:** a progress bar shows a percentage, phase description and available counters. The catalogue reports players processed; compression and writing report MiB; verification reports sections checked. Overall progress uses weighted phase ranges and does not estimate remaining time. It may pause while the reader performs an indivisible operation, such as decoding players. No timer simulates progress. The interface reaches 100% only after checks succeed and the data is ready. Errors are not shown as successful completion. Other short reads without measurable progress remain activity indicators.
 
 **Comparison:** opening the second-player selector reveals a search field inside the menu. Type part of a name, team, public ID or internal ID; results keep their position-based ordering. The existing external filter can be combined with the menu filter. Click or press Enter to confirm; Esc or a click outside cancels without changing the selected player. Open the menu with a click, F4 or Down, and use the arrow keys to navigate. If there are no matches, a message is shown and no nonexistent entry can be confirmed. Typing in the menu does not load a player after every character.
+
+## Changes in version 10
+
+- **Automatic environment checks at startup:** discovers Python 3.12 or newer, verifies required dependency versions and checks that libraries can be imported.
+- **Guided Python installation:** offers Python 3.13 through WinGet or the official website when no compatible interpreter is available.
+- **Automatic dependency setup:** installs or repairs missing or unusable dependencies in the editor’s dedicated environment, with details, cancellation and retry.
+- **Ready-to-use Windows distribution:** GitHub Actions builds and checks the Windows x64 ZIP with the .NET runtime included, then attaches it to newly published releases. Corresponding source is included.
+- **Bilingual documentation:** Italian and English READMEs with instructions for the compiled package and building from source.
 
 ## Getting started
 

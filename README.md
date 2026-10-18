@@ -8,7 +8,7 @@ Include un’anteprima dei valori sulla scala 1–20 del gioco e grafici per ana
 
 ## Progetto e requisiti tecnici
 
-Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Richiede Windows, SDK .NET 8, carico di lavoro **Sviluppo di applicazioni desktop .NET**, Python 3.12 o successivo e le dipendenze in `requirements.txt`.
+Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Per compilare richiede Windows, SDK .NET 8 e carico di lavoro **Sviluppo di applicazioni desktop .NET**. Il lettore usa Python 3.12 o successivo e le dipendenze in `requirements.txt`, verificate e predisposte all’avvio.
 
 ## Novità precedenti della versione 7
 
@@ -31,9 +31,17 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 
 ## Avvio
 
-Estrai questo progetto completo in una nuova cartella. Installa le dipendenze con `python -m pip install -r requirements.txt` oppure esegui `Installa_dipendenze.cmd`. Apri `FM26SimpleEditor.csproj` in Visual Studio, compila e avvia. I quattro file Python vengono copiati automaticamente accanto all'eseguibile.
+Estrai questo progetto completo in una nuova cartella. Apri `FM26SimpleEditor.csproj` in Visual Studio, compila e avvia. Gli script Python e `requirements.txt` vengono copiati automaticamente accanto all'eseguibile.
 
-Il comando `python` deve essere disponibile nel PATH. Se hai più installazioni, puoi indicare il percorso completo dell'interprete nella variabile di ambiente `FM26_PYTHON` prima di avviare Visual Studio o il programma.
+A ogni avvio una finestra verifica l’interprete e le librerie prima di aprire l’editor:
+
+- **Python assente o troppo vecchio:** propone **Installa Python 3.13** tramite WinGet per l’utente corrente. L’installazione parte solo premendo il pulsante, richiede internet e accetta le condizioni dei pacchetti e della sorgente WinGet. In alternativa, **Sito ufficiale Python** permette l’installazione manuale; poi premi **Riprova**, senza riavviare l’editor. Se WinGet manca o fallisce, usa questa alternativa.
+- **Python presente:** controlla le versioni richieste di `fmsave` e `zstandard` e i relativi import, compreso `backports.zstd` dove richiesto. Se tutto è pronto, avvia subito l’editor.
+- **Dipendenze mancanti, diverse dalle versioni richieste o non utilizzabili:** crea o ripara un ambiente dedicato in `%LOCALAPPDATA%\FM26SimpleEditor\runtimes\python-X.Y` e installa automaticamente da PyPI le dipendenze fissate in `requirements.txt`, comprese quelle transitive. Le librerie globali delle altre applicazioni non vengono modificate. Serve internet solo quando occorre installare o riparare.
+
+La finestra mostra le fasi e i dettagli degli errori, consente di riprovare e permette di uscire durante la preparazione. Un’installazione interrotta viene ricontrollata all’avvio successivo. L’editor parte solo dopo la verifica finale e usa esattamente l’interprete verificato.
+
+Non è obbligatorio avere `python` nel PATH: vengono cercati anche gli ambienti dell’editor, il registro Windows, le installazioni locali e il launcher `py`. Per indicare un interprete preferito, imposta `FM26_PYTHON` al percorso completo prima di avviare Visual Studio o il programma; se non è utilizzabile la ricerca continua. Restano disponibili l’installazione manuale con `python -m pip install -r requirements.txt` e `Installa_dipendenze.cmd`.
 
 ## Ricerca, modifica e anteprima
 
@@ -105,5 +113,7 @@ Il confronto tra file verifica ID, nome e nascita; una nascita modificata richie
 Sono incluse le correzioni precedenti: JSON Unicode, ID pubblico facoltativo, verifica della data e ricostruzione di tutte le voci dell'indice, comprese quelle annidate. La scrittura verifica tutte le sezioni compresse prima e dopo la modifica. Un file con indice già incoerente viene rifiutato: usa un salvataggio originale funzionante.
 
 ## Verifica
+
+Il controllo iniziale Python ha test automatici eseguibili con `python -m unittest discover -s tests -v`: interprete troppo vecchio, pacchetti assenti o con versione diversa, import non funzionanti, pip assente e requisiti non validi. La finestra Windows, il rilevamento delle installazioni e l’installazione con WinGet richiedono una prova su Windows.
 
 Il lettore e il protocollo sono verificati su salvataggi reali usati per le prove, compresi i giocatori con ID pubblico mancante e nomi Unicode. La verifica della scrittura controlla le modifiche ai campi e l'integrità dell'archivio, anche dopo modifiche successive a giocatori diversi. L'interfaccia Windows e il caricamento effettivo in Football Manager richiedono una prova sul computer Windows.

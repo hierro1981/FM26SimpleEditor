@@ -8,7 +8,7 @@ It includes a preview using the game's 1–20 attribute scale and charts for exp
 
 ## Project and technical requirements
 
-A C# Windows Forms project for Visual Studio 2026, with a local Python reader. Requires Windows, the .NET 8 SDK, the **.NET desktop development** workload, Python 3.12 or newer, and the dependencies in `requirements.txt`.
+A C# Windows Forms project for Visual Studio 2026, with a local Python reader. Building requires Windows, the .NET 8 SDK and the **.NET desktop development** workload. The reader uses Python 3.12 or newer and the dependencies in `requirements.txt`, checked and prepared at startup.
 
 ## Previous changes in version 7
 
@@ -31,9 +31,17 @@ Internal attribute history from a single supported save, charts with multiple se
 
 ## Getting started
 
-Extract the complete project into a new folder. Install dependencies with `python -m pip install -r requirements.txt` or run `Installa_dipendenze.cmd`. Open `FM26SimpleEditor.csproj` in Visual Studio, build and run. The four Python files are automatically copied alongside the executable.
+Extract the complete project into a new folder. Open `FM26SimpleEditor.csproj` in Visual Studio, build and run. The Python scripts and `requirements.txt` are automatically copied alongside the executable.
 
-The `python` command must be available on PATH. If you have multiple installations, set the `FM26_PYTHON` environment variable to the interpreter's full path before starting Visual Studio or the application.
+At every startup, a setup window checks the interpreter and libraries before opening the editor:
+
+- **Python missing or too old:** offers **Installa Python 3.13**, using WinGet for the current user. Installation starts only when clicked, requires internet, and accepts the package and WinGet source agreements. Alternatively, **Sito ufficiale Python** opens the official website for manual installation; then click **Riprova** without restarting the editor. Use this alternative if WinGet is unavailable or fails.
+- **Python available:** checks the required `fmsave` and `zstandard` versions and their imports, including `backports.zstd` where needed. If everything is ready, the editor opens immediately.
+- **Dependencies missing, at different versions, or unusable:** creates or repairs a dedicated environment at `%LOCALAPPDATA%\FM26SimpleEditor\runtimes\python-X.Y` and automatically installs the dependencies pinned in `requirements.txt` from PyPI, including transitive dependencies. Other applications’ global packages are left unchanged. Internet is needed only for installation or repair.
+
+The window displays stages and error details, supports retrying, and allows exiting during setup. Interrupted installations are checked again on the next launch. The editor opens only after final verification and uses the exact interpreter that passed the checks.
+
+The `python` command does not have to be on PATH: discovery also checks the editor’s environments, the Windows registry, local installations and the `py` launcher. To prefer an interpreter, set `FM26_PYTHON` to its full path before starting Visual Studio or the application; discovery continues if it is unusable. Manual installation with `python -m pip install -r requirements.txt` or `Installa_dipendenze.cmd` remains available.
 
 ## Search, editing and preview
 
@@ -105,5 +113,7 @@ Cross-save matching checks ID, name and birth date. A changed birth date require
 Earlier fixes are included: Unicode JSON, optional public IDs, birth-date verification, and rebuilding all index entries, including nested entries. Writing verifies all compressed sections before and after the change. A file with an already inconsistent index is rejected; use a working original save.
 
 ## Validation
+
+The Python startup probe has automated tests runnable with `python -m unittest discover -s tests -v`: outdated interpreter, missing or mismatched packages, failed imports, missing pip and invalid requirements. The Windows setup window, interpreter discovery and WinGet installation require testing on Windows.
 
 The reader and protocol have been tested with real saves, including players without public IDs and names containing Unicode characters. Write verification checks field changes and archive integrity, including successive edits to different players. The Windows interface and actual loading in Football Manager still require testing on a Windows computer.

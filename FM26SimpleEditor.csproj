@@ -9,6 +9,8 @@
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
   </PropertyGroup>
   <ItemGroup>
+    <None Update="runtime_probe.py" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="requirements.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Update="editor.py" CopyToOutputDirectory="PreserveNewest" />
     <None Update="operation_progress.py" CopyToOutputDirectory="PreserveNewest" />
     <None Update="history_reader.py" CopyToOutputDirectory="PreserveNewest" />

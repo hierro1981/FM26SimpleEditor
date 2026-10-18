@@ -6,6 +6,10 @@ namespace FM26SimpleEditor;
 
 public sealed class BackendClient : IDisposable
 {
+    private readonly string executable;
+
+    public BackendClient(string pythonExecutable) => executable = pythonExecutable;
+
     private Process? process;
     private readonly SemaphoreSlim gate = new(1, 1);
     private readonly StringBuilder errors = new();
@@ -20,7 +24,6 @@ public sealed class BackendClient : IDisposable
         if (process is { HasExited: false }) return;
         process?.Dispose();
         errors.Clear();
-        var executable = Environment.GetEnvironmentVariable("FM26_PYTHON") ?? "python";
         var start = new ProcessStartInfo(executable)
         {
             UseShellExecute = false, RedirectStandardInput = true,
@@ -31,6 +34,9 @@ public sealed class BackendClient : IDisposable
         };
         start.Environment["PYTHONIOENCODING"] = "utf-8";
         start.Environment["PYTHONUNBUFFERED"] = "1";
+        start.ArgumentList.Add("-E");
+        start.ArgumentList.Add("-X");
+        start.ArgumentList.Add("utf8");
         start.ArgumentList.Add(Path.Combine(AppContext.BaseDirectory, "editor.py"));
         try
         {
@@ -49,7 +55,7 @@ public sealed class BackendClient : IDisposable
         }
         catch (Exception exc)
         {
-            throw new InvalidOperationException("Python non disponibile. Installa Python 3.12 o successivo e le dipendenze indicate nel README. " + exc.Message, exc);
+            throw new InvalidOperationException("Il runtime Python verificato non è più disponibile. Riavvia l’editor per ripetere la configurazione. " + exc.Message, exc);
         }
     }
 

@@ -9,13 +9,15 @@ internal static class Program
     private static void Main()
     {
         ApplicationConfiguration.Initialize();
-        Application.Run(new MainForm());
+        using var setup = new RuntimeSetupForm();
+        if (setup.ShowDialog() != DialogResult.OK || setup.PythonExecutable is null) return;
+        Application.Run(new MainForm(setup.PythonExecutable));
     }
 }
 
 public sealed class MainForm : Form
 {
-    private readonly BackendClient backend = new();
+    private readonly BackendClient backend;
     private readonly TabControl tabs = new() { Dock = DockStyle.Fill };
     private readonly TabPage searchTab = new("1  Ricerca giocatori");
     private readonly TabPage editTab = new("2  Modifica giocatore");
@@ -79,8 +81,9 @@ public sealed class MainForm : Form
     private bool binding;
     private bool previewStale = true;
 
-    public MainForm()
+    public MainForm(string pythonExecutable)
     {
+        backend = new BackendClient(pythonExecutable);
         Text = "FM26 Simple Editor · v9";
         Font = new Font("Segoe UI", 10);
         Width = 1360; Height = 900;

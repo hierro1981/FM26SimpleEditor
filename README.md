@@ -11,15 +11,15 @@ Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Ric
 - Il campionato è ricavato da un gruppo di classifica leggibile contenente l'esatto team ID: regola conservativa di divisione con 18–26 squadre e turni per sede pari a squadre meno uno. Si richiede un unico insieme di squadre e almeno 3 giocatori con CA nota. La media riguarda i giocatori assegnati agli esatti team ID di quella classifica. Campionati piccoli, gruppi ambigui o non decodificati restano N/D. Il nome può mancare: in tal caso appare l'ID o “Divisione senza nome”. L'associazione alla competizione è dedotta dal lettore, non garantita dal gioco.
 - Campi con proporzioni verticali costanti, punti scalabili e centrati; altezza adattata nel confronto. Colonne del confronto distribuite su tutta la larghezza, con minimi e scorrimento quando necessario. Colonna “Migliore” con A/B e nome; CA e PA indicano anche il vincitore nella riga informativa. Per infortuni e scorrettezza vince il valore più basso.
 
+## Novità precedenti della versione 8
+
+Storico interno da un singolo salvataggio supportato, grafico con selezione multipla degli attributi, tabella con valori e Δ per ogni campo, ricerca e selezione rapida degli attributi, punto attuale opzionale. Vedi la sezione Storico per copertura e date.
+
 ## Novità della versione 9
 
 **Apertura e salvataggio:** barra con percentuale, descrizione della fase e contatori disponibili. Il catalogo mostra i giocatori elaborati; compressione e scrittura mostrano i MiB; la verifica mostra le sezioni completate. La percentuale complessiva usa intervalli pesati per fase e non è una stima del tempo restante. Può rimanere ferma mentre una fase indivisibile del lettore lavora, ad esempio la decodifica dei giocatori. Non usa un timer per simulare avanzamento. Il 100% viene mostrato solo dopo il successo dei controlli e la preparazione dei dati nell'interfaccia. Un errore non viene presentato come completamento. Le altre brevi letture prive di misure restano indicate come attività in corso.
 
 **Confronto:** aprendo la selezione del secondo giocatore compare un campo di ricerca dentro il menu. Digita una parte del nome, squadra, ID pubblico o interno; i risultati rispettano l'ordine per posizione. Il filtro esterno esistente rimane combinabile con quello del menu. Clic o Invio confermano, Esc o un clic fuori annullano senza cambiare il giocatore selezionato. Puoi aprire il menu con clic, F4 o freccia giù e usare le frecce per muoverti. Quando non ci sono corrispondenze, viene mostrato un messaggio e non è possibile confermare una voce inesistente. La ricerca nel menu non carica un giocatore a ogni carattere.
-
-## Novità precedenti della versione 8
-
-Storico interno da un singolo salvataggio supportato, grafico con selezione multipla degli attributi, tabella con valori e Δ per ogni campo, ricerca e selezione rapida degli attributi, punto attuale opzionale. Vedi la sezione Storico per copertura e date.
 
 ## Avvio
 

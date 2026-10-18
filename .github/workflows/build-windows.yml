@@ -1,0 +1,117 @@
+name: Build Windows executable
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Windows x64
+    runs-on: windows-2025
+    timeout-minutes: 20
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Set up Python for tests
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.13'
+
+      - name: Test Python startup probe
+        run: python -m unittest discover -s tests -v
+
+      - name: Verify real Python dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.txt
+          if ($LASTEXITCODE -ne 0) { throw "Dependency installation failed." }
+          $probe = python -E -X utf8 runtime_probe.py requirements.txt | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0 -or -not $probe.ready) {
+            throw ("Python runtime check failed: " + ($probe | ConvertTo-Json -Compress))
+          }
+
+      - name: Publish self-contained Windows application
+        shell: pwsh
+        run: |
+          dotnet publish FM26SimpleEditor.csproj --configuration Release --runtime win-x64 --self-contained true --output artifacts/publish -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:PublishTrimmed=false -p:DebugType=None
+          if ($LASTEXITCODE -ne 0) { throw "Windows publish failed." }
+
+      - name: Check and package distribution
+        shell: pwsh
+        run: |
+          $publish = Join-Path $PWD "artifacts/publish"
+          $required = @(
+            "FM26SimpleEditor.exe", "editor.py", "archive_rewrite.py",
+            "history_reader.py", "operation_progress.py",
+            "runtime_probe.py", "requirements.txt"
+          )
+          foreach ($file in $required) {
+            if (-not (Test-Path (Join-Path $publish $file) -PathType Leaf)) {
+              throw "Missing distribution file: $file"
+            }
+          }
+          # Test the copied probe and requirements, rather than the source copies.
+          $probe = python -E -X utf8 "$publish/runtime_probe.py" "$publish/requirements.txt" | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0 -or -not $probe.ready) { throw "Published probe failed." }
+          Copy-Item LICENSE, README.md, README.en.md, Installa_dipendenze.cmd -Destination $publish
+          # Include the exact corresponding source with the binary distribution.
+          git archive --format=zip --output="$publish/FM26SimpleEditor-source.zip" HEAD
+          if ($LASTEXITCODE -ne 0) { throw "Source archive failed." }
+          $commit = git rev-parse HEAD
+          @(
+            "FM26 Simple Editor - Windows x64",
+            "Commit: $commit",
+            "Source: $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/tree/$commit",
+            "",
+            "IT: Estrai tutti i file nella stessa cartella e avvia FM26SimpleEditor.exe.",
+            "EN: Extract all files into the same folder and run FM26SimpleEditor.exe.",
+            "IT: Il runtime .NET e incluso; Python e le dipendenze vengono verificati all'avvio.",
+            "EN: The .NET runtime is included; Python and dependencies are checked at startup."
+          ) | Set-Content -Path "$publish/BUILD-INFO.txt" -Encoding utf8
+          Compress-Archive -Path "$publish/*" -DestinationPath "artifacts/FM26SimpleEditor-win-x64.zip" -CompressionLevel Optimal
+
+      - name: Upload Windows ZIP
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: FM26SimpleEditor-win-x64
+          path: artifacts/FM26SimpleEditor-win-x64.zip
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: Attach ZIP to published release
+    if: github.event_name == 'release'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Download Windows ZIP
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: FM26SimpleEditor-win-x64
+          path: dist
+
+      - name: Upload release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$RELEASE_TAG" dist/FM26SimpleEditor-win-x64.zip

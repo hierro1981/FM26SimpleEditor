@@ -6,6 +6,14 @@ FM26 Simple Editor is a local, unofficial save editor for **Football Manager 26*
 
 It includes a preview using the game's 1–20 attribute scale and charts for exploring attribute development. Changes are saved to a **new, verified copy** of the `.fm` file, preserving the original save.
 
+## Download the Windows application
+
+The **Build Windows executable** workflow creates `FM26SimpleEditor-win-x64.zip` on every push to `main`, on pull requests and on manual runs. Open [Actions](https://github.com/hierro1981/FM26SimpleEditor/actions/workflows/build-windows.yml), select a successful run and download **FM26SimpleEditor-win-x64** under **Artifacts** (GitHub sign-in required; retained for 30 days). Use **Run workflow** to build manually.
+
+When a new release is published from a commit containing this workflow, the ZIP is automatically attached to the [release](https://github.com/hierro1981/FM26SimpleEditor/releases). Existing releases are not rebuilt or updated.
+
+Extract the complete ZIP and run **FM26SimpleEditor.exe**, keeping the scripts and `requirements.txt` in the same folder. The package targets **Windows x64**, includes the .NET runtime and does not require Visual Studio or the SDK. Python and its dependencies are checked and prepared at startup as described below. The license, documentation and corresponding source for the compiled commit are also included.
+
 ## Project and technical requirements
 
 A C# Windows Forms project for Visual Studio 2026, with a local Python reader. Building requires Windows, the .NET 8 SDK and the **.NET desktop development** workload. The reader uses Python 3.12 or newer and the dependencies in `requirements.txt`, checked and prepared at startup.

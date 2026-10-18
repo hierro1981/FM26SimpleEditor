@@ -9,11 +9,11 @@
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
   </PropertyGroup>
   <ItemGroup>
-    <None Update="runtime_probe.py" CopyToOutputDirectory="PreserveNewest" />
-    <None Update="requirements.txt" CopyToOutputDirectory="PreserveNewest" />
-    <None Update="editor.py" CopyToOutputDirectory="PreserveNewest" />
-    <None Update="operation_progress.py" CopyToOutputDirectory="PreserveNewest" />
-    <None Update="history_reader.py" CopyToOutputDirectory="PreserveNewest" />
-    <None Update="archive_rewrite.py" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="runtime_probe.py" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Update="requirements.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Update="editor.py" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Update="operation_progress.py" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Update="history_reader.py" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Update="archive_rewrite.py" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
 </Project>

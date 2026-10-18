@@ -6,6 +6,14 @@ FM26 Simple Editor è un editor locale e non ufficiale per i salvataggi di **Foo
 
 Include un’anteprima dei valori sulla scala 1–20 del gioco e grafici per analizzare l’evoluzione degli attributi. Le modifiche vengono salvate in una **nuova copia verificata** del file `.fm`, preservando il salvataggio originale.
 
+## Scarica l’eseguibile Windows
+
+La compilazione automatica **Build Windows executable** genera `FM26SimpleEditor-win-x64.zip` a ogni push su `main`, nelle pull request e su avvio manuale. Apri [Actions](https://github.com/hierro1981/FM26SimpleEditor/actions/workflows/build-windows.yml), seleziona una compilazione riuscita e scarica **FM26SimpleEditor-win-x64** da **Artifacts** (richiede l’accesso a GitHub; conservazione 30 giorni). Per avviare una compilazione manuale usa **Run workflow**.
+
+Quando viene pubblicata una nuova release basata su un commit che contiene questo workflow, lo ZIP viene allegato automaticamente alla [release](https://github.com/hierro1981/FM26SimpleEditor/releases). Le release già pubblicate non vengono ricompilate né aggiornate.
+
+Estrai lo ZIP completo e avvia **FM26SimpleEditor.exe**, mantenendo gli script e `requirements.txt` nella stessa cartella. Il pacchetto è per **Windows x64**, include il runtime .NET e non richiede Visual Studio o l’SDK. Python e le dipendenze vengono verificati e predisposti all’avvio come descritto sotto. Sono inclusi anche licenza, documentazione e sorgenti del commit compilato.
+
 ## Progetto e requisiti tecnici
 
 Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Per compilare richiede Windows, SDK .NET 8 e carico di lavoro **Sviluppo di applicazioni desktop .NET**. Il lettore usa Python 3.12 o successivo e le dipendenze in `requirements.txt`, verificate e predisposte all’avvio.

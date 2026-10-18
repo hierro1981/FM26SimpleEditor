@@ -41,10 +41,12 @@ def primary_position(positions):
 
 def player_row(player, clock):
     contract = player.contract
+    team = player.club_name or player.team_club_name or ""
+    owner = (player.loan_parent_club_name or "") if player.on_loan is True else team
     positions = {key: getattr(player.positions, key.lower()) for key in POSITION_ORDER}
     main = primary_position(positions)
     return dict(uid=player.uid, id=player.unique_id, name=player.name or f"Giocatore {player.uid}",
-                team=player.club_name or player.team_club_name or "", birth=player.birth_date.isoformat() if player.birth_date else None,
+                team=team, ownerTeam=owner, birth=player.birth_date.isoformat() if player.birth_date else None,
                 ca=player.ability.current, pa=player.ability.potential,
                 paRange=player.ability.potential_range_code, teamId=player.team_id, clubUid=player.club_uid,
                 age=player.age, height=player.height_cm if player.height_cm > 0 else None,
@@ -64,6 +66,13 @@ def search_rows(rows, request, clock):
     text = str(request.get("text") or "").strip().casefold()
     exact_team = str(request.get("teamExact") or "").strip()
     contains_team = str(request.get("teamContains") or "").strip().casefold()
+    loan_team = request.get("loanTeam") or "playing"
+    if loan_team not in {"playing", "owner"}:
+        raise ValueError("Squadra di riferimento dei prestiti non riconosciuta")
+
+    def team_name(row):
+        # Only confirmed loans change teams; an unknown owner stays unknown.
+        return row.get("ownerTeam", "") if loan_team == "owner" and row["onLoan"] is True else row["team"]
     ranges = []
     for field, minimum, maximum in (("age", 0, 120), ("ca", 0, 255), ("pa", 0, 255), ("height", 100, 250)):
         low, high = request.get(field + "Min"), request.get(field + "Max")
@@ -93,11 +102,12 @@ def search_rows(rows, request, clock):
     deadline = add_months(clock, 6 if contract == "6m" else 12) if clock is not None and contract in {"6m", "12m"} else None
 
     def matches(row):
-        if exact_team and row["team"] != exact_team:
+        team = team_name(row)
+        if exact_team and team != exact_team:
             return False
-        if not exact_team and contains_team and contains_team not in row["team"].casefold():
+        if not exact_team and contains_team and contains_team not in team.casefold():
             return False
-        if text and not any(text in str(value).casefold() for value in (row["name"], row["team"], row["uid"], row["id"] if row["id"] is not None else "")):
+        if text and not any(text in str(value).casefold() for value in (row["name"], team, row["uid"], row["id"] if row["id"] is not None else "")):
             return False
         if any(row[field] is None or not low <= row[field] <= high for field, low, high in ranges):
             return False
@@ -127,6 +137,8 @@ def search_rows(rows, request, clock):
         raise ValueError("Direzione di ordinamento non valida")
     found = sorted((row for row in rows if matches(row)), key=lambda row: row["uid"])
     def sort_value(row):
+        if sort == "team":
+            return team_name(row).casefold() or None
         if sort == "mainPosition":
             key = row.get("mainPosition", primary_position(row["positions"]))
             return POSITION_ORDER.index(key) if key else None
@@ -421,3 +433,4 @@ def serve():
 
 if __name__ == "__main__":
     serve()
+

@@ -28,12 +28,16 @@ public sealed class MainForm : Form
     private readonly HistoryPanel historyPanel = new();
     private readonly HashSet<uint> comparisonPool = [];
     private readonly ContextMenuStrip comparisonMenu = new();
-    private readonly Button open = new() { Text = "Apri salvataggio", Dock = DockStyle.Fill };
+    private readonly Button open = new() { Text = "Apri salvataggio", AutoSize = true };
     private readonly TextBox file = new() { ReadOnly = true, Dock = DockStyle.Fill };
     private readonly CheckBox italian = new() { Text = "Etichette in italiano", Checked = true, AutoSize = true, Anchor = AnchorStyles.Left };
     private readonly TextBox filter = new() { Dock = DockStyle.Fill, PlaceholderText = "Cerca per nome, squadra, ID pubblico o ID interno" };
     private readonly ComboBox team = new() { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
     private readonly TextBox teamSearch = new() { Dock = DockStyle.Fill, PlaceholderText = "Filtra squadre, es. tri" };
+    private readonly ComboBox loanTeam = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 240 };
+    private static readonly Color LoanBack = Color.FromArgb(255, 247, 220);
+    private static readonly Color LoanInk = Color.FromArgb(97, 68, 8);
+    private static readonly Color LoanSelection = Color.FromArgb(143, 98, 20);
     private readonly SearchOptions options = new();
     private readonly Label searchInfo = new() { AutoSize = true, ForeColor = Color.DimGray, Anchor = AnchorStyles.Left };
     private readonly CheckBox showFilters = new() { AutoSize = true, Text = "Mostra filtri opzionali", Checked = true };
@@ -54,7 +58,7 @@ public sealed class MainForm : Form
     private readonly Label affiliation = new() { AutoSize = true, ForeColor = Color.DimGray };
     private readonly Label birthInfo = new() { AutoSize = true, ForeColor = Color.DimGray, MaximumSize = new Size(1150, 0) };
     private readonly Label changes = new() { AutoSize = true, Anchor = AnchorStyles.Left };
-    private readonly Button save = new() { Text = "Salva copia modificata", AutoSize = true, Enabled = false };
+    private readonly Button save = new() { Text = "Salva modifiche", AutoSize = true, Enabled = false };
     private readonly Button reset = new() { Text = "Ripristina giocatore", AutoSize = true, Enabled = false };
     private readonly Button view = new() { Text = "Anteprima →", AutoSize = true, Enabled = false };
     private readonly Button compareButton = new() { Text = "Confronta…", AutoSize = true, Enabled = false };
@@ -84,7 +88,7 @@ public sealed class MainForm : Form
     public MainForm(string pythonExecutable)
     {
         backend = new BackendClient(pythonExecutable);
-        Text = "FM26 Simple Editor · v10";
+        Text = "FM26 Simple Editor · v11";
         Font = new Font("Segoe UI", 10);
         Width = 1360; Height = 900;
         MinimumSize = new Size(900, 650);
@@ -93,9 +97,12 @@ public sealed class MainForm : Form
         var root = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 3, ColumnCount = 1, Padding = new Padding(8) };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        var toolbar = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, ColumnCount = 3, Padding = new Padding(0, 0, 0, 8) };
-        toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 170)); toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 205));
-        toolbar.Controls.Add(open, 0, 0); toolbar.Controls.Add(file, 1, 0); toolbar.Controls.Add(italian, 2, 0);
+        var toolbar = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, ColumnCount = 1, RowCount = 2, Padding = new Padding(0, 0, 0, 8) };
+        toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        toolbar.RowStyles.Add(new RowStyle(SizeType.AutoSize)); toolbar.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        var actions = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, WrapContents = true };
+        actions.Controls.AddRange([open, save, changes, italian]);
+        toolbar.Controls.Add(actions, 0, 0); toolbar.Controls.Add(file, 0, 1);
         var status = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 3, Padding = new Padding(5, 7, 5, 0) };
         status.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -114,6 +121,7 @@ public sealed class MainForm : Form
         players.SelectionChanged += (_, _) => choose.Enabled = !busy && players.SelectedRows.Count == 1;
         filter.TextChanged += (_, _) => QueueSearch(); team.SelectedIndexChanged += (_, _) => QueueSearch();
         teamSearch.TextChanged += (_, _) => RebuildTeamChoices();
+        loanTeam.SelectedIndexChanged += (_, _) => { if (!binding) ApplyLoanTeamView(); };
         options.Changed += (_, _) => QueueSearch();
         clearFilters.Click += (_, _) => ResetSearch();
         showFilters.CheckedChanged += (_, _) => options.Visible = showFilters.Checked;
@@ -142,6 +150,7 @@ public sealed class MainForm : Form
         tips.SetToolTip(save, "Scrive una nuova copia e la rende il file di lavoro per le modifiche successive.");
         tips.SetToolTip(teamSearch, "Cerca una parte del nome, anche in mezzo: tri mostra tutte le squadre che contengono tri. Poi puoi scegliere una squadra nell'elenco.");
         tips.SetToolTip(team, "Tutte le corrispondenze usa il testo a sinistra; scegli una squadra per limitare i giocatori a quella squadra esatta.");
+        tips.SetToolTip(loanTeam, "Per i giocatori in prestito scegli la squadra usata nell’elenco, nella ricerca e nell’ordinamento. Anteprima e confronto restano riferiti alla squadra in cui giocano.");
         team.Items.Add("Tutte le squadre"); team.SelectedIndex = 0;
     }
 
@@ -150,14 +159,21 @@ public sealed class MainForm : Form
         var root = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 5, Padding = new Padding(12) };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        var search = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 2, Padding = new Padding(0, 0, 0, 8) };
+        var search = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 3, Padding = new Padding(0, 0, 0, 8) };
         search.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40)); search.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
         search.Controls.Add(filter, 0, 0); search.SetColumnSpan(filter, 2); search.Controls.Add(teamSearch, 0, 1); search.Controls.Add(team, 1, 1);
+        loanTeam.Items.AddRange(["In cui gioca (predefinita)", "Proprietaria"]); loanTeam.SelectedIndex = 0;
+        var loanOptions = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true };
+        loanOptions.Controls.AddRange([
+            new Label { Text = "Prestiti nella squadra:", AutoSize = true, Anchor = AnchorStyles.Left }, loanTeam,
+            new Label { Text = "● In prestito", AutoSize = true, Anchor = AnchorStyles.Left, BackColor = LoanBack, ForeColor = LoanInk, Padding = new Padding(5, 3, 5, 3) }
+        ]);
+        search.Controls.Add(loanOptions, 0, 2); search.SetColumnSpan(loanOptions, 2);
         var filtersHeader = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true };
         filtersHeader.Controls.AddRange([showFilters, clearFilters, searchInfo]);
         ConfigureGrid(players); players.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; players.ReadOnly = true; players.MultiSelect = false;
         players.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        players.Columns.Add(Column("Name", "Giocatore", 20)); players.Columns.Add(Column("Team", "Squadra", 19));
+        players.Columns.Add(Column("Name", "Giocatore", 20)); players.Columns.Add(Column("SearchTeamDisplay", "Squadra", 19));
         players.Columns.Add(Column("MainPosition", "Ruolo principale", 10)); players.Columns.Add(Column("Age", "Età", 4)); players.Columns.Add(Column("PositionSummary", "Posizioni ≥12", 12));
         players.Columns.Add(Column("Ca", "CA", 4)); players.Columns.Add(Column("Pa", "PA", 4));
         players.Columns.Add(Column("ContractEndDisplay", "Scadenza", 9)); players.Columns.Add(Column("ContractLabel", "Contratto", 12));
@@ -201,6 +217,13 @@ public sealed class MainForm : Form
         };
         players.CellFormatting += (_, args) =>
         {
+            if (args.RowIndex < 0 || args.ColumnIndex < 0 || players.Rows[args.RowIndex].DataBoundItem is not PlayerRow row) return;
+            bool onLoan = row.OnLoan is true;
+            args.CellStyle!.BackColor = onLoan ? LoanBack : SystemColors.Window;
+            args.CellStyle.ForeColor = onLoan ? LoanInk : SystemColors.WindowText;
+            args.CellStyle.SelectionBackColor = onLoan ? LoanSelection : SystemColors.Highlight;
+            args.CellStyle.SelectionForeColor = onLoan ? Color.White : SystemColors.HighlightText;
+            players.Rows[args.RowIndex].Cells[args.ColumnIndex].ToolTipText = row.LoanDescription;
             if (args.RowIndex >= 0 && args.ColumnIndex >= 0 && players.Columns[args.ColumnIndex].DataPropertyName == "MainPosition" && players.Rows[args.RowIndex].DataBoundItem is PlayerRow mainRow)
                 args.Value = mainRow.MainPosition.Length == 0 ? "—" : Labels.Position(mainRow.MainPosition, italian.Checked);
             if (args.RowIndex >= 0 && players.Columns[args.ColumnIndex].DataPropertyName == "PositionSummary" && players.Rows[args.RowIndex].DataBoundItem is PlayerRow player)
@@ -249,11 +272,8 @@ public sealed class MainForm : Form
             attributes.Rows[args.RowIndex].Cells[0].ToolTipText = RoleImportance.Name(tier, italian.Checked) + " · " + Labels.Position(position, italian.Checked);
         };
         split.Panel1.Controls.Add(attrGroup); split.Panel2.Controls.Add(posGroup);
-        var footer = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 2, Padding = new Padding(0, 10, 0, 0) };
-        footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); footer.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        var buttons = new FlowLayoutPanel { AutoSize = true, FlowDirection = FlowDirection.LeftToRight, WrapContents = false };
-        buttons.Controls.AddRange([reset, view, compareButton, historyButton, save]);
-        footer.Controls.Add(changes, 0, 0); footer.Controls.Add(buttons, 1, 0);
+        var footer = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true, Padding = new Padding(0, 10, 0, 0) };
+        footer.Controls.AddRange([reset, view, compareButton, historyButton]);
         root.Controls.Add(header, 0, 0); root.Controls.Add(properties, 0, 1); root.Controls.Add(birthInfo, 0, 2); root.Controls.Add(split, 0, 3); root.Controls.Add(footer, 0, 4);
         editing.Controls.Add(root); editTab.Controls.Add(editing);
     }
@@ -296,7 +316,7 @@ public sealed class MainForm : Form
         grid.CellValueChanged += (_, _) => Changed();
         grid.CurrentCellDirtyStateChanged += (_, _) =>
         {
-            if (!binding && !busy && grid.IsCurrentCellDirty) save.Enabled = reset.Enabled = true;
+            if (!binding) Changed();
         };
         grid.DataError += (_, args) => { args.ThrowException = false; args.Cancel = true; state.Text = "Inserisci un valore numerico valido."; };
     }
@@ -314,6 +334,7 @@ public sealed class MainForm : Form
         try
         {
             var query = options.Request(filter.Text.Trim(), selectedTeam, teamSearch.Text.Trim()); query.Sort = sortField; query.Descending = sortDescending;
+            query.LoanTeam = loanTeam.SelectedIndex == 1 ? "owner" : "playing";
             var result = await backend.Send<SearchResult>(query);
             if (version != searchVersion || busy || IsDisposed) return;
             var rows = result.Uids.Where(uid => catalogByUid.ContainsKey(uid)).Select(uid => catalogByUid[uid]).ToList();
@@ -322,6 +343,14 @@ public sealed class MainForm : Form
             results.Text = $"{result.Total:N0} risultati su {catalog.Count:N0} giocatori" + (result.Total > 2500 ? " · mostrati i primi 2.500" : "");
         }
         catch (Exception exc) { if (version == searchVersion && !IsDisposed) state.Text = "Ricerca non riuscita: " + exc.Message; }
+    }
+
+    private void ApplyLoanTeamView()
+    {
+        foreach (var player in catalog) player.ShowLoanOwner = loanTeam.SelectedIndex == 1;
+        if (detail is not null) detail.Player.ShowLoanOwner = loanTeam.SelectedIndex == 1;
+        allTeams = catalog.Select(player => player.SearchTeam).Where(name => name.Length > 0).Distinct().ToList();
+        RebuildTeamChoices();
     }
 
     private void RebuildTeamChoices()
@@ -345,7 +374,7 @@ public sealed class MainForm : Form
 
     private static string SortKey(string property) => property switch
     {
-        "Name" => "name", "Team" => "team", "Age" => "age", "Ca" => "ca", "Pa" => "pa",
+        "Name" => "name", "Team" or "SearchTeamDisplay" => "team", "Age" => "age", "Ca" => "ca", "Pa" => "pa",
         "MainPosition" => "mainPosition", "Id" => "id", "Uid" => "uid", "ContractEndDisplay" => "contractEnd", "ContractLabel" => "contractStatus", "PositionSummary" => "positions",
         _ => "name"
     };
@@ -389,9 +418,8 @@ public sealed class MainForm : Form
             comparisonPool.Clear(); UpdatePoolLabel(); comparison.ClearCache(); historyPanel.ClearSources();
             identity.Text = "Nessun giocatore selezionato"; affiliation.Text = "Apri una scheda dalla Ricerca.";
             editing.Enabled = false; preview.Visible = false; emptyPreview.Visible = true;
-            allTeams = catalog.Select(player => player.Team).Where(name => name.Length > 0).Distinct().ToList();
             binding = true; filter.Clear(); teamSearch.Clear(); options.ResetFilters(); team.SelectedIndex = 0; binding = false;
-            RebuildTeamChoices();
+            ApplyLoanTeamView();
             tabs.SelectedTab = searchTab;
             progress.Value = 100; progressText.Text = "100%";
             state.Text = $"Salvataggio aperto · {catalog.Count:N0} giocatori";
@@ -419,6 +447,7 @@ public sealed class MainForm : Form
     private void SetDetail(PlayerDetail selected)
     {
         binding = true;
+        selected.Player.ShowLoanOwner = loanTeam.SelectedIndex == 1;
         detail = selected; originalAttributes = PreviewMath.StoredOrder(selected.Attributes); originalPositions = PreviewMath.StoredOrder(selected.Positions);
         AddComparison(selected.Player.Uid);
         identity.Text = selected.Player.Name;
@@ -464,14 +493,14 @@ public sealed class MainForm : Form
     private void Changed()
     {
         if (binding) return;
-        bool dirty = HasChanges();
+        bool dirty = HasChanges() || attributes.IsCurrentCellDirty || positions.IsCurrentCellDirty;
         save.Enabled = reset.Enabled = !busy && dirty;
         view.Enabled = !busy && detail is not null;
         compareButton.Enabled = historyButton.Enabled = !busy && detail is not null;
         caMeter.Value = (int)ca.Value; paMeter.Value = pa.Value >= 0 ? (int)pa.Value : null;
-        changes.Text = detail is null ? "" : dirty ? "● Modifiche non salvate" : "Valori del file aperto";
+        changes.Text = file.Text.Length == 0 ? "" : dirty ? "● Modifiche non salvate" : "Nessuna modifica da salvare";
         changes.ForeColor = dirty ? Color.FromArgb(161, 99, 16) : Color.DimGray;
-        Text = "FM26 Simple Editor · v10" + (dirty ? " *" : "");
+        Text = "FM26 Simple Editor · v11" + (dirty ? " *" : "");
         attributes.Invalidate(); previewStale = true; RefreshPreview(); RefreshComparison();
     }
 
@@ -521,6 +550,7 @@ public sealed class MainForm : Form
                 attributes = PreviewMath.StoredOrder(detail.Attributes), positions = PreviewMath.StoredOrder(detail.Positions), output = dialog.FileName
             }, ReportProgress);
             file.Text = result.Source;
+            result.Detail.Player.ShowLoanOwner = loanTeam.SelectedIndex == 1;
             int at = catalog.FindIndex(player => player.Uid == result.Detail.Player.Uid);
             if (at >= 0) catalog[at] = result.Detail.Player;
             catalogByUid[result.Detail.Player.Uid] = result.Detail.Player;
@@ -579,3 +609,4 @@ public sealed class MainForm : Form
         base.Dispose(disposing);
     }
 }
+

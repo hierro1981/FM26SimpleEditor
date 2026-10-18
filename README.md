@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v10
+# FM26 Simple Editor · v11 (in sviluppo)
 
 Italiano | [English](README.en.md)
 
@@ -8,7 +8,7 @@ Include un’anteprima dei valori sulla scala 1–20 del gioco e grafici per ana
 
 ## Scarica l’eseguibile Windows
 
-La compilazione automatica **Build Windows executable** genera `FM26SimpleEditor-win-x64.zip` a ogni push su `main`, nelle pull request e su avvio manuale. Apri [Actions](https://github.com/hierro1981/FM26SimpleEditor/actions/workflows/build-windows.yml), seleziona una compilazione riuscita e scarica **FM26SimpleEditor-win-x64** da **Artifacts** (richiede l’accesso a GitHub; conservazione 30 giorni). Per avviare una compilazione manuale usa **Run workflow**.
+La compilazione automatica **Build Windows executable** genera `FM26SimpleEditor-win-x64.zip` a ogni push su `main` o sul branch `v11`, nelle pull request e su avvio manuale. Apri [Actions](https://github.com/hierro1981/FM26SimpleEditor/actions/workflows/build-windows.yml), seleziona una compilazione riuscita e scarica **FM26SimpleEditor-win-x64** da **Artifacts** (richiede l’accesso a GitHub; conservazione 30 giorni). Per avviare una compilazione manuale usa **Run workflow**.
 
 Quando viene pubblicata una nuova release basata su un commit che contiene questo workflow, lo ZIP viene allegato automaticamente alla [release](https://github.com/hierro1981/FM26SimpleEditor/releases). Le release già pubblicate non vengono ricompilate né aggiornate.
 
@@ -37,13 +37,19 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 
 **Confronto:** aprendo la selezione del secondo giocatore compare un campo di ricerca dentro il menu. Digita una parte del nome, squadra, ID pubblico o interno; i risultati rispettano l'ordine per posizione. Il filtro esterno esistente rimane combinabile con quello del menu. Clic o Invio confermano, Esc o un clic fuori annullano senza cambiare il giocatore selezionato. Puoi aprire il menu con clic, F4 o freccia giù e usare le frecce per muoverti. Quando non ci sono corrispondenze, viene mostrato un messaggio e non è possibile confermare una voce inesistente. La ricerca nel menu non carica un giocatore a ogni carattere.
 
-## Novità della versione 10
+## Novità precedenti della versione 10
 
 - **Controllo automatico dell’ambiente all’avvio:** ricerca Python 3.12 o successivo, verifica le versioni delle dipendenze e controlla che le librerie siano importabili.
 - **Installazione guidata di Python:** se manca un interprete compatibile, propone Python 3.13 tramite WinGet oppure il sito ufficiale.
 - **Dipendenze predisposte automaticamente:** se mancanti o non utilizzabili, vengono installate o riparate in un ambiente dedicato all’editor. Sono disponibili dettagli, annullamento e **Riprova**.
 - **Distribuzione Windows pronta all’uso:** GitHub Actions compila e verifica lo ZIP Windows x64 con runtime .NET incluso e lo allega alle nuove release. Il pacchetto include anche i sorgenti corrispondenti.
 - **Documentazione bilingue:** README in italiano e inglese, con istruzioni per il pacchetto compilato e per l’avvio dai sorgenti.
+
+## Novità della versione 11 — branch di sviluppo
+
+- **Prestiti riconoscibili nell’elenco:** righe evidenziate in ocra, anche quando selezionate, con legenda e tooltip che indica squadra attuale e proprietaria. I prestiti con stato non disponibile non vengono colorati come confermati.
+- **Squadra di riferimento dei prestiti:** il selettore **Prestiti nella squadra** usa **In cui gioca** come impostazione iniziale; scegli **Proprietaria** per vedere i prestiti tra i giocatori del club proprietario. Colonna Squadra, elenco delle squadre, ricerca per testo e ordinamento usano tutti il riferimento scelto. Se la proprietaria non è leggibile, viene indicata come non disponibile. Il selettore resta visibile anche nascondendo i filtri opzionali; **Azzera filtri** conserva questa preferenza di visualizzazione per la sessione. Anteprima, confronto e stelle restano riferiti alla squadra in cui il calciatore gioca.
+- **Salvataggio sempre raggiungibile:** **Salva modifiche** è nella barra superiore, vicino ad **Apri salvataggio**, insieme all’indicazione delle modifiche non salvate. È accessibile da tutte le schede e si abilita quando ci sono modifiche, anche durante l’editing di una cella. Continua a creare una nuova copia verificata del salvataggio.
 
 ## Avvio
 
@@ -124,12 +130,13 @@ Il confronto tra file verifica ID, nome e nascita; una nascita modificata richie
 
 ## Salvataggio
 
-**Salva copia modificata** crea un nuovo `.fm`. La copia verificata diventa il file di lavoro: le modifiche a un secondo giocatore mantengono quelle già salvate al primo. L'originale non può essere scelto come destinazione. Il programma segnala le modifiche non salvate prima di cambiare giocatore o file.
+**Salva modifiche** crea un nuovo `.fm`. La copia verificata diventa il file di lavoro: le modifiche a un secondo giocatore mantengono quelle già salvate al primo. L'originale non può essere scelto come destinazione. Il programma segnala le modifiche non salvate prima di cambiare giocatore o file.
 
 Sono incluse le correzioni precedenti: JSON Unicode, ID pubblico facoltativo, verifica della data e ricostruzione di tutte le voci dell'indice, comprese quelle annidate. La scrittura verifica tutte le sezioni compresse prima e dopo la modifica. Un file con indice già incoerente viene rifiutato: usa un salvataggio originale funzionante.
 
 ## Verifica
 
-Il controllo iniziale Python ha test automatici eseguibili con `python -m unittest discover -s tests -v`: interprete troppo vecchio, pacchetti assenti o con versione diversa, import non funzionanti, pip assente e requisiti non validi. La finestra Windows, il rilevamento delle installazioni e l’installazione con WinGet richiedono una prova su Windows.
+Dopo aver installato le dipendenze, esegui `python -m unittest discover -s tests -v` per i test della ricerca dei prestiti (squadra attuale/proprietaria, stato ignoto, filtri combinati, ordinamento e limite dei risultati) e del controllo iniziale Python: interprete troppo vecchio, pacchetti assenti o con versione diversa, import non funzionanti, pip assente e requisiti non validi. La finestra Windows, il rilevamento delle installazioni e l’installazione con WinGet richiedono una prova su Windows.
 
 Il lettore e il protocollo sono verificati su salvataggi reali usati per le prove, compresi i giocatori con ID pubblico mancante e nomi Unicode. La verifica della scrittura controlla le modifiche ai campi e l'integrità dell'archivio, anche dopo modifiche successive a giocatori diversi. L'interfaccia Windows e il caricamento effettivo in Football Manager richiedono una prova sul computer Windows.
+

@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v10
+# FM26 Simple Editor · v11 (in development)
 
 [Italiano](README.md) | English
 
@@ -8,7 +8,7 @@ It includes a preview using the game's 1–20 attribute scale and charts for exp
 
 ## Download the Windows application
 
-The **Build Windows executable** workflow creates `FM26SimpleEditor-win-x64.zip` on every push to `main`, on pull requests and on manual runs. Open [Actions](https://github.com/hierro1981/FM26SimpleEditor/actions/workflows/build-windows.yml), select a successful run and download **FM26SimpleEditor-win-x64** under **Artifacts** (GitHub sign-in required; retained for 30 days). Use **Run workflow** to build manually.
+The **Build Windows executable** workflow creates `FM26SimpleEditor-win-x64.zip` on every push to `main` or the `v11` branch, on pull requests and on manual runs. Open [Actions](https://github.com/hierro1981/FM26SimpleEditor/actions/workflows/build-windows.yml), select a successful run and download **FM26SimpleEditor-win-x64** under **Artifacts** (GitHub sign-in required; retained for 30 days). Use **Run workflow** to build manually.
 
 When a new release is published from a commit containing this workflow, the ZIP is automatically attached to the [release](https://github.com/hierro1981/FM26SimpleEditor/releases). Existing releases are not rebuilt or updated.
 
@@ -37,13 +37,19 @@ Internal attribute history from a single supported save, charts with multiple se
 
 **Comparison:** opening the second-player selector reveals a search field inside the menu. Type part of a name, team, public ID or internal ID; results keep their position-based ordering. The existing external filter can be combined with the menu filter. Click or press Enter to confirm; Esc or a click outside cancels without changing the selected player. Open the menu with a click, F4 or Down, and use the arrow keys to navigate. If there are no matches, a message is shown and no nonexistent entry can be confirmed. Typing in the menu does not load a player after every character.
 
-## Changes in version 10
+## Previous changes in version 10
 
 - **Automatic environment checks at startup:** discovers Python 3.12 or newer, verifies required dependency versions and checks that libraries can be imported.
 - **Guided Python installation:** offers Python 3.13 through WinGet or the official website when no compatible interpreter is available.
 - **Automatic dependency setup:** installs or repairs missing or unusable dependencies in the editor’s dedicated environment, with details, cancellation and retry.
 - **Ready-to-use Windows distribution:** GitHub Actions builds and checks the Windows x64 ZIP with the .NET runtime included, then attaches it to newly published releases. Corresponding source is included.
 - **Bilingual documentation:** Italian and English READMEs with instructions for the compiled package and building from source.
+
+## Changes in version 11 — development branch
+
+- **Highlighted loans:** confirmed loans have ochre rows, including a distinct selection colour, a legend and tooltips showing the playing and parent clubs. An unknown loan status is not highlighted as a confirmed loan.
+- **Loan team view:** **Prestiti nella squadra** defaults to **In cui gioca** (playing club); choose **Proprietaria** (parent club) to list loaned-out players with their owner. The Team column, team picker, text search and team sorting all use the selected view. Unreadable owners are shown as unavailable. The selector remains visible when optional filters are hidden; clearing filters preserves this session display preference. Previews, comparison cohorts and stars continue to use the playing squad.
+- **Global save controls:** **Salva modifiche** (Save changes) is in the top toolbar next to **Apri salvataggio**, together with the unsaved-changes indicator. It is available from every tab and becomes enabled for pending edits, including an edited cell. Saving still creates a new verified copy.
 
 ## Getting started
 
@@ -124,12 +130,13 @@ Cross-save matching checks ID, name and birth date. A changed birth date require
 
 ## Saving
 
-**Salva copia modificata** creates a new `.fm` file. The verified copy becomes the working file: editing a second player preserves changes already saved for the first. The current original cannot be selected as the output. The application warns about unsaved changes before switching players or files.
+**Salva modifiche** creates a new `.fm` file. The verified copy becomes the working file: editing a second player preserves changes already saved for the first. The current original cannot be selected as the output. The application warns about unsaved changes before switching players or files.
 
 Earlier fixes are included: Unicode JSON, optional public IDs, birth-date verification, and rebuilding all index entries, including nested entries. Writing verifies all compressed sections before and after the change. A file with an already inconsistent index is rejected; use a working original save.
 
 ## Validation
 
-The Python startup probe has automated tests runnable with `python -m unittest discover -s tests -v`: outdated interpreter, missing or mismatched packages, failed imports, missing pip and invalid requirements. The Windows setup window, interpreter discovery and WinGet installation require testing on Windows.
+After installing dependencies, run `python -m unittest discover -s tests -v` for loan-search tests (playing/parent clubs, unknown status, combined filters, sorting and result limits) and startup-probe tests: outdated interpreter, missing or mismatched packages, failed imports, missing pip and invalid requirements. The Windows setup window, interpreter discovery and WinGet installation require testing on Windows.
 
 The reader and protocol have been tested with real saves, including players without public IDs and names containing Unicode characters. Write verification checks field changes and archive integrity, including successive edits to different players. The Windows interface and actual loading in Football Manager still require testing on a Windows computer.
+

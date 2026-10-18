@@ -2,7 +2,7 @@ name: Build Windows executable
 
 on:
   push:
-    branches: [main]
+    branches: [main, v11]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -33,9 +33,6 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Test Python startup probe
-        run: python -m unittest discover -s tests -v
-
       - name: Verify real Python dependencies
         shell: pwsh
         run: |
@@ -45,6 +42,9 @@ jobs:
           if ($LASTEXITCODE -ne 0 -or -not $probe.ready) {
             throw ("Python runtime check failed: " + ($probe | ConvertTo-Json -Compress))
           }
+
+      - name: Test Python backend and startup
+        run: python -m unittest discover -s tests -v
 
       - name: Publish self-contained Windows application
         shell: pwsh
@@ -115,3 +115,4 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: gh release upload "$RELEASE_TAG" dist/FM26SimpleEditor-win-x64.zip
+

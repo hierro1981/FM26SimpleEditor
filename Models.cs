@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FM26SimpleEditor;
 
@@ -11,6 +12,11 @@ public sealed class PlayerRow
     public uint? Id { get; set; }
     public string Name { get; set; } = "";
     public string Team { get; set; } = "";
+    public string OwnerTeam { get; set; } = "";
+    [JsonIgnore] public bool ShowLoanOwner { get; set; }
+    [JsonIgnore] public string SearchTeam => ShowLoanOwner && OnLoan is true ? OwnerTeam : Team;
+    [JsonIgnore] public string SearchTeamDisplay => SearchTeam.Length > 0 ? SearchTeam : ShowLoanOwner && OnLoan is true ? "Proprietaria non disponibile" : "—";
+    [JsonIgnore] public string LoanDescription => OnLoan is true ? $"In prestito · gioca in: {(Team.Length > 0 ? Team : "non disponibile")} · proprietaria: {(OwnerTeam.Length > 0 ? OwnerTeam : "non disponibile")}" : OnLoan is null ? "Prestito: dato non disponibile" : "";
     public string MainPosition { get; set; } = "";
     public string? Birth { get; set; }
     public int Ca { get; set; }
@@ -102,6 +108,7 @@ public sealed class SearchRequest
     public string Contract { get; set; } = "all";
     public string Foot { get; set; } = "all";
     public string Loan { get; set; } = "all";
+    public string LoanTeam { get; set; } = "playing";
     public string Sort { get; set; } = "name";
     public bool Descending { get; set; }
 }
@@ -158,3 +165,4 @@ public sealed class BackendProgress
     public long? Total { get; set; }
     public string Unit { get; set; } = "";
 }
+

@@ -97,12 +97,16 @@ public sealed class MainForm : Form
         var root = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 3, ColumnCount = 1, Padding = new Padding(8) };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        var toolbar = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 1, RowCount = 2, Margin = Padding.Empty, Padding = new Padding(0, 0, 0, 4) };
+        // Fixed command cells avoid FlowLayoutPanel measuring a narrow, wrapped toolbar.
+        var toolbar = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 4, RowCount = 2, Margin = Padding.Empty, Padding = new Padding(0, 0, 0, 4) };
+        toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         toolbar.RowStyles.Add(new RowStyle(SizeType.AutoSize)); toolbar.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        var actions = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Margin = Padding.Empty, WrapContents = true };
-        actions.Controls.AddRange([open, save, changes, italian]);
-        toolbar.Controls.Add(actions, 0, 0); toolbar.Controls.Add(file, 0, 1);
+        toolbar.Controls.Add(open, 0, 0); toolbar.Controls.Add(save, 1, 0);
+        toolbar.Controls.Add(changes, 2, 0); toolbar.Controls.Add(italian, 3, 0);
+        toolbar.Controls.Add(file, 0, 1); toolbar.SetColumnSpan(file, 4);
         var status = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 3, Padding = new Padding(5, 7, 5, 0) };
         status.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -164,13 +168,13 @@ public sealed class MainForm : Form
         for (int row = 0; row < 3; row++) search.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         search.Controls.Add(filter, 0, 0); search.SetColumnSpan(filter, 2); search.Controls.Add(teamSearch, 0, 1); search.Controls.Add(team, 1, 1);
         loanTeam.Items.AddRange(["In cui gioca (predefinita)", "Proprietaria"]); loanTeam.SelectedIndex = 0;
-        var loanOptions = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, Margin = Padding.Empty, WrapContents = true };
+        var loanOptions = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, Margin = Padding.Empty, WrapContents = false };
         loanOptions.Controls.AddRange([
             new Label { Text = "Prestiti nella squadra:", AutoSize = true, Anchor = AnchorStyles.Left }, loanTeam,
             new Label { Text = "● In prestito", AutoSize = true, Anchor = AnchorStyles.Left, BackColor = LoanBack, ForeColor = LoanInk, Padding = new Padding(5, 3, 5, 3) }
         ]);
         search.Controls.Add(loanOptions, 0, 2); search.SetColumnSpan(loanOptions, 2);
-        var filtersHeader = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, Margin = Padding.Empty, WrapContents = true };
+        var filtersHeader = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, Margin = Padding.Empty, WrapContents = false };
         filtersHeader.Controls.AddRange([showFilters, clearFilters, searchInfo]);
         ConfigureGrid(players); players.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; players.ReadOnly = true; players.MultiSelect = false;
         players.SelectionMode = DataGridViewSelectionMode.FullRowSelect;

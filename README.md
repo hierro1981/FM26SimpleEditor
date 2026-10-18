@@ -1,5 +1,13 @@
 # FM26 Simple Editor · v9
 
+Italiano | [English](README.en.md)
+
+FM26 Simple Editor è un editor locale e non ufficiale per i salvataggi di **Football Manager 26**. Permette di cercare i giocatori per nome, squadra o ID, modificarne attributi, abilità, posizioni e data di nascita quando disponibile, e confrontarli tra loro.
+
+Include un’anteprima dei valori sulla scala 1–20 del gioco e grafici per analizzare l’evoluzione degli attributi. Le modifiche vengono salvate in una **nuova copia verificata** del file `.fm`, preservando il salvataggio originale.
+
+## Progetto e requisiti tecnici
+
 Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Richiede Windows, SDK .NET 8, carico di lavoro **Sviluppo di applicazioni desktop .NET**, Python 3.12 o successivo e le dipendenze in `requirements.txt`.
 
 ## Novità precedenti della versione 7
@@ -52,7 +60,7 @@ Le colonne numeriche sono allineate a destra. I risultati hanno scrollbar orizzo
 
 **Modifica giocatore** usa tutto lo spazio della scheda per gli attributi grezzi e la familiarità nelle posizioni. Il selettore **Etichette in italiano** alterna italiano e inglese e applica l'ordine alfabetico della lingua scelta agli attributi; le posizioni seguono lo schema del campo. L'identità del campo nel file non dipende dall'etichetta né dalla sua posizione in tabella. Le traduzioni sono quelle dell'editor e possono differire da alcune diciture della localizzazione ufficiale del gioco.
 
-Gli attributi rimangono sulla scala grezza nominale 1–100, come richiesto. Sono preservati anche i valori potenziati fino a 125 supportati dal lettore. Le posizioni usano 1–20; CA e PA hanno scala nominale 0–200, con supporto ai valori già modificati fino a 255. I codici PA negativi vengono conservati. La data di nascita cambia soltanto attivando la casella dedicata e quando il record della persona è individuato senza ambiguità.
+Gli attributi rimangono sulla scala grezza nominale 1–100. Sono preservati anche i valori potenziati fino a 125 supportati dal lettore. Le posizioni usano 1–20; CA e PA hanno scala nominale 0–200, con supporto ai valori già modificati fino a 255. I codici PA negativi vengono conservati. La data di nascita cambia soltanto attivando la casella dedicata e quando il record della persona è individuato senza ambiguità.
 
 Sopra i numeri degli attributi e delle posizioni sono disegnate barre. Anche CA e PA hanno un indicatore. Rosso corrisponde a 1–5, giallo a 6–10, verde a 11–15 e blu a 16–20; per i valori grezzi la valutazione del colore usa la conversione 1–20. Per propensione agli infortuni e scorrettezza il colore è invertito, dato che un valore basso è favorevole. La lunghezza indica il valore effettivo rispetto alla scala nominale. La scala dei valori non viene cambiata: nell'editing rimane grezza.
 
@@ -74,7 +82,7 @@ Il confronto è in sola lettura: mostra stelle CA/PA stimate, le due mappe del c
 
 ## Storico degli attributi — versione 8
 
-La quinta scheda apre automaticamente **Storico interno · sperimentale** quando riconosce una sequenza nel file aperto. Non è necessario caricare altri salvataggi. Il lettore è limitato alla build 26.3.2 con schema game_db 4000, verificata sui file forniti: richiede almeno due campioni, struttura ripetuta coerente e un solo candidato. Dati assenti, formati diversi e sequenze ambigue rimangono non disponibili; in questi casi viene proposta la modalità dei salvataggi datati con il motivo del mancato riconoscimento.
+La quinta scheda apre automaticamente **Storico interno · sperimentale** quando riconosce una sequenza nel file aperto. Non è necessario caricare altri salvataggi. Il lettore è limitato alla build 26.3.2 con schema game_db 4000, verificata sui salvataggi di prova: richiede almeno due campioni, struttura ripetuta coerente e un solo candidato. Dati assenti, formati diversi e sequenze ambigue rimangono non disponibili; in questi casi viene proposta la modalità dei salvataggi datati con il motivo del mancato riconoscimento.
 
 Sono stati identificati **47 attributi visibili**, in campioni da 69 byte. Non vengono attribuite CA/PA storiche, valori dei piedi o attributi nascosti ai campioni che non li contengono. La presenza e la copertura dello storico possono variare tra giocatori. Il lettore è sperimentale e non è una garanzia di supporto per altri formati.
 
@@ -94,8 +102,8 @@ Il confronto tra file verifica ID, nome e nascita; una nascita modificata richie
 
 **Salva copia modificata** crea un nuovo `.fm`. La copia verificata diventa il file di lavoro: le modifiche a un secondo giocatore mantengono quelle già salvate al primo. L'originale non può essere scelto come destinazione. Il programma segnala le modifiche non salvate prima di cambiare giocatore o file.
 
-Sono incluse le correzioni precedenti: JSON Unicode, ID pubblico facoltativo, verifica della data e ricostruzione di tutte le voci dell'indice, comprese quelle annidate. La scrittura verifica tutte le sezioni compresse prima e dopo la modifica. Un file con indice già incoerente viene rifiutato: usa l'originale funzionante oppure il salvataggio riparato fornito nella conversazione.
+Sono incluse le correzioni precedenti: JSON Unicode, ID pubblico facoltativo, verifica della data e ricostruzione di tutte le voci dell'indice, comprese quelle annidate. La scrittura verifica tutte le sezioni compresse prima e dopo la modifica. Un file con indice già incoerente viene rifiutato: usa un salvataggio originale funzionante.
 
 ## Verifica
 
-Il lettore e il protocollo sono verificati sui salvataggi di questa conversazione, compresi i giocatori con ID pubblico mancante e nomi Unicode. La verifica della scrittura controlla le modifiche ai campi e l'integrità dell'archivio, anche dopo modifiche successive a giocatori diversi. L'interfaccia Windows e il caricamento effettivo in Football Manager richiedono una prova sul computer Windows.
+Il lettore e il protocollo sono verificati su salvataggi reali usati per le prove, compresi i giocatori con ID pubblico mancante e nomi Unicode. La verifica della scrittura controlla le modifiche ai campi e l'integrità dell'archivio, anche dopo modifiche successive a giocatori diversi. L'interfaccia Windows e il caricamento effettivo in Football Manager richiedono una prova sul computer Windows.

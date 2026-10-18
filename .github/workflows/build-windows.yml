@@ -2,8 +2,6 @@ name: Build Windows executable
 
 on:
   push:
-    branches: [main, v11]
-  pull_request:
     branches: [main]
   workflow_dispatch:
   release:
@@ -14,6 +12,8 @@ permissions:
 
 jobs:
   build:
+    # Manual dispatches on development branches must not publish executables.
+    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
     name: Windows x64
     runs-on: windows-2025
     timeout-minutes: 20

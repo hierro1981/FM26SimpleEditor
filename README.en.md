@@ -8,7 +8,7 @@ It includes a preview using the game's 1–20 attribute scale and charts for exp
 
 ## Download the Windows application
 
-The **Build Windows executable** workflow creates `FM26SimpleEditor-win-x64.zip` on every push to `main` or the `v11` branch, on pull requests and on manual runs. Open [Actions](https://github.com/hierro1981/FM26SimpleEditor/actions/workflows/build-windows.yml), select a successful run and download **FM26SimpleEditor-win-x64** under **Artifacts** (GitHub sign-in required; retained for 30 days). Use **Run workflow** to build manually.
+The **Build Windows executable** workflow creates `FM26SimpleEditor-win-x64.zip` on every push to `main`, on manual runs from `main`, and for published releases. Development branches and pull requests do not generate EXE or ZIP files; manual runs on branches other than `main` are skipped too. Open [Actions](https://github.com/hierro1981/FM26SimpleEditor/actions/workflows/build-windows.yml), select a successful run and download **FM26SimpleEditor-win-x64** under **Artifacts** (GitHub sign-in required; retained for 30 days). Use **Run workflow** to build manually.
 
 When a new release is published from a commit containing this workflow, the ZIP is automatically attached to the [release](https://github.com/hierro1981/FM26SimpleEditor/releases). Existing releases are not rebuilt or updated.
 
@@ -49,7 +49,7 @@ Internal attribute history from a single supported save, charts with multiple se
 
 - **Highlighted loans:** confirmed loans have ochre rows, including a distinct selection colour, a legend and tooltips showing the playing and parent clubs. An unknown loan status is not highlighted as a confirmed loan.
 - **Loan team view:** **Prestiti nella squadra** defaults to **In cui gioca** (playing club); choose **Proprietaria** (parent club) to list loaned-out players with their owner. The Team column, team picker, text search and team sorting all use the selected view. Unreadable owners are shown as unavailable. The selector remains visible when optional filters are hidden; clearing filters preserves this session display preference. Previews, comparison cohorts and stars continue to use the playing squad.
-- **Global save controls:** **Salva modifiche** (Save changes) is in the top toolbar next to **Apri salvataggio**, together with the unsaved-changes indicator. It is available from every tab and becomes enabled for pending edits, including an edited cell. Saving still creates a new verified copy.
+- **Global save controls:** **Salva modifiche** (Save changes) is in the top toolbar next to **Apri salvataggio**, together with the unsaved-changes indicator. It is available from every tab and becomes enabled for pending edits, including an edited cell. Toolbar and search panels shrink to their contents, reducing blank space above the tabs and filters. Saving still creates a new verified copy.
 
 ## Getting started
 

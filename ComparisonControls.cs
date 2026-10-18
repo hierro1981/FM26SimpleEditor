@@ -65,16 +65,20 @@ public sealed class ComparisonPanel : UserControl
         root.Controls.Add(toolbar, 0, 0); root.Controls.Add(info, 0, 1); root.Controls.Add(headers, 0, 2); root.Controls.Add(fields, 0, 3); root.Controls.Add(views, 0, 4);
         void FitFields()
         {
-            bool attributesVisible = views.SelectedTab == attributesTab;
+            bool attributesVisible = views.SelectedTab is null || views.SelectedTab == attributesTab;
             bool showFields = attributesVisible && showPitch.Checked;
             fields.Visible = showFields;
             showPitch.Enabled = raw.Enabled = hidden.Enabled = attributesVisible;
             root.RowStyles[3].Height = showFields ? Math.Clamp(ClientSize.Height * .39f, 160 * DeviceDpi / 96f, 340 * DeviceDpi / 96f) : 0;
         }
+        Load += (_, _) => FitFields();
+        VisibleChanged += (_, _) => { if (Visible) FitFields(); };
+        views.HandleCreated += (_, _) => FitFields();
         SizeChanged += (_, _) => FitFields(); showPitch.CheckedChanged += (_, _) => FitFields();
         views.SelectedIndexChanged += (_, _) => { FitFields(); Render(); };
         primaryPitch.MinimumSize = otherPitch.MinimumSize = Size.Empty;
         Controls.Add(root);
+        FitFields();
         source.SelectedIndexChanged += (_, _) => RebuildPlayerChoices(); query.TextChanged += (_, _) => RebuildPlayerChoices();
         candidates.SelectedIndexChanged += async (_, _) => { if (!updating) await LoadReference(); };
         raw.CheckedChanged += (_, _) => Render(); hidden.CheckedChanged += (_, _) => Render();
@@ -148,8 +152,8 @@ public sealed class ComparisonPanel : UserControl
         remove.Enabled = candidates.SelectedItem is PlayerChoice entry && pool.Contains(entry.Uid);
         clear.Enabled = pool.Count > 0;
         grid.Columns.Clear(); grid.Rows.Clear();
-        primaryName.Text = primary is null ? "Apri un giocatore da Ricerca" : "A · " + primary.Player.Name;
-        otherName.Text = other is null ? "Scegli un giocatore da confrontare" : "B · " + other.Player.Name;
+        primaryName.Text = primary is null ? "Apri un giocatore da Ricerca" : (views.SelectedTab == reportTab ? "" : "A · ") + primary.Player.Name;
+        otherName.Text = other is null ? "Scegli un giocatore da confrontare" : (views.SelectedTab == reportTab ? "" : "B · ") + other.Player.Name;
         primaryMeta.Text = primary is null ? "" : $"{primary.Player.Team} · CA {currentCa} · PA {(currentPa >= 0 ? currentPa.ToString() : "N/D")}";
         otherMeta.Text = other is null ? "" : $"{other.Player.Team} · CA {other.Player.Ca} · PA {other.Player.Pa?.ToString() ?? "N/D"}";
         List<PlayerRow> squad = primary is null ? [] : catalog.Where(row => row.Ca > 0 && (primary.Player.TeamId.HasValue ? row.TeamId == primary.Player.TeamId : primary.Player.ClubUid.HasValue && row.ClubUid == primary.Player.ClubUid)).ToList();
@@ -158,6 +162,10 @@ public sealed class ComparisonPanel : UserControl
         primaryPotential.Rating = PreviewMath.Stars(currentPa > 0 ? currentPa : null,mean); otherPotential.Rating = PreviewMath.Stars(other?.Player.Pa,mean);
         attributesTab.Text = italian ? "Attributi" : "Attributes"; reportTab.Text = italian ? "Report per ruolo" : "Position report";
         info.Text = $"{pool.Count} giocatori nell'elenco · {(dirty ? "A include modifiche non salvate" : "A: giocatore aperto")} · B: valori del file. Stelle stimate rispetto alla squadra di A. Δ = A − B; ← A migliore, B migliore →. " + (views.SelectedTab == reportTab ? "Report su scala 1–20 con pesi 3/2/1." : ValuePalette.Legend);
+        if (views.SelectedTab == reportTab)
+            info.Text = italian
+                ? $"{pool.Count} giocatori nell’elenco · {(primary?.Player.Name ?? "Giocatore aperto")}: {(dirty ? "modifiche non salvate incluse" : "valori del file")} · {(other?.Player.Name ?? "Secondo giocatore")}: valori del file. Stelle relative alla squadra del giocatore aperto."
+                : $"{pool.Count} comparison players · {(primary?.Player.Name ?? "Open player")}: {(dirty ? "unsaved edits included" : "file values")} · {(other?.Player.Name ?? "Other player")}: file values. Stars relative to the open player’s team.";
         primaryPitch.SetPositions(primary?.Positions ?? [], italian); otherPitch.SetPositions(other?.Positions ?? [], italian);
         report.SetContext(primary, other, italian);
         if (primary is null || other is null) return;
@@ -170,7 +178,7 @@ public sealed class ComparisonPanel : UserControl
         grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = italian ? "Migliore" : "Winner", Width = 150, SortMode = DataGridViewColumnSortMode.NotSortable });
         float[] weights = [13, 25, 19, 10, 19, 14];
         for (int i = 0; i < grid.Columns.Count; i++) { grid.Columns[i].FillWeight = weights[i]; grid.Columns[i].MinimumWidth = i == 1 ? 130 : i == 3 ? 80 : 90; }
-        string Winner(int delta) => delta > 0 ? "A · " + primary.Player.Name : delta < 0 ? "B · " + other.Player.Name : italian ? "Pari" : "Equal";
+        string Winner(int delta) => delta > 0 ? primary.Player.Name : delta < 0 ? other.Player.Name : italian ? "Pari" : "Equal";
         info.Text += $"   CA: {Winner(currentCa-other.Player.Ca)} ({currentCa-other.Player.Ca:+0;-0;0})";
         if (currentPa > 0 && other.Player.Pa is > 0) info.Text += $" · PA: {Winner(currentPa-other.Player.Pa.Value)} ({currentPa-other.Player.Pa.Value:+0;-0;0})";
         grid.RowTemplate.Height = 41;
@@ -193,4 +201,5 @@ public sealed class ComparisonPanel : UserControl
         grid.ClearSelection();
     }
 }
+
 

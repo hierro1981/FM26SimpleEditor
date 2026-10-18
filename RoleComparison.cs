@@ -20,6 +20,24 @@ public sealed record RoleComparisonResult(string Position, double? ScoreA, doubl
 // Transparent editor heuristic, independent of CA/PA, star ratings and FM match formulas.
 public static class RoleComparison
 {
+    // Only shared, valid attributes from the selected position profile contribute.
+    // At least two observations are needed to describe an aspect; the role score is unchanged.
+    public static IReadOnlyList<RoleAspect> Analyze(RoleComparisonResult result)
+    {
+        (string Key, string It, string En, string[] Fields)[] domains =
+        [
+            ("defence", "nei duelli e nella lettura difensiva", "in defensive duels and reading play", ["tackling", "marking", "anticipation", "positioning", "concentration"]),
+            ("build_up", "nella costruzione e nel controllo del pallone", "in build-up and ball control", ["passing", "vision", "first_touch", "technique", "decisions"]),
+            ("attack", "nella rifinitura e nelle soluzioni offensive", "in chance creation and attacking options", ["crossing", "dribbling", "off_the_ball", "finishing", "long_shots", "composure"]),
+            ("mobility", "nella mobilità e nella rapidità", "in mobility and speed", ["pace", "acceleration", "agility", "balance"]),
+            ("support", "nel lavoro e nel sostegno alla manovra", "in work rate and team support", ["work_rate", "teamwork", "stamina"]),
+            ("duels", "nei mezzi per i duelli fisici e aerei", "in attributes for physical and aerial duels", ["strength", "jumping_reach", "heading", "bravery"]),
+            ("keeping", "nelle qualità da portiere", "in goalkeeping qualities", ["reflexes", "handling", "one_on_ones", "aerial_reach", "command_of_area", "communication", "rushing_out"])
+        ];
+        return domains.Select(d => new RoleAspect(d.Key, d.It, d.En, result.Stats.Where(s => d.Fields.Contains(s.Key)).ToArray()))
+            .Where(d => d.Stats.Count >= 2).ToArray();
+    }
+
     public const double BalancedMargin = .25;
     public const int PlayableMinimum = 12;
 
@@ -65,4 +83,10 @@ public static class RoleComparison
         }
         return new(position, scoreA, scoreB, fa, fb, stats, missing, verdict, suggested);
     }
+}
+
+
+public sealed record RoleAspect(string Key, string Italian, string English, IReadOnlyList<RoleComparisonStat> Stats)
+{
+    public double Delta => Stats.Sum(s => s.Delta * s.Weight) / (double)Stats.Sum(s => s.Weight);
 }

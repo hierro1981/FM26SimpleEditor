@@ -70,25 +70,68 @@ internal static class Checks
             Check(PreviewMath.DeltaText(2, 2) == "← +2" && PreviewMath.DeltaText(-2, -2) == "-2 →", "delta arrow points toward winner");
             Check(PreviewMath.DeltaText(-2, 2) == "← -2" && PreviewMath.DeltaText(2, -2) == "+2 →", "inverse attributes preserve numeric sign");
             Check(PreviewMath.DeltaText(0, 0) == "0 =", "equal delta");
+            CommentaryChecks();
             UiChecks();
             Console.WriteLine($"{count} C# checks passed"); return 0;
         }
         catch (Exception exc) { Console.Error.WriteLine(exc); return 1; }
     }
 
+    private static void CommentaryChecks()
+    {
+        var a = Player(1); var b = Player(2);
+        a.Positions = [new EditableField { Key = "DR", Value = 20 }];
+        b.Positions = [new EditableField { Key = "DR", Value = 18 }];
+        (string Key, int A, int B)[] values = [
+            ("tackling",16,13), ("anticipation",12,9), ("marking",11,8), ("passing",13,10),
+            ("crossing",15,14), ("agility",12,11), ("stamina",13,12), ("pace",9,15),
+            ("acceleration",14,15), ("work_rate",8,12), ("teamwork",9,16),
+            ("first_touch",11,13), ("dribbling",5,9), ("positioning",9,11), ("decisions",12,12)
+        ];
+        foreach (var v in values) { Set(a, v.Key, v.A * 5); Set(b, v.Key, v.B * 5); }
+        var r = RoleComparison.Compare(a, b, "DR"); var aspects = RoleComparison.Analyze(r);
+        Check(r.Suggested == ComparisonSide.B && aspects.Single(x => x.Key == "defence").Delta > .5, "overall preference can differ from defensive preference");
+        Check(aspects.Single(x => x.Key == "mobility").Delta < -.5 && aspects.Single(x => x.Key == "support").Delta < -.5, "fullback analysis distinguishes speed and support");
+        Check(aspects.All(x => x.Stats.Count >= 2 && x.Stats.All(f => r.Stats.Contains(f))), "analysis uses only shared position attributes with sufficient coverage");
+        string text = RoleReportPanel.Describe(r, "Joaquín Buil", "Daniel Hernández", true);
+        Check(text.Contains("Joaquín Buil risulta più forte nei duelli") && text.Contains("Daniel Hernández risulta più forte nella mobilità"), "real fullback example yields named playing characteristics");
+        Check(text.Contains("Daniel Hernández conserva però un vantaggio in") && text.Contains("Familiarità: Joaquín Buil 20/20 · Daniel Hernández 18/20"), "commentary preserves counterpoints and named familiarity");
+        Check(!text.Contains("A ·") && !text.Contains("B ·") && !text.Contains("Familiarità: A "), "report text replaces letter identifiers");
+        var swapped = RoleComparison.Analyze(RoleComparison.Compare(b, a, "DR"));
+        Check(aspects.All(x => Math.Abs(x.Delta + swapped.Single(y => y.Key == x.Key).Delta) < 1e-9), "aspect analysis is symmetric when swapping players");
+        Check(RoleReportPanel.Describe(r, "Buil", "Hernández", false).Contains("Buil is stronger in defensive duels"), "English commentary includes names and evidence");
+        a.Attributes.RemoveAll(f => f.Key != "tackling");
+        r = RoleComparison.Compare(a, b, "DR");
+        Check(RoleComparison.Analyze(r).Count == 0 && RoleReportPanel.Describe(r, "Buil", "Hernández", true).Contains("analisi parziale"), "single observation does not invent a playing profile");
+        r = RoleComparison.Compare(Player(1), Player(2), "MC");
+        Check(!RoleReportPanel.AnalyzeText(r, "Alpha", "Beta", true).Contains("risulta più forte"), "tied attributes do not invent a style advantage");
+    }
+
     private static void UiChecks()
     {
         var a = Player(1, 100); var b = Player(2);
         using var host = new Form { Size = new Size(1000, 850), StartPosition = FormStartPosition.Manual };
-        using var panel = new ComparisonPanel(); host.Controls.Add(panel); host.Show();
+        using var outer = new TabControl { Dock = DockStyle.Fill };
+        outer.TabPages.Add(new TabPage("Ricerca")); var comparePage = new TabPage("Confronto"); outer.TabPages.Add(comparePage);
+        using var panel = new ComparisonPanel(); comparePage.Controls.Add(panel); host.Controls.Add(outer); host.Show();
         panel.SetContext(a, 100, 150, true, [a.Player, b.Player], new HashSet<uint> { 1, 2 }, true, _ => Task.FromResult(b));
         Application.DoEvents();
+        outer.SelectedTab = comparePage; Application.DoEvents();
+        var pitches = panel.Controls[0].Controls.Cast<Control>().OfType<TableLayoutPanel>()
+            .Single(c => c.Controls.OfType<PitchControl>().Count() == 2);
+        Check(pitches.Visible && pitches.Height >= 160 && pitches.Controls.Cast<Control>().All(c => c.Visible && c.Height >= 100), "first entry from hidden parent reserves space for both pitches");
         var grid = Descendants(panel).OfType<DataGridView>().Single(g => g.Columns.Count == 6);
         Check(grid.Columns[0].HeaderText == "Gruppo" && grid.Columns[2].HeaderText.StartsWith("A ·") && grid.Columns[3].HeaderText == "Δ A − B" && grid.Columns[4].HeaderText.StartsWith("B ·"), "comparison column order");
         Check(grid.Rows.Count > 0 && grid.Rows[0].Cells[3].Value!.ToString()!.StartsWith("←"), "rendered winner arrow");
         var views = Descendants(panel).OfType<TabControl>().Single(); views.SelectedIndex = 1; Application.DoEvents();
         var report = Descendants(panel).OfType<RoleReportPanel>().Single();
         Check(report.Visible && report.ClientSize.Height > 240, "report has usable space without duplicate pitch views");
+        var reportGrid = Descendants(report).OfType<DataGridView>().Single();
+        Check(reportGrid.Columns[2].HeaderText == "Alpha" && reportGrid.Columns[4].HeaderText == "Beta", "report columns use player names");
+        Check(Descendants(report).OfType<Label>().Any(l => l.Text.Contains("Alpha: ") && l.Text.Contains("Beta: ")), "report scores use player names");
+        views.SelectedIndex = 0; Application.DoEvents();
+        Check(pitches.Visible && pitches.Height >= 160, "pitches restored after leaving report");
+        views.SelectedIndex = 1; Application.DoEvents();
         var selector = Descendants(report).OfType<ComboBox>().Single(); selector.SelectedIndex = 0; Application.DoEvents();
         Check(Descendants(report).OfType<Label>().Any(l => l.Text.StartsWith("Portiere")), "position picker refreshes report");
         Check(Descendants(report).OfType<DataGridView>().Single().Rows.Count > 0, "report shows relevant keeper attributes");
@@ -106,3 +149,4 @@ internal static class Checks
         }
     }
 }
+

@@ -77,19 +77,19 @@ public sealed class RoleReportPanel : UserControl
         if (a is null || b is null)
         {
             scores.Text = italian ? "Seleziona due giocatori" : "Select two players";
-            summary.Text = italian ? "Apri un giocatore e scegli il secondo nel confronto. Il report include le modifiche non salvate di A." : "Open a player and choose a comparison player. The report includes A’s unsaved edits.";
+            summary.Text = italian ? "Apri un giocatore e scegli il secondo nel confronto. Il report include le modifiche non salvate del giocatore aperto." : "Open a player and choose a comparison player. The report includes the open player’s unsaved edits.";
             return;
         }
         var result = RoleComparison.Compare(a, b, key);
         var culture = CultureInfo.GetCultureInfo(italian ? "it-IT" : "en-GB");
         string Score(double? value) => value?.ToString("0.00", culture) ?? "—";
-        scores.Text = $"{Labels.Position(key, italian)} · A: {Score(result.ScoreA)}/20 · B: {Score(result.ScoreB)}/20" + (result.Complete ? "" : italian ? " · parziale" : " · partial");
+        scores.Text = $"{Labels.Position(key, italian)} · {a.Player.Name}: {Score(result.ScoreA)}/20 · {b.Player.Name}: {Score(result.ScoreB)}/20" + (result.Complete ? "" : italian ? " · parziale" : " · partial");
         summary.Text = Describe(result, a.Player.Name, b.Player.Name, italian);
         table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = italian ? "Rilevanza" : "Importance", FillWeight = 17, MinimumWidth = 100 });
         table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = italian ? "Attributo" : "Attribute", FillWeight = 31, MinimumWidth = 145 });
-        table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "A", FillWeight = 17, MinimumWidth = 70, CellTemplate = new ValueBarCell(20), DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight } });
-        table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Δ A − B", FillWeight = 18, MinimumWidth = 80, DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleCenter } });
-        table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "B", FillWeight = 17, MinimumWidth = 70, CellTemplate = new ValueBarCell(20), DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight } });
+        table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = a.Player.Name, FillWeight = 17, MinimumWidth = 70, CellTemplate = new ValueBarCell(20), DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight } });
+        table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Δ", ToolTipText = a.Player.Name + " − " + b.Player.Name, FillWeight = 18, MinimumWidth = 80, DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleCenter } });
+        table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = b.Player.Name, FillWeight = 17, MinimumWidth = 70, CellTemplate = new ValueBarCell(20), DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight } });
         foreach (DataGridViewColumn col in table.Columns) col.SortMode = DataGridViewColumnSortMode.NotSortable;
         table.RowTemplate.Height = 41;
         foreach (var stat in result.Stats.OrderBy(s => s.Tier).ThenBy(s => Labels.Attribute(s.Key, italian), Labels.Comparer(italian)))
@@ -98,14 +98,41 @@ public sealed class RoleReportPanel : UserControl
             var row = table.Rows[index];
             row.Cells[0].Style.ForeColor = RoleImportance.Ink(stat.Tier); row.Cells[0].Style.BackColor = RoleImportance.Back(stat.Tier);
             row.Cells[3].Style.ForeColor = stat.Delta > 0 ? Color.SeaGreen : stat.Delta < 0 ? Color.Firebrick : Color.DimGray;
-            row.Cells[3].ToolTipText = stat.Delta > 0 ? "A · " + a.Player.Name : stat.Delta < 0 ? "B · " + b.Player.Name : italian ? "Pari" : "Equal";
+            row.Cells[3].ToolTipText = stat.Delta > 0 ? a.Player.Name : stat.Delta < 0 ? b.Player.Name : italian ? "Pari" : "Equal";
         }
         table.ClearSelection();
     }
 
-    private static string Describe(RoleComparisonResult r, string a, string b, bool it)
+    public static string AnalyzeText(RoleComparisonResult r, string a, string b, bool it)
     {
-        string winner = r.Suggested == ComparisonSide.A ? "A · " + a : "B · " + b;
+        var aspects = RoleComparison.Analyze(r);
+        var sentences = new List<string>();
+        foreach (var aspect in aspects.Where(x => Math.Abs(x.Delta) >= .5))
+        {
+            bool left = aspect.Delta > 0;
+            string winner = left ? a : b, other = left ? b : a;
+            string evidence = string.Join(", ", aspect.Stats.Where(s => left ? s.Delta > 0 : s.Delta < 0)
+                .OrderByDescending(s => Math.Abs(s.Delta) * s.Weight).Take(3)
+                .Select(s => $"{Labels.Attribute(s.Key, it)} (+{Math.Abs(s.Delta)})"));
+            var counter = aspect.Stats.Where(s => left ? s.Delta < 0 : s.Delta > 0)
+                .OrderByDescending(s => Math.Abs(s.Delta) * s.Weight).FirstOrDefault();
+            string text = it ? $"{winner} risulta più forte {aspect.Italian}: {evidence}." : $"{winner} is stronger {aspect.English}: {evidence}.";
+            if (counter is not null)
+                text += it ? $" {other} conserva però un vantaggio in {Labels.Attribute(counter.Key, it)} (+{Math.Abs(counter.Delta)})."
+                    : $" However, {other} retains an advantage in {Labels.Attribute(counter.Key, it)} (+{Math.Abs(counter.Delta)}).";
+            sentences.Add(text);
+        }
+        if (sentences.Count == 0) sentences.Add(it ? "Gli aspetti con almeno due attributi disponibili non mostrano differenze medie di almeno mezzo punto: non emerge uno stile nettamente superiore." : "Aspects with at least two available attributes show no mean gap of half a point or more: no clearly stronger style emerges.");
+        string scope = it ? "Lettura delle caratteristiche nella posizione scelta" : "Playing characteristics in the selected position";
+        if (!r.Complete) scope += it ? " (analisi parziale)" : " (partial analysis)";
+        return scope + ":" + Environment.NewLine + string.Join(Environment.NewLine, sentences) + Environment.NewLine +
+            (it ? "Queste differenze descrivono alternative d’impiego: il punteggio complessivo pesa gli attributi del ruolo, mentre la scelta dipende anche dal compito tattico. Velocità e impegno non dimostrano da soli una maggiore propensione offensiva."
+                : "These differences describe alternatives for deployment: the overall score weights position attributes, while the choice also depends on tactical duties. Speed and work rate alone do not establish a more attacking instinct.");
+    }
+
+    public static string Describe(RoleComparisonResult r, string a, string b, bool it)
+    {
+        string winner = r.Suggested == ComparisonSide.A ? a : b;
         string conclusion = r.Verdict switch
         {
             RoleVerdict.Incomplete => it ? "Dati incompleti: nessun suggerimento affidabile. Mancano: " + string.Join(", ", r.Missing.Select(k => Labels.Attribute(k, it))) : "Incomplete data: no reliable recommendation. Missing: " + string.Join(", ", r.Missing.Select(k => Labels.Attribute(k, it))),
@@ -123,9 +150,10 @@ public sealed class RoleReportPanel : UserControl
             return string.Join(", ", fields.Select(s => $"{Labels.Attribute(s.Key, it)} (+{Math.Abs(s.Delta)})"));
         }
         string sa = Strengths(true), sb = Strengths(false);
-        return conclusion + Environment.NewLine + Environment.NewLine + $"{(it ? "Familiarità" : "Familiarity")}: A {Familiarity(r.FamiliarityA)} · B {Familiarity(r.FamiliarityB)}. " +
+        return conclusion + Environment.NewLine + Environment.NewLine + AnalyzeText(r, a, b, it) + Environment.NewLine + Environment.NewLine + $"{(it ? "Familiarità" : "Familiarity")}: {a} {Familiarity(r.FamiliarityA)} · {b} {Familiarity(r.FamiliarityB)}. " +
             $"{(it ? "Copertura" : "Coverage")}: {r.Stats.Count}/{r.Expected}." + Environment.NewLine +
-            $"A · {(it ? "vantaggi più rilevanti" : "most relevant advantages")}: {(sa.Length > 0 ? sa : "—")}." + Environment.NewLine +
-            $"B · {(it ? "vantaggi più rilevanti" : "most relevant advantages")}: {(sb.Length > 0 ? sb : "—")}.";
+            $"{a} · {(it ? "vantaggi più rilevanti" : "most relevant advantages")}: {(sa.Length > 0 ? sa : "—")}." + Environment.NewLine +
+            $"{b} · {(it ? "vantaggi più rilevanti" : "most relevant advantages")}: {(sb.Length > 0 ? sb : "—")}.";
     }
 }
+

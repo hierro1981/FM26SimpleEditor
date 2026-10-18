@@ -119,6 +119,8 @@ Comparison is read-only: it shows estimated CA/PA stars, two pitch maps and an a
 
 ### Position report — version 12
 
+The report uses player names in scores, columns and commentary. Analysis covers defence, build-up, attacking options, mobility, support, physical/aerial duels and goalkeeping when at least two attributes from the selected position profile are available. It highlights weighted mean gaps of at least 0.5 points, cites evidence and counterpoints, and does not infer attacking instincts from speed alone. Incomplete data is explicitly marked partial. Both pitch views appear on the first visit to Comparison.
+
 Open **Report per ruolo** in Comparison and click a position on the pitch, or use the keyboard-accessible list. It initially selects A’s main position; yellow marks the selected node. The report includes A’s unsaved attribute and familiarity edits and B’s file values. The two overview pitches give way to the report while this subtab is selected. Raw-scale and hidden-attribute options apply to the general comparison table.
 
 The report evaluates a **position**, using the editor’s existing attribute-importance profiles. It does not reproduce a tactical duty or the match engine. Scores are weighted means of visible 1–20 values (`clamp((raw + 2) / 5, 1, 20)`, integer division), with weights **3 essential, 2 important, 1 useful**. CA/PA, stars and attributes outside the profile do not contribute. Boosted raw values clamp at 20. Missing, duplicated or invalid values are not invented. Values tied on the game scale remain tied even when raw values differ.
@@ -164,3 +166,4 @@ The reader and protocol have been tested with real saves, including players with
 
 
 On Windows, run C# checks with `dotnet run --project tests/ComparisonChecks/ComparisonChecks.csproj --configuration Release -p:UseAppHost=false`. The **Validate comparison (DLL only)** workflow checks calculations and controls without generating EXE or ZIP files, including column order, report position selection and compact toolbar spacing.
+

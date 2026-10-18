@@ -119,6 +119,8 @@ Il confronto è in sola lettura: mostra stelle CA/PA stimate, le due mappe del c
 
 ### Report per ruolo — versione 12
 
+Il report usa i nomi dei giocatori in punteggi, colonne e commenti. L’analisi descrive difesa, costruzione, soluzioni offensive, mobilità, sostegno, duelli fisici/aerei e portiere quando almeno due attributi del profilo selezionato sono disponibili. Segnala differenze medie ponderate di almeno 0,5 punti, cita i vantaggi e le contropartite; non deduce l’indole offensiva dalla sola velocità. I dati incompleti restano esplicitamente parziali. Le disposizioni in campo sono visibili già al primo ingresso nel confronto.
+
 Nel confronto apri **Report per ruolo** e clicca una posizione sul campo; puoi usare anche l’elenco, accessibile da tastiera. La selezione iniziale è il ruolo principale di A. Il punto giallo indica la posizione valutata. Il report usa gli attributi e la familiarità di A comprese le modifiche non salvate, e i valori di B letti dal file. Le mappe doppie lasciano spazio al report quando questa sottoscheda è aperta; le opzioni scala grezza e attributi nascosti riguardano la tabella generale.
 
 È un confronto **per posizione**, con i profili editoriali già usati per colorare gli attributi nell’editing: non riproduce un compito tattico o la formula del motore partita. La media usa i valori 1–20 visibili (`clamp((grezzo + 2) / 5, 1, 20)`, divisione intera) e pesi **3 fondamentale, 2 importante, 1 utile**. CA/PA, stelle e attributi estranei al profilo non entrano nel punteggio. Valori grezzi potenziati vengono limitati a 20; valori assenti, duplicati o non validi non vengono inventati. Punteggi uguali sulla scala del gioco rimangono uguali anche se i grezzi differiscono.
@@ -162,3 +164,4 @@ Il lettore e il protocollo sono verificati su salvataggi reali usati per le prov
 
 
 La verifica C# si esegue su Windows con `dotnet run --project tests/ComparisonChecks/ComparisonChecks.csproj --configuration Release -p:UseAppHost=false`. Il workflow **Validate comparison (DLL only)** esegue i controlli senza produrre EXE o ZIP; la verifica comprende anche l’ordine delle colonne, il cambio della posizione nel report e lo spazio della barra superiore.
+

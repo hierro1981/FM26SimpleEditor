@@ -67,7 +67,7 @@ public sealed class RuntimeSetupForm : Form
         progress.Visible = true;
         status.Text = installPython ? "Installazione Python…" : "Verifica Python e dipendenze…";
         cancellation = new CancellationTokenSource();
-        var log = new Progress<string>(line =>
+        IProgress<string> log = new Progress<string>(line =>
         {
             if (IsDisposed) return;
             if (details.TextLength > 60000) details.Text = details.Text[^30000..];

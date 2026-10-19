@@ -1,4 +1,6 @@
-# FM26 Simple Editor · v13.1 (in development)
+# FM26 Simple Editor · v13.1.1 (in development)
+
+[![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
 [Italiano](README.md) | English
 
@@ -18,51 +20,16 @@ Extract the complete ZIP and run **FM26SimpleEditor.exe**, keeping the scripts a
 
 A C# Windows Forms project for Visual Studio 2026, with a local Python reader. Building requires Windows, the .NET 8 SDK and the **.NET desktop development** workload. The reader uses Python 3.12 or newer and the dependencies in `requirements.txt`, checked and prepared at startup.
 
-## Previous changes in version 7
+## Changes in version 13.1.1 — development branch
 
-- Two search rows: name/ID above, team filter and selector below. Optional filters have a limited-height area with internal scrolling and can be hidden. The results table keeps the available space and horizontal scrolling.
-- Position order: GK, SW, DL, DC, DR, WBL, DM, WBR, ML, MC, MR, AML, AMC, AMR, STC. This order applies to position familiarity, position filters, the main-position column and comparison candidates. If all familiarity values are 1 or lower, the main position is unknown and sorts last.
-- Attribute-label colours: purple for essential, blue for important, green for useful, and the normal background for other attributes. The reference position can be selected and defaults to automatic. This is the editor's position-based guidance, not official FM weights or a tactical-role assessment. Value-bar colours still indicate the quality of the value.
-- CA and PA stars with three reference scales: squad, absolute, and league when available. The absolute scale is `ability / 40`, rounded to half a star and clamped to 0.5–5; zero or unknown PA gives N/A. Relative ratings use `2.5 + (ability − mean CA) / 20`, rounded to half a star and clamped to 0.5–5. Means use the original file values, remaining stable while you edit a player.
-- League reference is derived from a readable standings group containing the exact team ID. A conservative division rule requires 18–26 teams and rounds per venue equal to the number of teams minus one. There must be a unique set of teams and at least three players with known CA. The mean uses players assigned to the exact team IDs in that table. Small leagues, ambiguous groups and unreadable data remain N/A. Names may be unavailable; the competition ID or “Divisione senza nome” is then shown. The reader infers the competition association; it is not guaranteed by the game.
-- Pitch views keep portrait proportions, with scaled, centred position markers and an adaptive comparison height. Comparison columns fill the available width, with minimum widths and scrolling when needed. The “Migliore” column identifies A/B and the player's name; the information line also identifies the CA and PA winner. Lower injury proneness and dirtiness values are considered better.
+- Total release-asset download badge at the top of both READMEs, linked to GitHub releases.
+- Version notes ordered newest first in Italian and English.
 
-## Previous changes in version 8
+## Previous changes in version 13.1
 
-Internal attribute history from a single supported save, charts with multiple selected attributes, a table with values and Δ for each field, attribute search and bulk selection, and an optional current-value point. See Attribute history for coverage and date limitations.
+- History tooltips show only attribute name, value and date, in the matching chart-series colours.
 
-## Previous changes in version 9
-
-**Opening and saving:** a progress bar shows a percentage, phase description and available counters. The catalogue reports players processed; compression and writing report MiB; verification reports sections checked. Overall progress uses weighted phase ranges and does not estimate remaining time. It may pause while the reader performs an indivisible operation, such as decoding players. No timer simulates progress. The interface reaches 100% only after checks succeed and the data is ready. Errors are not shown as successful completion. Other short reads without measurable progress remain activity indicators.
-
-**Comparison:** opening the second-player selector reveals a search field inside the menu. Type part of a name, team, public ID or internal ID; results keep their position-based ordering. The existing external filter can be combined with the menu filter. Click or press Enter to confirm; Esc or a click outside cancels without changing the selected player. Open the menu with a click, F4 or Down, and use the arrow keys to navigate. If there are no matches, a message is shown and no nonexistent entry can be confirmed. Typing in the menu does not load a player after every character.
-
-## Previous changes in version 10
-
-- **Automatic environment checks at startup:** discovers Python 3.12 or newer, verifies required dependency versions and checks that libraries can be imported.
-- **Guided Python installation:** offers Python 3.13 through WinGet or the official website when no compatible interpreter is available.
-- **Automatic dependency setup:** installs or repairs missing or unusable dependencies in the editor’s dedicated environment, with details, cancellation and retry.
-- **Ready-to-use Windows distribution:** GitHub Actions builds and checks the Windows x64 ZIP; starting with v12 the .NET runtime is excluded and .NET 8 Desktop Runtime x64 must be installed on the PC, then attaches it to newly published releases. Corresponding source is included.
-- **Bilingual documentation:** Italian and English READMEs with instructions for the compiled package and building from source.
-
-## Previous changes in version 11
-
-- **Highlighted loans:** confirmed loans have ochre rows, including a distinct selection colour, a legend and tooltips showing the playing and parent clubs. An unknown loan status is not highlighted as a confirmed loan.
-- **Loan team view:** **Prestiti nella squadra** defaults to **In cui gioca** (playing club); choose **Proprietaria** (parent club) to list loaned-out players with their owner. The Team column, team picker, text search and team sorting all use the selected view. Unreadable owners are shown as unavailable. The selector remains visible when optional filters are hidden; clearing filters preserves this session display preference. Previews, comparison cohorts and stars continue to use the playing squad.
-- **Global save controls:** **Salva modifiche** (Save changes) is in the top toolbar next to **Apri salvataggio**, together with the unsaved-changes indicator. It is available from every tab and becomes enabled for pending edits, including an edited cell. Toolbar and search panels shrink to their contents, reducing blank space above the tabs and filters. Saving still creates a new verified copy.
-
-## Previous changes in version 12
-
-- Smaller Windows distribution without the framework: requires .NET 8 Desktop Runtime x64.
-- Search filters resize to their wrapped rows, immediately releasing space when switching from two rows to one; extra rows remain scrollable in narrow windows.
-- Comparison pitches appear on first entry; reports use player names and describe playing characteristics and trade-offs supported by attributes.
-
-- Comparison columns: **Group → Attribute → A → Δ → B → Winner**, with directional winner arrows while preserving the numeric difference sign.
-- New **Position report** subtab: choose on the pitch or from a list to compare relevant attributes, weighted scores, familiarity, advantages and a reasoned suggestion.
-- Grouped position abbreviations in the main-position column identify versatile players, for example `D (LC), DM, M (C)`. Labels follow the Italian/English selector.
-- Windows C# validation builds DLLs only and checks calculations and controls. Development branches generate no EXE, ZIP or downloadable artifacts.
-
-## Changes in version 13 — development branch
+## Previous changes in version 13
 
 - The **Language** dropdown replaces the checkbox. It translates the interface, columns, filters, tooltips, messages, preview and reports immediately, preserving the open player, edits and filters.
 - The preference is saved in `FM26SimpleEditor.config.json` **alongside the executable**, containing `{"language":"en"}` or `{"language":"it"}`. It is loaded before Python preparation. Missing, malformed or unsupported settings fall back to Italian. Writes are atomic; an unwritable folder produces a warning while retaining the selected language for the session.
@@ -76,6 +43,50 @@ Internal attribute history from a single supported save, charts with multiple se
 - Hover anywhere in the plot to see all available values at the nearest observed period, showing only attribute name, value and date, in the matching series colors. Deltas are green for improvement, red for deterioration and grey for no change; lower injury proneness and dirtiness are improvements. Missing periods do not produce deltas against more distant periods.
 - Loading a player displays a percentage, actual processing phases and a counter of attributes read. Individual phases may take different amounts of time.
 - **Show reconstructed months** adds month/year labels to internal history while keeping the numbered-sample view available.
+
+## Previous changes in version 12
+
+- Smaller Windows distribution without the framework: requires .NET 8 Desktop Runtime x64.
+- Search filters resize to their wrapped rows, immediately releasing space when switching from two rows to one; extra rows remain scrollable in narrow windows.
+- Comparison pitches appear on first entry; reports use player names and describe playing characteristics and trade-offs supported by attributes.
+
+- Comparison columns: **Group → Attribute → A → Δ → B → Winner**, with directional winner arrows while preserving the numeric difference sign.
+- New **Position report** subtab: choose on the pitch or from a list to compare relevant attributes, weighted scores, familiarity, advantages and a reasoned suggestion.
+- Grouped position abbreviations in the main-position column identify versatile players, for example `D (LC), DM, M (C)`. Labels follow the Italian/English selector.
+- Windows C# validation builds DLLs only and checks calculations and controls. Development branches generate no EXE, ZIP or downloadable artifacts.
+
+## Previous changes in version 11
+
+- **Highlighted loans:** confirmed loans have ochre rows, including a distinct selection colour, a legend and tooltips showing the playing and parent clubs. An unknown loan status is not highlighted as a confirmed loan.
+- **Loan team view:** **Prestiti nella squadra** defaults to **In cui gioca** (playing club); choose **Proprietaria** (parent club) to list loaned-out players with their owner. The Team column, team picker, text search and team sorting all use the selected view. Unreadable owners are shown as unavailable. The selector remains visible when optional filters are hidden; clearing filters preserves this session display preference. Previews, comparison cohorts and stars continue to use the playing squad.
+- **Global save controls:** **Salva modifiche** (Save changes) is in the top toolbar next to **Apri salvataggio**, together with the unsaved-changes indicator. It is available from every tab and becomes enabled for pending edits, including an edited cell. Toolbar and search panels shrink to their contents, reducing blank space above the tabs and filters. Saving still creates a new verified copy.
+
+## Previous changes in version 10
+
+- **Automatic environment checks at startup:** discovers Python 3.12 or newer, verifies required dependency versions and checks that libraries can be imported.
+- **Guided Python installation:** offers Python 3.13 through WinGet or the official website when no compatible interpreter is available.
+- **Automatic dependency setup:** installs or repairs missing or unusable dependencies in the editor’s dedicated environment, with details, cancellation and retry.
+- **Ready-to-use Windows distribution:** GitHub Actions builds and checks the Windows x64 ZIP; starting with v12 the .NET runtime is excluded and .NET 8 Desktop Runtime x64 must be installed on the PC, then attaches it to newly published releases. Corresponding source is included.
+- **Bilingual documentation:** Italian and English READMEs with instructions for the compiled package and building from source.
+
+## Previous changes in version 9
+
+**Opening and saving:** a progress bar shows a percentage, phase description and available counters. The catalogue reports players processed; compression and writing report MiB; verification reports sections checked. Overall progress uses weighted phase ranges and does not estimate remaining time. It may pause while the reader performs an indivisible operation, such as decoding players. No timer simulates progress. The interface reaches 100% only after checks succeed and the data is ready. Errors are not shown as successful completion. Other short reads without measurable progress remain activity indicators.
+
+**Comparison:** opening the second-player selector reveals a search field inside the menu. Type part of a name, team, public ID or internal ID; results keep their position-based ordering. The existing external filter can be combined with the menu filter. Click or press Enter to confirm; Esc or a click outside cancels without changing the selected player. Open the menu with a click, F4 or Down, and use the arrow keys to navigate. If there are no matches, a message is shown and no nonexistent entry can be confirmed. Typing in the menu does not load a player after every character.
+
+## Previous changes in version 8
+
+Internal attribute history from a single supported save, charts with multiple selected attributes, a table with values and Δ for each field, attribute search and bulk selection, and an optional current-value point. See Attribute history for coverage and date limitations.
+
+## Previous changes in version 7
+
+- Two search rows: name/ID above, team filter and selector below. Optional filters have a limited-height area with internal scrolling and can be hidden. The results table keeps the available space and horizontal scrolling.
+- Position order: GK, SW, DL, DC, DR, WBL, DM, WBR, ML, MC, MR, AML, AMC, AMR, STC. This order applies to position familiarity, position filters, the main-position column and comparison candidates. If all familiarity values are 1 or lower, the main position is unknown and sorts last.
+- Attribute-label colours: purple for essential, blue for important, green for useful, and the normal background for other attributes. The reference position can be selected and defaults to automatic. This is the editor's position-based guidance, not official FM weights or a tactical-role assessment. Value-bar colours still indicate the quality of the value.
+- CA and PA stars with three reference scales: squad, absolute, and league when available. The absolute scale is `ability / 40`, rounded to half a star and clamped to 0.5–5; zero or unknown PA gives N/A. Relative ratings use `2.5 + (ability − mean CA) / 20`, rounded to half a star and clamped to 0.5–5. Means use the original file values, remaining stable while you edit a player.
+- League reference is derived from a readable standings group containing the exact team ID. A conservative division rule requires 18–26 teams and rounds per venue equal to the number of teams minus one. There must be a unique set of teams and at least three players with known CA. The mean uses players assigned to the exact team IDs in that table. Small leagues, ambiguous groups and unreadable data remain N/A. Names may be unavailable; the competition ID or “Divisione senza nome” is then shown. The reader infers the competition association; it is not guaranteed by the game.
+- Pitch views keep portrait proportions, with scaled, centred position markers and an adaptive comparison height. Comparison columns fill the available width, with minimum widths and scrolling when needed. The “Migliore” column identifies A/B and the player's name; the information line also identifies the CA and PA winner. Lower injury proneness and dirtiness values are considered better.
 
 ## Getting started
 
@@ -162,7 +173,7 @@ The fifth tab automatically opens **Storico interno · sperimentale** when it re
 
 A **searchable checklist** on the left allows multiple attributes to be displayed together. The initial selection follows the essential and important attributes for the main position. **Seleziona visibili** adds all attributes matching the list filter; **Nessuno** clears the entire selection. Filtering hides list entries without deselecting previously chosen attributes. Changing label language preserves selection by field identity.
 
-Each attribute has a colour and line pattern in the scrollable legend, its own curve, and a table column. Hover over points for values, sample/date and source file; overlapping points show their available information together. **Scala grezza** switches between original values and the 1–20 conversion. **Mostra Δ** adds the change from each attribute's previous available observation. There is no arbitrary limit on selected attributes; selecting a small group usually makes charts easier to read.
+Each attribute has a colour and line pattern in the scrollable legend, its own curve, and a table column. Hover over the plot to see attribute name, value and sample/date for the nearest observed period, in the matching series colours; file paths are omitted from the tooltip. **Scala grezza** switches between original values and the 1–20 conversion. **Mostra Δ** adds the change from each attribute's previous available observation. There is no arbitrary limit on selected attributes; selecting a small group usually makes charts easier to read.
 
 **Includi valori attuali del file** adds a point and highlighted **Attuali** row for the file's current values. This is a comparison against the file's state, not another historical month, and can be disabled. Unsaved changes are excluded. Columns scroll horizontally, and the chart/table divider can be dragged.
 

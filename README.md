@@ -1,4 +1,6 @@
-# FM26 Simple Editor · v13.1 (in sviluppo)
+# FM26 Simple Editor · v13.1.1 (in sviluppo)
+
+[![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
 Italiano | [English](README.en.md)
 
@@ -18,51 +20,16 @@ Estrai lo ZIP completo e avvia **FM26SimpleEditor.exe**, mantenendo gli script e
 
 Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Per compilare richiede Windows, SDK .NET 8 e carico di lavoro **Sviluppo di applicazioni desktop .NET**. Il lettore usa Python 3.12 o successivo e le dipendenze in `requirements.txt`, verificate e predisposte all’avvio.
 
-## Novità precedenti della versione 7
+## Novità della versione 13.1.1 — branch di sviluppo
 
-- Ricerca su due righe: nome/ID sopra, filtro squadre ed elenco sotto. I filtri opzionali hanno un'area di altezza limitata, con scorrimento interno e possibilità di nasconderli. La tabella conserva lo spazio disponibile e la scrollbar orizzontale.
-- Posizioni in ordine: GK, SW, DL, DC, DR, WBL, DM, WBR, ML, MC, MR, AML, AMC, AMR, STC. Questo ordine si applica alla familiarità, al filtro ruoli, alla colonna ruolo principale e ai candidati del confronto. Se tutte le familiarità sono 1 o meno, il ruolo è sconosciuto e va in fondo all'ordinamento.
-- Etichette degli attributi colorate: viola fondamentale, blu importante, verde utile, sfondo normale per gli altri. Selettore della posizione di riferimento, inizialmente automatico. È una guida editoriale per posizione, non un peso ufficiale FM né una valutazione per compito tattico. I colori delle barre continuano a indicare la qualità del valore.
-- Stelle CA e PA su tre riferimenti: squadra, assoluto e campionato disponibile. La scala assoluta è `abilità / 40`, arrotondata a mezza stella e limitata a 0,5–5; zero/PA sconosciuta danno N/D. Il confronto relativo mantiene la formula `2,5 + (abilità − CA media) / 20`, arrotondata a mezza stella e limitata a 0,5–5. Le medie usano i valori originali del file, così restano stabili mentre modifichi il giocatore.
-- Il campionato è ricavato da un gruppo di classifica leggibile contenente l'esatto team ID: regola conservativa di divisione con 18–26 squadre e turni per sede pari a squadre meno uno. Si richiede un unico insieme di squadre e almeno 3 giocatori con CA nota. La media riguarda i giocatori assegnati agli esatti team ID di quella classifica. Campionati piccoli, gruppi ambigui o non decodificati restano N/D. Il nome può mancare: in tal caso appare l'ID o “Divisione senza nome”. L'associazione alla competizione è dedotta dal lettore, non garantita dal gioco.
-- Campi con proporzioni verticali costanti, punti scalabili e centrati; altezza adattata nel confronto. Colonne del confronto distribuite su tutta la larghezza, con minimi e scorrimento quando necessario. Colonna “Migliore” con A/B e nome; CA e PA indicano anche il vincitore nella riga informativa. Per infortuni e scorrettezza vince il valore più basso.
+- Badge dei download totali degli allegati alle release in cima a entrambi i README, con collegamento alle release GitHub.
+- Note delle versioni ordinate dalla più recente alla più vecchia, in italiano e inglese.
 
-## Novità precedenti della versione 8
+## Novità precedenti della versione 13.1
 
-Storico interno da un singolo salvataggio supportato, grafico con selezione multipla degli attributi, tabella con valori e Δ per ogni campo, ricerca e selezione rapida degli attributi, punto attuale opzionale. Vedi la sezione Storico per copertura e date.
+- Tooltip dello storico con soli nome attributo, valore e data, nei colori delle rispettive serie del grafico.
 
-## Novità precedenti della versione 9
-
-**Apertura e salvataggio:** barra con percentuale, descrizione della fase e contatori disponibili. Il catalogo mostra i giocatori elaborati; compressione e scrittura mostrano i MiB; la verifica mostra le sezioni completate. La percentuale complessiva usa intervalli pesati per fase e non è una stima del tempo restante. Può rimanere ferma mentre una fase indivisibile del lettore lavora, ad esempio la decodifica dei giocatori. Non usa un timer per simulare avanzamento. Il 100% viene mostrato solo dopo il successo dei controlli e la preparazione dei dati nell'interfaccia. Un errore non viene presentato come completamento. Le altre brevi letture prive di misure restano indicate come attività in corso.
-
-**Confronto:** aprendo la selezione del secondo giocatore compare un campo di ricerca dentro il menu. Digita una parte del nome, squadra, ID pubblico o interno; i risultati rispettano l'ordine per posizione. Il filtro esterno esistente rimane combinabile con quello del menu. Clic o Invio confermano, Esc o un clic fuori annullano senza cambiare il giocatore selezionato. Puoi aprire il menu con clic, F4 o freccia giù e usare le frecce per muoverti. Quando non ci sono corrispondenze, viene mostrato un messaggio e non è possibile confermare una voce inesistente. La ricerca nel menu non carica un giocatore a ogni carattere.
-
-## Novità precedenti della versione 10
-
-- **Controllo automatico dell’ambiente all’avvio:** ricerca Python 3.12 o successivo, verifica le versioni delle dipendenze e controlla che le librerie siano importabili.
-- **Installazione guidata di Python:** se manca un interprete compatibile, propone Python 3.13 tramite WinGet oppure il sito ufficiale.
-- **Dipendenze predisposte automaticamente:** se mancanti o non utilizzabili, vengono installate o riparate in un ambiente dedicato all’editor. Sono disponibili dettagli, annullamento e **Riprova**.
-- **Distribuzione Windows pronta all’uso:** GitHub Actions compila e verifica lo ZIP Windows x64; dalla v12 il runtime .NET non è incluso e serve .NET 8 Desktop Runtime x64 installato sul PC e lo allega alle nuove release. Il pacchetto include anche i sorgenti corrispondenti.
-- **Documentazione bilingue:** README in italiano e inglese, con istruzioni per il pacchetto compilato e per l’avvio dai sorgenti.
-
-## Novità precedenti della versione 11
-
-- **Prestiti riconoscibili nell’elenco:** righe evidenziate in ocra, anche quando selezionate, con legenda e tooltip che indica squadra attuale e proprietaria. I prestiti con stato non disponibile non vengono colorati come confermati.
-- **Squadra di riferimento dei prestiti:** il selettore **Prestiti nella squadra** usa **In cui gioca** come impostazione iniziale; scegli **Proprietaria** per vedere i prestiti tra i giocatori del club proprietario. Colonna Squadra, elenco delle squadre, ricerca per testo e ordinamento usano tutti il riferimento scelto. Se la proprietaria non è leggibile, viene indicata come non disponibile. Il selettore resta visibile anche nascondendo i filtri opzionali; **Azzera filtri** conserva questa preferenza di visualizzazione per la sessione. Anteprima, confronto e stelle restano riferiti alla squadra in cui il calciatore gioca.
-- **Salvataggio sempre raggiungibile:** **Salva modifiche** è nella barra superiore, vicino ad **Apri salvataggio**, insieme all’indicazione delle modifiche non salvate. È accessibile da tutte le schede e si abilita quando ci sono modifiche, anche durante l’editing di una cella. I pannelli della barra e della ricerca si ridimensionano al contenuto, riducendo gli spazi vuoti sopra le schede e i filtri. Continua a creare una nuova copia verificata del salvataggio.
-
-## Novità precedenti della versione 12
-
-- Distribuzione Windows più leggera senza framework incluso: richiede .NET 8 Desktop Runtime x64.
-- Filtri della ricerca con altezza adattiva: passando da due righe a una, l’elenco recupera subito lo spazio; nelle finestre strette restano scorribili.
-- Confronto con disposizioni in campo visibili al primo ingresso e report con nomi dei giocatori, analisi delle caratteristiche e contropartite motivate dagli attributi.
-
-- Confronto con colonne **Gruppo → Attributo → A → Δ → B → Migliore**, frecce verso il giocatore favorito e segno numerico della differenza conservato.
-- Nuova sottoscheda **Report per ruolo**, con scelta della posizione cliccando sul campo o tramite elenco, attributi rilevanti, punteggi, familiarità, vantaggi e suggerimento motivato.
-- Sigle raggruppate nella colonna **Ruolo principale** per riconoscere i multiposizione: per esempio `D (SC), M, C (C)`. La lingua scelta alterna le sigle italiane e inglesi.
-- Verifica C# su Windows con compilazione di sole DLL e test dei calcoli e dei controlli. I branch non generano EXE, ZIP o artefatti scaricabili.
-
-## Novità della versione 13 — branch di sviluppo
+## Novità precedenti della versione 13
 
 - **Lingua**: elenco Italiano / English al posto della casella; traduce l’interfaccia, le colonne, i filtri, i tooltip, i messaggi, l’anteprima e i report. Il cambio è immediato e conserva giocatore, modifiche e filtri.
 - La preferenza viene salvata in `FM26SimpleEditor.config.json` **accanto all’eseguibile**, con contenuto `{"language":"en"}` oppure `{"language":"it"}`. Viene letta prima della preparazione di Python. File assente, non valido o lingua non supportata: italiano. La scrittura è atomica; se la cartella non è scrivibile viene mostrato un avviso e la lingua resta attiva nella sessione.
@@ -76,6 +43,50 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 - Passando sul grafico compaiono tutti i valori disponibili del periodo più vicino, con nome attributo, valore e data, nei colori delle rispettive serie. I delta sono verdi per i miglioramenti, rossi per i peggioramenti e grigi se invariati; per propensione agli infortuni e scorrettezza i valori inferiori sono migliori. Un periodo mancante non genera un delta con periodi più lontani.
 - Il caricamento del giocatore mostra percentuale, fasi effettive e contatore degli attributi letti; la durata delle singole fasi può variare.
 - Nello storico interno, **Mostra mesi ricostruiti** aggiunge mese/anno ai campioni, mantenendo disponibile la vista numerata.
+
+## Novità precedenti della versione 12
+
+- Distribuzione Windows più leggera senza framework incluso: richiede .NET 8 Desktop Runtime x64.
+- Filtri della ricerca con altezza adattiva: passando da due righe a una, l’elenco recupera subito lo spazio; nelle finestre strette restano scorribili.
+- Confronto con disposizioni in campo visibili al primo ingresso e report con nomi dei giocatori, analisi delle caratteristiche e contropartite motivate dagli attributi.
+
+- Confronto con colonne **Gruppo → Attributo → A → Δ → B → Migliore**, frecce verso il giocatore favorito e segno numerico della differenza conservato.
+- Nuova sottoscheda **Report per ruolo**, con scelta della posizione cliccando sul campo o tramite elenco, attributi rilevanti, punteggi, familiarità, vantaggi e suggerimento motivato.
+- Sigle raggruppate nella colonna **Ruolo principale** per riconoscere i multiposizione: per esempio `D (SC), M, C (C)`. La lingua scelta alterna le sigle italiane e inglesi.
+- Verifica C# su Windows con compilazione di sole DLL e test dei calcoli e dei controlli. I branch non generano EXE, ZIP o artefatti scaricabili.
+
+## Novità precedenti della versione 11
+
+- **Prestiti riconoscibili nell’elenco:** righe evidenziate in ocra, anche quando selezionate, con legenda e tooltip che indica squadra attuale e proprietaria. I prestiti con stato non disponibile non vengono colorati come confermati.
+- **Squadra di riferimento dei prestiti:** il selettore **Prestiti nella squadra** usa **In cui gioca** come impostazione iniziale; scegli **Proprietaria** per vedere i prestiti tra i giocatori del club proprietario. Colonna Squadra, elenco delle squadre, ricerca per testo e ordinamento usano tutti il riferimento scelto. Se la proprietaria non è leggibile, viene indicata come non disponibile. Il selettore resta visibile anche nascondendo i filtri opzionali; **Azzera filtri** conserva questa preferenza di visualizzazione per la sessione. Anteprima, confronto e stelle restano riferiti alla squadra in cui il calciatore gioca.
+- **Salvataggio sempre raggiungibile:** **Salva modifiche** è nella barra superiore, vicino ad **Apri salvataggio**, insieme all’indicazione delle modifiche non salvate. È accessibile da tutte le schede e si abilita quando ci sono modifiche, anche durante l’editing di una cella. I pannelli della barra e della ricerca si ridimensionano al contenuto, riducendo gli spazi vuoti sopra le schede e i filtri. Continua a creare una nuova copia verificata del salvataggio.
+
+## Novità precedenti della versione 10
+
+- **Controllo automatico dell’ambiente all’avvio:** ricerca Python 3.12 o successivo, verifica le versioni delle dipendenze e controlla che le librerie siano importabili.
+- **Installazione guidata di Python:** se manca un interprete compatibile, propone Python 3.13 tramite WinGet oppure il sito ufficiale.
+- **Dipendenze predisposte automaticamente:** se mancanti o non utilizzabili, vengono installate o riparate in un ambiente dedicato all’editor. Sono disponibili dettagli, annullamento e **Riprova**.
+- **Distribuzione Windows pronta all’uso:** GitHub Actions compila e verifica lo ZIP Windows x64; dalla v12 il runtime .NET non è incluso e serve .NET 8 Desktop Runtime x64 installato sul PC e lo allega alle nuove release. Il pacchetto include anche i sorgenti corrispondenti.
+- **Documentazione bilingue:** README in italiano e inglese, con istruzioni per il pacchetto compilato e per l’avvio dai sorgenti.
+
+## Novità precedenti della versione 9
+
+**Apertura e salvataggio:** barra con percentuale, descrizione della fase e contatori disponibili. Il catalogo mostra i giocatori elaborati; compressione e scrittura mostrano i MiB; la verifica mostra le sezioni completate. La percentuale complessiva usa intervalli pesati per fase e non è una stima del tempo restante. Può rimanere ferma mentre una fase indivisibile del lettore lavora, ad esempio la decodifica dei giocatori. Non usa un timer per simulare avanzamento. Il 100% viene mostrato solo dopo il successo dei controlli e la preparazione dei dati nell'interfaccia. Un errore non viene presentato come completamento. Le altre brevi letture prive di misure restano indicate come attività in corso.
+
+**Confronto:** aprendo la selezione del secondo giocatore compare un campo di ricerca dentro il menu. Digita una parte del nome, squadra, ID pubblico o interno; i risultati rispettano l'ordine per posizione. Il filtro esterno esistente rimane combinabile con quello del menu. Clic o Invio confermano, Esc o un clic fuori annullano senza cambiare il giocatore selezionato. Puoi aprire il menu con clic, F4 o freccia giù e usare le frecce per muoverti. Quando non ci sono corrispondenze, viene mostrato un messaggio e non è possibile confermare una voce inesistente. La ricerca nel menu non carica un giocatore a ogni carattere.
+
+## Novità precedenti della versione 8
+
+Storico interno da un singolo salvataggio supportato, grafico con selezione multipla degli attributi, tabella con valori e Δ per ogni campo, ricerca e selezione rapida degli attributi, punto attuale opzionale. Vedi la sezione Storico per copertura e date.
+
+## Novità precedenti della versione 7
+
+- Ricerca su due righe: nome/ID sopra, filtro squadre ed elenco sotto. I filtri opzionali hanno un'area di altezza limitata, con scorrimento interno e possibilità di nasconderli. La tabella conserva lo spazio disponibile e la scrollbar orizzontale.
+- Posizioni in ordine: GK, SW, DL, DC, DR, WBL, DM, WBR, ML, MC, MR, AML, AMC, AMR, STC. Questo ordine si applica alla familiarità, al filtro ruoli, alla colonna ruolo principale e ai candidati del confronto. Se tutte le familiarità sono 1 o meno, il ruolo è sconosciuto e va in fondo all'ordinamento.
+- Etichette degli attributi colorate: viola fondamentale, blu importante, verde utile, sfondo normale per gli altri. Selettore della posizione di riferimento, inizialmente automatico. È una guida editoriale per posizione, non un peso ufficiale FM né una valutazione per compito tattico. I colori delle barre continuano a indicare la qualità del valore.
+- Stelle CA e PA su tre riferimenti: squadra, assoluto e campionato disponibile. La scala assoluta è `abilità / 40`, arrotondata a mezza stella e limitata a 0,5–5; zero/PA sconosciuta danno N/D. Il confronto relativo mantiene la formula `2,5 + (abilità − CA media) / 20`, arrotondata a mezza stella e limitata a 0,5–5. Le medie usano i valori originali del file, così restano stabili mentre modifichi il giocatore.
+- Il campionato è ricavato da un gruppo di classifica leggibile contenente l'esatto team ID: regola conservativa di divisione con 18–26 squadre e turni per sede pari a squadre meno uno. Si richiede un unico insieme di squadre e almeno 3 giocatori con CA nota. La media riguarda i giocatori assegnati agli esatti team ID di quella classifica. Campionati piccoli, gruppi ambigui o non decodificati restano N/D. Il nome può mancare: in tal caso appare l'ID o “Divisione senza nome”. L'associazione alla competizione è dedotta dal lettore, non garantita dal gioco.
+- Campi con proporzioni verticali costanti, punti scalabili e centrati; altezza adattata nel confronto. Colonne del confronto distribuite su tutta la larghezza, con minimi e scorrimento quando necessario. Colonna “Migliore” con A/B e nome; CA e PA indicano anche il vincitore nella riga informativa. Per infortuni e scorrettezza vince il valore più basso.
 
 ## Avvio
 
@@ -160,7 +171,7 @@ Sono stati identificati **47 attributi visibili**, in campioni da 69 byte. Non v
 
 A sinistra trovi una **lista cercabile con caselle di selezione**. Puoi mostrare più attributi contemporaneamente; la selezione iniziale segue gli attributi fondamentali e importanti della posizione principale. **Seleziona visibili** aggiunge tutti i risultati del filtro; **Nessuno** svuota l'intera selezione. Il filtro nasconde solo le voci della lista, mantenendo gli attributi già selezionati. Cambiare lingua conserva la selezione per identità del campo.
 
-Ogni attributo ha colore e tratteggio riconoscibili nella legenda scorrevole, una curva e una colonna nella tabella. Passa sui punti per leggere valori, campione/data e file; punti sovrapposti mostrano insieme le informazioni disponibili. **Scala grezza** alterna i valori originali e la conversione 1–20. **Mostra Δ** aggiunge la variazione rispetto alla precedente osservazione disponibile per ogni attributo. Non c'è un limite arbitrario al numero di attributi selezionabili; per grafici più leggibili conviene confrontare pochi attributi alla volta.
+Ogni attributo ha colore e tratteggio riconoscibili nella legenda scorrevole, una curva e una colonna nella tabella. Passa sul grafico per leggere attributo, valore e campione/data del periodo più vicino, nei colori delle rispettive serie; i percorsi dei file non compaiono nel tooltip. **Scala grezza** alterna i valori originali e la conversione 1–20. **Mostra Δ** aggiunge la variazione rispetto alla precedente osservazione disponibile per ogni attributo. Non c'è un limite arbitrario al numero di attributi selezionabili; per grafici più leggibili conviene confrontare pochi attributi alla volta.
 
 **Includi valori attuali del file** aggiunge un punto e una riga evidenziata “Attuali”, separata concettualmente dai campioni interni. È un confronto con lo stato del file, non un ulteriore mese storico. È disattivabile. Le modifiche non ancora salvate sono escluse. Le colonne scorrono orizzontalmente e il separatore tra grafico e tabella è trascinabile.
 

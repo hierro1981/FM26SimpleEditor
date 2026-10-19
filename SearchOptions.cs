@@ -117,7 +117,7 @@ public sealed class SearchOptions : UserControl
         position.Items.Clear(); position.Items.Add(new Choice("", italian ? L10n.Get("Text_ae145daf7f24", true) : L10n.Get("Text_ae145daf7f24", false)));
         foreach (var key in PositionScheme.Order)
             position.Items.Add(new Choice(key, Labels.Position(key, italian)));
-        position.SelectedIndex = Enumerable.Range(0, position.Items.Count).FirstOrDefault(index => ((Choice)position.Items[index]).Key == old);
+        position.SelectedIndex = Enumerable.Range(0, position.Items.Count).FirstOrDefault(index => position.Items[index] is Choice choice && choice.Key == old);
         updating = false;
     }
 

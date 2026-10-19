@@ -13,6 +13,7 @@ public static class L10n
     private static readonly Dictionary<string, (string Key, object?[] Arguments)> Formatted = new(StringComparer.Ordinal);
     private static Dictionary<string, string>? reverse;
     private static IReadOnlyList<string>? keys;
+    private static List<(string Key, Regex Pattern, int Fields)>? backendPatterns;
     public static string Language { get; private set; } = "it";
     public static bool IsItalian => Language == "it";
     public static CultureInfo Culture => CultureInfo.GetCultureInfo(IsItalian ? "it-IT" : "en-GB");
@@ -63,18 +64,18 @@ public static class L10n
         Add(() => root.AccessibleName ?? "", value => root.AccessibleName = value);
         Add(() => root.AccessibleDescription ?? "", value => root.AccessibleDescription = value);
         if (root is TextBox text) Add(() => text.PlaceholderText, value => text.PlaceholderText = value);
-        if (tips is not null) Add(() => tips.GetToolTip(root), value => tips.SetToolTip(root, value));
+        if (tips is not null) Add(() => tips.GetToolTip(root) ?? "", value => tips.SetToolTip(root, value));
         if (root is ComboBox combo)
             for (int i = 0; i < combo.Items.Count; i++)
             {
                 int index = i;
-                if (combo.Items[index] is string && KeyFor((string)combo.Items[index]) is string key)
+                if (combo.Items[index] is string caption && KeyFor(caption) is string key)
                     bindings.Add(it => { if (index < combo.Items.Count && combo.Items[index] is string old && (old == Get(key, true) || old == Get(key, false))) combo.Items[index] = Get(key, it); });
             }
         if (root is DataGridView grid)
             foreach (DataGridViewColumn column in grid.Columns) Add(() => column.HeaderText, value => column.HeaderText = value);
         if (root.ContextMenuStrip is not null)
-            foreach (ToolStripItem item in root.ContextMenuStrip.Items) Add(() => item.Text, value => item.Text = value);
+            foreach (ToolStripItem item in root.ContextMenuStrip.Items) Add(() => item.Text ?? "", value => item.Text = value);
         foreach (Control child in root.Controls) Capture(child, tips);
     }
     public static void Apply(Control root, bool? italian = null)
@@ -86,17 +87,25 @@ public static class L10n
     public static string Backend(string text)
     {
         if (IsItalian || string.IsNullOrEmpty(text)) return text;
-        foreach (string key in Keys.Where(k => k.StartsWith("Backend_", StringComparison.Ordinal)))
+        if (backendPatterns is null)
         {
-            string source = Get(key, true);
-            var fields = Regex.Matches(source, @"\{(\d+)\}");
-            string pattern = Regex.Escape(source);
-            foreach (Match field in fields) pattern = pattern.Replace(Regex.Escape(field.Value), "(?<v" + field.Groups[1].Value + ">.*?)");
-            var match = Regex.Match(text, "\\A" + pattern + "\\z", RegexOptions.Singleline | RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(100));
+            backendPatterns = [];
+            foreach (string key in Keys.Where(k => k.StartsWith("Backend_", StringComparison.Ordinal)))
+            {
+                string source = Get(key, true);
+                var fields = Regex.Matches(source, @"\{(\d+)\}");
+                string pattern = Regex.Escape(source);
+                foreach (Match field in fields) pattern = pattern.Replace(Regex.Escape(field.Value), "(?<v" + field.Groups[1].Value + ">.*?)");
+                backendPatterns.Add((key, new Regex("\\A" + pattern + "\\z", RegexOptions.Singleline | RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(100)), fields.Count));
+            }
+        }
+        foreach (var template in backendPatterns)
+        {
+            var match = template.Pattern.Match(text);
             if (match.Success)
             {
-                object?[] values = Enumerable.Range(0, fields.Count).Select(i => (object?)match.Groups["v" + i].Value).ToArray();
-                return string.Format(Culture, Get(key, false), values);
+                object?[] values = Enumerable.Range(0, template.Fields).Select(i => (object?)match.Groups["v" + i].Value).ToArray();
+                return string.Format(Culture, Get(template.Key, false), values);
             }
         }
         int separator = text.IndexOf(": ", StringComparison.Ordinal);

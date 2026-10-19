@@ -375,6 +375,9 @@
   <data name="Backend_d55baabc8bc3" xml:space="preserve">
     <value>Compressione del database</value>
   </data>
+  <data name="Backend_d6546a6a217e" xml:space="preserve">
+    <value>Verifica delle sezioni della copia</value>
+  </data>
   <data name="Backend_d6aea8b8be5f" xml:space="preserve">
     <value>Il salvataggio e' cambiato sul disco: aprilo nuovamente</value>
   </data>

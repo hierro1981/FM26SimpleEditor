@@ -188,7 +188,7 @@ public sealed class MainForm : Form
             state.Text = L10n.Translate(state.Text);
             affiliation.Text = L10n.Translate(affiliation.Text);
             if (detail is not null) birthInfo.Text = detail.BirthEditable ? L10n.Get("Text_ec60709e94bb") : L10n.Backend(detail.BirthWarning);
-            BindFields(); RebuildTeamChoices(); RefreshSearch();
+            UpdatePoolLabel(); BindFields(); RebuildTeamChoices(); RefreshSearch();
             previewStale = true; RefreshPreview(); RefreshComparison(); historyPanel.SetLanguage(UseItalian);
             Changed();
             try { AppSettings.Save(configurationDirectory, selected.Id); }

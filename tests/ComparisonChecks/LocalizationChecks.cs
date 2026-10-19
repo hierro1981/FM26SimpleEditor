@@ -84,10 +84,12 @@ internal static class LocalizationChecks
             Attributes = [new EditableField { Index = 0, Key = "technique", Value = 75 }],
             Positions = [new EditableField { Index = 0, Key = "MC", Value = 20 }]
         };
+        ((Dictionary<uint, PlayerRow>)typeof(MainForm).GetField("catalogByUid", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.GetValue(main)!).Add(99, player.Player);
         typeof(MainForm).GetMethod("SetDetail", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.Invoke(main, [player]);
         player.Attributes[0].Value = 80;
         language.SelectedIndex = 1; Application.DoEvents();
         check(L10n.Language == "en" && AppSettings.Load(directory).Language == "en" && All(main).OfType<Button>().Any(b => b.Text == "Open save") && All(main).OfType<TabPage>().Any(t => t.Text == "1  Player search"), "language select updates interface and persists preference immediately");
+        check(All(main).OfType<TabPage>().Any(t => t.Text == "4  Comparison (1)"), "comparison pool count tab caption changes language");
         check(player.Attributes[0].Value == 80 && player.Attributes[0].Label == "Technique" && All(main).OfType<Label>().Any(l => l.Text == "Portiere") && All(main).OfType<Label>().Any(l => l.Text.Contains("Contratto") && l.Text.Contains("Public ID")), "language switch preserves unsaved values and player/team names while translating identity labels");
         check(All(main).OfType<CheckBox>().All(c => c.Text != "Etichette in italiano") && filters.Request("test", null, null).AgeMin == request.AgeMin, "language select replaces checkbox and preserves active filters");
         check(All(filters).OfType<GroupBox>().Any(g => g.Text == "Age (years)") && All(filters).OfType<ComboBox>().SelectMany(c => c.Items.Cast<object>()).Any(i => i.ToString() == "Expires within 6 months"), "filter captions and dropdown choices are localized");

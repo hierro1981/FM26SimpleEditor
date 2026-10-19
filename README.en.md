@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v13.1.1 (in development)
+# FM26 Simple Editor · v13.1.1
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -20,7 +20,7 @@ Extract the complete ZIP and run **FM26SimpleEditor.exe**, keeping the scripts a
 
 A C# Windows Forms project for Visual Studio 2026, with a local Python reader. Building requires Windows, the .NET 8 SDK and the **.NET desktop development** workload. The reader uses Python 3.12 or newer and the dependencies in `requirements.txt`, checked and prepared at startup.
 
-## Changes in version 13.1.1 — development branch
+## Changes in version 13.1.1
 
 - Total release-asset download badge at the top of both READMEs, linked to GitHub releases.
 - Version notes ordered newest first in Italian and English.

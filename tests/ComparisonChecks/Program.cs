@@ -73,6 +73,7 @@ internal static class Checks
             CommentaryChecks();
             UiChecks();
             LocalizationChecks.Run(Check);
+            PlayerToolsChecks.Run(Check);
             Console.WriteLine($"{count} C# checks passed"); return 0;
         }
         catch (Exception exc) { Console.Error.WriteLine(exc); return 1; }

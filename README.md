@@ -67,9 +67,12 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 - **Lingua**: elenco Italiano / English al posto della casella; traduce l’interfaccia, le colonne, i filtri, i tooltip, i messaggi, l’anteprima e i report. Il cambio è immediato e conserva giocatore, modifiche e filtri.
 - La preferenza viene salvata in `FM26SimpleEditor.config.json` **accanto all’eseguibile**, con contenuto `{"language":"en"}` oppure `{"language":"it"}`. Viene letta prima della preparazione di Python. File assente, non valido o lingua non supportata: italiano. La scrittura è atomica; se la cartella non è scrivibile viene mostrato un avviso e la lingua resta attiva nella sessione.
 - Testi in `Resources/Strings.resx` (italiano, risorsa base) e `Resources/Strings.en.resx` (inglese). Le risorse sono compilate; per cambiare o aggiungere una traduzione occorre ricompilare. Distribuire anche la cartella `en` con la DLL delle risorse inglesi.
-- **Informazioni…** mostra la versione dell’assembly e il repository. All’apertura controlla l’ultima release stabile pubblica su GitHub, con timeout e possibilità di riprovare. Il confronto è numerico e ignora bozze e prerelease. Se esiste una versione più recente, **Apri la nuova release** apre il browser. Non installa aggiornamenti e non invia dati dei salvataggi.
+- **Informazioni…** mostra la versione dell’assembly e il repository in una finestra compatta, senza attribuzione personale nel testo descrittivo. All’apertura controlla l’ultima release stabile pubblica su GitHub, con timeout e possibilità di riprovare. Il confronto è numerico e ignora bozze e prerelease. Se esiste una versione più recente, **Apri la nuova release** apre il browser. Non installa aggiornamenti e non invia dati dei salvataggi.
 - I nomi dei giocatori e delle squadre, i percorsi e i log tecnici prodotti da Python, pip o Windows conservano il testo originale. I messaggi applicativi del lettore sono tradotti nell’interfaccia.
 - Verifica Windows su DLL e risorse, senza generare EXE o ZIP nel branch.
+
+- Nella scheda giocatore, tre pulsanti con icona copia trasferiscono negli appunti nome, ID pubblico e ID interno, senza etichette o separatori numerici. Il pulsante dell’ID pubblico è disabilitato se manca il dato.
+- Nello storico interno, **Mostra mesi ricostruiti** aggiunge mese/anno ai campioni, mantenendo disponibile la vista numerata.
 
 ## Avvio
 
@@ -150,7 +153,7 @@ La quinta scheda apre automaticamente **Storico interno · sperimentale** quando
 
 Sono stati identificati **47 attributi visibili**, in campioni da 69 byte. Non vengono attribuite CA/PA storiche, valori dei piedi o attributi nascosti ai campioni che non li contengono. La presenza e la copertura dello storico possono variare tra giocatori. Il lettore è sperimentale e non è una garanzia di supporto per altri formati.
 
-**Asse orizzontale dello storico interno:** Campione 1, 2, 3… Le date individuali non sono state decodificate. La cadenza appare mensile nei salvataggi confrontati, ma l'editor non inventa mesi o giorni. Le linee collegano osservazioni registrate e non indicano valori misurati tra un campione e l'altro. La sequenza conserva i valori interni reali senza interpolarli.
+**Asse orizzontale dello storico interno:** dalla v13 **Mostra mesi ricostruiti** è attivo quando sequenza, file di origine e data del salvataggio sono univoci. La proiezione assegna i campioni ai mesi completi precedenti al mese del salvataggio: per esempio, 19 campioni con riferimento 10/02/2028 diventano luglio 2026–gennaio 2028. La cadenza mensile è una deduzione confrontata con due salvataggi e con il grafico del gioco: **non è la decodifica delle date individuali né del giorno esatto**. Tabella, tooltip e riepilogo indicano che i mesi sono ricostruiti; la riga Attuali conserva la data effettiva del file. La proiezione non modifica il salvataggio né i campi data dei campioni. Se manca un riferimento univoco, o disattivi l’opzione, restano Campione 1, 2, 3… I valori degli attributi sono quelli memorizzati, senza interpolazione.
 
 A sinistra trovi una **lista cercabile con caselle di selezione**. Puoi mostrare più attributi contemporaneamente; inizialmente sono selezionati dribbling, passaggi e tecnica. **Seleziona visibili** aggiunge tutti i risultati del filtro; **Nessuno** svuota l'intera selezione. Il filtro nasconde solo le voci della lista, mantenendo gli attributi già selezionati. Cambiare lingua conserva la selezione per identità del campo.
 

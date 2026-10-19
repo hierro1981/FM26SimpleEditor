@@ -62,6 +62,11 @@ public sealed class MainForm : Form
     private readonly CheckBox changeBirth = new() { Text = L10n.Get("Text_86941499fe9e"), AutoSize = true, Enabled = false };
     private readonly Label identity = new() { AutoSize = true, Font = new Font("Segoe UI", 18, FontStyle.Bold) };
     private readonly Label affiliation = new() { AutoSize = true, ForeColor = Color.DimGray };
+    private readonly Label publicIdText = new() { AutoSize = true, Anchor = AnchorStyles.Left };
+    private readonly Label internalIdText = new() { AutoSize = true, Anchor = AnchorStyles.Left };
+    private readonly CopyValueButton copyPlayerName = new() { Name = "CopyPlayerName", AccessibleName = L10n.Get("CopyPlayerName"), Enabled = false };
+    private readonly CopyValueButton copyPublicId = new() { Name = "CopyPublicId", AccessibleName = L10n.Get("CopyPublicId"), Enabled = false };
+    private readonly CopyValueButton copyInternalId = new() { Name = "CopyInternalId", AccessibleName = L10n.Get("CopyInternalId"), Enabled = false };
     private readonly Label birthInfo = new() { AutoSize = true, ForeColor = Color.DimGray, MaximumSize = new Size(1150, 0) };
     private readonly Label changes = new() { AutoSize = true, Anchor = AnchorStyles.Left };
     private readonly Button save = new() { Text = L10n.Get("Text_55b0f70b6858"), AutoSize = true, Enabled = false };
@@ -163,6 +168,12 @@ public sealed class MainForm : Form
             if (tabs.SelectedTab == comparisonTab) { FinishEdits(); RefreshComparison(); }
             if (tabs.SelectedTab == historyTab) RefreshHistory();
         };
+        copyPlayerName.Click += (_, _) => CopyIdentity(detail?.Player.Name);
+        copyPublicId.Click += (_, _) => CopyIdentity(detail?.Player.Id?.ToString(CultureInfo.InvariantCulture));
+        copyInternalId.Click += (_, _) => CopyIdentity(detail?.Player.Uid.ToString(CultureInfo.InvariantCulture));
+        tips.SetToolTip(copyPlayerName, L10n.Get("CopyPlayerName"));
+        tips.SetToolTip(copyPublicId, L10n.Get("CopyPublicId"));
+        tips.SetToolTip(copyInternalId, L10n.Get("CopyInternalId"));
         tips.SetToolTip(language, L10n.Get("Text_c7ba90415dbf"));
         tips.SetToolTip(ca, L10n.Get("Text_a2e3e958ed35"));
         tips.SetToolTip(pa, L10n.Get("Text_064e19de6695"));
@@ -186,7 +197,7 @@ public sealed class MainForm : Form
             L10n.Apply(this);
             options.SetLanguage(UseItalian);
             state.Text = L10n.Translate(state.Text);
-            affiliation.Text = L10n.Translate(affiliation.Text);
+            UpdatePlayerIdentity();
             if (detail is not null) birthInfo.Text = detail.BirthEditable ? L10n.Get("Text_ec60709e94bb") : L10n.Backend(detail.BirthWarning);
             UpdatePoolLabel(); BindFields(); RebuildTeamChoices(); RefreshSearch();
             previewStale = true; RefreshPreview(); RefreshComparison(); historyPanel.SetLanguage(UseItalian);
@@ -303,7 +314,12 @@ public sealed class MainForm : Form
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         var header = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, Padding = new Padding(0, 0, 0, 8) };
         identity.Text = L10n.Get("Text_3f8498e92e4b"); affiliation.Text = L10n.Get("Text_9a36d649406a");
-        header.Controls.Add(identity); header.Controls.Add(affiliation);
+        var nameRow = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, WrapContents = true, Dock = DockStyle.Fill, Margin = Padding.Empty };
+        copyPlayerName.Anchor = AnchorStyles.Left;
+        nameRow.Controls.AddRange([identity, copyPlayerName]);
+        var identityRow = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, WrapContents = true, Dock = DockStyle.Fill, Margin = Padding.Empty };
+        identityRow.Controls.AddRange([affiliation, publicIdText, copyPublicId, internalIdText, copyInternalId]);
+        header.Controls.Add(nameRow); header.Controls.Add(identityRow);
         var properties = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true, Padding = new Padding(0, 0, 0, 6) };
         properties.Controls.AddRange([new Label { Text = "CA", AutoSize = true, Margin = new Padding(3, 17, 5, 0) }, ValueMeter.Wrap(ca,caMeter), new Label { Text = "PA", AutoSize = true, Margin = new Padding(14, 17, 5, 0) }, ValueMeter.Wrap(pa,paMeter), changeBirth, birth]);
         changeBirth.Margin = new Padding(24, 7, 5, 0);
@@ -475,6 +491,7 @@ public sealed class MainForm : Form
             detail = null; originalAttributes = []; originalPositions = [];
             comparisonPool.Clear(); UpdatePoolLabel(); comparison.ClearCache(); historyPanel.ClearSources();
             identity.Text = L10n.Get("Text_3f8498e92e4b"); affiliation.Text = L10n.Get("Text_9a36d649406a");
+            UpdatePlayerIdentity();
             editing.Enabled = false; preview.Visible = false; emptyPreview.Visible = true;
             binding = true; filter.Clear(); teamSearch.Clear(); options.ResetFilters(); team.SelectedIndex = 0; binding = false;
             ApplyLoanTeamView();
@@ -509,7 +526,7 @@ public sealed class MainForm : Form
         detail = selected; originalAttributes = PreviewMath.StoredOrder(selected.Attributes); originalPositions = PreviewMath.StoredOrder(selected.Positions);
         AddComparison(selected.Player.Uid);
         identity.Text = selected.Player.Name;
-        affiliation.Text = L10n.Format("Text_df065e5ab70e", selected.Player.Team, selected.Player.Id?.ToString() ?? "—", selected.Player.Uid);
+        UpdatePlayerIdentity();
         ca.Value = Math.Clamp(selected.Player.Ca, 0, 255); pa.Value = Math.Clamp(selected.RawPa, -10, 255);
         birth.MaxDate = gameDate.HasValue && gameDate.Value.Year >= 1850 ? gameDate.Value : DateTimePicker.MaximumDateTime;
         if (DateTime.TryParseExact(selected.Player.Birth, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var birthday) && birthday >= birth.MinDate && birthday <= birth.MaxDate) birth.Value = birthday;
@@ -519,6 +536,31 @@ public sealed class MainForm : Form
         foreach (var field in selected.Attributes.Concat(selected.Positions)) field.PropertyChanged += FieldChanged;
         BindFields(); binding = false;
         editing.Enabled = true; view.Enabled = true; emptyPreview.Visible = false; previewStale = true;
+    }
+
+    private void UpdatePlayerIdentity()
+    {
+        copyPlayerName.Enabled = !string.IsNullOrEmpty(detail?.Player.Name);
+        copyPublicId.Enabled = detail?.Player.Id.HasValue == true;
+        copyInternalId.Enabled = detail is not null;
+        if (detail is null) { publicIdText.Text = internalIdText.Text = ""; return; }
+        affiliation.Text = detail.Player.Team;
+        publicIdText.Text = L10n.Format("PublicIdValue", detail.Player.Id?.ToString(CultureInfo.InvariantCulture) ?? "—");
+        internalIdText.Text = L10n.Format("InternalIdValue", detail.Player.Uid.ToString(CultureInfo.InvariantCulture));
+    }
+
+    private void CopyIdentity(string? value)
+    {
+        if (string.IsNullOrEmpty(value)) return;
+        try
+        {
+            Clipboard.SetText(value, TextDataFormat.UnicodeText);
+            state.Text = L10n.Get("CopiedToClipboard");
+        }
+        catch (Exception exc) when (exc is System.Runtime.InteropServices.ExternalException or System.Threading.ThreadStateException)
+        {
+            MessageBox.Show(this, L10n.Get("ClipboardUnavailable"), L10n.Get("ClipboardTitle"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
     }
 
     private void FieldChanged(object? sender, PropertyChangedEventArgs args) { if (args.PropertyName == nameof(EditableField.Value)) Changed(); }

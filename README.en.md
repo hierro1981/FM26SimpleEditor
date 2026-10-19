@@ -67,9 +67,12 @@ Internal attribute history from a single supported save, charts with multiple se
 - The **Language** dropdown replaces the checkbox. It translates the interface, columns, filters, tooltips, messages, preview and reports immediately, preserving the open player, edits and filters.
 - The preference is saved in `FM26SimpleEditor.config.json` **alongside the executable**, containing `{"language":"en"}` or `{"language":"it"}`. It is loaded before Python preparation. Missing, malformed or unsupported settings fall back to Italian. Writes are atomic; an unwritable folder produces a warning while retaining the selected language for the session.
 - Texts live in `Resources/Strings.resx` (Italian base resource) and `Resources/Strings.en.resx` (English). Resources are compiled: rebuild to change or add translations. Keep the `en` folder containing the English resource DLL in the distribution.
-- **About…** shows the assembly version and repository. Opening it checks GitHub’s latest public stable release, with a timeout and retry support. Versions are compared numerically; drafts and prereleases are ignored. **Open the new release** opens the browser when a newer version exists. No updates are installed and no save data is transmitted.
+- **About…** shows the assembly version and repository in a compact window, without personal attribution in the description. Opening it checks GitHub’s latest public stable release, with a timeout and retry support. Versions are compared numerically; drafts and prereleases are ignored. **Open the new release** opens the browser when a newer version exists. No updates are installed and no save data is transmitted.
 - Player/team names, paths and technical logs produced by Python, pip or Windows retain their original text. Application messages from the reader are translated when displayed.
 - Windows validation checks DLLs and resources without generating EXE or ZIP files on the branch.
+
+- Three copy-icon buttons in the player tab copy the name, public ID and internal ID without labels or number grouping. The public-ID button is disabled when the value is missing.
+- **Show reconstructed months** adds month/year labels to internal history while keeping the numbered-sample view available.
 
 ## Getting started
 
@@ -152,7 +155,7 @@ The fifth tab automatically opens **Storico interno · sperimentale** when it re
 
 **47 visible attributes** have been identified in 69-byte sample records. Historical CA/PA, foot values and hidden attributes are not assigned to samples that do not contain them. Coverage and availability can vary between players. The reader is experimental and does not guarantee support for other formats.
 
-**Internal-history horizontal axis:** Sample 1, 2, 3… Individual dates have not been decoded. The cadence appears monthly in the compared saves, but the editor does not invent months or days. Lines connect recorded observations and do not represent measured intermediate values. Actual stored values are preserved without interpolation.
+**Internal-history horizontal axis:** starting with v13, **Show reconstructed months** is enabled when the sequence, source file and reference save date are unambiguous. The projection assigns samples to completed months before the save month: for example, 19 samples referenced to 10/02/2028 become July 2026–January 2028. Monthly cadence is inferred from two saves and the in-game chart: **individual dates and exact days have not been decoded**. The table, tooltips and summary identify months as reconstructed; Current retains the file’s actual date. The projection changes neither the save nor sample date fields. Missing or ambiguous references, or disabling the option, retain Sample 1, 2, 3… Stored attribute values are preserved without interpolation.
 
 A **searchable checklist** on the left allows multiple attributes to be displayed together. Dribbling, passing and technique are initially selected. **Seleziona visibili** adds all attributes matching the list filter; **Nessuno** clears the entire selection. Filtering hides list entries without deselecting previously chosen attributes. Changing label language preserves selection by field identity.
 

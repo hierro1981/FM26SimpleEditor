@@ -19,13 +19,13 @@ public sealed class AboutForm : Form
         Text = L10n.Get("AboutTitle"); Font = new Font("Segoe UI", 10);
         AutoScaleMode = AutoScaleMode.Dpi; StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog; MaximizeBox = MinimizeBox = false;
-        ClientSize = new Size(590, 380);
+        ClientSize = new Size(590, 290);
         using var iconStream = typeof(AboutForm).Assembly.GetManifestResourceStream("FM26SimpleEditor.App.ico");
         if (iconStream is not null) Icon = new Icon(iconStream);
-        var root = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(18), ColumnCount = 1, RowCount = 7 };
+        var root = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Padding = new Padding(18), ColumnCount = 1, RowCount = 7 };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         for (int i = 0; i < 6; i++) root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         root.Controls.Add(new Label { Text = "FM26 Simple Editor", AutoSize = true, Font = new Font(Font, FontStyle.Bold) }, 0, 0);
         root.Controls.Add(new Label { Text = L10n.Format("InstalledVersion", AppInfo.Version.ToString(3)), AutoSize = true }, 0, 1);
         root.Controls.Add(new Label { Text = L10n.Get("AboutDescription"), AutoSize = true, MaximumSize = new Size(535, 0), Margin = new Padding(3, 10, 3, 10) }, 0, 2);
@@ -36,7 +36,22 @@ public sealed class AboutForm : Form
         var close = new Button { Text = L10n.Get("Close"), AutoSize = true, DialogResult = DialogResult.Cancel };
         actions.Controls.AddRange([check, release, close]); root.Controls.Add(actions, 0, 5);
         root.Controls.Add(new Label { Text = L10n.Get("UpdatePrivacy"), AutoSize = true, MaximumSize = new Size(535, 0), ForeColor = Color.DimGray, Margin = new Padding(3, 10, 3, 3) }, 0, 6);
+        bool fitting = false;
+        void FitHeight()
+        {
+            if (fitting) return;
+            fitting = true;
+            try
+            {
+                int height = root.GetPreferredSize(new Size(ClientSize.Width, 0)).Height;
+                if (height > 0 && ClientSize.Height != height) ClientSize = new Size(ClientSize.Width, height);
+            }
+            finally { fitting = false; }
+        }
         Controls.Add(root); CancelButton = close;
+        root.SizeChanged += (_, _) => FitHeight();
+        updateStatus.TextChanged += (_, _) => FitHeight();
+        Shown += (_, _) => FitHeight();
         check.Click += async (_, _) => await CheckAsync();
         release.LinkClicked += (_, _) => { if (releaseUrl is not null) Open(releaseUrl); };
         Shown += async (_, _) => await CheckAsync();

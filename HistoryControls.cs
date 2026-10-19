@@ -11,12 +11,12 @@ public sealed class AttributeHistoryChart : Control
     private readonly List<(RectangleF Area, string Text)> hits = [];
     private readonly ToolTip tip = new();
     private int maximum = 20;
-    private bool dated;
+    private bool dated, monthly;
     private string lastTip = "";
     public AttributeHistoryChart() { Dock = DockStyle.Fill; DoubleBuffered = true; BackColor = Color.White; }
-    public void SetSeries(List<Series> values, int upper, bool useDates)
+    public void SetSeries(List<Series> values, int upper, bool useDates, bool useMonths = false)
     {
-        series = values; maximum = upper; dated = useDates; hits.Clear(); lastTip = ""; tip.SetToolTip(this, ""); Invalidate();
+        series = values; maximum = upper; dated = useDates; monthly = useMonths; hits.Clear(); lastTip = ""; tip.SetToolTip(this, ""); Invalidate();
     }
     protected override void OnPaint(PaintEventArgs args)
     {
@@ -57,11 +57,29 @@ public sealed class AttributeHistoryChart : Control
                 previous = at;
             }
         }
-        string Label(double x) => dated ? DateTime.FromOADate(x).ToString("dd/MM/yyyy") :
+        string Label(double x) => dated ? DateTime.FromOADate(x).ToString(monthly ? "MMM yyyy" : "dd/MM/yyyy", L10n.Culture) :
             points.First(point => point.X == x).Label;
         string left = Label(first), right = Label(last);
         g.DrawString(left,Font,ink,plot.Left,plot.Bottom+7*scale);
         if (first != last) g.DrawString(right,Font,ink,plot.Right-g.MeasureString(right,Font).Width,plot.Bottom+7*scale);
+        if (monthly && span > 0)
+        {
+            var startMonth = DateTime.FromOADate(first);
+            var endMonth = DateTime.FromOADate(last);
+            int months = (endMonth.Year - startMonth.Year) * 12 + endMonth.Month - startMonth.Month;
+            int ticks = Math.Clamp((int)(plot.Width / (92 * scale)), 2, 7);
+            int step = Math.Max(1, (int)Math.Ceiling(months / (double)(ticks - 1)));
+            float leftEnd = plot.Left + g.MeasureString(left, Font).Width + 12 * scale;
+            float rightStart = plot.Right - g.MeasureString(right, Font).Width - 12 * scale;
+            for (int offset = step; offset < months; offset += step)
+            {
+                DateTime date = startMonth.AddMonths(offset);
+                string label = date.ToString("MMM yyyy", L10n.Culture);
+                float width = g.MeasureString(label, Font).Width;
+                float x = plot.Left + (float)((date.ToOADate() - first) / span) * plot.Width - width / 2;
+                if (x >= leftEnd && x + width <= rightStart) g.DrawString(label, Font, ink, x, plot.Bottom + 7 * scale);
+            }
+        }
     }
     protected override void OnMouseMove(MouseEventArgs args)
     {
@@ -91,6 +109,8 @@ public sealed class HistoryPanel : UserControl
     private readonly Button none = new() { Text = L10n.Get("Text_aa201262e9a7"), AutoSize = true };
     private readonly CheckBox raw = new() { Text = L10n.Get("Text_00f23f53197c"), AutoSize = true };
     private readonly CheckBox current = new() { Text = L10n.Get("Text_f7642bcf0f8f"), Checked = true, AutoSize = true };
+    private readonly CheckBox monthlyCalendar = new() { Name = "HistoryMonthlyCalendar", Text = L10n.Get("HistoryMonthlyToggle"), Checked = true, AutoSize = true };
+    private readonly ToolTip hints = new();
     private readonly CheckBox delta = new() { Text = L10n.Get("Text_7c00e624d516"), Checked = true, AutoSize = true };
     private readonly FlowLayoutPanel legend = new() { Dock = DockStyle.Fill, AutoScroll = true, WrapContents = true };
     private readonly AttributeHistoryChart chart = new();
@@ -113,7 +133,7 @@ public sealed class HistoryPanel : UserControl
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.Percent,100));
         var tools = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true };
         mode.Items.AddRange([L10n.Get("Text_6efbb5528c52"), L10n.Get("Text_920a8419e478")]); mode.SelectedIndex = 0;
-        tools.Controls.AddRange([mode, raw, current, delta, add, clear]);
+        tools.Controls.AddRange([mode, raw, current, delta, monthlyCalendar, add, clear]);
         var body = new SplitContainer { Size = new Size(1100,550), Dock = DockStyle.Fill, FixedPanel = FixedPanel.Panel1, SplitterDistance = 245 };
         var selector = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 4, ColumnCount = 1 };
         selector.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
@@ -140,6 +160,8 @@ public sealed class HistoryPanel : UserControl
         clear.Click += async (_, _) => { sources.Clear(); await LoadHistory(); };
         mode.SelectedIndexChanged += (_, _) => { if (!updating) { preferInternal = mode.SelectedIndex == 0; RebuildAvailable(); Render(); } };
         raw.CheckedChanged += (_, _) => Render(); current.CheckedChanged += (_, _) => Render(); delta.CheckedChanged += (_, _) => Render();
+        monthlyCalendar.CheckedChanged += (_, _) => Render();
+        hints.SetToolTip(monthlyCalendar, L10n.Get("HistoryMonthlyTip"));
         find.TextChanged += (_, _) => RebuildList();
         all.Click += (_, _) => { foreach (Choice choice in attributes.Items) selected.Add(choice.Key); RebuildList(); Render(); };
         none.Click += (_, _) => { selected.Clear(); RebuildList(); Render(); };
@@ -149,7 +171,7 @@ public sealed class HistoryPanel : UserControl
             if (args.NewValue == CheckState.Checked) selected.Add(choice.Key); else selected.Remove(choice.Key);
             if (IsHandleCreated) BeginInvoke(new Action(Render));
         };
-        L10n.Capture(this);
+        L10n.Capture(this, hints);
     }
 
     public void ClearSources()
@@ -184,6 +206,7 @@ public sealed class HistoryPanel : UserControl
     {
         add.Enabled = ready && primary is not null; clear.Enabled = ready && sources.Count > 0;
         mode.Enabled = raw.Enabled = attributes.Enabled = current.Enabled = delta.Enabled = all.Enabled = none.Enabled = ready && result is not null;
+        monthlyCalendar.Enabled = ready && result is not null && HistoryCalendar.ReconstructMonths(result).Count > 0;
     }
     private List<HistoryPoint> DataPoints() => result is null ? [] : mode.SelectedIndex == 0 ? result.EmbeddedPoints : result.Points;
     private void RebuildAvailable()
@@ -207,7 +230,7 @@ public sealed class HistoryPanel : UserControl
         grid.Columns.Clear(); grid.Rows.Clear(); chart.SetSeries([],20,false);
         foreach (Control control in legend.Controls.Cast<Control>().ToArray()) control.Dispose(); legend.Controls.Clear();
         var keys = available.Where(selected.Contains).ToList(); count.Text = L10n.Format("Text_46c06b548bb1", keys.Count, available.Count);
-        current.Visible = mode.SelectedIndex == 0;
+        current.Visible = monthlyCalendar.Visible = mode.SelectedIndex == 0;
         if (result is null)
         {
             info.Text = primary is null ? L10n.Get("Text_302b8eb70bbc") : L10n.Get("Text_e2003fd16f1e");
@@ -215,14 +238,24 @@ public sealed class HistoryPanel : UserControl
         }
         bool embedded = mode.SelectedIndex == 0;
         var points = DataPoints().OrderBy(point => embedded ? point.Sequence.ToString("D6") : point.Date,StringComparer.Ordinal).ThenBy(point => point.Source).ToList();
+        var months = HistoryCalendar.ReconstructMonths(result);
+        bool calendar = embedded && monthlyCalendar.Checked && months.Count == points.Count && months.Count > 0;
+        monthlyCalendar.Enabled = months.Count > 0;
         bool duplicates = !embedded && points.GroupBy(point => point.Date).Any(group => group.Count()>1);
-        info.Text = (embedded ? L10n.Backend(result.EmbeddedMessage) : L10n.Backend(result.Message) + " " + L10n.Backend(result.EmbeddedMessage)) + L10n.Get("Text_d765d2266795") +
+        string embeddedMessage = L10n.Backend(result.EmbeddedMessage);
+        if (calendar)
+        {
+            var reference = result.Points.Single(p => p.Source.Equals(points[0].Source, StringComparison.OrdinalIgnoreCase));
+            var referenceDate = DateTime.ParseExact(reference.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            embeddedMessage = L10n.Format("HistoryMonthlySummary", points.Count, months.Values.Min().ToString("MMM yyyy", L10n.Culture), months.Values.Max().ToString("MMM yyyy", L10n.Culture), referenceDate);
+        }
+        info.Text = (embedded ? embeddedMessage : L10n.Backend(result.Message) + " " + embeddedMessage) + L10n.Get("Text_d765d2266795") +
             (embedded && current.Checked ? L10n.Get("Text_bba3193922f9") : "") +
             (duplicates ? L10n.Get("Text_9e4d513ec09b") : "") +
             (result.Warnings.Count == 0 ? "" : L10n.Get("Text_6ba40634b2ee") + string.Join(" | ",result.Warnings.Select(L10n.Backend)));
-        HistoryPoint? currentPoint = embedded && current.Checked && primary is not null ? result.Points.FirstOrDefault(point => point.Source == result.EmbeddedPoints.FirstOrDefault()?.Source) : null;
+        HistoryPoint? currentPoint = embedded && current.Checked && primary is not null ? result.Points.FirstOrDefault(point => string.Equals(point.Source, result.EmbeddedPoints.FirstOrDefault()?.Source, StringComparison.OrdinalIgnoreCase)) : null;
         if (currentPoint is not null) points.Add(currentPoint);
-        AddColumn(embedded ? L10n.Get("Text_1a9c88f4cf2e") : L10n.Get("Text_39b33a354458"),150);
+        AddColumn(calendar ? L10n.Get("HistoryMonthColumn") : embedded ? L10n.Get("Text_1a9c88f4cf2e") : L10n.Get("Text_39b33a354458"), calendar ? 215 : 150);
         AddColumn(L10n.Get("Text_2fb609839b7f"),230);
         foreach (string key in keys)
         {
@@ -239,7 +272,9 @@ public sealed class HistoryPanel : UserControl
         {
             var point = points[index]; bool now = ReferenceEquals(point,currentPoint);
             DateTime? date = DateTime.TryParseExact(point.Date,"yyyy-MM-dd",CultureInfo.InvariantCulture,DateTimeStyles.None,out var parsed) ? parsed : null;
-            string label = embedded ? now ? L10n.Get("Text_d39045327c8b") : L10n.Format("Text_0468a5223610", point.Sequence) : date?.ToString("dd/MM/yyyy") ?? "—";
+            bool estimated = calendar && !now && months.TryGetValue(point.Sequence, out _);
+            DateTime? month = estimated ? months[point.Sequence] : null;
+            string label = estimated ? L10n.Format("HistorySampleMonth", month!.Value.ToString("MMM yyyy", L10n.Culture)) : embedded ? now ? L10n.Get("Text_d39045327c8b") : L10n.Format("Text_0468a5223610", point.Sequence) : date?.ToString("dd/MM/yyyy") ?? "—";
             var cells = new List<object?> { now && date.HasValue ? L10n.Format("Text_d47f73a65981", date) : label, Path.GetFileName(point.Source) };
             foreach (string key in keys)
             {
@@ -249,19 +284,21 @@ public sealed class HistoryPanel : UserControl
                 if (value.HasValue)
                 {
                     before[key] = value.Value;
-                    double x = embedded ? index+1 : date?.ToOADate() ?? index+1;
+                    double x = calendar ? month?.ToOADate() ?? date!.Value.ToOADate() : embedded ? index+1 : date?.ToOADate() ?? index+1;
                     lines[key].Add(new(x,value.Value,label,point.Source,now));
                 }
             }
             cells.Add(point.Ca); cells.Add(point.Pa);
             int row = grid.Rows.Add(cells.ToArray());
+            if (estimated) grid.Rows[row].Cells[0].ToolTipText = L10n.Format("HistoryMonthTooltip", point.Sequence);
             grid.Rows[row].Cells[1].ToolTipText = point.Source + (point.IdentityNote.Length>0 ? "\n"+L10n.Backend(point.IdentityNote) : "");
             if (now) grid.Rows[row].DefaultCellStyle.BackColor = Color.FromArgb(238,244,251);
         }
         int maximum = raw.Checked ? lines.Values.SelectMany(line => line).Any(point => point.Value>100) ? 125 : 100 : 20;
-        chart.SetSeries(keys.Select(key => new AttributeHistoryChart.Series(key,Labels.Attribute(key,italian),styles[key].Color,styles[key].Dash,lines[key])).ToList(),maximum,!embedded);
+        chart.SetSeries(keys.Select(key => new AttributeHistoryChart.Series(key,Labels.Attribute(key,italian),styles[key].Color,styles[key].Dash,lines[key])).ToList(),maximum,!embedded || calendar,calendar);
         grid.ClearSelection();
     }
+    protected override void Dispose(bool disposing) { if (disposing) hints.Dispose(); base.Dispose(disposing); }
     private DataGridViewColumn AddColumn(string label, int width, int? maximum = null)
     {
         var column = new DataGridViewTextBoxColumn { HeaderText = label, Width = width, SortMode = DataGridViewColumnSortMode.NotSortable };

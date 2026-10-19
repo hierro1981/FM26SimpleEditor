@@ -16,7 +16,7 @@
     <value>About…</value>
   </data>
   <data name="AboutDescription" xml:space="preserve">
-    <value>Independent player editor for Football Manager 26 saves. A project by hierro1981; license and source are available in the repository.</value>
+    <value>Independent editor for Football Manager 26 saves. License and source are available in the repository.</value>
   </data>
   <data name="AboutTitle" xml:space="preserve">
     <value>About FM26 Simple Editor</value>
@@ -1470,5 +1470,56 @@ Hover over a position for its rating.</value>
   </data>
   <data name="UpdateRateLimit" xml:space="preserve">
     <value>GitHub has rate-limited requests. Retry later or open the repository using the link above.</value>
+  </data>
+  <data name="CopyPlayerName" xml:space="preserve">
+    <value>Copy player name</value>
+  </data>
+  <data name="CopyPublicId" xml:space="preserve">
+    <value>Copy public ID</value>
+  </data>
+  <data name="CopyInternalId" xml:space="preserve">
+    <value>Copy internal ID</value>
+  </data>
+  <data name="PlayerName" xml:space="preserve">
+    <value>Player name</value>
+  </data>
+  <data name="PublicId" xml:space="preserve">
+    <value>Public ID</value>
+  </data>
+  <data name="InternalId" xml:space="preserve">
+    <value>Internal ID</value>
+  </data>
+  <data name="PublicIdValue" xml:space="preserve">
+    <value>Public ID: {0}</value>
+  </data>
+  <data name="InternalIdValue" xml:space="preserve">
+    <value>Internal ID: {0}</value>
+  </data>
+  <data name="CopiedToClipboard" xml:space="preserve">
+    <value>Copied to clipboard.</value>
+  </data>
+  <data name="ClipboardUnavailable" xml:space="preserve">
+    <value>The clipboard is busy in another application. Please retry.</value>
+  </data>
+  <data name="ClipboardTitle" xml:space="preserve">
+    <value>Copy to clipboard</value>
+  </data>
+  <data name="HistoryMonthlyToggle" xml:space="preserve">
+    <value>Show reconstructed months</value>
+  </data>
+  <data name="HistoryMonthlyTip" xml:space="preserve">
+    <value>Assigns one sample to each completed month before the save date. Sample days have not been decoded. Turn off to view sample numbers.</value>
+  </data>
+  <data name="HistoryMonthlySummary" xml:space="preserve">
+    <value>{0} internal samples · reconstructed months from {1} to {2}, using save date {3:dd/MM/yyyy}. Monthly cadence is inferred; exact days are not decoded. Historical CA/PA, feet and hidden attributes are unavailable.</value>
+  </data>
+  <data name="HistorySampleMonth" xml:space="preserve">
+    <value>{0} · reconstructed</value>
+  </data>
+  <data name="HistoryMonthTooltip" xml:space="preserve">
+    <value>Sample {0} · reconstructed month, not a daily date read from the file.</value>
+  </data>
+  <data name="HistoryMonthColumn" xml:space="preserve">
+    <value>Reconstructed month / current</value>
   </data>
 </root>

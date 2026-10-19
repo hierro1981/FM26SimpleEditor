@@ -16,7 +16,7 @@
     <value>Informazioni…</value>
   </data>
   <data name="AboutDescription" xml:space="preserve">
-    <value>Editor indipendente dei giocatori nei salvataggi di Football Manager 26. Progetto di hierro1981; licenza e sorgenti nel repository.</value>
+    <value>Editor indipendente per i salvataggi di Football Manager 26. Licenza e sorgenti nel repository.</value>
   </data>
   <data name="AboutTitle" xml:space="preserve">
     <value>Informazioni su FM26 Simple Editor</value>
@@ -1470,5 +1470,56 @@ Passa sul punto per il valore.</value>
   </data>
   <data name="UpdateRateLimit" xml:space="preserve">
     <value>GitHub ha limitato le richieste. Riprova più tardi oppure apri il repository dal link sopra.</value>
+  </data>
+  <data name="CopyPlayerName" xml:space="preserve">
+    <value>Copia nome giocatore</value>
+  </data>
+  <data name="CopyPublicId" xml:space="preserve">
+    <value>Copia ID pubblico</value>
+  </data>
+  <data name="CopyInternalId" xml:space="preserve">
+    <value>Copia ID interno</value>
+  </data>
+  <data name="PlayerName" xml:space="preserve">
+    <value>Nome giocatore</value>
+  </data>
+  <data name="PublicId" xml:space="preserve">
+    <value>ID pubblico</value>
+  </data>
+  <data name="InternalId" xml:space="preserve">
+    <value>ID interno</value>
+  </data>
+  <data name="PublicIdValue" xml:space="preserve">
+    <value>ID pubblico: {0}</value>
+  </data>
+  <data name="InternalIdValue" xml:space="preserve">
+    <value>ID interno: {0}</value>
+  </data>
+  <data name="CopiedToClipboard" xml:space="preserve">
+    <value>Copiato negli appunti.</value>
+  </data>
+  <data name="ClipboardUnavailable" xml:space="preserve">
+    <value>Gli appunti sono occupati da un’altra applicazione. Riprova.</value>
+  </data>
+  <data name="ClipboardTitle" xml:space="preserve">
+    <value>Copia negli appunti</value>
+  </data>
+  <data name="HistoryMonthlyToggle" xml:space="preserve">
+    <value>Mostra mesi ricostruiti</value>
+  </data>
+  <data name="HistoryMonthlyTip" xml:space="preserve">
+    <value>Assegna un campione a ogni mese completo precedente alla data del salvataggio. I giorni dei campioni non sono decodificati. Disattiva per vedere i numeri di campione.</value>
+  </data>
+  <data name="HistoryMonthlySummary" xml:space="preserve">
+    <value>{0} campioni interni · mesi ricostruiti da {1} a {2}, usando la data del salvataggio {3:dd/MM/yyyy}. Cadenza mensile dedotta; giorno esatto non decodificato. CA/PA storica, piedi e attributi nascosti non disponibili.</value>
+  </data>
+  <data name="HistorySampleMonth" xml:space="preserve">
+    <value>{0} · ricostruito</value>
+  </data>
+  <data name="HistoryMonthTooltip" xml:space="preserve">
+    <value>Campione {0} · mese ricostruito, non data giornaliera letta dal file.</value>
+  </data>
+  <data name="HistoryMonthColumn" xml:space="preserve">
+    <value>Mese ricostruito / attuali</value>
   </data>
 </root>

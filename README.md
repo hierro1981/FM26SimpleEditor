@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v12
+# FM26 Simple Editor · v13 (in sviluppo)
 
 Italiano | [English](README.en.md)
 
@@ -51,7 +51,7 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 - **Squadra di riferimento dei prestiti:** il selettore **Prestiti nella squadra** usa **In cui gioca** come impostazione iniziale; scegli **Proprietaria** per vedere i prestiti tra i giocatori del club proprietario. Colonna Squadra, elenco delle squadre, ricerca per testo e ordinamento usano tutti il riferimento scelto. Se la proprietaria non è leggibile, viene indicata come non disponibile. Il selettore resta visibile anche nascondendo i filtri opzionali; **Azzera filtri** conserva questa preferenza di visualizzazione per la sessione. Anteprima, confronto e stelle restano riferiti alla squadra in cui il calciatore gioca.
 - **Salvataggio sempre raggiungibile:** **Salva modifiche** è nella barra superiore, vicino ad **Apri salvataggio**, insieme all’indicazione delle modifiche non salvate. È accessibile da tutte le schede e si abilita quando ci sono modifiche, anche durante l’editing di una cella. I pannelli della barra e della ricerca si ridimensionano al contenuto, riducendo gli spazi vuoti sopra le schede e i filtri. Continua a creare una nuova copia verificata del salvataggio.
 
-## Novità della versione 12
+## Novità precedenti della versione 12
 
 - Distribuzione Windows più leggera senza framework incluso: richiede .NET 8 Desktop Runtime x64.
 - Filtri della ricerca con altezza adattiva: passando da due righe a una, l’elenco recupera subito lo spazio; nelle finestre strette restano scorribili.
@@ -61,6 +61,15 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 - Nuova sottoscheda **Report per ruolo**, con scelta della posizione cliccando sul campo o tramite elenco, attributi rilevanti, punteggi, familiarità, vantaggi e suggerimento motivato.
 - Sigle raggruppate nella colonna **Ruolo principale** per riconoscere i multiposizione: per esempio `D (SC), M, C (C)`. La lingua scelta alterna le sigle italiane e inglesi.
 - Verifica C# su Windows con compilazione di sole DLL e test dei calcoli e dei controlli. I branch non generano EXE, ZIP o artefatti scaricabili.
+
+## Novità della versione 13 — branch di sviluppo
+
+- **Lingua**: elenco Italiano / English al posto della casella; traduce l’interfaccia, le colonne, i filtri, i tooltip, i messaggi, l’anteprima e i report. Il cambio è immediato e conserva giocatore, modifiche e filtri.
+- La preferenza viene salvata in `FM26SimpleEditor.config.json` **accanto all’eseguibile**, con contenuto `{"language":"en"}` oppure `{"language":"it"}`. Viene letta prima della preparazione di Python. File assente, non valido o lingua non supportata: italiano. La scrittura è atomica; se la cartella non è scrivibile viene mostrato un avviso e la lingua resta attiva nella sessione.
+- Testi in `Resources/Strings.resx` (italiano, risorsa base) e `Resources/Strings.en.resx` (inglese). Le risorse sono compilate; per cambiare o aggiungere una traduzione occorre ricompilare. Distribuire anche la cartella `en` con la DLL delle risorse inglesi.
+- **Informazioni…** mostra la versione dell’assembly e il repository. All’apertura controlla l’ultima release stabile pubblica su GitHub, con timeout e possibilità di riprovare. Il confronto è numerico e ignora bozze e prerelease. Se esiste una versione più recente, **Apri la nuova release** apre il browser. Non installa aggiornamenti e non invia dati dei salvataggi.
+- I nomi dei giocatori e delle squadre, i percorsi e i log tecnici prodotti da Python, pip o Windows conservano il testo originale. I messaggi applicativi del lettore sono tradotti nell’interfaccia.
+- Verifica Windows su DLL e risorse, senza generare EXE o ZIP nel branch.
 
 ## Avvio
 
@@ -99,7 +108,7 @@ Le colonne numeriche sono allineate a destra. I risultati hanno scrollbar orizzo
 
 **Mostra filtri opzionali** nasconde o mostra i controlli mantenendo i criteri attivi. Il contatore resta visibile. **Azzera filtri** cancella testo, scelta della squadra e tutti i filtri opzionali. Le ricerche non modificano il salvataggio.
 
-**Modifica giocatore** usa tutto lo spazio della scheda per gli attributi grezzi e la familiarità nelle posizioni. Il selettore **Etichette in italiano** alterna italiano e inglese e applica l'ordine alfabetico della lingua scelta agli attributi; le posizioni seguono lo schema del campo. L'identità del campo nel file non dipende dall'etichetta né dalla sua posizione in tabella. Le traduzioni sono quelle dell'editor e possono differire da alcune diciture della localizzazione ufficiale del gioco.
+**Modifica giocatore** usa tutto lo spazio della scheda per gli attributi grezzi e la familiarità nelle posizioni. Il selettore **Lingua** alterna l’interfaccia italiana e inglese e applica l'ordine alfabetico della lingua scelta agli attributi; le posizioni seguono lo schema del campo. L'identità del campo nel file non dipende dall'etichetta né dalla sua posizione in tabella. Le traduzioni sono quelle dell'editor e possono differire da alcune diciture della localizzazione ufficiale del gioco.
 
 Gli attributi rimangono sulla scala grezza nominale 1–100. Sono preservati anche i valori potenziati fino a 125 supportati dal lettore. Le posizioni usano 1–20; CA e PA hanno scala nominale 0–200, con supporto ai valori già modificati fino a 255. I codici PA negativi vengono conservati. La data di nascita cambia soltanto attivando la casella dedicata e quando il record della persona è individuato senza ambiguità.
 
@@ -168,4 +177,5 @@ Il lettore e il protocollo sono verificati su salvataggi reali usati per le prov
 
 
 La verifica C# si esegue su Windows con `dotnet run --project tests/ComparisonChecks/ComparisonChecks.csproj --configuration Release -p:UseAppHost=false`. Il workflow **Validate comparison (DLL only)** esegue i controlli senza produrre EXE o ZIP; la verifica comprende anche l’ordine delle colonne, il cambio della posizione nel report e lo spazio della barra superiore.
+
 

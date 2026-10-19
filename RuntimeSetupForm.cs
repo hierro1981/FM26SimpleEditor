@@ -4,13 +4,13 @@ namespace FM26SimpleEditor;
 
 public sealed class RuntimeSetupForm : Form
 {
-    private readonly Label status = new() { Text = "Verifica Python e dipendenze…", AutoSize = true, Dock = DockStyle.Fill };
+    private readonly Label status = new() { Text = L10n.Get("Text_f0c0f49590d2"), AutoSize = true, Dock = DockStyle.Fill };
     private readonly TextBox details = new() { Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Both, WordWrap = false, Dock = DockStyle.Fill };
     private readonly ProgressBar progress = new() { Style = ProgressBarStyle.Marquee, Dock = DockStyle.Fill, MarqueeAnimationSpeed = 25 };
-    private readonly Button install = new() { Text = "Installa Python 3.13", AutoSize = true, Visible = false };
-    private readonly Button retry = new() { Text = "Riprova", AutoSize = true };
-    private readonly Button website = new() { Text = "Sito ufficiale Python", AutoSize = true };
-    private readonly Button cancel = new() { Text = "Esci", AutoSize = true };
+    private readonly Button install = new() { Text = L10n.Get("Text_7edc4bcca94c"), AutoSize = true, Visible = false };
+    private readonly Button retry = new() { Text = L10n.Get("Text_20b5f4b8bfd5"), AutoSize = true };
+    private readonly Button website = new() { Text = L10n.Get("Text_4d20e07c4d4c"), AutoSize = true };
+    private readonly Button cancel = new() { Text = L10n.Get("Text_58025f3619bf"), AutoSize = true };
     private CancellationTokenSource? cancellation;
     private bool busy;
     private bool closeRequested;
@@ -21,7 +21,7 @@ public sealed class RuntimeSetupForm : Form
     {
         using var iconStream = typeof(RuntimeSetupForm).Assembly.GetManifestResourceStream("FM26SimpleEditor.App.ico");
         if (iconStream is not null) Icon = new Icon(iconStream);
-        Text = "FM26 Simple Editor · Preparazione all’avvio";
+        Text = L10n.Get("Text_72a1409756a3");
         Font = new Font("Segoe UI", 10);
         AutoScaleMode = AutoScaleMode.Dpi;
         StartPosition = FormStartPosition.CenterScreen;
@@ -47,7 +47,7 @@ public sealed class RuntimeSetupForm : Form
         website.Click += (_, _) =>
         {
             try { Process.Start(new ProcessStartInfo(PythonRuntimeSetup.DownloadsUrl) { UseShellExecute = true }); }
-            catch (Exception exc) { MessageBox.Show(this, exc.Message, "Apertura sito non riuscita", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (Exception exc) { MessageBox.Show(this, exc.Message, L10n.Get("Text_ec7570d31eef"), MessageBoxButtons.OK, MessageBoxIcon.Error); }
         };
         cancel.Click += (_, _) => Close();
         FormClosing += (_, args) =>
@@ -56,7 +56,7 @@ public sealed class RuntimeSetupForm : Form
             args.Cancel = true;
             closeRequested = true;
             cancel.Enabled = false;
-            status.Text = "Interruzione della preparazione…";
+            status.Text = L10n.Get("Text_a60e1c5efc02");
             cancellation?.Cancel();
         };
     }
@@ -67,7 +67,7 @@ public sealed class RuntimeSetupForm : Form
         busy = true;
         retry.Enabled = install.Enabled = false;
         progress.Visible = true;
-        status.Text = installPython ? "Installazione Python…" : "Verifica Python e dipendenze…";
+        status.Text = installPython ? L10n.Get("Text_9fd44301d99b") : L10n.Get("Text_f0c0f49590d2");
         cancellation = new CancellationTokenSource();
         IProgress<string> log = new Progress<string>(line =>
         {
@@ -81,21 +81,21 @@ public sealed class RuntimeSetupForm : Form
             var detected = await PythonRuntimeSetup.FindAsync(log, cancellation.Token);
             if (detected is null)
             {
-                status.Text = "Python 3.12 o successivo non trovato.";
-                log.Report("Installa Python 3.13 con il pulsante (WinGet, internet e accettazione delle condizioni dei pacchetti), oppure dal sito ufficiale. Poi premi Riprova. Se WinGet non è disponibile usa il sito ufficiale.");
+                status.Text = L10n.Get("Text_34e49b06cca6");
+                log.Report(L10n.Get("Text_da93783f7a81"));
                 install.Visible = true;
             }
             else
             {
                 install.Visible = false;
-                status.Text = detected.Ready ? "Python pronto." : "Preparazione delle dipendenze…";
+                status.Text = detected.Ready ? L10n.Get("Text_26232926a988") : L10n.Get("Text_e10ca3898158");
                 PythonExecutable = await PythonRuntimeSetup.PrepareAsync(detected, log, cancellation.Token);
             }
         }
-        catch (OperationCanceledException) { status.Text = "Preparazione interrotta."; }
+        catch (OperationCanceledException) { status.Text = L10n.Get("Text_f7a219323e1f"); }
         catch (Exception exc)
         {
-            status.Text = "Preparazione non riuscita. Consulta i dettagli e premi Riprova.";
+            status.Text = L10n.Get("Text_fcbecb092916");
             log.Report(exc.Message);
         }
         finally
@@ -110,3 +110,4 @@ public sealed class RuntimeSetupForm : Form
         if (PythonExecutable is not null) { DialogResult = DialogResult.OK; Close(); }
     }
 }
+

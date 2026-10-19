@@ -10,7 +10,7 @@ public static class ValuePalette
         if (key is "injury_proneness" or "dirtiness") level = 21 - level;
         return level <= 5 ? Color.FromArgb(201, 68, 66) : level <= 10 ? Color.FromArgb(214, 166, 41) : level <= 15 ? Color.FromArgb(45, 153, 101) : Color.FromArgb(49, 119, 205);
     }
-    public const string Legend = "Rosso 1–5 · giallo 6–10 · verde 11–15 · blu 16–20. Infortuni/scorrettezza: colori invertiti.";
+    public static string Legend => L10n.Get("Text_5ff89766ab1c");
 }
 
 public sealed class ValueBarCell : DataGridViewTextBoxCell
@@ -71,3 +71,4 @@ public sealed class ValueMeter : Control
         return layout;
     }
 }
+

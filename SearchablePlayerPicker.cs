@@ -10,7 +10,7 @@ public sealed class SearchablePlayerPicker : UserControl
 {
     private readonly Button trigger = new() { Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, AutoEllipsis = true };
     private readonly ToolStripDropDown popup = new() { Padding = System.Windows.Forms.Padding.Empty, AutoClose = true };
-    private readonly TextBox search = new() { Dock = DockStyle.Fill, PlaceholderText = "Cerca nome, squadra o ID…" };
+    private readonly TextBox search = new() { Dock = DockStyle.Fill, PlaceholderText = L10n.Get("Text_5b32139224ee") };
     private readonly ListBox results = new() { Dock = DockStyle.Fill, IntegralHeight = false, HorizontalScrollbar = true };
     private readonly Label count = new() { AutoSize = true, ForeColor = Color.DimGray };
     private readonly TableLayoutPanel content = new() { ColumnCount = 1, RowCount = 3, Padding = new Padding(8) };
@@ -22,7 +22,7 @@ public sealed class SearchablePlayerPicker : UserControl
     public SearchablePlayerPicker()
     {
         Width = 320; Height = 32;
-        AccessibleName = "Giocatore di confronto, elenco cercabile";
+        AccessibleName = L10n.Get("Text_d7ef2d0aa2ea");
         trigger.AccessibleName = AccessibleName;
         content.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
         content.RowStyles.Add(new RowStyle(SizeType.AutoSize)); content.RowStyles.Add(new RowStyle(SizeType.Percent,100)); content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -48,7 +48,9 @@ public sealed class SearchablePlayerPicker : UserControl
             if (args.KeyCode is Keys.F4 or Keys.Down) { OpenPopup(); args.SuppressKeyPress=true; }
         };
         RefreshText();
+        L10n.Capture(this); L10n.Capture(content);
     }
+    public void RefreshLanguage() { L10n.Apply(this); L10n.Apply(content); RefreshText(); if (popup.Visible) Filter(); }
     public void SetItems(List<PlayerChoice> choices, uint? preferred)
     {
         uint? before = SelectedItem?.Uid;
@@ -60,8 +62,8 @@ public sealed class SearchablePlayerPicker : UserControl
     }
     private void RefreshText()
     {
-        trigger.Text = (SelectedItem?.Label ?? "Scegli un giocatore…") + "  ▾";
-        trigger.AccessibleDescription = SelectedItem?.Label ?? "Apri e digita per cercare";
+        trigger.Text = (SelectedItem?.Label ?? L10n.Get("Text_e44f85cb84f6")) + "  ▾";
+        trigger.AccessibleDescription = SelectedItem?.Label ?? L10n.Get("Text_b8797b528736");
     }
     private void OpenPopup()
     {
@@ -84,7 +86,7 @@ public sealed class SearchablePlayerPicker : UserControl
         int index = filtered.FindIndex(item => item.Uid==highlighted);
         results.SelectedIndex = filtered.Count==0 ? -1 : index>=0 ? index : 0;
         results.EndUpdate();
-        count.Text = filtered.Count==0 ? "Nessun giocatore corrispondente" : $"{filtered.Count} giocatori · Invio o clic per scegliere · Esc per annullare";
+        count.Text = filtered.Count==0 ? L10n.Get("Text_7cf9482ef50b") : L10n.Format("Text_c10cd79b6bb8", filtered.Count);
     }
     private void Commit()
     {
@@ -95,3 +97,4 @@ public sealed class SearchablePlayerPicker : UserControl
     }
     protected override void Dispose(bool disposing) { if (disposing) popup.Dispose(); base.Dispose(disposing); }
 }
+

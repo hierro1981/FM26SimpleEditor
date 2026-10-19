@@ -18,11 +18,11 @@ public static class PositionScheme
         }
         var lines = new (string It, string En, string[] Keys)[]
         {
-            ("P", "GK", ["GK"]), ("L", "SW", ["SW"]), ("D", "D", ["DL", "DC", "DR"]),
+            ("P", "GK", ["GK"]), ("L", "SW", ["SW"]), (L10n.Get("Text_3f39d5c348e5"), L10n.Get("Text_3f39d5c348e5"), ["DL", "DC", "DR"]),
             ("E", "WB", ["WBL", "WBR"]), ("M", "DM", ["DM"]), ("C", "M", ["ML", "MC", "MR"]),
             ("T", "AM", ["AML", "AMC", "AMR"]), ("A", "ST", ["STC"])
         };
-        string Side(string key) => key.EndsWith('L') ? italian ? "S" : "L" : key.EndsWith('R') ? italian ? "D" : "R" : "C";
+        string Side(string key) => key.EndsWith('L') ? italian ? L10n.Get("Text_8de0b3c47f11", true) : L10n.Get("Text_8de0b3c47f11", false) : key.EndsWith('R') ? italian ? L10n.Get("Text_3f39d5c348e5", true) : L10n.Get("Text_3f39d5c348e5", false) : "C";
         return string.Join(", ", lines.Where(line => line.Keys.Any(keys.Contains)).Select(line =>
             (italian ? line.It : line.En) + (line.Keys[0] is "GK" or "SW" or "DM" ? "" : " (" + string.Concat(line.Keys.Where(keys.Contains).Select(Side)) + ")")));
     }
@@ -54,6 +54,7 @@ public static class RoleImportance
     }
     public static Color Ink(int tier) => tier switch { 1 => Color.FromArgb(115, 42, 146), 2 => Color.FromArgb(25, 83, 172), 3 => Color.FromArgb(0, 111, 105), _ => SystemColors.ControlText };
     public static Color Back(int tier) => tier switch { 1 => Color.FromArgb(245, 230, 250), 2 => Color.FromArgb(231, 240, 255), 3 => Color.FromArgb(229, 246, 239), _ => SystemColors.Window };
-    public static string Name(int tier, bool italian) => (tier, italian) switch { (1,true) => "Fondamentale", (2,true) => "Importante", (3,true) => "Utile", (1,false) => "Essential", (2,false) => "Important", (3,false) => "Useful", _ => "" };
+    public static string Name(int tier, bool italian) => tier is >= 1 and <= 3 ? L10n.Get("Importance_" + tier, italian) : "";
 }
+
 

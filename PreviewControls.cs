@@ -6,7 +6,7 @@ namespace FM26SimpleEditor;
 public sealed class StarControl : Control
 {
     private double? rating;
-    public double? Rating { get => rating; set { rating = value; AccessibleName = value is null ? "Stelle non disponibili" : $"{value:0.0} stelle stimate"; Invalidate(); } }
+    public double? Rating { get => rating; set { rating = value; AccessibleName = value is null ? L10n.Get("Text_6b52861acb61") : L10n.Format("Text_fd123f397c97", value); Invalidate(); } }
     public StarControl() { DoubleBuffered = true; Height = 34; Width = 180; }
     protected override void OnPaint(PaintEventArgs args)
     {
@@ -62,7 +62,7 @@ public sealed class PitchControl : Control
         ("AML", .18f, .24f), ("AMC", .5f, .24f), ("AMR", .82f, .24f), ("STC", .5f, .09f)
     ];
 
-    public PitchControl() { DoubleBuffered = true; MinimumSize = new Size(140, 120); Dock = DockStyle.Fill; AccessibleName = "Posizioni del giocatore sul campo"; }
+    public PitchControl() { DoubleBuffered = true; MinimumSize = new Size(140, 120); Dock = DockStyle.Fill; AccessibleName = L10n.Get("Text_edcf091dd19a"); }
     public void SetPositions(IEnumerable<EditableField> fields, bool useItalian)
     {
         ratings = fields.ToDictionary(field => field.Key, field => field.Value);
@@ -146,7 +146,7 @@ public sealed class PlayerPreview : UserControl
     private readonly ValueMeter potentialMeter = new() { Maximum = 200, Width = 240 };
     private readonly PitchControl pitch = new();
     private readonly FlowLayoutPanel groups = new() { Dock = DockStyle.Fill, AutoScroll = true, Padding = new Padding(5), WrapContents = true };
-    private readonly CheckBox showHidden = new() { AutoSize = true, Text = "Mostra attributi nascosti", Margin = new Padding(14, 8, 0, 0) };
+    private readonly CheckBox showHidden = new() { AutoSize = true, Text = L10n.Get("Text_dd2a6a16b813"), Margin = new Padding(14, 8, 0, 0) };
     private readonly Font valueFont = new("Segoe UI", 10, FontStyle.Bold);
     private PlayerDetail? detail;
     private bool italian;
@@ -165,10 +165,10 @@ public sealed class PlayerPreview : UserControl
         ratings.Controls.Add(MeterLabel(currentMeter,currentText), 0, 0); ratings.Controls.Add(currentStars, 1, 0);
         ratings.Controls.Add(MeterLabel(potentialMeter,potentialText), 2, 0); ratings.Controls.Add(potentialStars, 3, 0);
         ratings.Controls.Add(referenceText, 0, 1); ratings.SetColumnSpan(referenceText, 4);
-        ratings.Controls.Add(new Label { Text = "Assolute · CA", AutoSize = true }, 0, 2); ratings.Controls.Add(absoluteCurrent, 1, 2);
-        ratings.Controls.Add(new Label { Text = "Assolute · PA", AutoSize = true }, 2, 2); ratings.Controls.Add(absolutePotential, 3, 2);
-        ratings.Controls.Add(new Label { Text = "Campionato · CA", AutoSize = true }, 0, 3); ratings.Controls.Add(leagueCurrent, 1, 3);
-        ratings.Controls.Add(new Label { Text = "Campionato · PA", AutoSize = true }, 2, 3); ratings.Controls.Add(leaguePotential, 3, 3);
+        ratings.Controls.Add(new Label { Text = L10n.Get("Text_d4992007fff7"), AutoSize = true }, 0, 2); ratings.Controls.Add(absoluteCurrent, 1, 2);
+        ratings.Controls.Add(new Label { Text = L10n.Get("Text_afb8d72126a8"), AutoSize = true }, 2, 2); ratings.Controls.Add(absolutePotential, 3, 2);
+        ratings.Controls.Add(new Label { Text = L10n.Get("Text_28666d70b8cd"), AutoSize = true }, 0, 3); ratings.Controls.Add(leagueCurrent, 1, 3);
+        ratings.Controls.Add(new Label { Text = L10n.Get("Text_ce9bb84c3e8c"), AutoSize = true }, 2, 3); ratings.Controls.Add(leaguePotential, 3, 3);
         ratings.Controls.Add(leagueText, 0, 4); ratings.SetColumnSpan(leagueText, 4);
         ratings.Controls.Add(showHidden, 0, 5); ratings.SetColumnSpan(showHidden, 4);
         for (int i = 0; i < 6; i++) ratings.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -182,30 +182,32 @@ public sealed class PlayerPreview : UserControl
         Controls.Add(root);
         showHidden.CheckedChanged += (_, _) => RebuildAttributes();
         groups.SizeChanged += (_, _) => ResizeGroups();
+        L10n.Capture(this);
     }
 
     public void ShowPlayer(PlayerDetail selected, int ca, int pa, DateTime? birth, bool useItalian, double? squadMean, int cohortCount)
     {
+        L10n.Apply(this, useItalian);
         detail = selected; italian = useItalian;
         title.Text = selected.Player.Name;
         string birthText = birth?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) ?? "—";
-        subtitle.Text = $"{selected.Player.Team}  •  {birthText}  •  {(italian ? "Anteprima in sola lettura" : "Read-only preview")}";
+        subtitle.Text = $"{selected.Player.Team}  •  {birthText}  •  {(italian ? L10n.Get("Text_b4fff3cd3890", true) : L10n.Get("Text_b4fff3cd3890", false))}";
         var cs = PreviewMath.Stars(ca, squadMean); var ps = PreviewMath.Stars(pa > 0 ? pa : null, squadMean);
-        currentText.Text = $"{(italian ? "Abilità attuale" : "Current ability")}  {ca}/200  •  {(cs.HasValue ? cs.Value.ToString("0.0") + "/5" : "N/D")}";
-        potentialText.Text = $"{(italian ? "Potenziale" : "Potential")}  {(pa > 0 ? pa + "/200" : "N/D")}  •  {(ps.HasValue ? ps.Value.ToString("0.0") + "/5" : "N/D")}";
+        currentText.Text = $"{(italian ? L10n.Get("Text_5fd3d93232e0", true) : L10n.Get("Text_5fd3d93232e0", false))}  {ca}/200  •  {(cs.HasValue ? cs.Value.ToString("0.0") + "/5" : L10n.Get("Text_eb34623b71cd"))}";
+        potentialText.Text = $"{(italian ? L10n.Get("Text_ce82fff32927", true) : L10n.Get("Text_ce82fff32927", false))}  {(pa > 0 ? pa + "/200" : L10n.Get("Text_eb34623b71cd"))}  •  {(ps.HasValue ? ps.Value.ToString("0.0") + "/5" : L10n.Get("Text_eb34623b71cd"))}";
         currentStars.Rating = cs; potentialStars.Rating = ps;
         absoluteCurrent.Rating = PreviewMath.AbsoluteStars(ca); absolutePotential.Rating = PreviewMath.AbsoluteStars(pa);
         leagueCurrent.Rating = PreviewMath.Stars(ca, selected.League.Mean); leaguePotential.Rating = PreviewMath.Stars(pa > 0 ? pa : null, selected.League.Mean);
-        leagueText.Text = selected.League.Label + (selected.League.Mean.HasValue ? $" · CA media {selected.League.Mean:0.0} · {selected.League.Count} giocatori" : " · N/D") + " · Stelle assolute: CA/PA ÷ 40, arrotondate a mezza stella (stima editor).";
+        leagueText.Text = L10n.Backend(selected.League.Label) + (selected.League.Mean.HasValue ? L10n.Format("Text_1a58f46e0409", selected.League.Mean, selected.League.Count) : L10n.Get("Text_15b3e2d192ce")) + L10n.Get("Text_57a6677642b5");
         currentMeter.Value = ca; potentialMeter.Value = pa >= 0 ? pa : null;
         referenceText.Text = squadMean.HasValue
-            ? italian ? $"Stelle stimate dall'editor rispetto alla squadra (CA media {squadMean:0.0}, {cohortCount} giocatori). Non sono la valutazione dello staff di FM." : $"Editor star estimates relative to the squad (mean CA {squadMean:0.0}, {cohortCount} players). These are not FM staff ratings."
-            : italian ? "Stelle non disponibili: servono almeno 3 giocatori della stessa squadra con CA nota." : "Stars unavailable: at least 3 players from the same squad with known CA are required.";
-        showHidden.Text = italian ? "Mostra attributi nascosti" : "Show hidden attributes";
+            ? italian ? L10n.FormatIn(true, "Text_c88205316415", squadMean, cohortCount) : L10n.FormatIn(false, "Text_c88205316415", squadMean, cohortCount)
+            : italian ? L10n.Get("Text_5014a12ba8f5", true) : L10n.Get("Text_5014a12ba8f5", false);
+        showHidden.Text = italian ? L10n.Get("Text_dd2a6a16b813", true) : L10n.Get("Text_dd2a6a16b813", false);
         pitch.SetPositions(selected.Positions, italian);
         var natural = selected.Positions.Where(field => field.Value >= 18).OrderByDescending(field => field.Value).Select(field => Labels.Position(field.Key, italian));
-        naturalText.Text = (italian ? "Posizioni naturali: " : "Natural positions: ") + (natural.Any() ? string.Join(", ", natural) : "—");
-        legend.Text = italian ? "Verde 18–20: naturale\nGiallo 15–17: ottima familiarità\nArancio 12–14: discreta familiarità\nPassa sul punto per il valore." : "Green 18–20: natural\nYellow 15–17: accomplished\nOrange 12–14: competent\nHover over a position for its rating.";
+        naturalText.Text = (italian ? L10n.Get("Text_dd7c9737f87c", true) : L10n.Get("Text_dd7c9737f87c", false)) + (natural.Any() ? string.Join(", ", natural) : "—");
+        legend.Text = italian ? L10n.Get("Text_e64996006057", true) : L10n.Get("Text_e64996006057", false);
         RebuildAttributes();
     }
 
@@ -255,4 +257,5 @@ public sealed class PlayerPreview : UserControl
 
     protected override void Dispose(bool disposing) { if (disposing) valueFont.Dispose(); base.Dispose(disposing); }
 }
+
 

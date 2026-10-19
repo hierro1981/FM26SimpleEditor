@@ -3,3 +3,7 @@ obj/
 __pycache__/
 .vs/
 /FM26SimpleEditor.csproj.user
+
+
+/FM26SimpleEditor.config.json
+/FM26SimpleEditor.config.json.*.tmp

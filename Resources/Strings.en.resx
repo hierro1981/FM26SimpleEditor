@@ -1,0 +1,1471 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+  <data name="AboutButton" xml:space="preserve">
+    <value>About…</value>
+  </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>Independent player editor for Football Manager 26 saves. A project by hierro1981; license and source are available in the repository.</value>
+  </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>About FM26 Simple Editor</value>
+  </data>
+  <data name="Attribute_acceleration" xml:space="preserve">
+    <value>Acceleration</value>
+  </data>
+  <data name="Attribute_aerial_reach" xml:space="preserve">
+    <value>Aerial Reach</value>
+  </data>
+  <data name="Attribute_aggression" xml:space="preserve">
+    <value>Aggression</value>
+  </data>
+  <data name="Attribute_agility" xml:space="preserve">
+    <value>Agility</value>
+  </data>
+  <data name="Attribute_anticipation" xml:space="preserve">
+    <value>Anticipation</value>
+  </data>
+  <data name="Attribute_balance" xml:space="preserve">
+    <value>Balance</value>
+  </data>
+  <data name="Attribute_bravery" xml:space="preserve">
+    <value>Bravery</value>
+  </data>
+  <data name="Attribute_command_of_area" xml:space="preserve">
+    <value>Command of Area</value>
+  </data>
+  <data name="Attribute_communication" xml:space="preserve">
+    <value>Communication</value>
+  </data>
+  <data name="Attribute_composure" xml:space="preserve">
+    <value>Composure</value>
+  </data>
+  <data name="Attribute_concentration" xml:space="preserve">
+    <value>Concentration</value>
+  </data>
+  <data name="Attribute_consistency" xml:space="preserve">
+    <value>Consistency</value>
+  </data>
+  <data name="Attribute_corners" xml:space="preserve">
+    <value>Corners</value>
+  </data>
+  <data name="Attribute_crossing" xml:space="preserve">
+    <value>Crossing</value>
+  </data>
+  <data name="Attribute_decisions" xml:space="preserve">
+    <value>Decisions</value>
+  </data>
+  <data name="Attribute_determination" xml:space="preserve">
+    <value>Determination</value>
+  </data>
+  <data name="Attribute_dirtiness" xml:space="preserve">
+    <value>Dirtiness</value>
+  </data>
+  <data name="Attribute_dribbling" xml:space="preserve">
+    <value>Dribbling</value>
+  </data>
+  <data name="Attribute_eccentricity" xml:space="preserve">
+    <value>Eccentricity</value>
+  </data>
+  <data name="Attribute_finishing" xml:space="preserve">
+    <value>Finishing</value>
+  </data>
+  <data name="Attribute_first_touch" xml:space="preserve">
+    <value>First Touch</value>
+  </data>
+  <data name="Attribute_flair" xml:space="preserve">
+    <value>Flair</value>
+  </data>
+  <data name="Attribute_free_kick_taking" xml:space="preserve">
+    <value>Free Kick Taking</value>
+  </data>
+  <data name="Attribute_handling" xml:space="preserve">
+    <value>Handling</value>
+  </data>
+  <data name="Attribute_heading" xml:space="preserve">
+    <value>Heading</value>
+  </data>
+  <data name="Attribute_important_matches" xml:space="preserve">
+    <value>Important Matches</value>
+  </data>
+  <data name="Attribute_injury_proneness" xml:space="preserve">
+    <value>Injury Proneness</value>
+  </data>
+  <data name="Attribute_jumping_reach" xml:space="preserve">
+    <value>Jumping Reach</value>
+  </data>
+  <data name="Attribute_kicking" xml:space="preserve">
+    <value>Kicking</value>
+  </data>
+  <data name="Attribute_leadership" xml:space="preserve">
+    <value>Leadership</value>
+  </data>
+  <data name="Attribute_left_foot" xml:space="preserve">
+    <value>Left Foot</value>
+  </data>
+  <data name="Attribute_long_shots" xml:space="preserve">
+    <value>Long Shots</value>
+  </data>
+  <data name="Attribute_long_throws" xml:space="preserve">
+    <value>Long Throws</value>
+  </data>
+  <data name="Attribute_marking" xml:space="preserve">
+    <value>Marking</value>
+  </data>
+  <data name="Attribute_natural_fitness" xml:space="preserve">
+    <value>Natural Fitness</value>
+  </data>
+  <data name="Attribute_off_the_ball" xml:space="preserve">
+    <value>Off the Ball</value>
+  </data>
+  <data name="Attribute_one_on_ones" xml:space="preserve">
+    <value>One on Ones</value>
+  </data>
+  <data name="Attribute_pace" xml:space="preserve">
+    <value>Pace</value>
+  </data>
+  <data name="Attribute_passing" xml:space="preserve">
+    <value>Passing</value>
+  </data>
+  <data name="Attribute_penalty_taking" xml:space="preserve">
+    <value>Penalty Taking</value>
+  </data>
+  <data name="Attribute_positioning" xml:space="preserve">
+    <value>Positioning</value>
+  </data>
+  <data name="Attribute_punching" xml:space="preserve">
+    <value>Punching</value>
+  </data>
+  <data name="Attribute_reflexes" xml:space="preserve">
+    <value>Reflexes</value>
+  </data>
+  <data name="Attribute_right_foot" xml:space="preserve">
+    <value>Right Foot</value>
+  </data>
+  <data name="Attribute_rushing_out" xml:space="preserve">
+    <value>Rushing Out</value>
+  </data>
+  <data name="Attribute_stamina" xml:space="preserve">
+    <value>Stamina</value>
+  </data>
+  <data name="Attribute_strength" xml:space="preserve">
+    <value>Strength</value>
+  </data>
+  <data name="Attribute_tackling" xml:space="preserve">
+    <value>Tackling</value>
+  </data>
+  <data name="Attribute_teamwork" xml:space="preserve">
+    <value>Teamwork</value>
+  </data>
+  <data name="Attribute_technique" xml:space="preserve">
+    <value>Technique</value>
+  </data>
+  <data name="Attribute_throwing" xml:space="preserve">
+    <value>Throwing</value>
+  </data>
+  <data name="Attribute_versatility" xml:space="preserve">
+    <value>Versatility</value>
+  </data>
+  <data name="Attribute_vision" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="Attribute_work_rate" xml:space="preserve">
+    <value>Work Rate</value>
+  </data>
+  <data name="Backend_09b72ae804a3" xml:space="preserve">
+    <value>Choose a different name from the original save</value>
+  </data>
+  <data name="Backend_0cc0f3d3bbda" xml:space="preserve">
+    <value>Unknown command</value>
+  </data>
+  <data name="Backend_11e1cd687b57" xml:space="preserve">
+    <value>The source file changed: reopen it before editing</value>
+  </data>
+  <data name="Backend_12de4a7715f3" xml:space="preserve">
+    <value>Decompressing the database</value>
+  </data>
+  <data name="Backend_1e7449b17734" xml:space="preserve">
+    <value>Confirming the verified copy</value>
+  </data>
+  <data name="Backend_24030e06360f" xml:space="preserve">
+    <value>{0}: enter an integer from {1} to {2}</value>
+  </data>
+  <data name="Backend_26a8f664352e" xml:space="preserve">
+    <value>Incorrect size for {0}</value>
+  </data>
+  <data name="Backend_28560f6b7673" xml:space="preserve">
+    <value>League unavailable: no unambiguous readable division</value>
+  </data>
+  <data name="Backend_2adc055fcabd" xml:space="preserve">
+    <value>{0} · {1} teams · division inferred from the league table</value>
+  </data>
+  <data name="Backend_2bb024429a45" xml:space="preserve">
+    <value>Verifying original sections</value>
+  </data>
+  <data name="Backend_2ff6f2173a2e" xml:space="preserve">
+    <value>Record too large: history could not be safely identified.</value>
+  </data>
+  <data name="Backend_383f1944e088" xml:space="preserve">
+    <value>Invalid number of values: {0}</value>
+  </data>
+  <data name="Backend_39eb7e3f6d7d" xml:space="preserve">
+    <value>Load complete</value>
+  </data>
+  <data name="Backend_3c1ebe07013f" xml:space="preserve">
+    <value>Duplicate internal IDs in the save</value>
+  </data>
+  <data name="Backend_3d4bcacb4b33" xml:space="preserve">
+    <value>Select up to 20 saves at a time</value>
+  </data>
+  <data name="Backend_436d246215ad" xml:space="preserve">
+    <value>Preparing player catalogue</value>
+  </data>
+  <data name="Backend_44e25b45b45c" xml:space="preserve">
+    <value>Player not found in the open save</value>
+  </data>
+  <data name="Backend_45d0da93d376" xml:space="preserve">
+    <value>Saved player verification failed</value>
+  </data>
+  <data name="Backend_4a51ee9ef872" xml:space="preserve">
+    <value>Reading save header and index</value>
+  </data>
+  <data name="Backend_4abc4ab7d608" xml:space="preserve">
+    <value>Players decoded</value>
+  </data>
+  <data name="Backend_4d801a51a17d" xml:space="preserve">
+    <value>Open a save first</value>
+  </data>
+  <data name="Backend_4e7eb99985ee" xml:space="preserve">
+    <value>Unreadable game date: historical point excluded</value>
+  </data>
+  <data name="Backend_514dde22a4d1" xml:space="preserve">
+    <value>sections</value>
+  </data>
+  <data name="Backend_52274cd8fdd5" xml:space="preserve">
+    <value>Unnamed division</value>
+  </data>
+  <data name="Backend_565a3a4e4618" xml:space="preserve">
+    <value>Internal history unavailable: format not yet validated for this build.</value>
+  </data>
+  <data name="Backend_57d9b5223fe3" xml:space="preserve">
+    <value>Date cannot be edited: ambiguous person record</value>
+  </data>
+  <data name="Backend_58bbacc3a1bb" xml:space="preserve">
+    <value>Archive rebuilt and verified</value>
+  </data>
+  <data name="Backend_58e7aa96e623" xml:space="preserve">
+    <value>Multiple candidate sequences: internal history is ambiguous.</value>
+  </data>
+  <data name="Backend_5a62c699f750" xml:space="preserve">
+    <value>Full saved index verification failed</value>
+  </data>
+  <data name="Backend_5ba255bc705b" xml:space="preserve">
+    <value>Unknown sort column</value>
+  </data>
+  <data name="Backend_635c01ec93aa" xml:space="preserve">
+    <value>Database does not appear exactly once in the index</value>
+  </data>
+  <data name="Backend_67b64ece975d" xml:space="preserve">
+    <value>Birth date unavailable</value>
+  </data>
+  <data name="Backend_6a21ce94bd9f" xml:space="preserve">
+    <value>Verifying compressed database</value>
+  </data>
+  <data name="Backend_6b8788e53241" xml:space="preserve">
+    <value>League unavailable: {0}</value>
+  </data>
+  <data name="Backend_6e6078bcaeb5" xml:space="preserve">
+    <value>Rebuilding all index entries</value>
+  </data>
+  <data name="Backend_730c2d2773c2" xml:space="preserve">
+    <value>Birth date must be between 1850 and the game date</value>
+  </data>
+  <data name="Backend_7cdece04f0c5" xml:space="preserve">
+    <value>Incomplete or ambiguous index: entry count does not match all file sections</value>
+  </data>
+  <data name="Backend_7f33bc39d3c7" xml:space="preserve">
+    <value>Applying changes to the database copy</value>
+  </data>
+  <data name="Backend_8be7fcbe5ed4" xml:space="preserve">
+    <value>Unknown position</value>
+  </data>
+  <data name="Backend_8cfc1ddac578" xml:space="preserve">
+    <value>Invalid index for {0}. Use a working original save.</value>
+  </data>
+  <data name="Backend_8d2b92cc38f3" xml:space="preserve">
+    <value>Name or birth date does not match: possibly a different player</value>
+  </data>
+  <data name="Backend_8d70b44232b5" xml:space="preserve">
+    <value>Verifying player and saved fields</value>
+  </data>
+  <data name="Backend_8fc2a279f332" xml:space="preserve">
+    <value>Reading source archive</value>
+  </data>
+  <data name="Backend_9a39dc6b7ab7" xml:space="preserve">
+    <value>Different birth date: matching uses public ID, internal ID and name.</value>
+  </data>
+  <data name="Backend_9a8ef833a359" xml:space="preserve">
+    <value>Database section does not match the index read</value>
+  </data>
+  <data name="Backend_a35fc8140ecc" xml:space="preserve">
+    <value>Invalid sort direction</value>
+  </data>
+  <data name="Backend_a531bdc20289" xml:space="preserve">
+    <value>{0} internal samples · 47 visible attributes · experimental reader. X axis: sample order; individual dates are not decoded. Samples appear monthly, but no calendar is assigned. Historical CA/PA, feet and hidden attributes are unavailable.</value>
+  </data>
+  <data name="Backend_a61a542e89ab" xml:space="preserve">
+    <value>Original date does not match the record</value>
+  </data>
+  <data name="Backend_a707e2bea40a" xml:space="preserve">
+    <value>Reversed range: {0}</value>
+  </data>
+  <data name="Backend_a726eda3af72" xml:space="preserve">
+    <value>Checking modified data</value>
+  </data>
+  <data name="Backend_ac1a2814298e" xml:space="preserve">
+    <value>Game date unavailable for calculating expiry</value>
+  </data>
+  <data name="Backend_b1575da9083c" xml:space="preserve">
+    <value>The public ID does not match the selected player</value>
+  </data>
+  <data name="Backend_b365fe776b43" xml:space="preserve">
+    <value>Save verified</value>
+  </data>
+  <data name="Backend_ba7dac805fc8" xml:space="preserve">
+    <value>Actual values from the selected saves at their respective game dates.</value>
+  </data>
+  <data name="Backend_bb7aca5d3969" xml:space="preserve">
+    <value>Competition ID {0}</value>
+  </data>
+  <data name="Backend_bf89efb91de6" xml:space="preserve">
+    <value>Identity could not be uniquely verified (ID, name and birth date)</value>
+  </data>
+  <data name="Backend_c03d94f8e86b" xml:space="preserve">
+    <value>Reopening and checking the saved copy</value>
+  </data>
+  <data name="Backend_c4e2228823ed" xml:space="preserve">
+    <value>Database compression verification failed</value>
+  </data>
+  <data name="Backend_c9c906e8256a" xml:space="preserve">
+    <value>players</value>
+  </data>
+  <data name="Backend_cbf024701e97" xml:space="preserve">
+    <value>All copy checks completed</value>
+  </data>
+  <data name="Backend_cd3b6f390799" xml:space="preserve">
+    <value>Writing the copy</value>
+  </data>
+  <data name="Backend_ce8415b670e8" xml:space="preserve">
+    <value>Unknown foot or loan filter</value>
+  </data>
+  <data name="Backend_d38631385501" xml:space="preserve">
+    <value>Unknown contract status</value>
+  </data>
+  <data name="Backend_d55baabc8bc3" xml:space="preserve">
+    <value>Compressing the database</value>
+  </data>
+  <data name="Backend_d6aea8b8be5f" xml:space="preserve">
+    <value>The save has changed on disk: open it again</value>
+  </data>
+  <data name="Backend_da8568aa5e71" xml:space="preserve">
+    <value>Unknown loan reference team</value>
+  </data>
+  <data name="Backend_ddaaa98e8024" xml:space="preserve">
+    <value>Finding player records</value>
+  </data>
+  <data name="Backend_e0c7e71e757e" xml:space="preserve">
+    <value>Decoding players, identities and contracts</value>
+  </data>
+  <data name="Backend_e4bc452e9d4b" xml:space="preserve">
+    <value>No internal sequence recognized (at least 2 samples are required).</value>
+  </data>
+  <data name="Backend_e4ddc6ab5c88" xml:space="preserve">
+    <value>Catalogue verified</value>
+  </data>
+  <data name="Backend_e6dc88cbcb4a" xml:space="preserve">
+    <value>Choose a new name for the modified copy</value>
+  </data>
+  <data name="Backend_f311744bc36c" xml:space="preserve">
+    <value>Fully verifying saved sections</value>
+  </data>
+  <data name="Backend_f8e2b6726d8b" xml:space="preserve">
+    <value>The edit changed the database length</value>
+  </data>
+  <data name="CheckUpdates" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="CheckingUpdates" xml:space="preserve">
+    <value>Checking the latest published GitHub release…</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ConfigSaveError" xml:space="preserve">
+    <value>The language was changed, but the preference could not be saved to:
+{0}
+
+{1}
+Move the editor to a writable folder to retain the selection.</value>
+  </data>
+  <data name="ConfigWarning" xml:space="preserve">
+    <value>Configuration not saved</value>
+  </data>
+  <data name="Dash_Dash" xml:space="preserve">
+    <value>Dashed</value>
+  </data>
+  <data name="Dash_DashDot" xml:space="preserve">
+    <value>Dash-dot</value>
+  </data>
+  <data name="Dash_DashDotDot" xml:space="preserve">
+    <value>Dash-dot-dot</value>
+  </data>
+  <data name="Dash_Dot" xml:space="preserve">
+    <value>Dotted</value>
+  </data>
+  <data name="Dash_Solid" xml:space="preserve">
+    <value>Solid</value>
+  </data>
+  <data name="Group_feet" xml:space="preserve">
+    <value>Feet</value>
+  </data>
+  <data name="Group_goalkeeping" xml:space="preserve">
+    <value>Goalkeeping</value>
+  </data>
+  <data name="Group_hidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="Group_mental" xml:space="preserve">
+    <value>Mental</value>
+  </data>
+  <data name="Group_other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Group_physical" xml:space="preserve">
+    <value>Physical</value>
+  </data>
+  <data name="Group_technical" xml:space="preserve">
+    <value>Technical</value>
+  </data>
+  <data name="Importance_1" xml:space="preserve">
+    <value>Essential</value>
+  </data>
+  <data name="Importance_2" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="Importance_3" xml:space="preserve">
+    <value>Useful</value>
+  </data>
+  <data name="IncompleteData" xml:space="preserve">
+    <value>Incomplete data: no reliable recommendation. Missing: </value>
+  </data>
+  <data name="InstalledVersion" xml:space="preserve">
+    <value>Installed version: {0}</value>
+  </data>
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="ModifiedSuffix" xml:space="preserve">
+    <value>_modified.fm</value>
+  </data>
+  <data name="NoReleaseInfo" xml:space="preserve">
+    <value>No stable release with a recognized version is available.</value>
+  </data>
+  <data name="OpenLinkFailed" xml:space="preserve">
+    <value>Could not open the link: {0}</value>
+  </data>
+  <data name="OpenRelease" xml:space="preserve">
+    <value>Open the new release</value>
+  </data>
+  <data name="PositionCode_AMC" xml:space="preserve">
+    <value>AMC</value>
+  </data>
+  <data name="PositionCode_AML" xml:space="preserve">
+    <value>AML</value>
+  </data>
+  <data name="PositionCode_AMR" xml:space="preserve">
+    <value>AMR</value>
+  </data>
+  <data name="PositionCode_DC" xml:space="preserve">
+    <value>DC</value>
+  </data>
+  <data name="PositionCode_DL" xml:space="preserve">
+    <value>DL</value>
+  </data>
+  <data name="PositionCode_DM" xml:space="preserve">
+    <value>DM</value>
+  </data>
+  <data name="PositionCode_DR" xml:space="preserve">
+    <value>DR</value>
+  </data>
+  <data name="PositionCode_GK" xml:space="preserve">
+    <value>GK</value>
+  </data>
+  <data name="PositionCode_MC" xml:space="preserve">
+    <value>MC</value>
+  </data>
+  <data name="PositionCode_ML" xml:space="preserve">
+    <value>ML</value>
+  </data>
+  <data name="PositionCode_MR" xml:space="preserve">
+    <value>MR</value>
+  </data>
+  <data name="PositionCode_STC" xml:space="preserve">
+    <value>STC</value>
+  </data>
+  <data name="PositionCode_SW" xml:space="preserve">
+    <value>SW</value>
+  </data>
+  <data name="PositionCode_WBL" xml:space="preserve">
+    <value>WBL</value>
+  </data>
+  <data name="PositionCode_WBR" xml:space="preserve">
+    <value>WBR</value>
+  </data>
+  <data name="Position_AMC" xml:space="preserve">
+    <value>Attacking Midfielder Centre</value>
+  </data>
+  <data name="Position_AML" xml:space="preserve">
+    <value>Attacking Midfielder Left</value>
+  </data>
+  <data name="Position_AMR" xml:space="preserve">
+    <value>Attacking Midfielder Right</value>
+  </data>
+  <data name="Position_DC" xml:space="preserve">
+    <value>Defender Centre</value>
+  </data>
+  <data name="Position_DL" xml:space="preserve">
+    <value>Defender Left</value>
+  </data>
+  <data name="Position_DM" xml:space="preserve">
+    <value>Defensive Midfielder</value>
+  </data>
+  <data name="Position_DR" xml:space="preserve">
+    <value>Defender Right</value>
+  </data>
+  <data name="Position_GK" xml:space="preserve">
+    <value>Goalkeeper</value>
+  </data>
+  <data name="Position_MC" xml:space="preserve">
+    <value>Midfielder Centre</value>
+  </data>
+  <data name="Position_ML" xml:space="preserve">
+    <value>Midfielder Left</value>
+  </data>
+  <data name="Position_MR" xml:space="preserve">
+    <value>Midfielder Right</value>
+  </data>
+  <data name="Position_STC" xml:space="preserve">
+    <value>Striker</value>
+  </data>
+  <data name="Position_SW" xml:space="preserve">
+    <value>Sweeper</value>
+  </data>
+  <data name="Position_WBL" xml:space="preserve">
+    <value>Wing Back Left</value>
+  </data>
+  <data name="Position_WBR" xml:space="preserve">
+    <value>Wing Back Right</value>
+  </data>
+  <data name="Text_00f23f53197c" xml:space="preserve">
+    <value>Raw scale</value>
+  </data>
+  <data name="Text_01632e980f38" xml:space="preserve">
+    <value>Search for any part of a name: tri shows all teams containing tri. Then choose a team from the list.</value>
+  </data>
+  <data name="Text_018ce93e34b8" xml:space="preserve">
+    <value>Select two players</value>
+  </data>
+  <data name="Text_01be256931b8" xml:space="preserve">
+    <value>No changes to save</value>
+  </data>
+  <data name="Text_01f602d60568" xml:space="preserve">
+    <value>Select one or more available attributes.</value>
+  </data>
+  <data name="Text_0215c86d1b54" xml:space="preserve">
+    <value>Show optional filters</value>
+  </data>
+  <data name="Text_045cb480645d" xml:space="preserve">
+    <value>Main position</value>
+  </data>
+  <data name="Text_0468a5223610" xml:space="preserve">
+    <value>Sample {0}</value>
+  </data>
+  <data name="Text_05e7810f1ac4" xml:space="preserve">
+    <value>in chance creation and attacking options</value>
+  </data>
+  <data name="Text_064e19de6695" xml:space="preserve">
+    <value>Potential ability: nominal scale 0–200. Negative codes from the save are preserved.</value>
+  </data>
+  <data name="Text_0817a096bf96" xml:space="preserve">
+    <value>Missing or unusable dependencies: </value>
+  </data>
+  <data name="Text_0af5b1bce786" xml:space="preserve">
+    <value>Reading {0}…</value>
+  </data>
+  <data name="Text_0af945bd4a9b" xml:space="preserve">
+    <value>Numeric PA range. Missing or negatively coded potential values are excluded when this filter is active.</value>
+  </data>
+  <data name="Text_0d15148c4e4a" xml:space="preserve">
+    <value>Dominant: stronger than the other foot. Both strong: both at least 15/20.</value>
+  </data>
+  <data name="Text_0e1ce3bc5ee8" xml:space="preserve">
+    <value>You can compare up to 20 additional saves.</value>
+  </data>
+  <data name="Text_0e3fdef95375" xml:space="preserve">
+    <value>Python launcher unavailable; checking detected installations.</value>
+  </data>
+  <data name="Text_0fb09ab452aa" xml:space="preserve">
+    <value>All matches</value>
+  </data>
+  <data name="Text_103779fe3c89" xml:space="preserve">
+    <value>Repairing the dedicated environment: </value>
+  </data>
+  <data name="Text_1229c3bc79fc" xml:space="preserve">
+    <value>All matches uses the text on the left; choose a team to limit players to that exact team.</value>
+  </data>
+  <data name="Text_1327967db178" xml:space="preserve">
+    <value>Playing team (default)</value>
+  </data>
+  <data name="Text_1531b3fee5e1" xml:space="preserve">
+    <value>in build-up and ball control</value>
+  </data>
+  <data name="Text_15b3e2d192ce" xml:space="preserve">
+    <value> · N/A</value>
+  </data>
+  <data name="Text_16a31a1428fa" xml:space="preserve">
+    <value>Importance for position</value>
+  </data>
+  <data name="Text_1700f4df5398" xml:space="preserve">
+    <value>Equal</value>
+  </data>
+  <data name="Text_1a19746bb534" xml:space="preserve">
+    <value>Interpreter unusable: </value>
+  </data>
+  <data name="Text_1a58f46e0409" xml:space="preserve">
+    <value> · mean CA {0:0.0} · {1} players</value>
+  </data>
+  <data name="Text_1a9c88f4cf2e" xml:space="preserve">
+    <value>Sample</value>
+  </data>
+  <data name="Text_1b1ef2d59209" xml:space="preserve">
+    <value>unsaved edits included</value>
+  </data>
+  <data name="Text_1d696978d48d" xml:space="preserve">
+    <value>most relevant advantages</value>
+  </data>
+  <data name="Text_1d80f0682e0b" xml:space="preserve">
+    <value>unavailable</value>
+  </data>
+  <data name="Text_1eaee4b23a94" xml:space="preserve">
+    <value>Unknown familiarity: attributes can be compared, but positional readiness cannot be recommended.</value>
+  </data>
+  <data name="Text_1f6d6e1f48d8" xml:space="preserve">
+    <value>Position familiarity · 1–20</value>
+  </data>
+  <data name="Text_202c47c07827" xml:space="preserve">
+    <value>These differences describe alternatives for deployment: the overall score weights position attributes, while the choice also depends on tactical duties. Speed and work rate alone do not establish a more attacking instinct.</value>
+  </data>
+  <data name="Text_207544cd934d" xml:space="preserve">
+    <value>On loan · playing for: {0} · parent club: {1}</value>
+  </data>
+  <data name="Text_20b5f4b8bfd5" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="Text_22e221f18045" xml:space="preserve">
+    <value>Editor position estimate, not a tactical-role rating: 1–20 weighted mean, essential 3, important 2, useful 1. Familiarity is separate; this does not predict match performance.</value>
+  </data>
+  <data name="Text_255df67a2da1" xml:space="preserve">
+    <value>in defensive duels and reading play</value>
+  </data>
+  <data name="Text_26232926a988" xml:space="preserve">
+    <value>Python ready.</value>
+  </data>
+  <data name="Text_26b427758acc" xml:space="preserve">
+    <value>Choose on the pitch</value>
+  </data>
+  <data name="Text_28666d70b8cd" xml:space="preserve">
+    <value>League · CA</value>
+  </data>
+  <data name="Text_2f17719ac845" xml:space="preserve">
+    <value>Remove added saves</value>
+  </data>
+  <data name="Text_2fb609839b7f" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Text_302b8eb70bbc" xml:space="preserve">
+    <value>Open a player from Search.</value>
+  </data>
+  <data name="Text_34912a9e4c68" xml:space="preserve">
+    <value>Height (cm)</value>
+  </data>
+  <data name="Text_34e49b06cca6" xml:space="preserve">
+    <value>Python 3.12 or later was not found.</value>
+  </data>
+  <data name="Text_358796f71be1" xml:space="preserve">
+    <value>Public ID</value>
+  </data>
+  <data name="Text_3689b6415fd0" xml:space="preserve">
+    <value>History unavailable: </value>
+  </data>
+  <data name="Text_376a6a670a42" xml:space="preserve">
+    <value>Invalid Python response</value>
+  </data>
+  <data name="Text_398c94104b68" xml:space="preserve">
+    <value>Invalid field order</value>
+  </data>
+  <data name="Text_39b226b0bc64" xml:space="preserve">
+    <value>Show pitches</value>
+  </data>
+  <data name="Text_39b33a354458" xml:space="preserve">
+    <value>Game date</value>
+  </data>
+  <data name="Text_3b0a75ea292b" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="Text_3b50ed0e6ec2" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="Text_3cad6e3f2783" xml:space="preserve">
+    <value>League unavailable</value>
+  </data>
+  <data name="Text_3d0260e57cec" xml:space="preserve">
+    <value>Python {0} is unsupported: version 3.12 or later is required.</value>
+  </data>
+  <data name="Text_3d0e81cec59b" xml:space="preserve">
+    <value> (partial analysis)</value>
+  </data>
+  <data name="Text_3da863f9136d" xml:space="preserve">
+    <value>Hidden attributes</value>
+  </data>
+  <data name="Text_3f39d5c348e5" xml:space="preserve">
+    <value>R</value>
+  </data>
+  <data name="Text_3f8498e92e4b" xml:space="preserve">
+    <value>No player selected</value>
+  </data>
+  <data name="Text_41992da10449" xml:space="preserve">
+    <value>Choose which team to use for loaned players in the list, search and sorting. Preview and comparison still use their playing team.</value>
+  </data>
+  <data name="Text_42e01625f528" xml:space="preserve">
+    <value>Broadly equivalent profiles: no clear preference under these criteria.</value>
+  </data>
+  <data name="Text_452ac98b053e" xml:space="preserve">
+    <value>All teams</value>
+  </data>
+  <data name="Text_46c06b548bb1" xml:space="preserve">
+    <value>{0} selected / {1} available</value>
+  </data>
+  <data name="Text_46fe5e750735" xml:space="preserve">
+    <value>Choose saves from the same career</value>
+  </data>
+  <data name="Text_474c06af6715" xml:space="preserve">
+    <value>Editor guidance, not official FM weights</value>
+  </data>
+  <data name="Text_47d9a2b22da4" xml:space="preserve">
+    <value>Writes a new copy and uses it as the working file for subsequent changes.</value>
+  </data>
+  <data name="Text_486f013addb0" xml:space="preserve">
+    <value>The save reader has exited. </value>
+  </data>
+  <data name="Text_49be2b3731fc" xml:space="preserve">
+    <value>4  Comparison (0)</value>
+  </data>
+  <data name="Text_4c099aaccac0" xml:space="preserve">
+    <value>Can play (12+)</value>
+  </data>
+  <data name="Text_4c8cf7466688" xml:space="preserve">
+    <value>Python installed. Looking for the new interpreter…</value>
+  </data>
+  <data name="Text_4c9f2babc23a" xml:space="preserve">
+    <value>History…</value>
+  </data>
+  <data name="Text_4cab1256af2b" xml:space="preserve">
+    <value>Loan players under:</value>
+  </data>
+  <data name="Text_4cd0d886b40b" xml:space="preserve">
+    <value>Coverage</value>
+  </data>
+  <data name="Text_4d20e07c4d4c" xml:space="preserve">
+    <value>Official Python website</value>
+  </data>
+  <data name="Text_4dba6a2f1b9f" xml:space="preserve">
+    <value>Unsaved changes</value>
+  </data>
+  <data name="Text_4f6eac65b3be" xml:space="preserve">
+    <value>Search by name, team, public ID or internal ID</value>
+  </data>
+  <data name="Text_5014a12ba8f5" xml:space="preserve">
+    <value>Stars unavailable: at least 3 players from the same squad with known CA are required.</value>
+  </data>
+  <data name="Text_514019445ab2" xml:space="preserve">
+    <value>Save complete</value>
+  </data>
+  <data name="Text_51ad88cc9eb2" xml:space="preserve">
+    <value>Dash-dot</value>
+  </data>
+  <data name="Text_51bf843f1751" xml:space="preserve">
+    <value>Expiry</value>
+  </data>
+  <data name="Text_51df0484073a" xml:space="preserve">
+    <value>Attribute / position</value>
+  </data>
+  <data name="Text_52bfc8e906b8" xml:space="preserve">
+    <value>Preview →</value>
+  </data>
+  <data name="Text_52fcfde046ff" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Text_53a436ea8c92" xml:space="preserve">
+    <value>5  History</value>
+  </data>
+  <data name="Text_53e4d698ead1" xml:space="preserve">
+    <value>Wait for the current operation to finish.</value>
+  </data>
+  <data name="Text_5533eef0995d" xml:space="preserve">
+    <value>Report position</value>
+  </data>
+  <data name="Text_558b8c27d299" xml:space="preserve">
+    <value>Enter a valid numeric value.</value>
+  </data>
+  <data name="Text_55b0f70b6858" xml:space="preserve">
+    <value>Save changes</value>
+  </data>
+  <data name="Text_562a75697840" xml:space="preserve">
+    <value>Raw values</value>
+  </data>
+  <data name="Text_5714b701231e" xml:space="preserve">
+    <value>Installing Python 3.13 via WinGet for the current user…</value>
+  </data>
+  <data name="Text_5764e89cef6f" xml:space="preserve">
+    <value>Uses the minimum gap only: PA minus CA. Unknown potential values are excluded.</value>
+  </data>
+  <data name="Text_57a6677642b5" xml:space="preserve">
+    <value> · Absolute stars: CA/PA ÷ 40, rounded to half a star (editor estimate).</value>
+  </data>
+  <data name="Text_57e4df9fbdb4" xml:space="preserve">
+    <value>Not on loan</value>
+  </data>
+  <data name="Text_58025f3619bf" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Text_596429ce9eb6" xml:space="preserve">
+    <value>Click a position or use the list. Yellow marks the evaluated position.</value>
+  </data>
+  <data name="Text_599079bc0126" xml:space="preserve">
+    <value>Dotted</value>
+  </data>
+  <data name="Text_5a6045247428" xml:space="preserve">
+    <value>Empty reader response</value>
+  </data>
+  <data name="Text_5aa749965391" xml:space="preserve">
+    <value>Positions ≥12</value>
+  </data>
+  <data name="Text_5b32139224ee" xml:space="preserve">
+    <value>Search name, team or ID…</value>
+  </data>
+  <data name="Text_5b61f03e7658" xml:space="preserve">
+    <value>Reading internal history and selected saves…</value>
+  </data>
+  <data name="Text_5d14defc9b3f" xml:space="preserve">
+    <value>in goalkeeping qualities</value>
+  </data>
+  <data name="Text_5df832e19d28" xml:space="preserve">
+    <value>Search failed: </value>
+  </data>
+  <data name="Text_5f4c1937efd4" xml:space="preserve">
+    <value>● Unsaved changes</value>
+  </data>
+  <data name="Text_5f7f5f392dd8" xml:space="preserve">
+    <value> · partial</value>
+  </data>
+  <data name="Text_5fd3d93232e0" xml:space="preserve">
+    <value>Current ability</value>
+  </data>
+  <data name="Text_5fe0d6b9a217" xml:space="preserve">
+    <value>Python check failed: </value>
+  </data>
+  <data name="Text_5ff89766ab1c" xml:space="preserve">
+    <value>Red 1–5 · yellow 6–10 · green 11–15 · blue 16–20. Injury proneness/dirtiness: reversed colours.</value>
+  </data>
+  <data name="Text_61efeb24af86" xml:space="preserve">
+    <value>in attributes for physical and aerial duels</value>
+  </data>
+  <data name="Text_6263f825860b" xml:space="preserve">
+    <value>Reset player</value>
+  </data>
+  <data name="Text_632c1126bbb8" xml:space="preserve">
+    <value>1  Player search</value>
+  </data>
+  <data name="Text_658469a26ec0" xml:space="preserve">
+    <value>{0:N0} results from {1:N0} players</value>
+  </data>
+  <data name="Text_6792c3433e1b" xml:space="preserve">
+    <value>Use</value>
+  </data>
+  <data name="Text_68663ead19d6" xml:space="preserve">
+    <value>Unexpected reader event</value>
+  </data>
+  <data name="Text_6aef1e9c089a" xml:space="preserve">
+    <value>Copy saved and verified. Subsequent changes will start from this file.</value>
+  </data>
+  <data name="Text_6b52861acb61" xml:space="preserve">
+    <value>Stars unavailable</value>
+  </data>
+  <data name="Text_6ba40634b2ee" xml:space="preserve">
+    <value>
+Excluded files: </value>
+  </data>
+  <data name="Text_6d7f90c02494" xml:space="preserve">
+    <value>Automatic · main position</value>
+  </data>
+  <data name="Text_6efbb5528c52" xml:space="preserve">
+    <value>Internal history · experimental</value>
+  </data>
+  <data name="Text_707eecb875fc" xml:space="preserve">
+    <value>Attribute</value>
+  </data>
+  <data name="Text_71a727f536e4" xml:space="preserve">
+    <value>On loan</value>
+  </data>
+  <data name="Text_725424c55624" xml:space="preserve">
+    <value>Contract</value>
+  </data>
+  <data name="Text_72a1409756a3" xml:space="preserve">
+    <value>FM26 Simple Editor · Startup preparation</value>
+  </data>
+  <data name="Text_72cbceadc06a" xml:space="preserve">
+    <value>The verified Python runtime is no longer available. Restart the editor to repeat setup. </value>
+  </data>
+  <data name="Text_7318992da38f" xml:space="preserve">
+    <value>Position report uses the 1–20 scale and 3/2/1 weights.</value>
+  </data>
+  <data name="Text_75191df29c9a" xml:space="preserve">
+    <value>Nearly equal attributes (gap &lt; 0.25): prefer {0} for at least 3 points more familiarity.</value>
+  </data>
+  <data name="Text_751a743435ea" xml:space="preserve">
+    <value>Filter teams, e.g. tri</value>
+  </data>
+  <data name="Text_75ca7ae5eaa1" xml:space="preserve">
+    <value>Operation failed (code {0}).
+</value>
+  </data>
+  <data name="Text_76636614446e" xml:space="preserve">
+    <value>Could not start </value>
+  </data>
+  <data name="Text_76ed2e73cde9" xml:space="preserve">
+    <value>Save opened · {0:N0} players</value>
+  </data>
+  <data name="Text_7a436139381b" xml:space="preserve">
+    <value>4  Comparison ({0})</value>
+  </data>
+  <data name="Text_7acb74dfc936" xml:space="preserve">
+    <value>Right dominant</value>
+  </data>
+  <data name="Text_7b3842e1f4ca" xml:space="preserve">
+    <value> However, {0} retains an advantage in {1} (+{2}).</value>
+  </data>
+  <data name="Text_7b4e2d0fae1d" xml:space="preserve">
+    <value>Raw value</value>
+  </data>
+  <data name="Text_7c00e624d516" xml:space="preserve">
+    <value>Show Δ</value>
+  </data>
+  <data name="Text_7c2ab2538f02" xml:space="preserve">
+    <value>A includes unsaved edits</value>
+  </data>
+  <data name="Text_7cf9482ef50b" xml:space="preserve">
+    <value>No matching players</value>
+  </data>
+  <data name="Text_7edc4bcca94c" xml:space="preserve">
+    <value>Install Python 3.13</value>
+  </data>
+  <data name="Text_7f3477fd96c4" xml:space="preserve">
+    <value>runtime_probe.py or requirements.txt is missing alongside the executable. Rebuild or extract the complete project.</value>
+  </data>
+  <data name="Text_7f65ef4af637" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Text_7fa7c40c16c5" xml:space="preserve">
+    <value>Parent club unavailable</value>
+  </data>
+  <data name="Text_81fb6bf9caec" xml:space="preserve">
+    <value>Choose a player to compare</value>
+  </data>
+  <data name="Text_82801b689bdc" xml:space="preserve">
+    <value>Compare…</value>
+  </data>
+  <data name="Text_839423d2d1a6" xml:space="preserve">
+    <value> · showing the first 2,500</value>
+  </data>
+  <data name="Text_83f29bd14a6e" xml:space="preserve">
+    <value>Attributes</value>
+  </data>
+  <data name="Text_8663131db38a" xml:space="preserve">
+    <value>Dash-dot-dot</value>
+  </data>
+  <data name="Text_86941499fe9e" xml:space="preserve">
+    <value>Edit date of birth</value>
+  </data>
+  <data name="Text_86de35bcbb79" xml:space="preserve">
+    <value>Choose the report position</value>
+  </data>
+  <data name="Text_86e7925e4177" xml:space="preserve">
+    <value>Winner</value>
+  </data>
+  <data name="Text_885725b27cce" xml:space="preserve">
+    <value>Add to comparison list</value>
+  </data>
+  <data name="Text_89bf53640b26" xml:space="preserve">
+    <value>Expired</value>
+  </data>
+  <data name="Text_8a9947ee8c97" xml:space="preserve">
+    <value>Open a player from Search</value>
+  </data>
+  <data name="Text_8b402958d93e" xml:space="preserve">
+    <value>Parent club</value>
+  </data>
+  <data name="Text_8b48e2e8ec50" xml:space="preserve">
+    <value>Already in comparison list</value>
+  </data>
+  <data name="Text_8b7aacbe906e" xml:space="preserve">
+    <value>Remove from list</value>
+  </data>
+  <data name="Text_8be7fcbe5ed4" xml:space="preserve">
+    <value>Unknown position</value>
+  </data>
+  <data name="Text_8bef81b4f3c8" xml:space="preserve">
+    <value>{0} · values from the open save</value>
+  </data>
+  <data name="Text_8c3ea2ea786a" xml:space="preserve">
+    <value>Dashed</value>
+  </data>
+  <data name="Text_8ca49b27492a" xml:space="preserve">
+    <value>Age at the game date. Unreadable birth dates exclude players only when the age filter is active.</value>
+  </data>
+  <data name="Text_8de0b3c47f11" xml:space="preserve">
+    <value>L</value>
+  </data>
+  <data name="Text_8fdbfdcebc3a" xml:space="preserve">
+    <value>Discard the player's unsaved changes?</value>
+  </data>
+  <data name="Text_920a8419e478" xml:space="preserve">
+    <value>Compare dated saves</value>
+  </data>
+  <data name="Text_9337b648a0e1" xml:space="preserve">
+    <value>Open player profile →</value>
+  </data>
+  <data name="Text_946327641b50" xml:space="preserve">
+    <value>{0} active filters · game date {1}</value>
+  </data>
+  <data name="Text_94a4c8661be8" xml:space="preserve">
+    <value>Left dominant</value>
+  </data>
+  <data name="Text_951b8d171625" xml:space="preserve">
+    <value>Accomplished (15+)</value>
+  </data>
+  <data name="Text_9648e3497415" xml:space="preserve">
+    <value>Reading the selected player…</value>
+  </data>
+  <data name="Text_96b6ef93f726" xml:space="preserve">
+    <value>Open save</value>
+  </data>
+  <data name="Text_96fd7b35ee9e" xml:space="preserve">
+    <value>Raw attributes · nominal scale 1–100</value>
+  </data>
+  <data name="Text_972393f31323" xml:space="preserve">
+    <value>Enter an integer from 1 to {0}.</value>
+  </data>
+  <data name="Text_974a57d31063" xml:space="preserve">
+    <value>Playing characteristics in the selected position</value>
+  </data>
+  <data name="Text_97ca235373f6" xml:space="preserve">
+    <value>Raw difference A − B: {0:+0;-0;0}. Arrow points toward the better value (lower for injury proneness/dirtiness).</value>
+  </data>
+  <data name="Text_989bb184de15" xml:space="preserve">
+    <value>in mobility and speed</value>
+  </data>
+  <data name="Text_994f045e8439" xml:space="preserve">
+    <value>{0} comparison players · {1} · B: file values. Stars relative to A's squad. Δ = A − B; ← A better, B better →. </value>
+  </data>
+  <data name="Text_9a36d649406a" xml:space="preserve">
+    <value>Open a profile from Search.</value>
+  </data>
+  <data name="Text_9b6ca71eb272" xml:space="preserve">
+    <value>Save failed</value>
+  </data>
+  <data name="Text_9c589f02f00a" xml:space="preserve">
+    <value>Error opening save</value>
+  </data>
+  <data name="Text_9d8d2a088944" xml:space="preserve">
+    <value>Could not start Python</value>
+  </data>
+  <data name="Text_9e4d513ec09b" xml:space="preserve">
+    <value> Duplicate dates: separate points without connecting lines.</value>
+  </data>
+  <data name="Text_9efdc62c88bf" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="Text_9fd44301d99b" xml:space="preserve">
+    <value>Installing Python…</value>
+  </data>
+  <data name="Text_a237f9809ea5" xml:space="preserve">
+    <value>Select a player in the Search tab.</value>
+  </data>
+  <data name="Text_a2e3e958ed35" xml:space="preserve">
+    <value>Current ability: nominal scale 0–200.</value>
+  </data>
+  <data name="Text_a439407283a1" xml:space="preserve">
+    <value>Add saves…</value>
+  </data>
+  <data name="Text_a60e1c5efc02" xml:space="preserve">
+    <value>Stopping setup…</value>
+  </data>
+  <data name="Text_a6cc4366541a" xml:space="preserve">
+    <value>Copy saved and verified:
+{0}</value>
+  </data>
+  <data name="Text_a95838c3f0ec" xml:space="preserve">
+    <value>Position and familiarity</value>
+  </data>
+  <data name="Text_aa201262e9a7" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Text_aa58b21b01d6" xml:space="preserve">
+    <value>from</value>
+  </data>
+  <data name="Text_abfe1ebbee3f" xml:space="preserve">
+    <value>Installing dependencies from PyPI; please wait…</value>
+  </data>
+  <data name="Text_adcecb06f9f3" xml:space="preserve">
+    <value>Potential ability · PA</value>
+  </data>
+  <data name="Text_ae145daf7f24" xml:space="preserve">
+    <value>Any position</value>
+  </data>
+  <data name="Text_afb8d72126a8" xml:space="preserve">
+    <value>Absolute · PA</value>
+  </data>
+  <data name="Text_b1536395f037" xml:space="preserve">
+    <value>Minimum PA − CA gap</value>
+  </data>
+  <data name="Text_b4739e9bd7a1" xml:space="preserve">
+    <value>Open a save to search.</value>
+  </data>
+  <data name="Text_b4fff3cd3890" xml:space="preserve">
+    <value>Read-only preview</value>
+  </data>
+  <data name="Text_b67eeb7fa174" xml:space="preserve">
+    <value>Football Manager saves (*.fm)|*.fm</value>
+  </data>
+  <data name="Text_b820128ee005" xml:space="preserve">
+    <value>{0} comparison players · {1}: {2} · {3}: file values. Stars relative to the open player’s team.</value>
+  </data>
+  <data name="Text_b8797b528736" xml:space="preserve">
+    <value>Open and type to search</value>
+  </data>
+  <data name="Text_b8b311b0f273" xml:space="preserve">
+    <value>Solid</value>
+  </data>
+  <data name="Text_b959d6541181" xml:space="preserve">
+    <value>Loan: data unavailable</value>
+  </data>
+  <data name="Text_b9bb40edbe6e" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="Text_bba3193922f9" xml:space="preserve">
+    <value> Current values are a separate comparison, not another historical month.</value>
+  </data>
+  <data name="Text_bcc1f408078e" xml:space="preserve">
+    <value>at least</value>
+  </data>
+  <data name="Text_bd63df3c891a" xml:space="preserve">
+    <value>Attribute preference: {0}. Check familiarity too: the score applies no hidden positional penalties.</value>
+  </data>
+  <data name="Text_be02ed39e12d" xml:space="preserve">
+    <value>en-GB</value>
+  </data>
+  <data name="Text_be6f556dde17" xml:space="preserve">
+    <value>file values</value>
+  </data>
+  <data name="Text_beb6c62f8917" xml:space="preserve">
+    <value>Reading the save and player catalogue…</value>
+  </data>
+  <data name="Text_bf43a8426aed" xml:space="preserve">
+    <value>Checking Python: </value>
+  </data>
+  <data name="Text_bf7555be00c9" xml:space="preserve">
+    <value>Checking pip in the dedicated environment…</value>
+  </data>
+  <data name="Text_c0c8df4a07ac" xml:space="preserve">
+    <value>Open an .fm save to start</value>
+  </data>
+  <data name="Text_c10cd79b6bb8" xml:space="preserve">
+    <value>{0} players · Enter or click to choose · Esc to cancel</value>
+  </data>
+  <data name="Text_c2809eb34831" xml:space="preserve">
+    <value>in work rate and team support</value>
+  </data>
+  <data name="Text_c2acac38d378" xml:space="preserve">
+    <value>Both strong (15+)</value>
+  </data>
+  <data name="Text_c4483e052140" xml:space="preserve">
+    <value>Reset filters</value>
+  </data>
+  <data name="Text_c4b0781cd212" xml:space="preserve">
+    <value>Importance</value>
+  </data>
+  <data name="Text_c4bdfd33d95d" xml:space="preserve">
+    <value>No detected contract</value>
+  </data>
+  <data name="Text_c4ff98018ca7" xml:space="preserve">
+    <value>Loan</value>
+  </data>
+  <data name="Text_c543c235ece1" xml:space="preserve">
+    <value>Select visible</value>
+  </data>
+  <data name="Text_c7172fdd812d" xml:space="preserve">
+    <value>Data unavailable</value>
+  </data>
+  <data name="Text_c7ba90415dbf" xml:space="preserve">
+    <value>Change the interface language, attribute and position labels; sorting follows the selected language.</value>
+  </data>
+  <data name="Text_c88205316415" xml:space="preserve">
+    <value>Editor star estimates relative to the squad (mean CA {0:0.0}, {1} players). These are not FM staff ratings.</value>
+  </data>
+  <data name="Text_ca978112ca1b" xml:space="preserve">
+    <value>to</value>
+  </data>
+  <data name="Text_cb2cc50c4178" xml:space="preserve">
+    <value>Waiting for another editor installation to finish…</value>
+  </data>
+  <data name="Text_ce1391381fc8" xml:space="preserve">
+    <value>Unavailable</value>
+  </data>
+  <data name="Text_ce82fff32927" xml:space="preserve">
+    <value>Potential</value>
+  </data>
+  <data name="Text_ce9bb84c3e8c" xml:space="preserve">
+    <value>League · PA</value>
+  </data>
+  <data name="Text_ceaf655a3ef2" xml:space="preserve">
+    <value>Foot</value>
+  </data>
+  <data name="Text_d004bbfcb761" xml:space="preserve">
+    <value>Timeout exceeded for </value>
+  </data>
+  <data name="Text_d10c243588b5" xml:space="preserve">
+    <value>2  Edit player</value>
+  </data>
+  <data name="Text_d12e07ecdec1" xml:space="preserve">
+    <value>Search attribute…</value>
+  </data>
+  <data name="Text_d1cb94b7d991" xml:space="preserve">
+    <value>Expiry from the game date, inclusive. Within 12 months includes the first 6. None means no detected contract and no associated team. Unavailable data is separate.</value>
+  </data>
+  <data name="Text_d2e2201308d8" xml:space="preserve">
+    <value>Expires within 12 months</value>
+  </data>
+  <data name="Text_d2ff7726ba7d" xml:space="preserve">
+    <value>Neither reaches familiarity 12/20: both need adaptation before being recommended here.</value>
+  </data>
+  <data name="Text_d39045327c8b" xml:space="preserve">
+    <value>Current</value>
+  </data>
+  <data name="Text_d460db79e60b" xml:space="preserve">
+    <value>A: open player</value>
+  </data>
+  <data name="Text_d47f73a65981" xml:space="preserve">
+    <value>Current · {0:dd/MM/yyyy}</value>
+  </data>
+  <data name="Text_d4992007fff7" xml:space="preserve">
+    <value>Absolute · CA</value>
+  </data>
+  <data name="Text_d648bc617064" xml:space="preserve">
+    <value>Familiarity</value>
+  </data>
+  <data name="Text_d765d2266795" xml:space="preserve">
+    <value> Unsaved edits are excluded.</value>
+  </data>
+  <data name="Text_d78a83e5c032" xml:space="preserve">
+    <value>Italian labels</value>
+  </data>
+  <data name="Text_d7b494e94601" xml:space="preserve">
+    <value>Clear list</value>
+  </data>
+  <data name="Text_d7ef2d0aa2ea" xml:space="preserve">
+    <value>Comparison player, searchable list</value>
+  </data>
+  <data name="Text_d7effa1c65a8" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Text_da93783f7a81" xml:space="preserve">
+    <value>Install Python 3.13 using the button (WinGet, internet access and package agreement acceptance), or from the official website. Then click Retry. If WinGet is unavailable, use the website.</value>
+  </data>
+  <data name="Text_db2ed7c2417a" xml:space="preserve">
+    <value>Age (years)</value>
+  </data>
+  <data name="Text_db56c5c85177" xml:space="preserve">
+    <value>Same team</value>
+  </data>
+  <data name="Text_dd2a6a16b813" xml:space="preserve">
+    <value>Show hidden attributes</value>
+  </data>
+  <data name="Text_dd7c9737f87c" xml:space="preserve">
+    <value>Natural positions: </value>
+  </data>
+  <data name="Text_ddae15dbe328" xml:space="preserve">
+    <value>Dependencies still unusable: </value>
+  </data>
+  <data name="Text_de7ca56f56c1" xml:space="preserve">
+    <value>{0} is stronger {1}: {2}.</value>
+  </data>
+  <data name="Text_df065e5ab70e" xml:space="preserve">
+    <value>{0}  •  Public ID {1}  •  Internal ID {2}</value>
+  </data>
+  <data name="Text_e070660e5c42" xml:space="preserve">
+    <value>Active, known expiry</value>
+  </data>
+  <data name="Text_e10ca3898158" xml:space="preserve">
+    <value>Preparing dependencies…</value>
+  </data>
+  <data name="Text_e17d380480a5" xml:space="preserve">
+    <value>3  In-game preview</value>
+  </data>
+  <data name="Text_e17d53cc8e6c" xml:space="preserve">
+    <value>Aspects with at least two available attributes show no mean gap of half a point or more: no clearly stronger style emerges.</value>
+  </data>
+  <data name="Text_e1e8b54d45e2" xml:space="preserve">
+    <value>Internal ID</value>
+  </data>
+  <data name="Text_e2003fd16f1e" xml:space="preserve">
+    <value>Reading. Unsaved edits are excluded.</value>
+  </data>
+  <data name="Text_e2d47e04db5f" xml:space="preserve">
+    <value>Preparing the list and filters</value>
+  </data>
+  <data name="Text_e44f85cb84f6" xml:space="preserve">
+    <value>Choose a player…</value>
+  </data>
+  <data name="Text_e50b26ad4723" xml:space="preserve">
+    <value>Position report</value>
+  </data>
+  <data name="Text_e64996006057" xml:space="preserve">
+    <value>Green 18–20: natural
+Yellow 15–17: accomplished
+Orange 12–14: competent
+Hover over a position for its rating.</value>
+  </data>
+  <data name="Text_ea4bae741bfb" xml:space="preserve">
+    <value>Comparison list</value>
+  </data>
+  <data name="Text_eaaf759afa09" xml:space="preserve">
+    <value>Comparison unavailable: </value>
+  </data>
+  <data name="Text_eae7da9c773b" xml:space="preserve">
+    <value>Other player</value>
+  </data>
+  <data name="Text_eb34623b71cd" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="Text_ec60709e94bb" xml:space="preserve">
+    <value>The date changes only when the checkbox is enabled. Preview shows current values without writing to the file.</value>
+  </data>
+  <data name="Text_ec7570d31eef" xml:space="preserve">
+    <value>Could not open website</value>
+  </data>
+  <data name="Text_ed1e0716be83" xml:space="preserve">
+    <value>Preparing the dedicated environment: </value>
+  </data>
+  <data name="Text_edcf091dd19a" xml:space="preserve">
+    <value>Player positions on the pitch</value>
+  </data>
+  <data name="Text_f0c0f49590d2" xml:space="preserve">
+    <value>Checking Python and dependencies…</value>
+  </data>
+  <data name="Text_f0cdee43e3b1" xml:space="preserve">
+    <value>Attribute history</value>
+  </data>
+  <data name="Text_f101d9a9a54f" xml:space="preserve">
+    <value>Compare with the open player</value>
+  </data>
+  <data name="Text_f183249bfc83" xml:space="preserve">
+    <value>Open player</value>
+  </data>
+  <data name="Text_f49050ba3949" xml:space="preserve">
+    <value>Open a player and choose a comparison player. The report includes the open player’s unsaved edits.</value>
+  </data>
+  <data name="Text_f537c6bd038e" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="Text_f53c05dd871c" xml:space="preserve">
+    <value>None detected</value>
+  </data>
+  <data name="Text_f69457a73dd8" xml:space="preserve">
+    <value>Expires within 6 months</value>
+  </data>
+  <data name="Text_f6ab09c6bbfa" xml:space="preserve">
+    <value>Current ability · CA</value>
+  </data>
+  <data name="Text_f7642bcf0f8f" xml:space="preserve">
+    <value>Include current file values</value>
+  </data>
+  <data name="Text_f7a219323e1f" xml:space="preserve">
+    <value>Setup cancelled.</value>
+  </data>
+  <data name="Text_f81f2c0dbff0" xml:space="preserve">
+    <value>Player position, not tactical duty. Accomplished: at least 15/20; can play: at least 12/20.</value>
+  </data>
+  <data name="Text_f934e2fe40d8" xml:space="preserve">
+    <value>Final version and import checks…</value>
+  </data>
+  <data name="Text_fa15392c881e" xml:space="preserve">
+    <value>Search name or ID…</value>
+  </data>
+  <data name="Text_fc7d80e4d698" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Text_fcb5504e6a1f" xml:space="preserve">
+    <value>Error reading player</value>
+  </data>
+  <data name="Text_fcbecb092916" xml:space="preserve">
+    <value>Setup failed. Check the details and click Retry.</value>
+  </data>
+  <data name="Text_fce03e78db6f" xml:space="preserve">
+    <value>● On loan</value>
+  </data>
+  <data name="Text_fd123f397c97" xml:space="preserve">
+    <value>{0:0.0} estimated stars</value>
+  </data>
+  <data name="Text_fd2a169c6549" xml:space="preserve">
+    <value>Writing and fully verifying the save…</value>
+  </data>
+  <data name="Text_ff17bc12d7eb" xml:space="preserve">
+    <value>Prefer {0}: only this player reaches familiarity 12/20. This is a readiness advantage, even if the other player has stronger attributes.</value>
+  </data>
+  <data name="UpToDate" xml:space="preserve">
+    <value>No newer version is available. Latest release: {0}.</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>A newer version is available: {0}.</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Could not check for updates. Check your connection and retry; you can open the repository using the link above.</value>
+  </data>
+  <data name="UpdatePrivacy" xml:space="preserve">
+    <value>Opening this window checks the public release only. No save data is sent; updates are not installed automatically.</value>
+  </data>
+  <data name="UpdateRateLimit" xml:space="preserve">
+    <value>GitHub has rate-limited requests. Retry later or open the repository using the link above.</value>
+  </data>
+</root>

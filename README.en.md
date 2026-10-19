@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v12
+# FM26 Simple Editor · v13 (in development)
 
 [Italiano](README.md) | English
 
@@ -51,7 +51,7 @@ Internal attribute history from a single supported save, charts with multiple se
 - **Loan team view:** **Prestiti nella squadra** defaults to **In cui gioca** (playing club); choose **Proprietaria** (parent club) to list loaned-out players with their owner. The Team column, team picker, text search and team sorting all use the selected view. Unreadable owners are shown as unavailable. The selector remains visible when optional filters are hidden; clearing filters preserves this session display preference. Previews, comparison cohorts and stars continue to use the playing squad.
 - **Global save controls:** **Salva modifiche** (Save changes) is in the top toolbar next to **Apri salvataggio**, together with the unsaved-changes indicator. It is available from every tab and becomes enabled for pending edits, including an edited cell. Toolbar and search panels shrink to their contents, reducing blank space above the tabs and filters. Saving still creates a new verified copy.
 
-## Changes in version 12
+## Previous changes in version 12
 
 - Smaller Windows distribution without the framework: requires .NET 8 Desktop Runtime x64.
 - Search filters resize to their wrapped rows, immediately releasing space when switching from two rows to one; extra rows remain scrollable in narrow windows.
@@ -61,6 +61,15 @@ Internal attribute history from a single supported save, charts with multiple se
 - New **Position report** subtab: choose on the pitch or from a list to compare relevant attributes, weighted scores, familiarity, advantages and a reasoned suggestion.
 - Grouped position abbreviations in the main-position column identify versatile players, for example `D (LC), DM, M (C)`. Labels follow the Italian/English selector.
 - Windows C# validation builds DLLs only and checks calculations and controls. Development branches generate no EXE, ZIP or downloadable artifacts.
+
+## Changes in version 13 — development branch
+
+- The **Language** dropdown replaces the checkbox. It translates the interface, columns, filters, tooltips, messages, preview and reports immediately, preserving the open player, edits and filters.
+- The preference is saved in `FM26SimpleEditor.config.json` **alongside the executable**, containing `{"language":"en"}` or `{"language":"it"}`. It is loaded before Python preparation. Missing, malformed or unsupported settings fall back to Italian. Writes are atomic; an unwritable folder produces a warning while retaining the selected language for the session.
+- Texts live in `Resources/Strings.resx` (Italian base resource) and `Resources/Strings.en.resx` (English). Resources are compiled: rebuild to change or add translations. Keep the `en` folder containing the English resource DLL in the distribution.
+- **About…** shows the assembly version and repository. Opening it checks GitHub’s latest public stable release, with a timeout and retry support. Versions are compared numerically; drafts and prereleases are ignored. **Open the new release** opens the browser when a newer version exists. No updates are installed and no save data is transmitted.
+- Player/team names, paths and technical logs produced by Python, pip or Windows retain their original text. Application messages from the reader are translated when displayed.
+- Windows validation checks DLLs and resources without generating EXE or ZIP files on the branch.
 
 ## Getting started
 
@@ -99,7 +108,7 @@ Numeric columns are right-aligned. Results have horizontal and vertical scrollba
 
 **Mostra filtri opzionali** shows or hides controls without changing active criteria. The filter count stays visible. **Azzera filtri** clears the search text, team selection and all optional filters. Searches do not modify the save.
 
-**Player editing** (`Modifica giocatore`) uses its tab for raw attributes and position familiarity. **Etichette in italiano** switches attribute and position labels between Italian and English. Attributes follow the selected language's alphabetical order; positions follow the pitch order. A field's identity in the file does not depend on its label or display order. Translations belong to this editor and may differ from the game's official localisation. This toggle does not translate the entire interface.
+**Player editing** (`Modifica giocatore`) uses its tab for raw attributes and position familiarity. **Language** switches the entire interface between Italian and English. Attributes follow the selected language's alphabetical order; positions follow the pitch order. A field's identity in the file does not depend on its label or display order. Translations belong to this editor and may differ from the game's official localisation.
 
 Attributes retain their nominal raw 1–100 scale. Previously boosted values up to 125, supported by the reader, are preserved. Positions use 1–20; CA and PA have a nominal 0–200 scale, with support for previously modified values up to 255. Negative PA codes are preserved. Birth dates change only when the dedicated checkbox is enabled and the person's record can be identified unambiguously.
 
@@ -170,4 +179,5 @@ The reader and protocol have been tested with real saves, including players with
 
 
 On Windows, run C# checks with `dotnet run --project tests/ComparisonChecks/ComparisonChecks.csproj --configuration Release -p:UseAppHost=false`. The **Validate comparison (DLL only)** workflow checks calculations and controls without generating EXE or ZIP files, including column order, report position selection and compact toolbar spacing.
+
 

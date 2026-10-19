@@ -35,7 +35,7 @@ public sealed class AttributeHistoryChart : Control
             g.DrawString(Math.Round(maximum*i/4.0).ToString(CultureInfo.InvariantCulture), Font, ink, 3, y-Font.Height/2f);
         }
         var points = series.SelectMany(line => line.Points).ToList();
-        if (points.Count == 0) { g.DrawString("Seleziona uno o più attributi disponibili.", Font, ink, plot.Left, plot.Top); return; }
+        if (points.Count == 0) { g.DrawString(L10n.Get("Text_01f602d60568"), Font, ink, plot.Left, plot.Top); return; }
         double first = points.Min(point => point.X), last = points.Max(point => point.X), span = last-first;
         foreach (var line in series)
         {
@@ -79,19 +79,19 @@ public sealed class HistoryPanel : UserControl
     private sealed record Choice(string Key, string Label) { public override string ToString() => Label; }
     private static readonly Color[] Colors = [Color.FromArgb(30,91,177), Color.FromArgb(188,55,38), Color.FromArgb(18,125,89), Color.FromArgb(129,63,166), Color.FromArgb(155,103,0), Color.FromArgb(0,128,147), Color.FromArgb(181,45,119), Color.FromArgb(77,83,94), Color.FromArgb(105,111,17), Color.FromArgb(109,67,43), Color.FromArgb(64,73,152), Color.FromArgb(139,63,74)];
     private static readonly DashStyle[] Dashes = [DashStyle.Solid, DashStyle.Dash, DashStyle.Dot, DashStyle.DashDot, DashStyle.DashDotDot];
-    private readonly Label title = new() { AutoSize = true, Font = new Font("Segoe UI", 15, FontStyle.Bold), Text = "Storico attributi" };
+    private readonly Label title = new() { AutoSize = true, Font = new Font("Segoe UI", 15, FontStyle.Bold), Text = L10n.Get("Text_f0cdee43e3b1") };
     private readonly Label info = new() { AutoSize = true, ForeColor = Color.DimGray };
-    private readonly Button add = new() { Text = "Aggiungi salvataggi…", AutoSize = true };
-    private readonly Button clear = new() { Text = "Rimuovi salvataggi aggiunti", AutoSize = true };
+    private readonly Button add = new() { Text = L10n.Get("Text_a439407283a1"), AutoSize = true };
+    private readonly Button clear = new() { Text = L10n.Get("Text_2f17719ac845"), AutoSize = true };
     private readonly ComboBox mode = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 245 };
-    private readonly TextBox find = new() { Dock = DockStyle.Fill, PlaceholderText = "Cerca attributo…" };
+    private readonly TextBox find = new() { Dock = DockStyle.Fill, PlaceholderText = L10n.Get("Text_d12e07ecdec1") };
     private readonly CheckedListBox attributes = new() { Dock = DockStyle.Fill, CheckOnClick = true, IntegralHeight = false, HorizontalScrollbar = true };
     private readonly Label count = new() { AutoSize = true };
-    private readonly Button all = new() { Text = "Seleziona visibili", AutoSize = true };
-    private readonly Button none = new() { Text = "Nessuno", AutoSize = true };
-    private readonly CheckBox raw = new() { Text = "Scala grezza", AutoSize = true };
-    private readonly CheckBox current = new() { Text = "Includi valori attuali del file", Checked = true, AutoSize = true };
-    private readonly CheckBox delta = new() { Text = "Mostra Δ", Checked = true, AutoSize = true };
+    private readonly Button all = new() { Text = L10n.Get("Text_c543c235ece1"), AutoSize = true };
+    private readonly Button none = new() { Text = L10n.Get("Text_aa201262e9a7"), AutoSize = true };
+    private readonly CheckBox raw = new() { Text = L10n.Get("Text_00f23f53197c"), AutoSize = true };
+    private readonly CheckBox current = new() { Text = L10n.Get("Text_f7642bcf0f8f"), Checked = true, AutoSize = true };
+    private readonly CheckBox delta = new() { Text = L10n.Get("Text_7c00e624d516"), Checked = true, AutoSize = true };
     private readonly FlowLayoutPanel legend = new() { Dock = DockStyle.Fill, AutoScroll = true, WrapContents = true };
     private readonly AttributeHistoryChart chart = new();
     private readonly DataGridView grid = new() { ReadOnly = true, Dock = DockStyle.Fill, AllowUserToAddRows = false, AllowUserToDeleteRows = false, RowHeadersVisible = false, ScrollBars = ScrollBars.Both, BackgroundColor = SystemColors.Window, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None };
@@ -112,7 +112,7 @@ public sealed class HistoryPanel : UserControl
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.Percent,100));
         var tools = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true };
-        mode.Items.AddRange(["Storico interno · sperimentale", "Confronta salvataggi datati"]); mode.SelectedIndex = 0;
+        mode.Items.AddRange([L10n.Get("Text_6efbb5528c52"), L10n.Get("Text_920a8419e478")]); mode.SelectedIndex = 0;
         tools.Controls.AddRange([mode, raw, current, delta, add, clear]);
         var body = new SplitContainer { Size = new Size(1100,550), Dock = DockStyle.Fill, FixedPanel = FixedPanel.Panel1, SplitterDistance = 245 };
         var selector = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 4, ColumnCount = 1 };
@@ -131,10 +131,10 @@ public sealed class HistoryPanel : UserControl
         add.Click += async (_, _) =>
         {
             if (primary is null) return;
-            using var dialog = new OpenFileDialog { Filter = "Salvataggi Football Manager (*.fm)|*.fm", Multiselect = true, Title = "Scegli salvataggi della stessa carriera" };
+            using var dialog = new OpenFileDialog { Filter = L10n.Get("Text_b67eeb7fa174"), Multiselect = true, Title = L10n.Get("Text_46fe5e750735") };
             if (dialog.ShowDialog() != DialogResult.OK) return;
             var paths = sources.Concat(dialog.FileNames).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-            if (paths.Count > 20) { MessageBox.Show("Puoi confrontare al massimo 20 salvataggi aggiuntivi."); return; }
+            if (paths.Count > 20) { MessageBox.Show(L10n.Get("Text_0e1ce3bc5ee8")); return; }
             sources.Clear(); sources.AddRange(paths); preferInternal = false; await LoadHistory();
         };
         clear.Click += async (_, _) => { sources.Clear(); await LoadHistory(); };
@@ -149,17 +149,18 @@ public sealed class HistoryPanel : UserControl
             if (args.NewValue == CheckState.Checked) selected.Add(choice.Key); else selected.Remove(choice.Key);
             if (IsHandleCreated) BeginInvoke(new Action(Render));
         };
+        L10n.Capture(this);
     }
 
     public void ClearSources()
     {
         ++version; sources.Clear(); result = null; primary = null; available.Clear(); preferInternal = true; RebuildList(); Render();
     }
-    public void SetLanguage(bool useItalian) { italian = useItalian; RebuildAvailable(); Render(); }
+    public void SetLanguage(bool useItalian) { updating = true; L10n.Apply(this, useItalian); updating = false; italian = useItalian; RebuildAvailable(); Render(); }
     public async void SetContext(PlayerDetail? player, bool useItalian, Func<uint,string[],Task<HistoryResult>> load)
     {
         bool same = ReferenceEquals(primary,player);
-        primary = player; italian = useItalian; loader = load;
+        SetLanguage(useItalian); primary = player; italian = useItalian; loader = load;
         if (same && result is not null) { RebuildAvailable(); Render(); return; }
         await LoadHistory();
     }
@@ -167,7 +168,7 @@ public sealed class HistoryPanel : UserControl
     {
         int request = ++version;
         if (primary is null || loader is null) { result = null; RebuildAvailable(); Render(); return; }
-        result = null; RebuildAvailable(); Render(); SetEnabled(false); info.Text = "Lettura dello storico interno e dei salvataggi selezionati…";
+        result = null; RebuildAvailable(); Render(); SetEnabled(false); info.Text = L10n.Get("Text_5b61f03e7658");
         try
         {
             var loaded = await loader(primary.Player.Uid,sources.ToArray());
@@ -176,7 +177,7 @@ public sealed class HistoryPanel : UserControl
             mode.SelectedIndex = preferInternal && loaded.EmbeddedAvailable ? 0 : 1;
             updating = false; RebuildAvailable(); Render();
         }
-        catch (Exception exc) { if (request == version && !IsDisposed) info.Text = "Storico non disponibile: " + exc.Message; }
+        catch (Exception exc) { if (request == version && !IsDisposed) info.Text = L10n.Get("Text_3689b6415fd0") + exc.Message; }
         finally { if (request == version && !IsDisposed) SetEnabled(true); }
     }
     private void SetEnabled(bool ready)
@@ -202,33 +203,33 @@ public sealed class HistoryPanel : UserControl
     private void Render()
     {
         if (IsDisposed) return;
-        title.Text = "Storico attributi" + (primary is null ? "" : " · " + primary.Player.Name);
+        title.Text = L10n.Get("Text_f0cdee43e3b1") + (primary is null ? "" : " · " + primary.Player.Name);
         grid.Columns.Clear(); grid.Rows.Clear(); chart.SetSeries([],20,false);
         foreach (Control control in legend.Controls.Cast<Control>().ToArray()) control.Dispose(); legend.Controls.Clear();
-        var keys = available.Where(selected.Contains).ToList(); count.Text = $"{keys.Count} selezionati / {available.Count} disponibili";
+        var keys = available.Where(selected.Contains).ToList(); count.Text = L10n.Format("Text_46c06b548bb1", keys.Count, available.Count);
         current.Visible = mode.SelectedIndex == 0;
         if (result is null)
         {
-            info.Text = primary is null ? "Apri un giocatore da Ricerca." : "Lettura in corso. Le modifiche non salvate sono escluse.";
+            info.Text = primary is null ? L10n.Get("Text_302b8eb70bbc") : L10n.Get("Text_e2003fd16f1e");
             SetEnabled(true); return;
         }
         bool embedded = mode.SelectedIndex == 0;
         var points = DataPoints().OrderBy(point => embedded ? point.Sequence.ToString("D6") : point.Date,StringComparer.Ordinal).ThenBy(point => point.Source).ToList();
         bool duplicates = !embedded && points.GroupBy(point => point.Date).Any(group => group.Count()>1);
-        info.Text = (embedded ? result.EmbeddedMessage : result.Message + " " + result.EmbeddedMessage) + " Le modifiche non salvate sono escluse." +
-            (embedded && current.Checked ? " Attuali è un confronto separato, non un ulteriore mese storico." : "") +
-            (duplicates ? " Date duplicate: punti separati senza linee di collegamento." : "") +
-            (result.Warnings.Count == 0 ? "" : "\nFile esclusi: " + string.Join(" | ",result.Warnings));
+        info.Text = (embedded ? L10n.Backend(result.EmbeddedMessage) : L10n.Backend(result.Message) + " " + L10n.Backend(result.EmbeddedMessage)) + L10n.Get("Text_d765d2266795") +
+            (embedded && current.Checked ? L10n.Get("Text_bba3193922f9") : "") +
+            (duplicates ? L10n.Get("Text_9e4d513ec09b") : "") +
+            (result.Warnings.Count == 0 ? "" : L10n.Get("Text_6ba40634b2ee") + string.Join(" | ",result.Warnings.Select(L10n.Backend)));
         HistoryPoint? currentPoint = embedded && current.Checked && primary is not null ? result.Points.FirstOrDefault(point => point.Source == result.EmbeddedPoints.FirstOrDefault()?.Source) : null;
         if (currentPoint is not null) points.Add(currentPoint);
-        AddColumn(embedded ? "Campione" : "Data partita",150);
-        AddColumn("Salvataggio",230);
+        AddColumn(embedded ? L10n.Get("Text_1a9c88f4cf2e") : L10n.Get("Text_39b33a354458"),150);
+        AddColumn(L10n.Get("Text_2fb609839b7f"),230);
         foreach (string key in keys)
         {
             var column = AddColumn(Labels.Attribute(key,italian),135,raw.Checked ? 100 : 20);
             column.HeaderCell.Style.ForeColor = styles[key].Color; column.Tag = key;
             if (delta.Checked) AddColumn("Δ " + Labels.Attribute(key,italian),90);
-            var item = new Label { Text = Labels.Attribute(key,italian) + " · " + styles[key].Dash, AutoSize = true, ForeColor = styles[key].Color, Margin = new Padding(6,4,10,4) };
+            var item = new Label { Text = Labels.Attribute(key,italian) + " · " + L10n.Get("Dash_" + styles[key].Dash), AutoSize = true, ForeColor = styles[key].Color, Margin = new Padding(6,4,10,4) };
             legend.Controls.Add(item);
         }
         AddColumn("CA",75,200); AddColumn("PA",75,200);
@@ -238,8 +239,8 @@ public sealed class HistoryPanel : UserControl
         {
             var point = points[index]; bool now = ReferenceEquals(point,currentPoint);
             DateTime? date = DateTime.TryParseExact(point.Date,"yyyy-MM-dd",CultureInfo.InvariantCulture,DateTimeStyles.None,out var parsed) ? parsed : null;
-            string label = embedded ? now ? "Attuali" : $"Campione {point.Sequence}" : date?.ToString("dd/MM/yyyy") ?? "—";
-            var cells = new List<object?> { now && date.HasValue ? $"Attuali · {date:dd/MM/yyyy}" : label, Path.GetFileName(point.Source) };
+            string label = embedded ? now ? L10n.Get("Text_d39045327c8b") : L10n.Format("Text_0468a5223610", point.Sequence) : date?.ToString("dd/MM/yyyy") ?? "—";
+            var cells = new List<object?> { now && date.HasValue ? L10n.Format("Text_d47f73a65981", date) : label, Path.GetFileName(point.Source) };
             foreach (string key in keys)
             {
                 int? value = point.Attributes.TryGetValue(key,out int stored) ? raw.Checked ? stored : PreviewMath.Attribute20(stored) : null;
@@ -254,7 +255,7 @@ public sealed class HistoryPanel : UserControl
             }
             cells.Add(point.Ca); cells.Add(point.Pa);
             int row = grid.Rows.Add(cells.ToArray());
-            grid.Rows[row].Cells[1].ToolTipText = point.Source + (point.IdentityNote.Length>0 ? "\n"+point.IdentityNote : "");
+            grid.Rows[row].Cells[1].ToolTipText = point.Source + (point.IdentityNote.Length>0 ? "\n"+L10n.Backend(point.IdentityNote) : "");
             if (now) grid.Rows[row].DefaultCellStyle.BackColor = Color.FromArgb(238,244,251);
         }
         int maximum = raw.Checked ? lines.Values.SelectMany(line => line).Any(point => point.Value>100) ? 125 : 100 : 20;
@@ -270,3 +271,4 @@ public sealed class HistoryPanel : UserControl
         grid.Columns.Add(column); grid.RowTemplate.Height = 41; return column;
     }
 }
+

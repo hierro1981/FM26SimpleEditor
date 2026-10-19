@@ -26,13 +26,13 @@ public static class RoleComparison
     {
         (string Key, string It, string En, string[] Fields)[] domains =
         [
-            ("defence", "nei duelli e nella lettura difensiva", "in defensive duels and reading play", ["tackling", "marking", "anticipation", "positioning", "concentration"]),
-            ("build_up", "nella costruzione e nel controllo del pallone", "in build-up and ball control", ["passing", "vision", "first_touch", "technique", "decisions"]),
-            ("attack", "nella rifinitura e nelle soluzioni offensive", "in chance creation and attacking options", ["crossing", "dribbling", "off_the_ball", "finishing", "long_shots", "composure"]),
-            ("mobility", "nella mobilità e nella rapidità", "in mobility and speed", ["pace", "acceleration", "agility", "balance"]),
-            ("support", "nel lavoro e nel sostegno alla manovra", "in work rate and team support", ["work_rate", "teamwork", "stamina"]),
-            ("duels", "nei mezzi per i duelli fisici e aerei", "in attributes for physical and aerial duels", ["strength", "jumping_reach", "heading", "bravery"]),
-            ("keeping", "nelle qualità da portiere", "in goalkeeping qualities", ["reflexes", "handling", "one_on_ones", "aerial_reach", "command_of_area", "communication", "rushing_out"])
+            ("defence", L10n.Get("Text_255df67a2da1", true), L10n.Get("Text_255df67a2da1", false), ["tackling", "marking", "anticipation", "positioning", "concentration"]),
+            ("build_up", L10n.Get("Text_1531b3fee5e1", true), L10n.Get("Text_1531b3fee5e1", false), ["passing", "vision", "first_touch", "technique", "decisions"]),
+            ("attack", L10n.Get("Text_05e7810f1ac4", true), L10n.Get("Text_05e7810f1ac4", false), ["crossing", "dribbling", "off_the_ball", "finishing", "long_shots", "composure"]),
+            ("mobility", L10n.Get("Text_989bb184de15", true), L10n.Get("Text_989bb184de15", false), ["pace", "acceleration", "agility", "balance"]),
+            ("support", L10n.Get("Text_c2809eb34831", true), L10n.Get("Text_c2809eb34831", false), ["work_rate", "teamwork", "stamina"]),
+            ("duels", L10n.Get("Text_61efeb24af86", true), L10n.Get("Text_61efeb24af86", false), ["strength", "jumping_reach", "heading", "bravery"]),
+            ("keeping", L10n.Get("Text_5d14defc9b3f", true), L10n.Get("Text_5d14defc9b3f", false), ["reflexes", "handling", "one_on_ones", "aerial_reach", "command_of_area", "communication", "rushing_out"])
         ];
         return domains.Select(d => new RoleAspect(d.Key, d.It, d.En, result.Stats.Where(s => d.Fields.Contains(s.Key)).ToArray()))
             .Where(d => d.Stats.Count >= 2).ToArray();
@@ -43,7 +43,7 @@ public static class RoleComparison
 
     public static RoleComparisonResult Compare(PlayerDetail a, PlayerDetail b, string position)
     {
-        if (!PositionScheme.Order.Contains(position)) throw new ArgumentException("Posizione non riconosciuta", nameof(position));
+        if (!PositionScheme.Order.Contains(position)) throw new ArgumentException(L10n.Get("Text_8be7fcbe5ed4"), nameof(position));
         static Dictionary<string, int> Attributes(PlayerDetail player) => player.Attributes.GroupBy(f => f.Key)
             .Where(g => g.Count() == 1 && g.First().Value is >= 1 and <= 125)
             .ToDictionary(g => g.Key, g => g.First().Value);
@@ -90,3 +90,4 @@ public sealed record RoleAspect(string Key, string Italian, string English, IRea
 {
     public double Delta => Stats.Sum(s => s.Delta * s.Weight) / (double)Stats.Sum(s => s.Weight);
 }
+

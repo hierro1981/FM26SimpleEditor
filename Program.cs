@@ -9,6 +9,7 @@ internal static class Program
     private static void Main()
     {
         ApplicationConfiguration.Initialize();
+        L10n.SetLanguage(AppSettings.Load(AppContext.BaseDirectory).Language);
         using var setup = new RuntimeSetupForm();
         if (setup.ShowDialog() != DialogResult.OK || setup.PythonExecutable is null) return;
         Application.Run(new MainForm(setup.PythonExecutable));
@@ -19,30 +20,35 @@ public sealed class MainForm : Form
 {
     private readonly BackendClient backend;
     private readonly TabControl tabs = new() { Dock = DockStyle.Fill };
-    private readonly TabPage searchTab = new("1  Ricerca giocatori");
-    private readonly TabPage editTab = new("2  Modifica giocatore");
-    private readonly TabPage previewTab = new("3  Anteprima nel gioco");
-    private readonly TabPage comparisonTab = new("4  Confronto (0)");
-    private readonly TabPage historyTab = new("5  Storico");
+    private readonly TabPage searchTab = new(L10n.Get("Text_632c1126bbb8"));
+    private readonly TabPage editTab = new(L10n.Get("Text_d10c243588b5"));
+    private readonly TabPage previewTab = new(L10n.Get("Text_e17d380480a5"));
+    private readonly TabPage comparisonTab = new(L10n.Get("Text_49be2b3731fc"));
+    private readonly TabPage historyTab = new(L10n.Get("Text_53a436ea8c92"));
     private readonly ComparisonPanel comparison = new();
     private readonly HistoryPanel historyPanel = new();
     private readonly HashSet<uint> comparisonPool = [];
     private readonly ContextMenuStrip comparisonMenu = new();
-    private readonly Button open = new() { Text = "Apri salvataggio", AutoSize = true };
+    private readonly Button open = new() { Text = L10n.Get("Text_96b6ef93f726"), AutoSize = true };
     private readonly TextBox file = new() { ReadOnly = true, Dock = DockStyle.Fill };
-    private readonly CheckBox italian = new() { Text = "Etichette in italiano", Checked = true, AutoSize = true, Anchor = AnchorStyles.Left };
-    private readonly TextBox filter = new() { Dock = DockStyle.Fill, PlaceholderText = "Cerca per nome, squadra, ID pubblico o ID interno" };
+    private sealed record LanguageChoice(string Id, string Label) { public override string ToString() => Label; }
+    private readonly ComboBox language = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 125, Name = "LanguageSelector", AccessibleName = L10n.Get("LanguageLabel") };
+    private readonly Button about = new() { Text = L10n.Get("AboutButton"), AutoSize = true };
+    private readonly string configurationDirectory;
+    private bool changingLanguage;
+    private bool UseItalian => L10n.IsItalian;
+    private readonly TextBox filter = new() { Dock = DockStyle.Fill, PlaceholderText = L10n.Get("Text_4f6eac65b3be") };
     private readonly ComboBox team = new() { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
-    private readonly TextBox teamSearch = new() { Dock = DockStyle.Fill, PlaceholderText = "Filtra squadre, es. tri" };
+    private readonly TextBox teamSearch = new() { Dock = DockStyle.Fill, PlaceholderText = L10n.Get("Text_751a743435ea") };
     private readonly ComboBox loanTeam = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 240 };
     private static readonly Color LoanBack = Color.FromArgb(255, 247, 220);
     private static readonly Color LoanInk = Color.FromArgb(97, 68, 8);
     private static readonly Color LoanSelection = Color.FromArgb(143, 98, 20);
     private readonly SearchOptions options = new();
     private readonly Label searchInfo = new() { AutoSize = true, ForeColor = Color.DimGray, Anchor = AnchorStyles.Left };
-    private readonly CheckBox showFilters = new() { AutoSize = true, Text = "Mostra filtri opzionali", Checked = true };
-    private readonly Button clearFilters = new() { Text = "Azzera filtri", AutoSize = true };
-    private readonly Button choose = new() { Text = "Apri scheda giocatore →", AutoSize = true, Enabled = false };
+    private readonly CheckBox showFilters = new() { AutoSize = true, Text = L10n.Get("Text_0215c86d1b54"), Checked = true };
+    private readonly Button clearFilters = new() { Text = L10n.Get("Text_c4483e052140"), AutoSize = true };
+    private readonly Button choose = new() { Text = L10n.Get("Text_9337b648a0e1"), AutoSize = true, Enabled = false };
     private readonly Label results = new() { AutoSize = true, Anchor = AnchorStyles.Left };
     private readonly DataGridView players = new();
     private readonly ComboBox relevancePosition = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 230 };
@@ -53,21 +59,21 @@ public sealed class MainForm : Form
     private readonly ValueMeter caMeter = new() { Maximum = 200 };
     private readonly ValueMeter paMeter = new() { Maximum = 200 };
     private readonly DateTimePicker birth = new() { Format = DateTimePickerFormat.Short, MinDate = new DateTime(1850, 1, 1), Width = 145, Enabled = false };
-    private readonly CheckBox changeBirth = new() { Text = "Modifica data di nascita", AutoSize = true, Enabled = false };
+    private readonly CheckBox changeBirth = new() { Text = L10n.Get("Text_86941499fe9e"), AutoSize = true, Enabled = false };
     private readonly Label identity = new() { AutoSize = true, Font = new Font("Segoe UI", 18, FontStyle.Bold) };
     private readonly Label affiliation = new() { AutoSize = true, ForeColor = Color.DimGray };
     private readonly Label birthInfo = new() { AutoSize = true, ForeColor = Color.DimGray, MaximumSize = new Size(1150, 0) };
     private readonly Label changes = new() { AutoSize = true, Anchor = AnchorStyles.Left };
-    private readonly Button save = new() { Text = "Salva modifiche", AutoSize = true, Enabled = false };
-    private readonly Button reset = new() { Text = "Ripristina giocatore", AutoSize = true, Enabled = false };
-    private readonly Button view = new() { Text = "Anteprima →", AutoSize = true, Enabled = false };
-    private readonly Button compareButton = new() { Text = "Confronta…", AutoSize = true, Enabled = false };
-    private readonly Button historyButton = new() { Text = "Storico…", AutoSize = true, Enabled = false };
-    private readonly Label state = new() { AutoSize = true, Text = "Apri un salvataggio .fm per iniziare", Anchor = AnchorStyles.Left };
+    private readonly Button save = new() { Text = L10n.Get("Text_55b0f70b6858"), AutoSize = true, Enabled = false };
+    private readonly Button reset = new() { Text = L10n.Get("Text_6263f825860b"), AutoSize = true, Enabled = false };
+    private readonly Button view = new() { Text = L10n.Get("Text_52bfc8e906b8"), AutoSize = true, Enabled = false };
+    private readonly Button compareButton = new() { Text = L10n.Get("Text_82801b689bdc"), AutoSize = true, Enabled = false };
+    private readonly Button historyButton = new() { Text = L10n.Get("Text_4c9f2babc23a"), AutoSize = true, Enabled = false };
+    private readonly Label state = new() { AutoSize = true, Text = L10n.Get("Text_c0c8df4a07ac"), Anchor = AnchorStyles.Left };
     private readonly Label progressText = new() { AutoSize = true, Anchor = AnchorStyles.Left, Visible = false };
     private readonly ProgressBar progress = new() { Style = ProgressBarStyle.Marquee, MarqueeAnimationSpeed = 25, Width = 125, Height = 18, Visible = false };
     private readonly PlayerPreview preview = new();
-    private readonly Label emptyPreview = new() { Text = "Seleziona un giocatore nella scheda Ricerca.", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter };
+    private readonly Label emptyPreview = new() { Text = L10n.Get("Text_a237f9809ea5"), Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter };
     private readonly Panel editing = new() { Dock = DockStyle.Fill, Enabled = false };
     private readonly ToolTip tips = new();
     private readonly System.Windows.Forms.Timer debounce = new() { Interval = 220 };
@@ -85,12 +91,15 @@ public sealed class MainForm : Form
     private bool binding;
     private bool previewStale = true;
 
-    public MainForm(string pythonExecutable)
+    public MainForm(string pythonExecutable, string? configurationDirectory = null)
     {
+        this.configurationDirectory = configurationDirectory ?? AppContext.BaseDirectory;
         backend = new BackendClient(pythonExecutable);
+        language.Items.AddRange([new LanguageChoice("it", "Italiano"), new LanguageChoice("en", "English")]);
+        language.SelectedIndex = UseItalian ? 0 : 1;
         using var iconStream = typeof(MainForm).Assembly.GetManifestResourceStream("FM26SimpleEditor.App.ico");
         if (iconStream is not null) Icon = new Icon(iconStream);
-        Text = "FM26 Simple Editor · v12";
+        Text = AppInfo.Title;
         Font = new Font("Segoe UI", 10);
         Width = 1360; Height = 900;
         MinimumSize = new Size(900, 650);
@@ -107,7 +116,10 @@ public sealed class MainForm : Form
         toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         toolbar.RowStyles.Add(new RowStyle(SizeType.AutoSize)); toolbar.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         toolbar.Controls.Add(open, 0, 0); toolbar.Controls.Add(save, 1, 0);
-        toolbar.Controls.Add(changes, 2, 0); toolbar.Controls.Add(italian, 3, 0);
+        toolbar.Controls.Add(changes, 2, 0);
+        var languageTools = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, WrapContents = false, Margin = Padding.Empty };
+        languageTools.Controls.AddRange([new Label { Text = L10n.Get("LanguageLabel"), AutoSize = true, Anchor = AnchorStyles.Left }, language, about]);
+        toolbar.Controls.Add(languageTools, 3, 0);
         toolbar.Controls.Add(file, 0, 1); toolbar.SetColumnSpan(file, 4);
         var status = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 3, Padding = new Padding(5, 7, 5, 0) };
         status.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -132,7 +144,8 @@ public sealed class MainForm : Form
         clearFilters.Click += (_, _) => ResetSearch();
         showFilters.CheckedChanged += (_, _) => options.Visible = showFilters.Checked;
         debounce.Tick += (_, _) => { debounce.Stop(); RefreshSearch(); };
-        italian.CheckedChanged += (_, _) => { FinishEdits(); BindFields(); options.SetLanguage(italian.Checked); RebuildTeamChoices(); RefreshSearch(); previewStale = true; RefreshPreview(); RefreshComparison(); historyPanel.SetLanguage(italian.Checked); };
+        language.SelectedIndexChanged += (_, _) => ChangeLanguage();
+        about.Click += (_, _) => { using var dialog = new AboutForm(); dialog.ShowDialog(this); };
         ca.ValueChanged += (_, _) => Changed(); pa.ValueChanged += (_, _) => Changed(); birth.ValueChanged += (_, _) => Changed();
         changeBirth.CheckedChanged += (_, _) => { birth.Enabled = changeBirth.Checked && detail?.BirthEditable == true && !busy; Changed(); };
         save.Click += async (_, _) => await SaveFile();
@@ -150,14 +163,42 @@ public sealed class MainForm : Form
             if (tabs.SelectedTab == comparisonTab) { FinishEdits(); RefreshComparison(); }
             if (tabs.SelectedTab == historyTab) RefreshHistory();
         };
-        tips.SetToolTip(italian, "Cambia le etichette degli attributi e delle posizioni; l'ordine alfabetico segue la lingua scelta.");
-        tips.SetToolTip(ca, "Abilità attuale: scala nominale 0–200.");
-        tips.SetToolTip(pa, "Abilità potenziale: scala nominale 0–200. I codici negativi del file vengono conservati.");
-        tips.SetToolTip(save, "Scrive una nuova copia e la rende il file di lavoro per le modifiche successive.");
-        tips.SetToolTip(teamSearch, "Cerca una parte del nome, anche in mezzo: tri mostra tutte le squadre che contengono tri. Poi puoi scegliere una squadra nell'elenco.");
-        tips.SetToolTip(team, "Tutte le corrispondenze usa il testo a sinistra; scegli una squadra per limitare i giocatori a quella squadra esatta.");
-        tips.SetToolTip(loanTeam, "Per i giocatori in prestito scegli la squadra usata nell’elenco, nella ricerca e nell’ordinamento. Anteprima e confronto restano riferiti alla squadra in cui giocano.");
-        team.Items.Add("Tutte le squadre"); team.SelectedIndex = 0;
+        tips.SetToolTip(language, L10n.Get("Text_c7ba90415dbf"));
+        tips.SetToolTip(ca, L10n.Get("Text_a2e3e958ed35"));
+        tips.SetToolTip(pa, L10n.Get("Text_064e19de6695"));
+        tips.SetToolTip(save, L10n.Get("Text_47d9a2b22da4"));
+        tips.SetToolTip(teamSearch, L10n.Get("Text_01632e980f38"));
+        tips.SetToolTip(team, L10n.Get("Text_1229c3bc79fc"));
+        tips.SetToolTip(loanTeam, L10n.Get("Text_41992da10449"));
+        team.Items.Add(L10n.Get("Text_452ac98b053e")); team.SelectedIndex = 0;
+        options.SetLanguage(UseItalian);
+        L10n.Capture(this, tips);
+    }
+
+    private void ChangeLanguage()
+    {
+        if (changingLanguage || language.SelectedItem is not LanguageChoice selected) return;
+        changingLanguage = true;
+        try
+        {
+            if (!FinishEdits()) { language.SelectedIndex = UseItalian ? 0 : 1; return; }
+            L10n.SetLanguage(selected.Id);
+            L10n.Apply(this);
+            options.SetLanguage(UseItalian);
+            state.Text = L10n.Translate(state.Text);
+            affiliation.Text = L10n.Translate(affiliation.Text);
+            if (detail is not null) birthInfo.Text = detail.BirthEditable ? L10n.Get("Text_ec60709e94bb") : L10n.Backend(detail.BirthWarning);
+            BindFields(); RebuildTeamChoices(); RefreshSearch();
+            previewStale = true; RefreshPreview(); RefreshComparison(); historyPanel.SetLanguage(UseItalian);
+            Changed();
+            try { AppSettings.Save(configurationDirectory, selected.Id); }
+            catch (Exception exc) when (exc is IOException or UnauthorizedAccessException)
+            {
+                MessageBox.Show(this, L10n.Format("ConfigSaveError", Path.Combine(configurationDirectory, AppSettings.FileName), exc.Message),
+                    L10n.Get("ConfigWarning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        finally { changingLanguage = false; }
     }
 
     private void BuildSearch()
@@ -169,22 +210,22 @@ public sealed class MainForm : Form
         search.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40)); search.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
         for (int row = 0; row < 3; row++) search.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         search.Controls.Add(filter, 0, 0); search.SetColumnSpan(filter, 2); search.Controls.Add(teamSearch, 0, 1); search.Controls.Add(team, 1, 1);
-        loanTeam.Items.AddRange(["In cui gioca (predefinita)", "Proprietaria"]); loanTeam.SelectedIndex = 0;
+        loanTeam.Items.AddRange([L10n.Get("Text_1327967db178"), L10n.Get("Text_8b402958d93e")]); loanTeam.SelectedIndex = 0;
         var loanOptions = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, Margin = Padding.Empty, WrapContents = false };
         loanOptions.Controls.AddRange([
-            new Label { Text = "Prestiti nella squadra:", AutoSize = true, Anchor = AnchorStyles.Left }, loanTeam,
-            new Label { Text = "● In prestito", AutoSize = true, Anchor = AnchorStyles.Left, BackColor = LoanBack, ForeColor = LoanInk, Padding = new Padding(5, 3, 5, 3) }
+            new Label { Text = L10n.Get("Text_4cab1256af2b"), AutoSize = true, Anchor = AnchorStyles.Left }, loanTeam,
+            new Label { Text = L10n.Get("Text_fce03e78db6f"), AutoSize = true, Anchor = AnchorStyles.Left, BackColor = LoanBack, ForeColor = LoanInk, Padding = new Padding(5, 3, 5, 3) }
         ]);
         search.Controls.Add(loanOptions, 0, 2); search.SetColumnSpan(loanOptions, 2);
         var filtersHeader = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, Margin = Padding.Empty, WrapContents = false };
         filtersHeader.Controls.AddRange([showFilters, clearFilters, searchInfo]);
         ConfigureGrid(players); players.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; players.ReadOnly = true; players.MultiSelect = false;
         players.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        players.Columns.Add(Column("Name", "Giocatore", 20)); players.Columns.Add(Column("SearchTeamDisplay", "Squadra", 19));
-        players.Columns.Add(Column("MainPosition", "Ruolo principale", 10)); players.Columns.Add(Column("Age", "Età", 4)); players.Columns.Add(Column("PositionSummary", "Posizioni ≥12", 12));
+        players.Columns.Add(Column("Name", L10n.Get("Text_f537c6bd038e"), 20)); players.Columns.Add(Column("SearchTeamDisplay", L10n.Get("Text_3b0a75ea292b"), 19));
+        players.Columns.Add(Column("MainPosition", L10n.Get("Text_045cb480645d"), 10)); players.Columns.Add(Column("Age", L10n.Get("Text_9efdc62c88bf"), 4)); players.Columns.Add(Column("PositionSummary", L10n.Get("Text_5aa749965391"), 12));
         players.Columns.Add(Column("Ca", "CA", 4)); players.Columns.Add(Column("Pa", "PA", 4));
-        players.Columns.Add(Column("ContractEndDisplay", "Scadenza", 9)); players.Columns.Add(Column("ContractLabel", "Contratto", 12));
-        players.Columns.Add(Column("Id", "ID pubblico", 8)); players.Columns.Add(Column("Uid", "ID interno", 8));
+        players.Columns.Add(Column("ContractEndDisplay", L10n.Get("Text_51bf843f1751"), 9)); players.Columns.Add(Column("ContractLabel", L10n.Get("Text_725424c55624"), 12));
+        players.Columns.Add(Column("Id", L10n.Get("Text_358796f71be1"), 8)); players.Columns.Add(Column("Uid", L10n.Get("Text_e1e8b54d45e2"), 8));
         int[] widths = [200, 220, 150, 60, 230, 65, 65, 115, 155, 110, 110];
         for (int index = 0; index < players.Columns.Count; index++)
         {
@@ -199,8 +240,8 @@ public sealed class MainForm : Form
             var selected = SortKey(players.Columns[args.ColumnIndex].DataPropertyName);
             sortDescending = selected == sortField && !sortDescending; sortField = selected; RefreshSearch();
         };
-        var addComparison = new ToolStripMenuItem("Aggiungi all'elenco di confronto");
-        var compareNow = new ToolStripMenuItem("Confronta con il giocatore aperto");
+        var addComparison = new ToolStripMenuItem(L10n.Get("Text_885725b27cce"));
+        var compareNow = new ToolStripMenuItem(L10n.Get("Text_f101d9a9a54f"));
         PlayerRow? contextPlayer = null;
         comparisonMenu.Items.AddRange([addComparison,compareNow]); players.ContextMenuStrip = comparisonMenu;
         players.CellMouseDown += (_, args) =>
@@ -213,7 +254,7 @@ public sealed class MainForm : Form
         {
             var row = SelectedRow(); contextPlayer = row; args.Cancel = row is null || busy;
             addComparison.Enabled = row is not null && !comparisonPool.Contains(row.Uid);
-            addComparison.Text = addComparison.Enabled ? "Aggiungi all'elenco di confronto" : "Già nell'elenco di confronto";
+            addComparison.Text = addComparison.Enabled ? L10n.Get("Text_885725b27cce") : L10n.Get("Text_8b48e2e8ec50");
             compareNow.Enabled = row is not null && detail is not null && row.Uid != detail.Player.Uid;
         };
         addComparison.Click += (_, _) => { if (contextPlayer is PlayerRow row) AddComparison(row.Uid); };
@@ -233,11 +274,11 @@ public sealed class MainForm : Form
             players.Rows[args.RowIndex].Cells[args.ColumnIndex].ToolTipText = row.LoanDescription;
             if (args.RowIndex >= 0 && args.ColumnIndex >= 0 && players.Columns[args.ColumnIndex].DataPropertyName == "MainPosition" && players.Rows[args.RowIndex].DataBoundItem is PlayerRow mainRow)
             {
-                args.Value = PositionScheme.Compact(mainRow.Positions, italian.Checked);
-                players.Rows[args.RowIndex].Cells[args.ColumnIndex].ToolTipText = string.Join("; ", mainRow.Positions.Where(p => p.Value > 1).OrderBy(p => PositionScheme.Rank(p.Key)).Select(p => $"{Labels.Position(p.Key, italian.Checked)}: {p.Value}/20")) + (mainRow.OnLoan is true ? "\n" + mainRow.LoanDescription : "");
+                args.Value = PositionScheme.Compact(mainRow.Positions, UseItalian);
+                players.Rows[args.RowIndex].Cells[args.ColumnIndex].ToolTipText = string.Join("; ", mainRow.Positions.Where(p => p.Value > 1).OrderBy(p => PositionScheme.Rank(p.Key)).Select(p => $"{Labels.Position(p.Key, UseItalian)}: {p.Value}/20")) + (mainRow.OnLoan is true ? "\n" + mainRow.LoanDescription : "");
             }
             if (args.RowIndex >= 0 && players.Columns[args.ColumnIndex].DataPropertyName == "PositionSummary" && players.Rows[args.RowIndex].DataBoundItem is PlayerRow player)
-                args.Value = string.Join(", ", player.Positions.Where(pair => pair.Value >= 12).OrderByDescending(pair => pair.Value).Select(pair => $"{Labels.PositionCode(pair.Key, italian.Checked)} ({pair.Value})"));
+                args.Value = string.Join(", ", player.Positions.Where(pair => pair.Value >= 12).OrderByDescending(pair => pair.Value).Select(pair => $"{Labels.PositionCode(pair.Key, UseItalian)} ({pair.Value})"));
         };
         var footer = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 2, Padding = new Padding(0, 9, 0, 0) };
         footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); footer.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -261,22 +302,22 @@ public sealed class MainForm : Form
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         var header = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, Padding = new Padding(0, 0, 0, 8) };
-        identity.Text = "Nessun giocatore selezionato"; affiliation.Text = "Apri una scheda dalla Ricerca.";
+        identity.Text = L10n.Get("Text_3f8498e92e4b"); affiliation.Text = L10n.Get("Text_9a36d649406a");
         header.Controls.Add(identity); header.Controls.Add(affiliation);
         var properties = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true, Padding = new Padding(0, 0, 0, 6) };
         properties.Controls.AddRange([new Label { Text = "CA", AutoSize = true, Margin = new Padding(3, 17, 5, 0) }, ValueMeter.Wrap(ca,caMeter), new Label { Text = "PA", AutoSize = true, Margin = new Padding(14, 17, 5, 0) }, ValueMeter.Wrap(pa,paMeter), changeBirth, birth]);
         changeBirth.Margin = new Padding(24, 7, 5, 0);
         var split = new SplitContainer { Size = new Size(1100, 500), Dock = DockStyle.Fill, SplitterDistance = 700 };
-        var attrGroup = new GroupBox { Text = "Attributi grezzi · scala nominale 1–100", Dock = DockStyle.Fill, Padding = new Padding(10) };
-        var posGroup = new GroupBox { Text = "Familiarità nelle posizioni · 1–20", Dock = DockStyle.Fill, Padding = new Padding(10) };
+        var attrGroup = new GroupBox { Text = L10n.Get("Text_96fd7b35ee9e"), Dock = DockStyle.Fill, Padding = new Padding(10) };
+        var posGroup = new GroupBox { Text = L10n.Get("Text_1f6d6e1f48d8"), Dock = DockStyle.Fill, Padding = new Padding(10) };
         ConfigureEditGrid(attributes, 125); ConfigureEditGrid(positions, 20);
         var attrLayout = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3 };
         attrLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize)); attrLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize)); attrLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         var roleLine = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill };
-        roleLine.Controls.Add(new Label { Text = "Rilevanza per posizione", AutoSize = true }); roleLine.Controls.Add(relevancePosition);
+        roleLine.Controls.Add(new Label { Text = L10n.Get("Text_16a31a1428fa"), AutoSize = true }); roleLine.Controls.Add(relevancePosition);
         var keyLine = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill };
         foreach (int tier in new[] { 1, 2, 3 }) keyLine.Controls.Add(new Label { Text = RoleImportance.Name(tier, true), AutoSize = true, ForeColor = RoleImportance.Ink(tier), BackColor = RoleImportance.Back(tier) });
-        keyLine.Controls.Add(new Label { Text = "Guida editor, non pesi ufficiali FM", AutoSize = true });
+        keyLine.Controls.Add(new Label { Text = L10n.Get("Text_474c06af6715"), AutoSize = true });
         attrLayout.Controls.Add(roleLine, 0, 0); attrLayout.Controls.Add(keyLine, 0, 1); attrLayout.Controls.Add(attributes, 0, 2);
         attrGroup.Controls.Add(attrLayout); posGroup.Controls.Add(positions);
         relevancePosition.SelectedIndexChanged += (_, _) => attributes.Invalidate();
@@ -286,7 +327,7 @@ public sealed class MainForm : Form
             string position = relevancePosition.SelectedIndex > 0 ? PositionScheme.Order[relevancePosition.SelectedIndex - 1] : PositionScheme.Main(detail.Positions);
             int tier = RoleImportance.Tier(position, field.Key);
             args.CellStyle!.ForeColor = RoleImportance.Ink(tier); args.CellStyle.BackColor = RoleImportance.Back(tier);
-            attributes.Rows[args.RowIndex].Cells[0].ToolTipText = RoleImportance.Name(tier, italian.Checked) + " · " + Labels.Position(position, italian.Checked);
+            attributes.Rows[args.RowIndex].Cells[0].ToolTipText = RoleImportance.Name(tier, UseItalian) + " · " + Labels.Position(position, UseItalian);
         };
         split.Panel1.Controls.Add(attrGroup); split.Panel2.Controls.Add(posGroup);
         var footer = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true, Padding = new Padding(0, 10, 0, 0) };
@@ -315,8 +356,8 @@ public sealed class MainForm : Form
     private void ConfigureEditGrid(DataGridView grid, int maximum)
     {
         ConfigureGrid(grid);
-        var label = Column("Label", "Attributo / posizione", 75); label.ReadOnly = true;
-        var value = Column("Value", "Valore", 25); value.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+        var label = Column("Label", L10n.Get("Text_51df0484073a"), 75); label.ReadOnly = true;
+        var value = Column("Value", L10n.Get("Text_3b50ed0e6ec2"), 25); value.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         value.CellTemplate = new ValueBarCell(maximum == 125 ? 100 : 20); grid.RowTemplate.Height = 41;
         grid.Columns.Add(label); grid.Columns.Add(value);
         grid.SelectionMode = DataGridViewSelectionMode.CellSelect;
@@ -325,7 +366,7 @@ public sealed class MainForm : Form
             if (binding || args.ColumnIndex != 1 || args.RowIndex < 0) return;
             if (!int.TryParse(Convert.ToString(args.FormattedValue, CultureInfo.InvariantCulture), out var number) || number < 1 || number > maximum)
             {
-                args.Cancel = true; grid.Rows[args.RowIndex].ErrorText = $"Inserisci un intero da 1 a {maximum}.";
+                args.Cancel = true; grid.Rows[args.RowIndex].ErrorText = L10n.Format("Text_972393f31323", maximum);
                 state.Text = grid.Rows[args.RowIndex].ErrorText;
             }
             else grid.Rows[args.RowIndex].ErrorText = "";
@@ -335,7 +376,7 @@ public sealed class MainForm : Form
         {
             if (!binding) Changed();
         };
-        grid.DataError += (_, args) => { args.ThrowException = false; args.Cancel = true; state.Text = "Inserisci un valore numerico valido."; };
+        grid.DataError += (_, args) => { args.ThrowException = false; args.Cancel = true; state.Text = L10n.Get("Text_558b8c27d299"); };
     }
 
     private void QueueSearch() { if (binding) return; debounce.Stop(); debounce.Start(); }
@@ -346,8 +387,8 @@ public sealed class MainForm : Form
         int version = ++searchVersion;
         string? selectedTeam = team.SelectedIndex > 0 ? team.SelectedItem?.ToString() : null;
         int count = options.ActiveCount + (selectedTeam is not null || teamSearch.Text.Trim().Length > 0 ? 1 : 0) + (filter.Text.Trim().Length > 0 ? 1 : 0);
-        searchInfo.Text = $"{count} filtri attivi · data partita {gameDate?.ToString("dd/MM/yyyy") ?? "non disponibile"}";
-        if (catalog.Count == 0) { players.DataSource = null; results.Text = "Apri un salvataggio per cercare."; return; }
+        searchInfo.Text = L10n.Format("Text_946327641b50", count, gameDate?.ToString("dd/MM/yyyy") ?? L10n.Get("Text_1d80f0682e0b"));
+        if (catalog.Count == 0) { players.DataSource = null; results.Text = L10n.Get("Text_b4739e9bd7a1"); return; }
         try
         {
             var query = options.Request(filter.Text.Trim(), selectedTeam, teamSearch.Text.Trim()); query.Sort = sortField; query.Descending = sortDescending;
@@ -357,9 +398,9 @@ public sealed class MainForm : Form
             var rows = result.Uids.Where(uid => catalogByUid.ContainsKey(uid)).Select(uid => catalogByUid[uid]).ToList();
             players.DataSource = new BindingList<PlayerRow>(rows); players.ClearSelection();
             foreach (DataGridViewColumn column in players.Columns) column.HeaderCell.SortGlyphDirection = SortKey(column.DataPropertyName) == sortField ? sortDescending ? SortOrder.Descending : SortOrder.Ascending : SortOrder.None;
-            results.Text = $"{result.Total:N0} risultati su {catalog.Count:N0} giocatori" + (result.Total > 2500 ? " · mostrati i primi 2.500" : "");
+            results.Text = L10n.Format("Text_658469a26ec0", result.Total, catalog.Count) + (result.Total > 2500 ? L10n.Get("Text_839423d2d1a6") : "");
         }
-        catch (Exception exc) { if (version == searchVersion && !IsDisposed) state.Text = "Ricerca non riuscita: " + exc.Message; }
+        catch (Exception exc) { if (version == searchVersion && !IsDisposed) state.Text = L10n.Get("Text_5df832e19d28") + exc.Message; }
     }
 
     private void ApplyLoanTeamView()
@@ -376,8 +417,8 @@ public sealed class MainForm : Form
         var selected = team.SelectedIndex > 0 ? team.SelectedItem?.ToString() : null;
         var text = teamSearch.Text.Trim();
         binding = true; team.BeginUpdate(); team.Items.Clear();
-        team.Items.Add(text.Length > 0 ? "Tutte le corrispondenze" : "Tutte le squadre");
-        team.Items.AddRange(allTeams.Where(name => text.Length == 0 || name.Contains(text, StringComparison.OrdinalIgnoreCase)).OrderBy(name => name, Labels.Comparer(italian.Checked)).Cast<object>().ToArray());
+        team.Items.Add(text.Length > 0 ? L10n.Get("Text_0fb09ab452aa") : L10n.Get("Text_452ac98b053e"));
+        team.Items.AddRange(allTeams.Where(name => text.Length == 0 || name.Contains(text, StringComparison.OrdinalIgnoreCase)).OrderBy(name => name, Labels.Comparer(UseItalian)).Cast<object>().ToArray());
         int selectedIndex = selected is null ? -1 : team.Items.IndexOf(selected);
         team.SelectedIndex = selectedIndex > 0 ? selectedIndex : 0;
         team.EndUpdate(); binding = false; QueueSearch();
@@ -397,7 +438,7 @@ public sealed class MainForm : Form
     };
 
     private PlayerRow? SelectedRow() => players.SelectedRows.Count == 1 ? players.SelectedRows[0].DataBoundItem as PlayerRow : null;
-    private void UpdatePoolLabel() => comparisonTab.Text = $"4  Confronto ({comparisonPool.Count})";
+    private void UpdatePoolLabel() => comparisonTab.Text = L10n.Format("Text_7a436139381b", comparisonPool.Count);
     private void AddComparison(uint uid)
     {
         if (!catalogByUid.ContainsKey(uid)) return;
@@ -408,40 +449,40 @@ public sealed class MainForm : Form
     private void RefreshComparison()
     {
         if (busy || binding || tabs.SelectedTab != comparisonTab) return;
-        comparison.SetContext(detail,(int)ca.Value,(int)pa.Value,HasChanges(),catalog,comparisonPool,italian.Checked,
+        comparison.SetContext(detail,(int)ca.Value,(int)pa.Value,HasChanges(),catalog,comparisonPool,UseItalian,
             uid => backend.Send<PlayerDetail>(new { command = "inspect", uid }));
     }
 
     private void RefreshHistory()
     {
         if (busy || tabs.SelectedTab != historyTab) return;
-        historyPanel.SetContext(detail,italian.Checked,
+        historyPanel.SetContext(detail,UseItalian,
             (uid,sources) => backend.Send<HistoryResult>(new { command = "history", uid, sources }));
     }
 
     private async Task OpenFile()
     {
-        using var dialog = new OpenFileDialog { Filter = "Salvataggi Football Manager (*.fm)|*.fm" };
+        using var dialog = new OpenFileDialog { Filter = L10n.Get("Text_b67eeb7fa174") };
         if (dialog.ShowDialog() != DialogResult.OK || !ConfirmDiscard()) return;
-        SetBusy(true, "Lettura del salvataggio e del catalogo giocatori…", determinate: true);
+        SetBusy(true, L10n.Get("Text_beb6c62f8917"), determinate: true);
         try
         {
             var result = await backend.Send<OpenResult>(new { command = "open", source = dialog.FileName }, ReportProgress);
-            ReportProgress(new BackendProgress { Percent = 98, Phase = "Preparazione dell’elenco e dei filtri" });
+            ReportProgress(new BackendProgress { Percent = 98, Phase = L10n.Get("Text_e2d47e04db5f") });
             await Task.Yield();
             catalog = result.Players; catalogByUid = catalog.ToDictionary(player => player.Uid); file.Text = result.Source;
             gameDate = DateTime.TryParseExact(result.GameDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var clock) ? clock : null;
             detail = null; originalAttributes = []; originalPositions = [];
             comparisonPool.Clear(); UpdatePoolLabel(); comparison.ClearCache(); historyPanel.ClearSources();
-            identity.Text = "Nessun giocatore selezionato"; affiliation.Text = "Apri una scheda dalla Ricerca.";
+            identity.Text = L10n.Get("Text_3f8498e92e4b"); affiliation.Text = L10n.Get("Text_9a36d649406a");
             editing.Enabled = false; preview.Visible = false; emptyPreview.Visible = true;
             binding = true; filter.Clear(); teamSearch.Clear(); options.ResetFilters(); team.SelectedIndex = 0; binding = false;
             ApplyLoanTeamView();
             tabs.SelectedTab = searchTab;
             progress.Value = 100; progressText.Text = "100%";
-            state.Text = $"Salvataggio aperto · {catalog.Count:N0} giocatori";
+            state.Text = L10n.Format("Text_76ed2e73cde9", catalog.Count);
         }
-        catch (Exception exc) { Error("Errore apertura", exc); }
+        catch (Exception exc) { Error(L10n.Get("Text_9c589f02f00a"), exc); }
         finally { SetBusy(false); RefreshSearch(); Changed(); }
     }
 
@@ -450,14 +491,14 @@ public sealed class MainForm : Form
         if (busy || players.SelectedRows.Count != 1 || players.SelectedRows[0].DataBoundItem is not PlayerRow row) return;
         if (detail?.Player.Uid == row.Uid) { tabs.SelectedTab = editTab; return; }
         if (!ConfirmDiscard()) return;
-        SetBusy(true, $"Lettura di {row.Name}…");
+        SetBusy(true, L10n.Format("Text_0af5b1bce786", row.Name));
         try
         {
             var selected = await backend.Send<PlayerDetail>(new { command = "inspect", uid = row.Uid });
             SetDetail(selected); tabs.SelectedTab = editTab;
-            state.Text = $"{row.Name} · valori del salvataggio aperto";
+            state.Text = L10n.Format("Text_8bef81b4f3c8", row.Name);
         }
-        catch (Exception exc) { Error("Errore lettura giocatore", exc); }
+        catch (Exception exc) { Error(L10n.Get("Text_fcb5504e6a1f"), exc); }
         finally { SetBusy(false); Changed(); }
     }
 
@@ -468,13 +509,13 @@ public sealed class MainForm : Form
         detail = selected; originalAttributes = PreviewMath.StoredOrder(selected.Attributes); originalPositions = PreviewMath.StoredOrder(selected.Positions);
         AddComparison(selected.Player.Uid);
         identity.Text = selected.Player.Name;
-        affiliation.Text = $"{selected.Player.Team}  •  ID pubblico {selected.Player.Id?.ToString() ?? "—"}  •  ID interno {selected.Player.Uid}";
+        affiliation.Text = L10n.Format("Text_df065e5ab70e", selected.Player.Team, selected.Player.Id?.ToString() ?? "—", selected.Player.Uid);
         ca.Value = Math.Clamp(selected.Player.Ca, 0, 255); pa.Value = Math.Clamp(selected.RawPa, -10, 255);
         birth.MaxDate = gameDate.HasValue && gameDate.Value.Year >= 1850 ? gameDate.Value : DateTimePicker.MaximumDateTime;
         if (DateTime.TryParseExact(selected.Player.Birth, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var birthday) && birthday >= birth.MinDate && birthday <= birth.MaxDate) birth.Value = birthday;
         else birth.Value = birth.MinDate;
         changeBirth.Checked = false; changeBirth.Enabled = selected.BirthEditable; birth.Enabled = false;
-        birthInfo.Text = selected.BirthEditable ? "La data viene modificata soltanto se attivi la casella. L'anteprima mostra i valori correnti senza scrivere sul file." : selected.BirthWarning;
+        birthInfo.Text = selected.BirthEditable ? L10n.Get("Text_ec60709e94bb") : L10n.Backend(selected.BirthWarning);
         foreach (var field in selected.Attributes.Concat(selected.Positions)) field.PropertyChanged += FieldChanged;
         BindFields(); binding = false;
         editing.Enabled = true; view.Enabled = true; emptyPreview.Visible = false; previewStale = true;
@@ -487,15 +528,15 @@ public sealed class MainForm : Form
         if (detail is null) return;
         bool before = binding; binding = true;
         int roleIndex = Math.Max(0, relevancePosition.SelectedIndex);
-        relevancePosition.Items.Clear(); relevancePosition.Items.Add(italian.Checked ? "Automatico · ruolo principale" : "Automatic · main position");
-        relevancePosition.Items.AddRange(PositionScheme.Order.Select(key => (object)Labels.Position(key, italian.Checked)).ToArray()); relevancePosition.SelectedIndex = roleIndex;
-        foreach (var field in detail.Attributes) field.Label = Labels.Attribute(field.Key, italian.Checked);
-        foreach (var field in detail.Positions) field.Label = Labels.Position(field.Key, italian.Checked);
-        attributes.DataSource = new BindingList<EditableField>(Labels.Alphabetical(detail.Attributes, italian.Checked).ToList());
+        relevancePosition.Items.Clear(); relevancePosition.Items.Add(UseItalian ? L10n.Get("Text_6d7f90c02494", true) : L10n.Get("Text_6d7f90c02494", false));
+        relevancePosition.Items.AddRange(PositionScheme.Order.Select(key => (object)Labels.Position(key, UseItalian)).ToArray()); relevancePosition.SelectedIndex = roleIndex;
+        foreach (var field in detail.Attributes) field.Label = Labels.Attribute(field.Key, UseItalian);
+        foreach (var field in detail.Positions) field.Label = Labels.Position(field.Key, UseItalian);
+        attributes.DataSource = new BindingList<EditableField>(Labels.Alphabetical(detail.Attributes, UseItalian).ToList());
         positions.DataSource = new BindingList<EditableField>(detail.Positions.OrderBy(field => PositionScheme.Rank(field.Key)).ToList());
-        attributes.Columns[0].HeaderText = italian.Checked ? "Attributo" : "Attribute"; positions.Columns[0].HeaderText = italian.Checked ? "Posizione" : "Position";
-        attributes.Columns[1].HeaderText = positions.Columns[1].HeaderText = italian.Checked ? "Valore grezzo" : "Raw value";
-        positions.Columns[1].HeaderText = italian.Checked ? "Familiarità" : "Familiarity";
+        attributes.Columns[0].HeaderText = UseItalian ? L10n.Get("Text_707eecb875fc", true) : L10n.Get("Text_707eecb875fc", false); positions.Columns[0].HeaderText = UseItalian ? L10n.Get("Text_d7effa1c65a8", true) : L10n.Get("Text_d7effa1c65a8", false);
+        attributes.Columns[1].HeaderText = positions.Columns[1].HeaderText = UseItalian ? L10n.Get("Text_7b4e2d0fae1d", true) : L10n.Get("Text_7b4e2d0fae1d", false);
+        positions.Columns[1].HeaderText = UseItalian ? L10n.Get("Text_d648bc617064", true) : L10n.Get("Text_d648bc617064", false);
         binding = before;
     }
 
@@ -515,9 +556,9 @@ public sealed class MainForm : Form
         view.Enabled = !busy && detail is not null;
         compareButton.Enabled = historyButton.Enabled = !busy && detail is not null;
         caMeter.Value = (int)ca.Value; paMeter.Value = pa.Value >= 0 ? (int)pa.Value : null;
-        changes.Text = file.Text.Length == 0 ? "" : dirty ? "● Modifiche non salvate" : "Nessuna modifica da salvare";
+        changes.Text = file.Text.Length == 0 ? "" : dirty ? L10n.Get("Text_5f4c1937efd4") : L10n.Get("Text_01be256931b8");
         changes.ForeColor = dirty ? Color.FromArgb(161, 99, 16) : Color.DimGray;
-        Text = "FM26 Simple Editor · v12" + (dirty ? " *" : "");
+        Text = AppInfo.Title + (dirty ? " *" : "");
         attributes.Invalidate(); previewStale = true; RefreshPreview(); RefreshComparison();
     }
 
@@ -526,7 +567,7 @@ public sealed class MainForm : Form
     private bool ConfirmDiscard()
     {
         if (!FinishEdits()) return false;
-        return !HasChanges() || MessageBox.Show("Scartare le modifiche non salvate al giocatore?", "Modifiche in corso", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes;
+        return !HasChanges() || MessageBox.Show(L10n.Get("Text_8fdbfdcebc3a"), L10n.Get("Text_4dba6a2f1b9f"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes;
     }
 
     private void ResetEdits()
@@ -547,16 +588,16 @@ public sealed class MainForm : Form
         var cohort = catalog.Where(other => other.Ca > 0 && (player.TeamId.HasValue ? other.TeamId == player.TeamId : player.ClubUid.HasValue && other.ClubUid == player.ClubUid)).ToList();
         double? mean = cohort.Count >= 3 ? cohort.Average(other => other.Ca) : null;
         DateTime? birthday = changeBirth.Checked ? birth.Value.Date : DateTime.TryParseExact(player.Birth, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var original) ? original : null;
-        preview.ShowPlayer(detail, (int)ca.Value, (int)pa.Value, birthday, italian.Checked, mean, cohort.Count);
+        preview.ShowPlayer(detail, (int)ca.Value, (int)pa.Value, birthday, UseItalian, mean, cohort.Count);
         emptyPreview.Visible = false; preview.Visible = true; preview.BringToFront(); previewStale = false;
     }
 
     private async Task SaveFile()
     {
         if (busy || detail is null || !FinishEdits() || !HasChanges()) return;
-        using var dialog = new SaveFileDialog { Filter = "Salvataggi Football Manager (*.fm)|*.fm", FileName = Path.GetFileNameWithoutExtension(file.Text) + "_modificato.fm", InitialDirectory = Path.GetDirectoryName(file.Text), OverwritePrompt = true };
+        using var dialog = new SaveFileDialog { Filter = L10n.Get("Text_b67eeb7fa174"), FileName = Path.GetFileNameWithoutExtension(file.Text) + L10n.Get("ModifiedSuffix"), InitialDirectory = Path.GetDirectoryName(file.Text), OverwritePrompt = true };
         if (dialog.ShowDialog() != DialogResult.OK) return;
-        SetBusy(true, "Scrittura e verifica completa del salvataggio…", determinate: true);
+        SetBusy(true, L10n.Get("Text_fd2a169c6549"), determinate: true);
         try
         {
             var result = await backend.Send<SaveResult>(new
@@ -574,10 +615,10 @@ public sealed class MainForm : Form
             comparison.ClearCache();
             SetDetail(result.Detail);
             progress.Value = 100; progressText.Text = "100%";
-            state.Text = "Copia salvata e verificata. Le prossime modifiche partiranno da questo file.";
-            MessageBox.Show($"Copia salvata e verificata:\n{result.Source}", "Salvataggio completato", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            state.Text = L10n.Get("Text_6aef1e9c089a");
+            MessageBox.Show(L10n.Format("Text_a6cc4366541a", result.Source), L10n.Get("Text_514019445ab2"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-        catch (Exception exc) { Error("Salvataggio non riuscito", exc); }
+        catch (Exception exc) { Error(L10n.Get("Text_9b6ca71eb272"), exc); }
         finally { SetBusy(false); RefreshSearch(); Changed(); }
     }
 
@@ -590,8 +631,8 @@ public sealed class MainForm : Form
         progressText.Visible = true; progressText.Text = progress.Value + "%";
         string counter = "";
         if (update.Done.HasValue && update.Total is > 0)
-            counter = update.Unit == "byte" ? $" · {update.Done.Value/1048576.0:0.0}/{update.Total.Value/1048576.0:0.0} MiB" : $" · {update.Done:N0}/{update.Total:N0} {update.Unit}";
-        state.Text = update.Phase + counter;
+            counter = update.Unit == "byte" ? $" · {update.Done.Value/1048576.0:0.0}/{update.Total.Value/1048576.0:0.0} MiB" : $" · {update.Done:N0}/{update.Total:N0} {L10n.Backend(update.Unit)}";
+        state.Text = L10n.Backend(update.Phase) + counter;
     }
 
     private void SetBusy(bool value, string? message = null, bool determinate = false)
@@ -600,7 +641,7 @@ public sealed class MainForm : Form
         progressText.Visible = value && determinate;
         if (value) { progress.Value = 0; progressText.Text = "0%"; progress.Style = determinate ? ProgressBarStyle.Continuous : ProgressBarStyle.Marquee; }
         if (value) ++searchVersion;
-        open.Enabled = italian.Enabled = tabs.Enabled = !value;
+        open.Enabled = language.Enabled = tabs.Enabled = !value;
         if (message is not null) state.Text = message;
         choose.Enabled = !value && players.SelectedRows.Count == 1;
         if (detail is not null) { editing.Enabled = !value; changeBirth.Enabled = !value && detail.BirthEditable; birth.Enabled = !value && changeBirth.Checked && detail.BirthEditable; }
@@ -615,7 +656,7 @@ public sealed class MainForm : Form
 
     protected override void OnFormClosing(FormClosingEventArgs args)
     {
-        if (busy) { args.Cancel = true; state.Text = "Attendi il completamento dell'operazione in corso."; return; }
+        if (busy) { args.Cancel = true; state.Text = L10n.Get("Text_53e4d698ead1"); return; }
         if (!ConfirmDiscard()) { args.Cancel = true; return; }
         base.OnFormClosing(args);
     }
@@ -626,6 +667,7 @@ public sealed class MainForm : Form
         base.Dispose(disposing);
     }
 }
+
 
 
 

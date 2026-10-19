@@ -62,6 +62,7 @@ jobs:
           $required = @(
             "FM26SimpleEditor.exe", "FM26SimpleEditor.dll",
             "FM26SimpleEditor.deps.json", "FM26SimpleEditor.runtimeconfig.json",
+            "en/FM26SimpleEditor.resources.dll",
             "editor.py", "archive_rewrite.py",
             "history_reader.py", "operation_progress.py",
             "runtime_probe.py", "requirements.txt"
@@ -136,5 +137,6 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: gh release upload "$RELEASE_TAG" dist/FM26SimpleEditor-win-x64.zip
+
 
 

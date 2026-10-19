@@ -4,8 +4,8 @@ namespace FM26SimpleEditor;
 
 public sealed class RoleReportPanel : UserControl
 {
-    private readonly PitchControl pitch = new() { SelectionEnabled = true, AccessibleName = "Scegli la posizione per il report" };
-    private readonly ComboBox position = new() { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList, AccessibleName = "Posizione del report" };
+    private readonly PitchControl pitch = new() { SelectionEnabled = true, AccessibleName = L10n.Get("Text_86de35bcbb79") };
+    private readonly ComboBox position = new() { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList, AccessibleName = L10n.Get("Text_5533eef0995d") };
     private readonly GroupBox selector = new() { Dock = DockStyle.Fill };
     private readonly Label instruction = new() { AutoSize = true, Dock = DockStyle.Fill, MaximumSize = new Size(220, 0), ForeColor = Color.DimGray };
     private readonly Label scores = new() { AutoSize = true, Dock = DockStyle.Fill, Font = new Font("Segoe UI", 11, FontStyle.Bold) };
@@ -50,10 +50,12 @@ public sealed class RoleReportPanel : UserControl
         root.Controls.Add(selector, 0, 0); root.Controls.Add(right, 1, 0); Controls.Add(root);
         pitch.PositionSelected += key => { int index = Array.IndexOf(PositionScheme.Order, key); if (index >= 0) position.SelectedIndex = index; };
         position.SelectedIndexChanged += (_, _) => { if (!binding) Render(); };
+        L10n.Capture(this);
     }
 
     public void SetContext(PlayerDetail? primary, PlayerDetail? other, bool useItalian)
     {
+        L10n.Apply(this, useItalian);
         string selected = position.SelectedIndex >= 0 ? PositionScheme.Order[position.SelectedIndex] : "";
         if (primaryUid != primary?.Player.Uid) selected = primary is null ? "" : PositionScheme.Main(primary.Positions);
         a = primary; b = other; primaryUid = primary?.Player.Uid; italian = useItalian;
@@ -61,8 +63,8 @@ public sealed class RoleReportPanel : UserControl
         position.Items.Clear(); position.Items.AddRange(PositionScheme.Order.Select(key => (object)Labels.Position(key, italian)).ToArray());
         int index = Array.IndexOf(PositionScheme.Order, selected); position.SelectedIndex = index >= 0 ? index : 0;
         position.Enabled = pitch.Enabled = a is not null;
-        selector.Text = italian ? "Scegli sul campo" : "Choose on the pitch";
-        instruction.Text = italian ? "Clicca una posizione oppure sceglila nell’elenco. Il punto giallo indica la posizione valutata." : "Click a position or use the list. Yellow marks the evaluated position.";
+        selector.Text = italian ? L10n.Get("Text_26b427758acc", true) : L10n.Get("Text_26b427758acc", false);
+        instruction.Text = italian ? L10n.Get("Text_596429ce9eb6", true) : L10n.Get("Text_596429ce9eb6", false);
         pitch.SetPositions([], italian); binding = false; Render();
     }
 
@@ -72,21 +74,21 @@ public sealed class RoleReportPanel : UserControl
         string key = position.SelectedIndex >= 0 ? PositionScheme.Order[position.SelectedIndex] : "GK";
         pitch.SelectedPosition = key;
         method.Text = italian
-            ? "Stima dell’editor per posizione, non per compito tattico: media 1–20 con pesi 3 fondamentale, 2 importante, 1 utile. Familiarità separata; non predice le prestazioni in partita."
-            : "Editor position estimate, not a tactical-role rating: 1–20 weighted mean, essential 3, important 2, useful 1. Familiarity is separate; this does not predict match performance.";
+            ? L10n.Get("Text_22e221f18045", true)
+            : L10n.Get("Text_22e221f18045", false);
         if (a is null || b is null)
         {
-            scores.Text = italian ? "Seleziona due giocatori" : "Select two players";
-            summary.Text = italian ? "Apri un giocatore e scegli il secondo nel confronto. Il report include le modifiche non salvate del giocatore aperto." : "Open a player and choose a comparison player. The report includes the open player’s unsaved edits.";
+            scores.Text = italian ? L10n.Get("Text_018ce93e34b8", true) : L10n.Get("Text_018ce93e34b8", false);
+            summary.Text = italian ? L10n.Get("Text_f49050ba3949", true) : L10n.Get("Text_f49050ba3949", false);
             return;
         }
         var result = RoleComparison.Compare(a, b, key);
-        var culture = CultureInfo.GetCultureInfo(italian ? "it-IT" : "en-GB");
+        var culture = CultureInfo.GetCultureInfo(italian ? L10n.Get("Text_be02ed39e12d", true) : L10n.Get("Text_be02ed39e12d", false));
         string Score(double? value) => value?.ToString("0.00", culture) ?? "—";
-        scores.Text = $"{Labels.Position(key, italian)} · {a.Player.Name}: {Score(result.ScoreA)}/20 · {b.Player.Name}: {Score(result.ScoreB)}/20" + (result.Complete ? "" : italian ? " · parziale" : " · partial");
+        scores.Text = $"{Labels.Position(key, italian)} · {a.Player.Name}: {Score(result.ScoreA)}/20 · {b.Player.Name}: {Score(result.ScoreB)}/20" + (result.Complete ? "" : italian ? L10n.Get("Text_5f7f5f392dd8", true) : L10n.Get("Text_5f7f5f392dd8", false));
         summary.Text = Describe(result, a.Player.Name, b.Player.Name, italian);
-        table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = italian ? "Rilevanza" : "Importance", FillWeight = 17, MinimumWidth = 100 });
-        table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = italian ? "Attributo" : "Attribute", FillWeight = 31, MinimumWidth = 145 });
+        table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = italian ? L10n.Get("Text_c4b0781cd212", true) : L10n.Get("Text_c4b0781cd212", false), FillWeight = 17, MinimumWidth = 100 });
+        table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = italian ? L10n.Get("Text_707eecb875fc", true) : L10n.Get("Text_707eecb875fc", false), FillWeight = 31, MinimumWidth = 145 });
         table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = a.Player.Name, FillWeight = 17, MinimumWidth = 70, CellTemplate = new ValueBarCell(20), DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight } });
         table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Δ", ToolTipText = a.Player.Name + " − " + b.Player.Name, FillWeight = 18, MinimumWidth = 80, DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleCenter } });
         table.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = b.Player.Name, FillWeight = 17, MinimumWidth = 70, CellTemplate = new ValueBarCell(20), DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight } });
@@ -98,7 +100,7 @@ public sealed class RoleReportPanel : UserControl
             var row = table.Rows[index];
             row.Cells[0].Style.ForeColor = RoleImportance.Ink(stat.Tier); row.Cells[0].Style.BackColor = RoleImportance.Back(stat.Tier);
             row.Cells[3].Style.ForeColor = stat.Delta > 0 ? Color.SeaGreen : stat.Delta < 0 ? Color.Firebrick : Color.DimGray;
-            row.Cells[3].ToolTipText = stat.Delta > 0 ? a.Player.Name : stat.Delta < 0 ? b.Player.Name : italian ? "Pari" : "Equal";
+            row.Cells[3].ToolTipText = stat.Delta > 0 ? a.Player.Name : stat.Delta < 0 ? b.Player.Name : italian ? L10n.Get("Text_1700f4df5398", true) : L10n.Get("Text_1700f4df5398", false);
         }
         table.ClearSelection();
     }
@@ -116,18 +118,18 @@ public sealed class RoleReportPanel : UserControl
                 .Select(s => $"{Labels.Attribute(s.Key, it)} (+{Math.Abs(s.Delta)})"));
             var counter = aspect.Stats.Where(s => left ? s.Delta < 0 : s.Delta > 0)
                 .OrderByDescending(s => Math.Abs(s.Delta) * s.Weight).FirstOrDefault();
-            string text = it ? $"{winner} risulta più forte {aspect.Italian}: {evidence}." : $"{winner} is stronger {aspect.English}: {evidence}.";
+            string text = it ? L10n.FormatIn(true, "Text_de7ca56f56c1", winner, aspect.Italian, evidence) : L10n.FormatIn(false, "Text_de7ca56f56c1", winner, aspect.English, evidence);
             if (counter is not null)
-                text += it ? $" {other} conserva però un vantaggio in {Labels.Attribute(counter.Key, it)} (+{Math.Abs(counter.Delta)})."
-                    : $" However, {other} retains an advantage in {Labels.Attribute(counter.Key, it)} (+{Math.Abs(counter.Delta)}).";
+                text += it ? L10n.FormatIn(true, "Text_7b3842e1f4ca", other, Labels.Attribute(counter.Key, it), Math.Abs(counter.Delta))
+                    : L10n.FormatIn(false, "Text_7b3842e1f4ca", other, Labels.Attribute(counter.Key, it), Math.Abs(counter.Delta));
             sentences.Add(text);
         }
-        if (sentences.Count == 0) sentences.Add(it ? "Gli aspetti con almeno due attributi disponibili non mostrano differenze medie di almeno mezzo punto: non emerge uno stile nettamente superiore." : "Aspects with at least two available attributes show no mean gap of half a point or more: no clearly stronger style emerges.");
-        string scope = it ? "Lettura delle caratteristiche nella posizione scelta" : "Playing characteristics in the selected position";
-        if (!r.Complete) scope += it ? " (analisi parziale)" : " (partial analysis)";
+        if (sentences.Count == 0) sentences.Add(it ? L10n.Get("Text_e17d53cc8e6c", true) : L10n.Get("Text_e17d53cc8e6c", false));
+        string scope = it ? L10n.Get("Text_974a57d31063", true) : L10n.Get("Text_974a57d31063", false);
+        if (!r.Complete) scope += it ? L10n.Get("Text_3d0e81cec59b", true) : L10n.Get("Text_3d0e81cec59b", false);
         return scope + ":" + Environment.NewLine + string.Join(Environment.NewLine, sentences) + Environment.NewLine +
-            (it ? "Queste differenze descrivono alternative d’impiego: il punteggio complessivo pesa gli attributi del ruolo, mentre la scelta dipende anche dal compito tattico. Velocità e impegno non dimostrano da soli una maggiore propensione offensiva."
-                : "These differences describe alternatives for deployment: the overall score weights position attributes, while the choice also depends on tactical duties. Speed and work rate alone do not establish a more attacking instinct.");
+            (it ? L10n.Get("Text_202c47c07827", true)
+                : L10n.Get("Text_202c47c07827", false));
     }
 
     public static string Describe(RoleComparisonResult r, string a, string b, bool it)
@@ -135,25 +137,26 @@ public sealed class RoleReportPanel : UserControl
         string winner = r.Suggested == ComparisonSide.A ? a : b;
         string conclusion = r.Verdict switch
         {
-            RoleVerdict.Incomplete => it ? "Dati incompleti: nessun suggerimento affidabile. Mancano: " + string.Join(", ", r.Missing.Select(k => Labels.Attribute(k, it))) : "Incomplete data: no reliable recommendation. Missing: " + string.Join(", ", r.Missing.Select(k => Labels.Attribute(k, it))),
-            RoleVerdict.UnknownFamiliarity => it ? "Familiarità non disponibile: confronta gli attributi, ma non è possibile suggerire chi sia più pronto nella posizione." : "Unknown familiarity: attributes can be compared, but positional readiness cannot be recommended.",
-            RoleVerdict.Unfamiliar => it ? "Nessuno dei due raggiunge familiarità 12/20: entrambi richiedono adattamento prima di essere consigliati qui." : "Neither reaches familiarity 12/20: both need adaptation before being recommended here.",
-            RoleVerdict.OnlyA or RoleVerdict.OnlyB => it ? $"Preferenza per {winner}: è l’unico con familiarità almeno 12/20. Il vantaggio è di prontezza nella posizione, anche se l’altro può avere attributi superiori." : $"Prefer {winner}: only this player reaches familiarity 12/20. This is a readiness advantage, even if the other player has stronger attributes.",
-            RoleVerdict.FamiliarityA or RoleVerdict.FamiliarityB => it ? $"Attributi quasi equivalenti (scarto < 0,25): preferenza per {winner} per familiarità superiore di almeno 3 punti." : $"Nearly equal attributes (gap < 0.25): prefer {winner} for at least 3 points more familiarity.",
-            RoleVerdict.AttributesA or RoleVerdict.AttributesB => it ? $"Preferenza sugli attributi per {winner}. Controlla anche la familiarità: il punteggio non applica penalità nascoste per la posizione." : $"Attribute preference: {winner}. Check familiarity too: the score applies no hidden positional penalties.",
-            _ => it ? "Profili sostanzialmente equivalenti: nessuna preferenza netta secondo questi criteri." : "Broadly equivalent profiles: no clear preference under these criteria."
+            RoleVerdict.Incomplete => it ? L10n.Get("IncompleteData", true) + string.Join(", ", r.Missing.Select(k => Labels.Attribute(k, it))) : L10n.Get("IncompleteData", false) + string.Join(", ", r.Missing.Select(k => Labels.Attribute(k, it))),
+            RoleVerdict.UnknownFamiliarity => it ? L10n.Get("Text_1eaee4b23a94", true) : L10n.Get("Text_1eaee4b23a94", false),
+            RoleVerdict.Unfamiliar => it ? L10n.Get("Text_d2ff7726ba7d", true) : L10n.Get("Text_d2ff7726ba7d", false),
+            RoleVerdict.OnlyA or RoleVerdict.OnlyB => it ? L10n.FormatIn(true, "Text_ff17bc12d7eb", winner) : L10n.FormatIn(false, "Text_ff17bc12d7eb", winner),
+            RoleVerdict.FamiliarityA or RoleVerdict.FamiliarityB => it ? L10n.FormatIn(true, "Text_75191df29c9a", winner) : L10n.FormatIn(false, "Text_75191df29c9a", winner),
+            RoleVerdict.AttributesA or RoleVerdict.AttributesB => it ? L10n.FormatIn(true, "Text_bd63df3c891a", winner) : L10n.FormatIn(false, "Text_bd63df3c891a", winner),
+            _ => it ? L10n.Get("Text_42e01625f528", true) : L10n.Get("Text_42e01625f528", false)
         };
-        string Familiarity(int? value) => value is null ? it ? "N/D" : "N/A" : value + "/20";
+        string Familiarity(int? value) => value is null ? it ? L10n.Get("Text_eb34623b71cd", true) : L10n.Get("Text_eb34623b71cd", false) : value + "/20";
         string Strengths(bool left)
         {
             var fields = r.Stats.Where(s => left ? s.Delta > 0 : s.Delta < 0).OrderByDescending(s => Math.Abs(s.Delta) * s.Weight).ThenBy(s => s.Key, StringComparer.Ordinal).Take(3);
             return string.Join(", ", fields.Select(s => $"{Labels.Attribute(s.Key, it)} (+{Math.Abs(s.Delta)})"));
         }
         string sa = Strengths(true), sb = Strengths(false);
-        return conclusion + Environment.NewLine + Environment.NewLine + AnalyzeText(r, a, b, it) + Environment.NewLine + Environment.NewLine + $"{(it ? "Familiarità" : "Familiarity")}: {a} {Familiarity(r.FamiliarityA)} · {b} {Familiarity(r.FamiliarityB)}. " +
-            $"{(it ? "Copertura" : "Coverage")}: {r.Stats.Count}/{r.Expected}." + Environment.NewLine +
-            $"{a} · {(it ? "vantaggi più rilevanti" : "most relevant advantages")}: {(sa.Length > 0 ? sa : "—")}." + Environment.NewLine +
-            $"{b} · {(it ? "vantaggi più rilevanti" : "most relevant advantages")}: {(sb.Length > 0 ? sb : "—")}.";
+        return conclusion + Environment.NewLine + Environment.NewLine + AnalyzeText(r, a, b, it) + Environment.NewLine + Environment.NewLine + $"{(it ? L10n.Get("Text_d648bc617064", true) : L10n.Get("Text_d648bc617064", false))}: {a} {Familiarity(r.FamiliarityA)} · {b} {Familiarity(r.FamiliarityB)}. " +
+            $"{(it ? L10n.Get("Text_4cd0d886b40b", true) : L10n.Get("Text_4cd0d886b40b", false))}: {r.Stats.Count}/{r.Expected}." + Environment.NewLine +
+            $"{a} · {(it ? L10n.Get("Text_1d696978d48d", true) : L10n.Get("Text_1d696978d48d", false))}: {(sa.Length > 0 ? sa : "—")}." + Environment.NewLine +
+            $"{b} · {(it ? L10n.Get("Text_1d696978d48d", true) : L10n.Get("Text_1d696978d48d", false))}: {(sb.Length > 0 ? sb : "—")}.";
     }
 }
+
 

@@ -2,8 +2,8 @@ name: Validate comparison (DLL only)
 
 on:
   push:
-    branches: [main, v12]
-    paths: ["**/*.cs", "**/*.csproj", ".github/workflows/validate.yml"]
+    branches: [main, v12, v13]
+    paths: ["**/*.cs", "**/*.csproj", "**/*.resx", ".github/workflows/validate.yml"]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -30,3 +30,4 @@ jobs:
           if (Get-ChildItem -Recurse -File -Include FM26SimpleEditor.exe,ComparisonChecks.exe,*.zip) {
             throw "Validation must not generate application EXEs or ZIPs."
           }
+

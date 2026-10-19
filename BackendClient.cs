@@ -50,12 +50,12 @@ public sealed class BackendClient : IDisposable
                     if (errors.Length > 32000) errors.Remove(0, errors.Length - 16000);
                 }
             };
-            if (!process.Start()) throw new InvalidOperationException("Avvio Python non riuscito");
+            if (!process.Start()) throw new InvalidOperationException(L10n.Get("Text_9d8d2a088944"));
             process.BeginErrorReadLine();
         }
         catch (Exception exc)
         {
-            throw new InvalidOperationException("Il runtime Python verificato non è più disponibile. Riavvia l’editor per ripetere la configurazione. " + exc.Message, exc);
+            throw new InvalidOperationException(L10n.Get("Text_72cbceadc06a") + exc.Message, exc);
         }
     }
 
@@ -74,20 +74,20 @@ public sealed class BackendClient : IDisposable
                 {
                     string detail;
                     lock (errors) detail = errors.ToString().Trim();
-                    throw new InvalidOperationException("Il lettore del salvataggio si è chiuso. " + detail);
+                    throw new InvalidOperationException(L10n.Get("Text_486f013addb0") + detail);
                 }
                 using var document = JsonDocument.Parse(line);
                 var root = document.RootElement;
                 if (root.TryGetProperty("event",out var kind))
                 {
-                    if (kind.GetString() != "progress") throw new InvalidOperationException("Evento inatteso dal lettore");
+                    if (kind.GetString() != "progress") throw new InvalidOperationException(L10n.Get("Text_68663ead19d6"));
                     var update = root.Deserialize<BackendProgress>(Options);
                     if (update is not null) onProgress?.Invoke(update);
                     continue;
                 }
                 if (!root.GetProperty("ok").GetBoolean())
-                    throw new InvalidOperationException(root.GetProperty("error").GetString());
-                return root.GetProperty("data").Deserialize<T>(Options) ?? throw new InvalidOperationException("Risposta vuota dal lettore");
+                    throw new InvalidOperationException(L10n.Backend(root.GetProperty("error").GetString() ?? ""));
+                return root.GetProperty("data").Deserialize<T>(Options) ?? throw new InvalidOperationException(L10n.Get("Text_5a6045247428"));
             }
         }
         finally { gate.Release(); }
@@ -104,3 +104,4 @@ public sealed class BackendClient : IDisposable
         gate.Dispose();
     }
 }
+

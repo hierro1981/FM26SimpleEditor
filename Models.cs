@@ -15,8 +15,8 @@ public sealed class PlayerRow
     public string OwnerTeam { get; set; } = "";
     [JsonIgnore] public bool ShowLoanOwner { get; set; }
     [JsonIgnore] public string SearchTeam => ShowLoanOwner && OnLoan is true ? OwnerTeam : Team;
-    [JsonIgnore] public string SearchTeamDisplay => SearchTeam.Length > 0 ? SearchTeam : ShowLoanOwner && OnLoan is true ? "Proprietaria non disponibile" : "—";
-    [JsonIgnore] public string LoanDescription => OnLoan is true ? $"In prestito · gioca in: {(Team.Length > 0 ? Team : "non disponibile")} · proprietaria: {(OwnerTeam.Length > 0 ? OwnerTeam : "non disponibile")}" : OnLoan is null ? "Prestito: dato non disponibile" : "";
+    [JsonIgnore] public string SearchTeamDisplay => SearchTeam.Length > 0 ? SearchTeam : ShowLoanOwner && OnLoan is true ? L10n.Get("Text_7fa7c40c16c5") : "—";
+    [JsonIgnore] public string LoanDescription => OnLoan is true ? L10n.Format("Text_207544cd934d", (Team.Length > 0 ? Team : L10n.Get("Text_1d80f0682e0b")), (OwnerTeam.Length > 0 ? OwnerTeam : L10n.Get("Text_1d80f0682e0b"))) : OnLoan is null ? L10n.Get("Text_b959d6541181") : "";
     public string MainPosition { get; set; } = "";
     public string? Birth { get; set; }
     public int Ca { get; set; }
@@ -33,7 +33,7 @@ public sealed class PlayerRow
     public string? ContractEnd { get; set; }
     public string ContractStatus { get; set; } = "unknown";
     public string PositionSummary => string.Join(", ", Positions.Where(pair => pair.Value >= 12).OrderByDescending(pair => pair.Value).Select(pair => $"{pair.Key} ({pair.Value})"));
-    public string ContractLabel => ContractStatus switch { "none" => "Senza rilevato", "expired" => "Scaduto", "active" => "In corso", _ => "Non disponibile" };
+    public string ContractLabel => ContractStatus switch { "none" => L10n.Get("Text_f53c05dd871c"), "expired" => L10n.Get("Text_89bf53640b26"), "active" => L10n.Get("Text_52fcfde046ff"), _ => L10n.Get("Text_ce1391381fc8") };
     public string ContractEndDisplay => DateTime.TryParseExact(ContractEnd, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date) ? date.ToString("dd/MM/yyyy") : "—";
 }
 
@@ -66,7 +66,7 @@ public sealed class LeagueReference
 {
     public double? Mean { get; set; }
     public int Count { get; set; }
-    public string Label { get; set; } = "Campionato non disponibile";
+    public string Label { get; set; } = L10n.Get("Text_3cad6e3f2783");
 }
 
 public sealed class OpenResult
@@ -153,7 +153,7 @@ public static class PreviewMath
     {
         var list = fields.OrderBy(field => field.Index).ToArray();
         if (!list.Select(field => field.Index).SequenceEqual(Enumerable.Range(0, list.Length)))
-            throw new InvalidOperationException("Ordine dei campi non valido");
+            throw new InvalidOperationException(L10n.Get("Text_398c94104b68"));
         return list.Select(field => field.Value).ToArray();
     }
 }
@@ -166,5 +166,6 @@ public sealed class BackendProgress
     public long? Total { get; set; }
     public string Unit { get; set; } = "";
 }
+
 
 

@@ -72,6 +72,7 @@ internal static class Checks
             Check(PreviewMath.DeltaText(0, 0) == "0 =", "equal delta");
             CommentaryChecks();
             UiChecks();
+            LocalizationChecks.Run(Check);
             Console.WriteLine($"{count} C# checks passed"); return 0;
         }
         catch (Exception exc) { Console.Error.WriteLine(exc); return 1; }
@@ -177,5 +178,6 @@ internal static class Checks
         Check(cards.AutoScroll && cards.VerticalScroll.Visible && filters.Height <= 190 * main.DeviceDpi / 96f + 1, "narrow windows keep extra filter rows scrollable");
     }
 }
+
 
 

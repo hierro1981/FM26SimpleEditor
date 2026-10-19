@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v13 (in development)
+# FM26 Simple Editor · v13.1 (in development)
 
 [Italiano](README.md) | English
 
@@ -73,7 +73,7 @@ Internal attribute history from a single supported save, charts with multiple se
 
 - Three copy-icon buttons in the player tab copy the name, public ID and internal ID without labels or number grouping. The public-ID button is disabled when the value is missing.
 - History initially selects the essential and important attributes for the player’s main position. Position presets can be applied from the dedicated list; manual selection is preserved for the same player. Presets provide editorial guidance, not official FM weights.
-- Hover anywhere in the plot to see all available values at the nearest observed period, including period and source file. Deltas are green for improvement, red for deterioration and grey for no change; lower injury proneness and dirtiness are improvements. Missing periods do not produce deltas against more distant periods.
+- Hover anywhere in the plot to see all available values at the nearest observed period, showing only attribute name, value and date, in the matching series colors. Deltas are green for improvement, red for deterioration and grey for no change; lower injury proneness and dirtiness are improvements. Missing periods do not produce deltas against more distant periods.
 - Loading a player displays a percentage, actual processing phases and a counter of attributes read. Individual phases may take different amounts of time.
 - **Show reconstructed months** adds month/year labels to internal history while keeping the numbered-sample view available.
 
@@ -160,7 +160,7 @@ The fifth tab automatically opens **Storico interno · sperimentale** when it re
 
 **Internal-history horizontal axis:** starting with v13, **Show reconstructed months** is enabled when the sequence, source file and reference save date are unambiguous. The projection assigns samples to completed months before the save month: for example, 19 samples referenced to 10/02/2028 become July 2026–January 2028. Monthly cadence is inferred from two saves and the in-game chart: **individual dates and exact days have not been decoded**. The table, tooltips and summary identify months as reconstructed; Current retains the file’s actual date. The projection changes neither the save nor sample date fields. Missing or ambiguous references, or disabling the option, retain Sample 1, 2, 3… Stored attribute values are preserved without interpolation.
 
-A **searchable checklist** on the left allows multiple attributes to be displayed together. Dribbling, passing and technique are initially selected. **Seleziona visibili** adds all attributes matching the list filter; **Nessuno** clears the entire selection. Filtering hides list entries without deselecting previously chosen attributes. Changing label language preserves selection by field identity.
+A **searchable checklist** on the left allows multiple attributes to be displayed together. The initial selection follows the essential and important attributes for the main position. **Seleziona visibili** adds all attributes matching the list filter; **Nessuno** clears the entire selection. Filtering hides list entries without deselecting previously chosen attributes. Changing label language preserves selection by field identity.
 
 Each attribute has a colour and line pattern in the scrollable legend, its own curve, and a table column. Hover over points for values, sample/date and source file; overlapping points show their available information together. **Scala grezza** switches between original values and the 1–20 conversion. **Mostra Δ** adds the change from each attribute's previous available observation. There is no arbitrary limit on selected attributes; selecting a small group usually makes charts easier to read.
 

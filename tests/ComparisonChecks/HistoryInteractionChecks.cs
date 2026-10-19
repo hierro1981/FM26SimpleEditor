@@ -54,12 +54,15 @@ internal static class HistoryInteractionChecks
             new("passing","Passing",Color.Blue,DashStyle.Solid,[new(1,10,"January","a.fm",false),new(3,14,"March","a.fm",false)]),
             new("technique","Technique",Color.Green,DashStyle.Dash,[new(1,12,"January","a.fm",false),new(1,13,"January","b.fm",false)])],20,false);
         string tooltip = chart.PeriodDetails(1.4);
-        check(tooltip.Contains("Passing: 10") && tooltip.Contains("Technique: 12") && tooltip.Contains("Technique: 13") && tooltip.Contains("b.fm"), "nearest-period tooltip includes all attributes and duplicate-date sources");
+        check(tooltip.Contains("Passing: 10") && tooltip.Contains("Technique: 12") && tooltip.Contains("Technique: 13") && tooltip.Contains("January") && !tooltip.Contains(".fm"), "nearest-period tooltip contains only attributes, values and dates, retaining distinct observations");
+        check(chart.PeriodEntries(1).Where(e => e.Text.StartsWith("Technique:")).All(e => e.Color == Color.Green) && chart.PeriodEntries(1)[0].Color == Color.Blue,
+            "tooltip rows retain the matching attribute series colors");
         check(!chart.PeriodDetails(2.9).Contains("Technique"), "tooltip does not interpolate missing observations");
         using var bitmap = new Bitmap(600,300); chart.DrawToBitmap(bitmap,chart.ClientRectangle);
         typeof(AttributeHistoryChart).GetMethod("OnMouseMove",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!.Invoke(chart,[new MouseEventArgs(MouseButtons.None,0,45,140,0)]);
         var tip = (ToolTip)typeof(AttributeHistoryChart).GetField("tip",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!.GetValue(chart)!;
-        check(tip.GetToolTip(chart).Contains("Technique: 13"), "hover works anywhere in plot height instead of tiny point targets");
+        check(tip.OwnerDraw, "history tooltip uses custom drawing for per-attribute colors");
+        check(tip.GetToolTip(chart)!.Contains("Technique: 13"), "hover works anywhere in plot height instead of tiny point targets");
         chart.SetSeries([],20,false); check(chart.PeriodDetails(0) == "" && tip.GetToolTip(chart) == "", "replacing chart clears obsolete tooltip");
         host.Close(); L10n.SetLanguage("it");
     }

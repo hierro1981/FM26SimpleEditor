@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v13 (in sviluppo)
+# FM26 Simple Editor · v13.1 (in sviluppo)
 
 Italiano | [English](README.en.md)
 
@@ -73,7 +73,7 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 
 - Nella scheda giocatore, tre pulsanti con icona copia trasferiscono negli appunti nome, ID pubblico e ID interno, senza etichette o separatori numerici. Il pulsante dell’ID pubblico è disabilitato se manca il dato.
 - Lo storico seleziona inizialmente gli attributi fondamentali e importanti della posizione principale. I preset per posizione sono applicabili dalla lista dedicata; la selezione manuale viene mantenuta per lo stesso giocatore. I preset sono indicazioni editoriali, non pesi ufficiali di FM.
-- Passando sul grafico compaiono tutti i valori disponibili del periodo più vicino, con periodo e file di origine. I delta sono verdi per i miglioramenti, rossi per i peggioramenti e grigi se invariati; per propensione agli infortuni e scorrettezza i valori inferiori sono migliori. Un periodo mancante non genera un delta con periodi più lontani.
+- Passando sul grafico compaiono tutti i valori disponibili del periodo più vicino, con nome attributo, valore e data, nei colori delle rispettive serie. I delta sono verdi per i miglioramenti, rossi per i peggioramenti e grigi se invariati; per propensione agli infortuni e scorrettezza i valori inferiori sono migliori. Un periodo mancante non genera un delta con periodi più lontani.
 - Il caricamento del giocatore mostra percentuale, fasi effettive e contatore degli attributi letti; la durata delle singole fasi può variare.
 - Nello storico interno, **Mostra mesi ricostruiti** aggiunge mese/anno ai campioni, mantenendo disponibile la vista numerata.
 
@@ -158,7 +158,7 @@ Sono stati identificati **47 attributi visibili**, in campioni da 69 byte. Non v
 
 **Asse orizzontale dello storico interno:** dalla v13 **Mostra mesi ricostruiti** è attivo quando sequenza, file di origine e data del salvataggio sono univoci. La proiezione assegna i campioni ai mesi completi precedenti al mese del salvataggio: per esempio, 19 campioni con riferimento 10/02/2028 diventano luglio 2026–gennaio 2028. La cadenza mensile è una deduzione confrontata con due salvataggi e con il grafico del gioco: **non è la decodifica delle date individuali né del giorno esatto**. Tabella, tooltip e riepilogo indicano che i mesi sono ricostruiti; la riga Attuali conserva la data effettiva del file. La proiezione non modifica il salvataggio né i campi data dei campioni. Se manca un riferimento univoco, o disattivi l’opzione, restano Campione 1, 2, 3… I valori degli attributi sono quelli memorizzati, senza interpolazione.
 
-A sinistra trovi una **lista cercabile con caselle di selezione**. Puoi mostrare più attributi contemporaneamente; inizialmente sono selezionati dribbling, passaggi e tecnica. **Seleziona visibili** aggiunge tutti i risultati del filtro; **Nessuno** svuota l'intera selezione. Il filtro nasconde solo le voci della lista, mantenendo gli attributi già selezionati. Cambiare lingua conserva la selezione per identità del campo.
+A sinistra trovi una **lista cercabile con caselle di selezione**. Puoi mostrare più attributi contemporaneamente; la selezione iniziale segue gli attributi fondamentali e importanti della posizione principale. **Seleziona visibili** aggiunge tutti i risultati del filtro; **Nessuno** svuota l'intera selezione. Il filtro nasconde solo le voci della lista, mantenendo gli attributi già selezionati. Cambiare lingua conserva la selezione per identità del campo.
 
 Ogni attributo ha colore e tratteggio riconoscibili nella legenda scorrevole, una curva e una colonna nella tabella. Passa sui punti per leggere valori, campione/data e file; punti sovrapposti mostrano insieme le informazioni disponibili. **Scala grezza** alterna i valori originali e la conversione 1–20. **Mostra Δ** aggiunge la variazione rispetto alla precedente osservazione disponibile per ogni attributo. Non c'è un limite arbitrario al numero di attributi selezionabili; per grafici più leggibili conviene confrontare pochi attributi alla volta.
 

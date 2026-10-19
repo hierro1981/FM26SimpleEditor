@@ -6,18 +6,57 @@ namespace FM26SimpleEditor;
 public sealed class AttributeHistoryChart : Control
 {
     public sealed record PointValue(double X, int Value, string Label, string Source, bool Current);
+    public sealed record PeriodEntry(string Text, Color Color);
     public sealed record Series(string Key, string Label, Color Color, DashStyle Dash, List<PointValue> Points);
     private List<Series> series = [];
     private RectangleF plotArea;
     private double? hoverX;
-    private readonly ToolTip tip = new() { AutoPopDelay = 30000, InitialDelay = 150, ReshowDelay = 100 };
+    private readonly ToolTip tip = new() { OwnerDraw = true, AutoPopDelay = 30000, InitialDelay = 150, ReshowDelay = 100 };
     private int maximum = 20;
     private bool dated, monthly;
     private string lastTip = "";
-    public AttributeHistoryChart() { Dock = DockStyle.Fill; DoubleBuffered = true; BackColor = Color.White; }
+    private List<PeriodEntry> tooltipEntries = [];
+    private int tooltipRows = 1;
+    private int[] tooltipWidths = [];
+    private int TooltipLineHeight => Math.Max(Font.Height + 6, (int)(22 * DeviceDpi / 96f));
+    public AttributeHistoryChart()
+    {
+        Dock = DockStyle.Fill; DoubleBuffered = true; BackColor = Color.White;
+        tip.Popup += (_, args) =>
+        {
+            int padding = (int)(10 * DeviceDpi / 96f);
+            var screen = Screen.FromControl(this).WorkingArea;
+            tooltipRows = Math.Max(1, Math.Min(tooltipEntries.Count, (screen.Height - 2*padding - 40) / TooltipLineHeight));
+            int columns = Math.Max(1, (int)Math.Ceiling(tooltipEntries.Count / (double)tooltipRows));
+            tooltipWidths = Enumerable.Range(0, columns).Select(column => Math.Min(Math.Max(80,
+                tooltipEntries.Skip(column*tooltipRows).Take(tooltipRows).Select(entry => TextRenderer.MeasureText(entry.Text, Font).Width).DefaultIfEmpty(80).Max()) + 2*padding,
+                Math.Max(80, (screen.Width-40)/columns))).ToArray();
+            args.ToolTipSize = new Size(tooltipWidths.Sum(), tooltipRows*TooltipLineHeight+2*padding);
+        };
+        tip.Draw += (_, args) =>
+        {
+            args.Graphics.Clear(Color.White);
+            using var border = new Pen(Color.Silver);
+            args.Graphics.DrawRectangle(border, 0, 0, args.Bounds.Width-1, args.Bounds.Height-1);
+            int padding = (int)(10 * DeviceDpi / 96f), x = 0;
+            for (int column = 0; column < tooltipWidths.Length; column++)
+            {
+                for (int row = 0; row < tooltipRows; row++)
+                {
+                    int index = column*tooltipRows+row;
+                    if (index >= tooltipEntries.Count) break;
+                    var entry = tooltipEntries[index];
+                    var bounds = new Rectangle(x+padding, padding+row*TooltipLineHeight, tooltipWidths[column]-2*padding, TooltipLineHeight);
+                    TextRenderer.DrawText(args.Graphics, entry.Text, Font, bounds, entry.Color,
+                        TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix);
+                }
+                x += tooltipWidths[column];
+            }
+        };
+    }
     public void SetSeries(List<Series> values, int upper, bool useDates, bool useMonths = false)
     {
-        series = values; maximum = upper; dated = useDates; monthly = useMonths; hoverX = null; lastTip = ""; tip.SetToolTip(this, ""); Invalidate();
+        series = values; maximum = upper; dated = useDates; monthly = useMonths; hoverX = null; tooltipEntries.Clear(); lastTip = ""; tip.SetToolTip(this, ""); Invalidate();
     }
     protected override void OnPaint(PaintEventArgs args)
     {
@@ -89,14 +128,15 @@ public sealed class AttributeHistoryChart : Control
         }
     }
     // Use a whole vertical slice of the plot, with actual observations only (no interpolation).
-    public string PeriodDetails(double x)
+    public IReadOnlyList<PeriodEntry> PeriodEntries(double x)
     {
         var points = series.SelectMany(line => line.Points).ToList();
-        if (points.Count == 0) return "";
+        if (points.Count == 0) return [];
         double nearest = points.OrderBy(point => Math.Abs(point.X-x)).ThenBy(point => point.X).First().X;
-        return string.Join("\n", series.SelectMany(line => line.Points.Where(point => point.X == nearest)
-            .Select(point => $"{line.Label}: {point.Value} · {point.Label}\n{point.Source}")));
+        return series.SelectMany(line => line.Points.Where(point => point.X == nearest)
+            .Select(point => new PeriodEntry($"{line.Label}: {point.Value} · {point.Label}", line.Color))).Distinct().ToList();
     }
+    public string PeriodDetails(double x) => string.Join("\n", PeriodEntries(x).Select(entry => entry.Text));
     protected override void OnMouseMove(MouseEventArgs args)
     {
         base.OnMouseMove(args);
@@ -108,11 +148,12 @@ public sealed class AttributeHistoryChart : Control
             double x = first + (args.X-plotArea.Left)/plotArea.Width * (last-first);
             nearest = points.OrderBy(p => Math.Abs(p.X-x)).ThenBy(p => p.X).First().X;
         }
-        string text = nearest.HasValue ? PeriodDetails(nearest.Value) : "";
+        var entries = nearest.HasValue ? PeriodEntries(nearest.Value).ToList() : [];
+        string text = string.Join("\n", entries.Select(entry => entry.Text));
         if (text == lastTip) return;
-        hoverX = nearest; lastTip = text; tip.SetToolTip(this, text); Invalidate();
+        hoverX = nearest; tooltipEntries = entries; lastTip = text; tip.SetToolTip(this, text); Invalidate();
     }
-    protected override void OnMouseLeave(EventArgs args) { base.OnMouseLeave(args); hoverX = null; lastTip = ""; tip.SetToolTip(this, ""); Invalidate(); }
+    protected override void OnMouseLeave(EventArgs args) { base.OnMouseLeave(args); hoverX = null; tooltipEntries.Clear(); lastTip = ""; tip.SetToolTip(this, ""); Invalidate(); }
     protected override void Dispose(bool disposing) { if (disposing) tip.Dispose(); base.Dispose(disposing); }
 }
 

@@ -45,7 +45,7 @@ internal static class LocalizationChecks
         }
         finally { L10n.SetLanguage("it"); Directory.Delete(directory, recursive: true); }
         check(UpdateChecker.TryVersion("v13", out var simple) && UpdateChecker.TryVersion("v13.0.0", out var full) && simple == full, "release version components normalize");
-        check(UpdateChecker.TryVersion("v9", out var older) && UpdateChecker.TryVersion("v13.1", out var newer) && older < AppInfo.Version && newer > AppInfo.Version, "release version comparison is numeric");
+        check(UpdateChecker.TryVersion("v9", out var older) && UpdateChecker.TryVersion("v13.2", out var newer) && older < AppInfo.Version && newer > AppInfo.Version, "release version comparison is numeric");
         check(!UpdateChecker.TryVersion("v14-beta", out _) && !UpdateChecker.TryVersion("latest", out _) && !UpdateChecker.TryVersion("v999999999999", out _), "invalid and prerelease versions are rejected");
         string Json(string tag, string url, bool draft = false, bool pre = false) => JsonSerializer.Serialize(new { tag_name = tag, html_url = url, draft, prerelease = pre });
         check(UpdateChecker.Parse(Json("v14", AppInfo.RepositoryUrl + "/releases/tag/v14"))?.Version > AppInfo.Version, "valid newer GitHub release is recognized");

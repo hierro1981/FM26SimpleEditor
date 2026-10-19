@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v12 (in sviluppo)
+# FM26 Simple Editor · v12
 
 Italiano | [English](README.en.md)
 
@@ -12,7 +12,7 @@ La compilazione automatica **Build Windows executable** genera `FM26SimpleEditor
 
 Quando viene pubblicata una nuova release basata su un commit che contiene questo workflow, lo ZIP viene allegato automaticamente alla [release](https://github.com/hierro1981/FM26SimpleEditor/releases). Le release già pubblicate non vengono ricompilate né aggiornate.
 
-Estrai lo ZIP completo e avvia **FM26SimpleEditor.exe**, mantenendo gli script e `requirements.txt` nella stessa cartella. Il pacchetto è per **Windows x64**, include il runtime .NET e non richiede Visual Studio o l’SDK. Python e le dipendenze vengono verificati e predisposti all’avvio come descritto sotto. Sono inclusi anche licenza, documentazione e sorgenti del commit compilato.
+Estrai lo ZIP completo e avvia **FM26SimpleEditor.exe**, mantenendo gli script e `requirements.txt` nella stessa cartella. Il pacchetto è per **Windows x64** e richiede **.NET 8 Desktop Runtime x64** installato sul PC; il framework non è incluso. Puoi scaricarlo dalla [pagina ufficiale .NET 8](https://dotnet.microsoft.com/download/dotnet/8.0), scegliendo **.NET Desktop Runtime → Windows → x64**. Il solo runtime .NET generico non basta per Windows Forms. Non servono Visual Studio o l’SDK. Mantieni anche le DLL e i file `.json` dello ZIP accanto all’EXE. Python e le dipendenze vengono verificati e predisposti all’avvio come descritto sotto. Sono inclusi anche licenza, documentazione e sorgenti del commit compilato.
 
 ## Progetto e requisiti tecnici
 
@@ -42,7 +42,7 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 - **Controllo automatico dell’ambiente all’avvio:** ricerca Python 3.12 o successivo, verifica le versioni delle dipendenze e controlla che le librerie siano importabili.
 - **Installazione guidata di Python:** se manca un interprete compatibile, propone Python 3.13 tramite WinGet oppure il sito ufficiale.
 - **Dipendenze predisposte automaticamente:** se mancanti o non utilizzabili, vengono installate o riparate in un ambiente dedicato all’editor. Sono disponibili dettagli, annullamento e **Riprova**.
-- **Distribuzione Windows pronta all’uso:** GitHub Actions compila e verifica lo ZIP Windows x64 con runtime .NET incluso e lo allega alle nuove release. Il pacchetto include anche i sorgenti corrispondenti.
+- **Distribuzione Windows pronta all’uso:** GitHub Actions compila e verifica lo ZIP Windows x64; dalla v12 il runtime .NET non è incluso e serve .NET 8 Desktop Runtime x64 installato sul PC e lo allega alle nuove release. Il pacchetto include anche i sorgenti corrispondenti.
 - **Documentazione bilingue:** README in italiano e inglese, con istruzioni per il pacchetto compilato e per l’avvio dai sorgenti.
 
 ## Novità precedenti della versione 11
@@ -51,7 +51,11 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 - **Squadra di riferimento dei prestiti:** il selettore **Prestiti nella squadra** usa **In cui gioca** come impostazione iniziale; scegli **Proprietaria** per vedere i prestiti tra i giocatori del club proprietario. Colonna Squadra, elenco delle squadre, ricerca per testo e ordinamento usano tutti il riferimento scelto. Se la proprietaria non è leggibile, viene indicata come non disponibile. Il selettore resta visibile anche nascondendo i filtri opzionali; **Azzera filtri** conserva questa preferenza di visualizzazione per la sessione. Anteprima, confronto e stelle restano riferiti alla squadra in cui il calciatore gioca.
 - **Salvataggio sempre raggiungibile:** **Salva modifiche** è nella barra superiore, vicino ad **Apri salvataggio**, insieme all’indicazione delle modifiche non salvate. È accessibile da tutte le schede e si abilita quando ci sono modifiche, anche durante l’editing di una cella. I pannelli della barra e della ricerca si ridimensionano al contenuto, riducendo gli spazi vuoti sopra le schede e i filtri. Continua a creare una nuova copia verificata del salvataggio.
 
-## Novità della versione 12 — branch di sviluppo
+## Novità della versione 12
+
+- Distribuzione Windows più leggera senza framework incluso: richiede .NET 8 Desktop Runtime x64.
+- Filtri della ricerca con altezza adattiva: passando da due righe a una, l’elenco recupera subito lo spazio; nelle finestre strette restano scorribili.
+- Confronto con disposizioni in campo visibili al primo ingresso e report con nomi dei giocatori, analisi delle caratteristiche e contropartite motivate dagli attributi.
 
 - Confronto con colonne **Gruppo → Attributo → A → Δ → B → Migliore**, frecce verso il giocatore favorito e segno numerico della differenza conservato.
 - Nuova sottoscheda **Report per ruolo**, con scelta della posizione cliccando sul campo o tramite elenco, attributi rilevanti, punteggi, familiarità, vantaggi e suggerimento motivato.

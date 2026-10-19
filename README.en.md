@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v12 (in development)
+# FM26 Simple Editor · v12
 
 [Italiano](README.md) | English
 
@@ -12,7 +12,7 @@ The **Build Windows executable** workflow creates `FM26SimpleEditor-win-x64.zip`
 
 When a new release is published from a commit containing this workflow, the ZIP is automatically attached to the [release](https://github.com/hierro1981/FM26SimpleEditor/releases). Existing releases are not rebuilt or updated.
 
-Extract the complete ZIP and run **FM26SimpleEditor.exe**, keeping the scripts and `requirements.txt` in the same folder. The package targets **Windows x64**, includes the .NET runtime and does not require Visual Studio or the SDK. Python and its dependencies are checked and prepared at startup as described below. The license, documentation and corresponding source for the compiled commit are also included.
+Extract the complete ZIP and run **FM26SimpleEditor.exe**, keeping the scripts and `requirements.txt` in the same folder. The package targets **Windows x64** and requires **.NET 8 Desktop Runtime x64** installed on the PC; the framework is not included. Download it from the [official .NET 8 page](https://dotnet.microsoft.com/download/dotnet/8.0), choosing **.NET Desktop Runtime → Windows → x64**. The generic .NET runtime alone is not sufficient for Windows Forms. Visual Studio and the SDK are not required. Keep the DLLs and `.json` files from the ZIP alongside the EXE. Python and its dependencies are checked and prepared at startup as described below. The license, documentation and corresponding source for the compiled commit are also included.
 
 ## Project and technical requirements
 
@@ -42,7 +42,7 @@ Internal attribute history from a single supported save, charts with multiple se
 - **Automatic environment checks at startup:** discovers Python 3.12 or newer, verifies required dependency versions and checks that libraries can be imported.
 - **Guided Python installation:** offers Python 3.13 through WinGet or the official website when no compatible interpreter is available.
 - **Automatic dependency setup:** installs or repairs missing or unusable dependencies in the editor’s dedicated environment, with details, cancellation and retry.
-- **Ready-to-use Windows distribution:** GitHub Actions builds and checks the Windows x64 ZIP with the .NET runtime included, then attaches it to newly published releases. Corresponding source is included.
+- **Ready-to-use Windows distribution:** GitHub Actions builds and checks the Windows x64 ZIP; starting with v12 the .NET runtime is excluded and .NET 8 Desktop Runtime x64 must be installed on the PC, then attaches it to newly published releases. Corresponding source is included.
 - **Bilingual documentation:** Italian and English READMEs with instructions for the compiled package and building from source.
 
 ## Previous changes in version 11
@@ -51,7 +51,11 @@ Internal attribute history from a single supported save, charts with multiple se
 - **Loan team view:** **Prestiti nella squadra** defaults to **In cui gioca** (playing club); choose **Proprietaria** (parent club) to list loaned-out players with their owner. The Team column, team picker, text search and team sorting all use the selected view. Unreadable owners are shown as unavailable. The selector remains visible when optional filters are hidden; clearing filters preserves this session display preference. Previews, comparison cohorts and stars continue to use the playing squad.
 - **Global save controls:** **Salva modifiche** (Save changes) is in the top toolbar next to **Apri salvataggio**, together with the unsaved-changes indicator. It is available from every tab and becomes enabled for pending edits, including an edited cell. Toolbar and search panels shrink to their contents, reducing blank space above the tabs and filters. Saving still creates a new verified copy.
 
-## Changes in version 12 — development branch
+## Changes in version 12
+
+- Smaller Windows distribution without the framework: requires .NET 8 Desktop Runtime x64.
+- Search filters resize to their wrapped rows, immediately releasing space when switching from two rows to one; extra rows remain scrollable in narrow windows.
+- Comparison pitches appear on first entry; reports use player names and describe playing characteristics and trade-offs supported by attributes.
 
 - Comparison columns: **Group → Attribute → A → Δ → B → Winner**, with directional winner arrows while preserving the numeric difference sign.
 - New **Position report** subtab: choose on the pitch or from a list to compare relevant attributes, weighted scores, familiarity, advantages and a reasoned suggestion.

@@ -49,10 +49,10 @@ jobs:
       - name: Validate comparison calculations and controls
         run: dotnet run --project tests/ComparisonChecks/ComparisonChecks.csproj --configuration Release -p:UseAppHost=false
 
-      - name: Publish self-contained Windows application
+      - name: Publish framework-dependent Windows application
         shell: pwsh
         run: |
-          dotnet publish FM26SimpleEditor.csproj --configuration Release --runtime win-x64 --self-contained true --output artifacts/publish -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:PublishTrimmed=false -p:DebugType=None
+          dotnet publish FM26SimpleEditor.csproj --configuration Release --runtime win-x64 --self-contained false --output artifacts/publish -p:PublishSingleFile=false -p:PublishTrimmed=false -p:DebugType=None
           if ($LASTEXITCODE -ne 0) { throw "Windows publish failed." }
 
       - name: Check and package distribution
@@ -60,7 +60,9 @@ jobs:
         run: |
           $publish = Join-Path $PWD "artifacts/publish"
           $required = @(
-            "FM26SimpleEditor.exe", "editor.py", "archive_rewrite.py",
+            "FM26SimpleEditor.exe", "FM26SimpleEditor.dll",
+            "FM26SimpleEditor.deps.json", "FM26SimpleEditor.runtimeconfig.json",
+            "editor.py", "archive_rewrite.py",
             "history_reader.py", "operation_progress.py",
             "runtime_probe.py", "requirements.txt"
           )
@@ -69,6 +71,19 @@ jobs:
               throw "Missing distribution file: $file"
             }
           }
+          # A framework-dependent package references the installed runtime instead of shipping it.
+          $runtime = Get-Content (Join-Path $publish "FM26SimpleEditor.runtimeconfig.json") -Raw | ConvertFrom-Json
+          $frameworks = @($runtime.runtimeOptions.framework) + @($runtime.runtimeOptions.frameworks)
+          if (-not ($frameworks | Where-Object { $_.name -eq "Microsoft.WindowsDesktop.App" -and $_.version -like "8.*" })) {
+            throw "Expected a dependency on the installed .NET 8 Windows Desktop runtime."
+          }
+          if ($runtime.runtimeOptions.includedFrameworks -or
+              (Test-Path (Join-Path $publish "coreclr.dll")) -or
+              (Test-Path (Join-Path $publish "System.Private.CoreLib.dll"))) {
+            throw "The Windows package must not include the .NET runtime."
+          }
+          Get-Item (Join-Path $publish "FM26SimpleEditor.exe"), (Join-Path $publish "FM26SimpleEditor.dll") |
+            Select-Object Name, Length | Format-Table -AutoSize
           # Test the copied probe and requirements, rather than the source copies.
           $probe = python -E -X utf8 "$publish/runtime_probe.py" "$publish/requirements.txt" | ConvertFrom-Json
           if ($LASTEXITCODE -ne 0 -or -not $probe.ready) { throw "Published probe failed." }
@@ -84,10 +99,13 @@ jobs:
             "",
             "IT: Estrai tutti i file nella stessa cartella e avvia FM26SimpleEditor.exe.",
             "EN: Extract all files into the same folder and run FM26SimpleEditor.exe.",
-            "IT: Il runtime .NET e incluso; Python e le dipendenze vengono verificati all'avvio.",
-            "EN: The .NET runtime is included; Python and dependencies are checked at startup."
+            "IT: Richiede .NET 8 Desktop Runtime x64 installato sul PC; il framework non e incluso.",
+            "EN: Requires .NET 8 Desktop Runtime x64 installed on the PC; the framework is not included.",
+            "IT: Python e le dipendenze vengono verificati all'avvio.",
+            "EN: Python and dependencies are checked at startup."
           ) | Set-Content -Path "$publish/BUILD-INFO.txt" -Encoding utf8
           Compress-Archive -Path "$publish/*" -DestinationPath "artifacts/FM26SimpleEditor-win-x64.zip" -CompressionLevel Optimal
+          Get-Item "artifacts/FM26SimpleEditor-win-x64.zip" | Select-Object Name, Length | Format-Table -AutoSize
 
       - name: Upload Windows ZIP
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

@@ -8,24 +8,26 @@ public sealed class AttributeHistoryChart : Control
     public sealed record PointValue(double X, int Value, string Label, string Source, bool Current);
     public sealed record Series(string Key, string Label, Color Color, DashStyle Dash, List<PointValue> Points);
     private List<Series> series = [];
-    private readonly List<(RectangleF Area, string Text)> hits = [];
-    private readonly ToolTip tip = new();
+    private RectangleF plotArea;
+    private double? hoverX;
+    private readonly ToolTip tip = new() { AutoPopDelay = 30000, InitialDelay = 150, ReshowDelay = 100 };
     private int maximum = 20;
     private bool dated, monthly;
     private string lastTip = "";
     public AttributeHistoryChart() { Dock = DockStyle.Fill; DoubleBuffered = true; BackColor = Color.White; }
     public void SetSeries(List<Series> values, int upper, bool useDates, bool useMonths = false)
     {
-        series = values; maximum = upper; dated = useDates; monthly = useMonths; hits.Clear(); lastTip = ""; tip.SetToolTip(this, ""); Invalidate();
+        series = values; maximum = upper; dated = useDates; monthly = useMonths; hoverX = null; lastTip = ""; tip.SetToolTip(this, ""); Invalidate();
     }
     protected override void OnPaint(PaintEventArgs args)
     {
         base.OnPaint(args);
-        hits.Clear();
+        plotArea = RectangleF.Empty;
         var g = args.Graphics; g.SmoothingMode = SmoothingMode.AntiAlias;
         float scale = DeviceDpi / 96f;
         var plot = new RectangleF(45*scale, 14*scale, Width-65*scale, Height-55*scale);
         if (plot.Width < 30 || plot.Height < 25) return;
+        plotArea = plot;
         using var rule = new Pen(Color.FromArgb(224, 230, 236));
         using var ink = new SolidBrush(Color.DimGray);
         for (int i = 0; i <= 4; i++)
@@ -53,9 +55,14 @@ public sealed class AttributeHistoryChart : Control
                 float radius = (point.Current ? 4 : 2.7f)*scale;
                 g.FillEllipse(fill,x-radius,y-radius,2*radius,2*radius);
                 if (point.Current) g.DrawEllipse(border,x-radius,y-radius,2*radius,2*radius);
-                hits.Add((new RectangleF(x-7*scale,y-7*scale,14*scale,14*scale), $"{line.Label}: {point.Value} · {point.Label}\n{Path.GetFileName(point.Source)}"));
                 previous = at;
             }
+        }
+        if (hoverX.HasValue)
+        {
+            float x = span == 0 ? plot.Left + plot.Width/2 : plot.Left + (float)((hoverX.Value-first)/span)*plot.Width;
+            using var cursor = new Pen(Color.Gray, scale) { DashStyle = DashStyle.Dot };
+            g.DrawLine(cursor, x, plot.Top, x, plot.Bottom);
         }
         string Label(double x) => dated ? DateTime.FromOADate(x).ToString(monthly ? "MMM yyyy" : "dd/MM/yyyy", L10n.Culture) :
             points.First(point => point.X == x).Label;
@@ -81,14 +88,31 @@ public sealed class AttributeHistoryChart : Control
             }
         }
     }
+    // Use a whole vertical slice of the plot, with actual observations only (no interpolation).
+    public string PeriodDetails(double x)
+    {
+        var points = series.SelectMany(line => line.Points).ToList();
+        if (points.Count == 0) return "";
+        double nearest = points.OrderBy(point => Math.Abs(point.X-x)).ThenBy(point => point.X).First().X;
+        return string.Join("\n", series.SelectMany(line => line.Points.Where(point => point.X == nearest)
+            .Select(point => $"{line.Label}: {point.Value} · {point.Label}\n{point.Source}")));
+    }
     protected override void OnMouseMove(MouseEventArgs args)
     {
         base.OnMouseMove(args);
-        string text = string.Join("\n", hits.Where(hit => hit.Area.Contains(args.Location)).Select(hit => hit.Text));
+        var points = series.SelectMany(line => line.Points).ToList();
+        double? nearest = null;
+        if (plotArea.Contains(args.Location) && points.Count > 0)
+        {
+            double first = points.Min(p => p.X), last = points.Max(p => p.X);
+            double x = first + (args.X-plotArea.Left)/plotArea.Width * (last-first);
+            nearest = points.OrderBy(p => Math.Abs(p.X-x)).ThenBy(p => p.X).First().X;
+        }
+        string text = nearest.HasValue ? PeriodDetails(nearest.Value) : "";
         if (text == lastTip) return;
-        lastTip = text; tip.SetToolTip(this, text);
+        hoverX = nearest; lastTip = text; tip.SetToolTip(this, text); Invalidate();
     }
-    protected override void OnMouseLeave(EventArgs args) { base.OnMouseLeave(args); lastTip = ""; tip.SetToolTip(this, ""); }
+    protected override void OnMouseLeave(EventArgs args) { base.OnMouseLeave(args); hoverX = null; lastTip = ""; tip.SetToolTip(this, ""); Invalidate(); }
     protected override void Dispose(bool disposing) { if (disposing) tip.Dispose(); base.Dispose(disposing); }
 }
 
@@ -102,6 +126,8 @@ public sealed class HistoryPanel : UserControl
     private readonly Button add = new() { Text = L10n.Get("Text_a439407283a1"), AutoSize = true };
     private readonly Button clear = new() { Text = L10n.Get("Text_2f17719ac845"), AutoSize = true };
     private readonly ComboBox mode = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 245 };
+    private readonly ComboBox preset = new() { Name = "HistoryRolePreset", Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
+    private readonly Button applyPreset = new() { Text = L10n.Get("HistoryApplyPreset"), AutoSize = true };
     private readonly TextBox find = new() { Dock = DockStyle.Fill, PlaceholderText = L10n.Get("Text_d12e07ecdec1") };
     private readonly CheckedListBox attributes = new() { Dock = DockStyle.Fill, CheckOnClick = true, IntegralHeight = false, HorizontalScrollbar = true };
     private readonly Label count = new() { AutoSize = true };
@@ -116,7 +142,7 @@ public sealed class HistoryPanel : UserControl
     private readonly AttributeHistoryChart chart = new();
     private readonly DataGridView grid = new() { ReadOnly = true, Dock = DockStyle.Fill, AllowUserToAddRows = false, AllowUserToDeleteRows = false, RowHeadersVisible = false, ScrollBars = ScrollBars.Both, BackgroundColor = SystemColors.Window, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None };
     private readonly List<string> sources = [];
-    private readonly HashSet<string> selected = new(StringComparer.Ordinal) { "technique", "dribbling", "passing" };
+    private readonly HashSet<string> selected = new(StringComparer.Ordinal);
     private readonly Dictionary<string, (Color Color, DashStyle Dash)> styles = new(StringComparer.Ordinal);
     private Func<uint, string[], Task<HistoryResult>>? loader;
     private PlayerDetail? primary;
@@ -124,6 +150,7 @@ public sealed class HistoryPanel : UserControl
     private List<string> available = [];
     private bool italian = true, updating, preferInternal = true;
     private int version;
+    private bool initialSelection = true;
 
     public HistoryPanel()
     {
@@ -135,11 +162,11 @@ public sealed class HistoryPanel : UserControl
         mode.Items.AddRange([L10n.Get("Text_6efbb5528c52"), L10n.Get("Text_920a8419e478")]); mode.SelectedIndex = 0;
         tools.Controls.AddRange([mode, raw, current, delta, monthlyCalendar, add, clear]);
         var body = new SplitContainer { Size = new Size(1100,550), Dock = DockStyle.Fill, FixedPanel = FixedPanel.Panel1, SplitterDistance = 245 };
-        var selector = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 4, ColumnCount = 1 };
+        var selector = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 6, ColumnCount = 1 };
         selector.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-        selector.RowStyles.Add(new RowStyle(SizeType.AutoSize)); selector.RowStyles.Add(new RowStyle(SizeType.AutoSize)); selector.RowStyles.Add(new RowStyle(SizeType.AutoSize)); selector.RowStyles.Add(new RowStyle(SizeType.Percent,100));
+        selector.RowStyles.Add(new RowStyle(SizeType.AutoSize)); selector.RowStyles.Add(new RowStyle(SizeType.AutoSize)); selector.RowStyles.Add(new RowStyle(SizeType.AutoSize)); selector.RowStyles.Add(new RowStyle(SizeType.AutoSize)); selector.RowStyles.Add(new RowStyle(SizeType.AutoSize)); selector.RowStyles.Add(new RowStyle(SizeType.Percent,100));
         var buttons = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true }; buttons.Controls.AddRange([all,none]);
-        selector.Controls.Add(find,0,0); selector.Controls.Add(buttons,0,1); selector.Controls.Add(count,0,2); selector.Controls.Add(attributes,0,3);
+        selector.Controls.Add(preset,0,0); selector.Controls.Add(applyPreset,0,1); selector.Controls.Add(find,0,2); selector.Controls.Add(buttons,0,3); selector.Controls.Add(count,0,4); selector.Controls.Add(attributes,0,5);
         body.Panel1.Controls.Add(selector);
         var views = new SplitContainer { Size = new Size(850,550), Dock = DockStyle.Fill, Orientation = Orientation.Horizontal, SplitterDistance = 300 };
         var graph = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2 };
@@ -162,6 +189,9 @@ public sealed class HistoryPanel : UserControl
         raw.CheckedChanged += (_, _) => Render(); current.CheckedChanged += (_, _) => Render(); delta.CheckedChanged += (_, _) => Render();
         monthlyCalendar.CheckedChanged += (_, _) => Render();
         hints.SetToolTip(monthlyCalendar, L10n.Get("HistoryMonthlyTip"));
+        hints.SetToolTip(preset, L10n.Get("HistoryPresetTip"));
+        applyPreset.Click += (_, _) => { ApplyPreset(); RebuildList(); Render(); };
+        RebuildPresets();
         find.TextChanged += (_, _) => RebuildList();
         all.Click += (_, _) => { foreach (Choice choice in attributes.Items) selected.Add(choice.Key); RebuildList(); Render(); };
         none.Click += (_, _) => { selected.Clear(); RebuildList(); Render(); };
@@ -176,13 +206,17 @@ public sealed class HistoryPanel : UserControl
 
     public void ClearSources()
     {
-        ++version; sources.Clear(); result = null; primary = null; available.Clear(); preferInternal = true; RebuildList(); Render();
+        ++version; sources.Clear(); result = null; primary = null; initialSelection = true; selected.Clear(); available.Clear(); preferInternal = true; RebuildList(); Render();
     }
-    public void SetLanguage(bool useItalian) { updating = true; L10n.Apply(this, useItalian); updating = false; italian = useItalian; RebuildAvailable(); Render(); }
+    public void SetLanguage(bool useItalian) { updating = true; L10n.Apply(this, useItalian); updating = false; italian = useItalian; RebuildPresets(); RebuildAvailable(); Render(); }
     public async void SetContext(PlayerDetail? player, bool useItalian, Func<uint,string[],Task<HistoryResult>> load)
     {
         bool same = ReferenceEquals(primary,player);
-        SetLanguage(useItalian); primary = player; italian = useItalian; loader = load;
+        bool newPlayer = primary?.Player.Uid != player?.Player.Uid;
+        if (newPlayer) { initialSelection = true; selected.Clear(); result = null; }
+        primary = player; italian = useItalian; loader = load;
+        if (newPlayer) preset.SelectedIndex = -1;
+        SetLanguage(useItalian);
         if (same && result is not null) { RebuildAvailable(); Render(); return; }
         await LoadHistory();
     }
@@ -205,7 +239,7 @@ public sealed class HistoryPanel : UserControl
     private void SetEnabled(bool ready)
     {
         add.Enabled = ready && primary is not null; clear.Enabled = ready && sources.Count > 0;
-        mode.Enabled = raw.Enabled = attributes.Enabled = current.Enabled = delta.Enabled = all.Enabled = none.Enabled = ready && result is not null;
+        preset.Enabled = applyPreset.Enabled = mode.Enabled = raw.Enabled = attributes.Enabled = current.Enabled = delta.Enabled = all.Enabled = none.Enabled = ready && result is not null;
         monthlyCalendar.Enabled = ready && result is not null && HistoryCalendar.ReconstructMonths(result).Count > 0;
     }
     private List<HistoryPoint> DataPoints() => result is null ? [] : mode.SelectedIndex == 0 ? result.EmbeddedPoints : result.Points;
@@ -214,7 +248,25 @@ public sealed class HistoryPanel : UserControl
         available = DataPoints().SelectMany(point => point.Attributes.Keys).Distinct(StringComparer.Ordinal).OrderBy(key => Labels.Attribute(key,italian),Labels.Comparer(italian)).ToList();
         foreach (string key in available.OrderBy(key => key,StringComparer.Ordinal))
             if (!styles.ContainsKey(key)) { int i = styles.Count; styles[key] = (Colors[i % Colors.Length], Dashes[(i / Colors.Length) % Dashes.Length]); }
+        if (initialSelection && available.Count > 0) { ApplyPreset(); initialSelection = false; }
         RebuildList();
+    }
+    private void RebuildPresets()
+    {
+        string key = (preset.SelectedItem as Choice)?.Key ?? "";
+        preset.Items.Clear();
+        string main = primary is null ? "" : PositionScheme.Main(primary.Positions);
+        preset.Items.Add(new Choice("", L10n.Get("HistoryAutomaticRole") + (main.Length > 0 ? " · " + Labels.Position(main, italian) : "")));
+        foreach (string position in PositionScheme.Order) preset.Items.Add(new Choice(position, Labels.Position(position, italian)));
+        preset.SelectedIndex = preset.Items.Cast<Choice>().ToList().FindIndex(c => c.Key == key);
+    }
+    private void ApplyPreset()
+    {
+        string role = (preset.SelectedItem as Choice)?.Key ?? "";
+        if (role.Length == 0 && primary is not null) role = PositionScheme.Main(primary.Positions);
+        var fields = RoleImportance.Fields(role).Where(f => f.Tier <= 2).Select(f => f.Key).ToHashSet(StringComparer.Ordinal);
+        selected.Clear();
+        foreach (string key in available.Where(key => fields.Count == 0 || fields.Contains(key))) selected.Add(key);
     }
     private void RebuildList()
     {
@@ -261,7 +313,12 @@ public sealed class HistoryPanel : UserControl
         {
             var column = AddColumn(Labels.Attribute(key,italian),135,raw.Checked ? 100 : 20);
             column.HeaderCell.Style.ForeColor = styles[key].Color; column.Tag = key;
-            if (delta.Checked) AddColumn("Δ " + Labels.Attribute(key,italian),90);
+            if (delta.Checked)
+            {
+                var change = AddColumn("Δ " + Labels.Attribute(key,italian),90);
+                change.Tag = "delta:" + key; change.DefaultCellStyle.Format = "+0;-0;0";
+                change.HeaderCell.ToolTipText = L10n.Get(key is "injury_proneness" or "dirtiness" ? "HistoryInverseDeltaTip" : "HistoryDeltaTip");
+            }
             var item = new Label { Text = Labels.Attribute(key,italian) + " · " + L10n.Get("Dash_" + styles[key].Dash), AutoSize = true, ForeColor = styles[key].Color, Margin = new Padding(6,4,10,4) };
             legend.Controls.Add(item);
         }
@@ -285,11 +342,21 @@ public sealed class HistoryPanel : UserControl
                 {
                     before[key] = value.Value;
                     double x = calendar ? month?.ToOADate() ?? date!.Value.ToOADate() : embedded ? index+1 : date?.ToOADate() ?? index+1;
-                    lines[key].Add(new(x,value.Value,label,point.Source,now));
+                    lines[key].Add(new(x,value.Value,cells[0]?.ToString() ?? label,point.Source,now));
                 }
+                else before.Remove(key);
             }
             cells.Add(point.Ca); cells.Add(point.Pa);
             int row = grid.Rows.Add(cells.ToArray());
+            foreach (DataGridViewCell cell in grid.Rows[row].Cells)
+            {
+                if (cell.OwningColumn?.Tag is not string tag || !tag.StartsWith("delta:", StringComparison.Ordinal)) continue;
+                int quality = cell.Value is int change ? change * (tag[6..] is "injury_proneness" or "dirtiness" ? -1 : 1) : 0;
+                Color ink = quality > 0 ? Color.FromArgb(0,112,65) : quality < 0 ? Color.FromArgb(180,35,35) : Color.DimGray;
+                cell.Style.ForeColor = cell.Style.SelectionForeColor = ink;
+                cell.Style.SelectionBackColor = cell.Style.BackColor = quality > 0 ? Color.FromArgb(228,245,235) : quality < 0 ? Color.FromArgb(255,235,235) : SystemColors.Window;
+                cell.ToolTipText = cell.OwningColumn.HeaderCell.ToolTipText;
+            }
             if (estimated) grid.Rows[row].Cells[0].ToolTipText = L10n.Format("HistoryMonthTooltip", point.Sequence);
             grid.Rows[row].Cells[1].ToolTipText = point.Source + (point.IdentityNote.Length>0 ? "\n"+L10n.Backend(point.IdentityNote) : "");
             if (now) grid.Rows[row].DefaultCellStyle.BackColor = Color.FromArgb(238,244,251);

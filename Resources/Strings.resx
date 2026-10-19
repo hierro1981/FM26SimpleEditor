@@ -1522,4 +1522,61 @@ Passa sul punto per il valore.</value>
   <data name="HistoryMonthColumn" xml:space="preserve">
     <value>Mese ricostruito / attuali</value>
   </data>
+  <data name="HistoryApplyPreset" xml:space="preserve">
+    <value>Applica preset ruolo</value>
+  </data>
+  <data name="HistoryAutomaticRole" xml:space="preserve">
+    <value>Posizione principale</value>
+  </data>
+  <data name="HistoryPresetTip" xml:space="preserve">
+    <value>Seleziona una posizione e applica il preset: mostra gli attributi fondamentali e importanti disponibili nello storico. La selezione manuale rimane libera.</value>
+  </data>
+  <data name="HistoryDeltaTip" xml:space="preserve">
+    <value>Differenza rispetto al periodo precedente: verde miglioramento, rosso peggioramento, grigio invariato.</value>
+  </data>
+  <data name="HistoryInverseDeltaTip" xml:space="preserve">
+    <value>Per questo attributo un valore più basso è migliore: verde diminuzione, rosso aumento.</value>
+  </data>
+  <data name="PlayerRendering" xml:space="preserve">
+    <value>Preparazione della scheda giocatore</value>
+  </data>
+  <data name="Backend_Inspect_0" xml:space="preserve">
+    <value>Identificazione del giocatore</value>
+  </data>
+  <data name="Backend_Inspect_1" xml:space="preserve">
+    <value>Lettura degli attributi del giocatore</value>
+  </data>
+  <data name="Backend_Inspect_2" xml:space="preserve">
+    <value>Lettura delle posizioni del giocatore</value>
+  </data>
+  <data name="Backend_Inspect_3" xml:space="preserve">
+    <value>Verifica dei dati anagrafici e della data di nascita</value>
+  </data>
+  <data name="Backend_Inspect_4" xml:space="preserve">
+    <value>Lettura di abilità attuale e potenziale</value>
+  </data>
+  <data name="Backend_Inspect_5" xml:space="preserve">
+    <value>Lettura del campionato di riferimento</value>
+  </data>
+  <data name="Backend_Inspect_6" xml:space="preserve">
+    <value>Campionato recuperato dalla cache</value>
+  </data>
+  <data name="Backend_Inspect_7" xml:space="preserve">
+    <value>Lettura delle classifiche del salvataggio</value>
+  </data>
+  <data name="Backend_Inspect_8" xml:space="preserve">
+    <value>Identificazione della divisione della squadra</value>
+  </data>
+  <data name="Backend_Inspect_9" xml:space="preserve">
+    <value>Calcolo del riferimento di abilità del campionato</value>
+  </data>
+  <data name="Backend_Inspect_10" xml:space="preserve">
+    <value>Riferimento del campionato completato</value>
+  </data>
+  <data name="Backend_Inspect_11" xml:space="preserve">
+    <value>Dati giocatore pronti</value>
+  </data>
+  <data name="Backend_Inspect_12" xml:space="preserve">
+    <value>attributi</value>
+  </data>
 </root>

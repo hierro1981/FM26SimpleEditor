@@ -285,15 +285,19 @@ class PlayerStore:
         self.birth_cache[player.uid] = result
         return result
 
-    def league_reference(self, player):
+    def league_reference(self, player, progress=None):
+        report(progress, 0, "Lettura del campionato di riferimento")
         team = player.team_id
         if team in self.league_cache:
+            report(progress, 100, "Campionato recuperato dalla cache")
             return self.league_cache[team]
         result = dict(mean=None, count=0, label="Campionato non disponibile: nessuna divisione univoca leggibile")
         try:
             if team is not None:
                 if self.league_tables_cache is None:
+                    report(progress, 5, "Lettura delle classifiche del salvataggio")
                     self.league_tables_cache = list(self.save.league_tables())
+                report(progress, 65, "Identificazione della divisione della squadra")
                 # Conservative division-shape rule documented by fmsave; never infer from nation.
                 candidates = [table for table in self.league_tables_cache
                               if 18 <= table.club_count <= 26 and table.rows
@@ -302,6 +306,7 @@ class PlayerStore:
                 groups = {tuple(sorted(row.team_id for row in table.rows)): table for table in candidates}
                 if len(groups) == 1:
                     teams, table = next(iter(groups.items()))
+                    report(progress, 80, "Calcolo del riferimento di abilità del campionato")
                     cohort = [row["ca"] for row in self.rows if row["teamId"] in teams and row["ca"] > 0]
                     if len(cohort) >= 3:
                         label = table.competition_name or (f"Competizione ID {table.competition_id}" if table.competition_id is not None else "Divisione senza nome")
@@ -309,23 +314,31 @@ class PlayerStore:
         except Exception as exc:
             result["label"] = "Campionato non disponibile: " + str(exc)
         self.league_cache[team] = result
+        report(progress, 100, "Riferimento del campionato completato")
         return result
 
-    def inspect(self, uid):
+    def inspect(self, uid, progress=None):
+        report(progress, 0, "Identificazione del giocatore")
         player = self.player(uid)
         start, _ = self.offsets(player)
         layout = self.layout
         names = iter(layout.attribute_field_order)
         attributes = []
+        report(progress, 10, "Lettura degli attributi del giocatore", 0, layout.attribute_count, "attributi")
         for index in range(layout.attribute_count):
             key = "left_foot" if index == layout.left_foot_index else "right_foot" if index == layout.right_foot_index else next(names)
             attributes.append(dict(index=index, key=key, value=self.raw[start+layout.attributes_offset+index]))
+            report(progress, 10+20*(index+1)/layout.attribute_count, "Lettura degli attributi del giocatore", index+1, layout.attribute_count, "attributi")
+        report(progress, 30, "Lettura delle posizioni del giocatore")
         positions = [dict(index=index, key=key, value=self.raw[start+layout.ratings_offset+index])
                      for index, key in enumerate(layout.position_codes)]
+        report(progress, 40, "Verifica dei dati anagrafici e della data di nascita")
         birth_at, warning = self.birth_offset(player)
+        report(progress, 60, "Lettura di abilità attuale e potenziale")
         raw_pa = struct.unpack_from("<h", self.raw, start+layout.potential_ability_offset)[0]
+        league = self.league_reference(player, scaled(progress, 65, 95))
         return dict(player=player_row(player, self.save.info.game_date), attributes=attributes, positions=positions,
-                    birthEditable=birth_at is not None, birthWarning=warning, rawPa=raw_pa, league=self.league_reference(player))
+                    birthEditable=birth_at is not None, birthWarning=warning, rawPa=raw_pa, league=league)
 
     def save_player(self, request, progress=None):
         report(progress, 0, "Controllo dei dati modificati")
@@ -398,7 +411,7 @@ def serve():
             try:
                 request = json.loads(line)
                 command = request.get("command")
-                progress = ProgressReporter() if command in {"open", "save"} else None
+                progress = ProgressReporter() if command in {"open", "save", "inspect"} else None
                 if command == "open":
                     new_store = PlayerStore(request["source"], scaled(progress, 0, 95))
                     if store is not None:
@@ -410,7 +423,7 @@ def serve():
                 elif store is None:
                     raise ValueError("Apri prima un salvataggio")
                 elif command == "inspect":
-                    result = store.inspect(request.get("uid"))
+                    result = store.inspect(request.get("uid"), scaled(progress, 0, 95))
                 elif command == "search":
                     result = search_rows(store.rows, request, store.save.info.game_date)
                 elif command == "history":
@@ -421,7 +434,7 @@ def serve():
                     store = new_store
                 else:
                     raise ValueError("Comando non riconosciuto")
-                report(progress, 100, "Caricamento completato" if command == "open" else "Salvataggio verificato")
+                report(progress, 100, "Caricamento completato" if command == "open" else "Dati giocatore pronti" if command == "inspect" else "Salvataggio verificato")
                 response = dict(ok=True, data=result)
             except Exception as exc:
                 response = dict(ok=False, error=f"{type(exc).__name__}: {exc}")
@@ -433,4 +446,5 @@ def serve():
 
 if __name__ == "__main__":
     serve()
+
 

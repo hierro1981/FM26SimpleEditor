@@ -72,6 +72,9 @@ Storico interno da un singolo salvataggio supportato, grafico con selezione mult
 - Verifica Windows su DLL e risorse, senza generare EXE o ZIP nel branch.
 
 - Nella scheda giocatore, tre pulsanti con icona copia trasferiscono negli appunti nome, ID pubblico e ID interno, senza etichette o separatori numerici. Il pulsante dell’ID pubblico è disabilitato se manca il dato.
+- Lo storico seleziona inizialmente gli attributi fondamentali e importanti della posizione principale. I preset per posizione sono applicabili dalla lista dedicata; la selezione manuale viene mantenuta per lo stesso giocatore. I preset sono indicazioni editoriali, non pesi ufficiali di FM.
+- Passando sul grafico compaiono tutti i valori disponibili del periodo più vicino, con periodo e file di origine. I delta sono verdi per i miglioramenti, rossi per i peggioramenti e grigi se invariati; per propensione agli infortuni e scorrettezza i valori inferiori sono migliori. Un periodo mancante non genera un delta con periodi più lontani.
+- Il caricamento del giocatore mostra percentuale, fasi effettive e contatore degli attributi letti; la durata delle singole fasi può variare.
 - Nello storico interno, **Mostra mesi ricostruiti** aggiunge mese/anno ai campioni, mantenendo disponibile la vista numerata.
 
 ## Avvio

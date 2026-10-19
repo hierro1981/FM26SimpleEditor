@@ -72,6 +72,9 @@ Internal attribute history from a single supported save, charts with multiple se
 - Windows validation checks DLLs and resources without generating EXE or ZIP files on the branch.
 
 - Three copy-icon buttons in the player tab copy the name, public ID and internal ID without labels or number grouping. The public-ID button is disabled when the value is missing.
+- History initially selects the essential and important attributes for the player’s main position. Position presets can be applied from the dedicated list; manual selection is preserved for the same player. Presets provide editorial guidance, not official FM weights.
+- Hover anywhere in the plot to see all available values at the nearest observed period, including period and source file. Deltas are green for improvement, red for deterioration and grey for no change; lower injury proneness and dirtiness are improvements. Missing periods do not produce deltas against more distant periods.
+- Loading a player displays a percentage, actual processing phases and a counter of attributes read. Individual phases may take different amounts of time.
 - **Show reconstructed months** adds month/year labels to internal history while keeping the numbered-sample view available.
 
 ## Getting started

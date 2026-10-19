@@ -508,11 +508,13 @@ public sealed class MainForm : Form
         if (busy || players.SelectedRows.Count != 1 || players.SelectedRows[0].DataBoundItem is not PlayerRow row) return;
         if (detail?.Player.Uid == row.Uid) { tabs.SelectedTab = editTab; return; }
         if (!ConfirmDiscard()) return;
-        SetBusy(true, L10n.Format("Text_0af5b1bce786", row.Name));
+        SetBusy(true, L10n.Format("Text_0af5b1bce786", row.Name), determinate: true);
         try
         {
-            var selected = await backend.Send<PlayerDetail>(new { command = "inspect", uid = row.Uid });
+            var selected = await backend.Send<PlayerDetail>(new { command = "inspect", uid = row.Uid }, ReportProgress);
+            ReportProgress(new BackendProgress { Percent = 98, Phase = L10n.Get("PlayerRendering") });
             SetDetail(selected); tabs.SelectedTab = editTab;
+            progress.Value = 100; progressText.Text = "100%";
             state.Text = L10n.Format("Text_8bef81b4f3c8", row.Name);
         }
         catch (Exception exc) { Error(L10n.Get("Text_fcb5504e6a1f"), exc); }

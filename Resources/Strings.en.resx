@@ -1522,4 +1522,61 @@ Hover over a position for its rating.</value>
   <data name="HistoryMonthColumn" xml:space="preserve">
     <value>Reconstructed month / current</value>
   </data>
+  <data name="HistoryApplyPreset" xml:space="preserve">
+    <value>Apply position preset</value>
+  </data>
+  <data name="HistoryAutomaticRole" xml:space="preserve">
+    <value>Main position</value>
+  </data>
+  <data name="HistoryPresetTip" xml:space="preserve">
+    <value>Choose a position and apply the preset to show its essential and important attributes available in history. You can also select attributes manually.</value>
+  </data>
+  <data name="HistoryDeltaTip" xml:space="preserve">
+    <value>Change from the previous period: green improvement, red deterioration, grey unchanged.</value>
+  </data>
+  <data name="HistoryInverseDeltaTip" xml:space="preserve">
+    <value>For this attribute lower is better: green decrease, red increase.</value>
+  </data>
+  <data name="PlayerRendering" xml:space="preserve">
+    <value>Preparing player details</value>
+  </data>
+  <data name="Backend_Inspect_0" xml:space="preserve">
+    <value>Identifying player</value>
+  </data>
+  <data name="Backend_Inspect_1" xml:space="preserve">
+    <value>Reading player attributes</value>
+  </data>
+  <data name="Backend_Inspect_2" xml:space="preserve">
+    <value>Reading player positions</value>
+  </data>
+  <data name="Backend_Inspect_3" xml:space="preserve">
+    <value>Checking personal details and birth date</value>
+  </data>
+  <data name="Backend_Inspect_4" xml:space="preserve">
+    <value>Reading current and potential ability</value>
+  </data>
+  <data name="Backend_Inspect_5" xml:space="preserve">
+    <value>Reading league reference</value>
+  </data>
+  <data name="Backend_Inspect_6" xml:space="preserve">
+    <value>League reference loaded from cache</value>
+  </data>
+  <data name="Backend_Inspect_7" xml:space="preserve">
+    <value>Reading league tables from save</value>
+  </data>
+  <data name="Backend_Inspect_8" xml:space="preserve">
+    <value>Identifying team division</value>
+  </data>
+  <data name="Backend_Inspect_9" xml:space="preserve">
+    <value>Calculating league ability reference</value>
+  </data>
+  <data name="Backend_Inspect_10" xml:space="preserve">
+    <value>League reference complete</value>
+  </data>
+  <data name="Backend_Inspect_11" xml:space="preserve">
+    <value>Player data ready</value>
+  </data>
+  <data name="Backend_Inspect_12" xml:space="preserve">
+    <value>attributes</value>
+  </data>
 </root>

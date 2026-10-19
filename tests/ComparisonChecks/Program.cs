@@ -74,6 +74,7 @@ internal static class Checks
             UiChecks();
             LocalizationChecks.Run(Check);
             PlayerToolsChecks.Run(Check);
+            HistoryInteractionChecks.Run(Check);
             Console.WriteLine($"{count} C# checks passed"); return 0;
         }
         catch (Exception exc) { Console.Error.WriteLine(exc); return 1; }

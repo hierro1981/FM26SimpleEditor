@@ -244,7 +244,7 @@ public sealed class MainForm : Form
         void FitFilters()
         {
             int width = root.ClientSize.Width - root.Padding.Horizontal - options.Margin.Horizontal;
-            int height = showFilters.Checked ? options.HeightForWidth(width) : 0;
+            int height = showFilters.Checked ? options.HeightForWidth(width) + options.Margin.Vertical : 0;
             if (Math.Abs(root.RowStyles[2].Height - height) > .5f) root.RowStyles[2].Height = height;
         }
         root.Layout += (_, _) => FitFilters();

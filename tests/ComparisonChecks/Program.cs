@@ -158,6 +158,7 @@ internal static class Checks
         {
             main.Size = new Size(width, 850); Application.DoEvents();
             int rows = cards.Controls.Cast<Control>().Select(c => c.Top).Distinct().Count();
+            Console.WriteLine($"FILTER width={width}, form={main.Width}, client={main.ClientSize}, filters={filters.Bounds}, cards={cards.Bounds}, rows={rows}, preferred={filters.HeightForWidth(filters.Width)}, bounds={string.Join(\";\", cards.Controls.Cast<Control>().Select(c => c.Bounds.ToString()))}");
             Check(rows == (width == 2600 ? 1 : 2), "filter wrapping at width " + width);
             int contentBottom = cards.Controls.Cast<Control>().Max(c => c.Bottom + c.Margin.Bottom);
             int gap = resultsGrid.PointToScreen(Point.Empty).Y - cards.PointToScreen(new Point(0, contentBottom)).Y;

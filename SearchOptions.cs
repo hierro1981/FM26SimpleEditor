@@ -57,6 +57,7 @@ public sealed class SearchOptions : UserControl
     private readonly ComboBox foot = Dropdown();
     private readonly ComboBox loan = Dropdown();
     private readonly ToolTip tips = new();
+    private readonly FlowLayoutPanel cards = new() { AutoSize = false, AutoScroll = true, Dock = DockStyle.Fill, WrapContents = true, Padding = Padding.Empty };
     private bool updating;
     public event EventHandler? Changed;
     public int ActiveCount => new[] { age, ca, pa, height, growth }.Count(range => range.Active) +
@@ -65,8 +66,6 @@ public sealed class SearchOptions : UserControl
     public SearchOptions()
     {
         AutoSize = false; Height = 190; Dock = DockStyle.Fill;
-        var cards = new FlowLayoutPanel { AutoSize = false, AutoScroll = true, Dock = DockStyle.Fill, WrapContents = true, Padding = new Padding(0) };
-        MinimumSize = new Size(0, 160);
         var role = new GroupBox { Text = "Posizione e familiarità", Width = 330, Height = 83, Padding = new Padding(7), Margin = new Padding(4) };
         var row = new TableLayoutPanel { ColumnCount = 2, Dock = DockStyle.Fill };
         row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52)); row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48));
@@ -90,6 +89,12 @@ public sealed class SearchOptions : UserControl
         foreach (var combo in new[] { position, level, contract, foot, loan }) combo.SelectedIndexChanged += (_, _) => { level.Enabled = position.SelectedIndex > 0; Notify(); };
         SetLanguage(true);
     }
+
+    // Measure the wrapped cards at the available width, independently of the previous height.
+    // Keep a two-row viewport at narrow widths; additional rows remain scrollable.
+    public int HeightForWidth(int width) => Math.Min(
+        cards.GetPreferredSize(new Size(Math.Max(1, width - Padding.Horizontal), 0)).Height + Padding.Vertical,
+        (int)Math.Ceiling(190 * DeviceDpi / 96f));
 
     private static ComboBox Dropdown() => new() { DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Top, IntegralHeight = false, DropDownHeight = 280 };
     private static GroupBox Card(string title, Control child, int width = 245)
@@ -132,3 +137,4 @@ public sealed class SearchOptions : UserControl
 
     protected override void Dispose(bool disposing) { if (disposing) tips.Dispose(); base.Dispose(disposing); }
 }
+

@@ -147,6 +147,33 @@ internal static class Checks
             int gap = tabs.PointToScreen(Point.Empty).Y - file.PointToScreen(new Point(0, file.Height)).Y;
             Check(gap >= 0 && gap < 30 * main.DeviceDpi / 96f, "compact global toolbar at width " + width);
         }
+        main.MaximumSize = new Size(4000, 2000);
+        var filters = Descendants(main).OfType<SearchOptions>().Single();
+        var cards = filters.Controls.OfType<FlowLayoutPanel>().Single();
+        var searchRoot = (TableLayoutPanel)filters.Parent!;
+        var resultsGrid = searchRoot.Controls.OfType<DataGridView>().Single();
+        var toggle = Descendants(main).OfType<CheckBox>().Single(c => c.Text == "Mostra filtri opzionali");
+        int twoRowHeight = 0, oneRowHeight = 0;
+        foreach (int width in new[] { 1360, 2600, 1360 })
+        {
+            main.Size = new Size(width, 850); Application.DoEvents();
+            int rows = cards.Controls.Cast<Control>().Select(c => c.Top).Distinct().Count();
+            Check(rows == (width == 2600 ? 1 : 2), "filter wrapping at width " + width);
+            int contentBottom = cards.Controls.Cast<Control>().Max(c => c.Bottom + c.Margin.Bottom);
+            int gap = resultsGrid.PointToScreen(Point.Empty).Y - cards.PointToScreen(new Point(0, contentBottom)).Y;
+            Check(gap >= 0 && gap <= 12 * main.DeviceDpi / 96f, "results follow wrapped filters without empty row at width " + width);
+            if (width == 2600) oneRowHeight = filters.Height; else twoRowHeight = filters.Height;
+        }
+        Check(oneRowHeight < twoRowHeight - 50, "widening releases a full filter row immediately");
+        main.Size = new Size(2600, 850); Application.DoEvents();
+        int expandedTop = resultsGrid.Top;
+        toggle.Checked = false; Application.DoEvents();
+        Check(!filters.Visible && searchRoot.RowStyles[2].Height == 0 && resultsGrid.Top < expandedTop, "hidden filters release all reserved space");
+        toggle.Checked = true; Application.DoEvents();
+        Check(filters.Visible && filters.Height == oneRowHeight && resultsGrid.Top == expandedTop, "showing filters restores current one-row height");
+        main.Size = new Size(900, 850); Application.DoEvents();
+        Check(cards.AutoScroll && cards.VerticalScroll.Visible && filters.Height <= 190 * main.DeviceDpi / 96f + 1, "narrow windows keep extra filter rows scrollable");
     }
 }
+
 

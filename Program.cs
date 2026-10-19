@@ -240,8 +240,15 @@ public sealed class MainForm : Form
         var footer = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 2, Padding = new Padding(0, 9, 0, 0) };
         footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); footer.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         footer.Controls.Add(results, 0, 0); footer.Controls.Add(choose, 1, 0);
-        root.RowStyles[2].SizeType = SizeType.Absolute; root.RowStyles[2].Height = 190;
-        showFilters.CheckedChanged += (_, _) => root.RowStyles[2].Height = showFilters.Checked ? 190 * DeviceDpi / 96f : 0;
+        root.RowStyles[2].SizeType = SizeType.Absolute;
+        void FitFilters()
+        {
+            int width = root.ClientSize.Width - root.Padding.Horizontal - options.Margin.Horizontal;
+            int height = showFilters.Checked ? options.HeightForWidth(width) : 0;
+            if (Math.Abs(root.RowStyles[2].Height - height) > .5f) root.RowStyles[2].Height = height;
+        }
+        root.Layout += (_, _) => FitFilters();
+        showFilters.CheckedChanged += (_, _) => FitFilters();
         root.Controls.Add(search, 0, 0); root.Controls.Add(filtersHeader, 0, 1); root.Controls.Add(options, 0, 2); root.Controls.Add(players, 0, 3); root.Controls.Add(footer, 0, 4);
         searchTab.Controls.Add(root);
     }
@@ -617,5 +624,6 @@ public sealed class MainForm : Form
         base.Dispose(disposing);
     }
 }
+
 
 

@@ -19,6 +19,8 @@ public sealed class RuntimeSetupForm : Form
 
     public RuntimeSetupForm()
     {
+        using var iconStream = typeof(RuntimeSetupForm).Assembly.GetManifestResourceStream("FM26SimpleEditor.App.ico");
+        if (iconStream is not null) Icon = new Icon(iconStream);
         Text = "FM26 Simple Editor · Preparazione all’avvio";
         Font = new Font("Segoe UI", 10);
         AutoScaleMode = AutoScaleMode.Dpi;

@@ -88,6 +88,8 @@ public sealed class MainForm : Form
     public MainForm(string pythonExecutable)
     {
         backend = new BackendClient(pythonExecutable);
+        using var iconStream = typeof(MainForm).Assembly.GetManifestResourceStream("FM26SimpleEditor.App.ico");
+        if (iconStream is not null) Icon = new Icon(iconStream);
         Text = "FM26 Simple Editor · v12";
         Font = new Font("Segoe UI", 10);
         Width = 1360; Height = 900;

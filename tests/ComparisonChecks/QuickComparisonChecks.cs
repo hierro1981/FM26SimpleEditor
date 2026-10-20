@@ -74,7 +74,7 @@ internal static class QuickComparisonChecks
         check(pool.Contains(1) && pool.Contains(2) && compare.Visible, "quick comparison adds both players to pool and opens the comparison tab");
         // Reopening the pair must clear a stale search query and older reference.
         pool.Add(3);
-        var query = All(compare).OfType<TextBox>().Single(); query.Text = "not a player";
+        var query = (TextBox)typeof(ComparisonPanel).GetField("query", Private)!.GetValue(compare)!; query.Text = "not a player";
         typeof(ComparisonPanel).GetMethod("PreferReference")!.Invoke(compare, [3u]);
         check(ReferenceEquals(typeof(ComparisonPanel).GetField("other", Private)!.GetValue(compare), players[2]), "test starts with a different comparison reference");
         ((Task)typeof(MainForm).GetMethod("ComparePair", Private)!.Invoke(main, [1u, 2u])!).GetAwaiter().GetResult(); Application.DoEvents();

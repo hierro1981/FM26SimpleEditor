@@ -1861,4 +1861,5 @@ Hover over a position for its rating.</value>
   <data name="TacticalMethod" xml:space="preserve">
     <value>Sports Interactive identifies positional familiarity and role attributes as suitability factors; the consulted sources do not publish the numerical formula. These attribute profiles and weights are editor assessments, not official suitability data. General profile: the existing 3/2/1 position-report weights. Named role: focus attributes ×3, support ×2 and remaining position attributes ×1. Uses the weighted mean of visible 1–20 values; requires complete data and familiarity ≥12/20. Two selections: mean of both scores, with suitability required in both. Stars = score/4, rounded to half a star; CA and PA do not change scores. English names and availability follow the FM26 reference catalogue; Italian translations are descriptive.</value>
   </data>
+  <data name="QuickComparePair" xml:space="preserve"><value>Compare the two selected players</value></data>
 </root>

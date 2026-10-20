@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v14.1
+# FM26 Simple Editor · v14.3
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -30,6 +30,12 @@ Lo ZIP resta disponibile come versione portatile. Il setup viene compilato e ver
 ## Progetto e requisiti tecnici
 
 Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Per compilare richiede Windows, SDK .NET 8 e carico di lavoro **Sviluppo di applicazioni desktop .NET**. Il lettore usa Python 3.12 o successivo e le dipendenze in `requirements.txt`, verificate e predisposte all’avvio.
+
+## Novità della versione 14.3
+
+- **Confronto rapido:** seleziona due giocatori con Ctrl+clic e scegli **Confronta i due giocatori selezionati** dal tasto destro, nella ricerca iniziale, nella rosa di **La mia squadra** o in **Migliori per posizione**. L'azione carica il primo giocatore nell'ordine dell'elenco e apre il confronto con il secondo, anche di un'altra squadra e senza dover aprire prima un giocatore. Entrambi vengono aggiunti all'elenco di confronto.
+- Il tasto destro su una riga già selezionata conserva la selezione multipla. Il confronto rapido si abilita solo con due giocatori distinti; le azioni sul singolo restano disponibili con una sola selezione. Restano attivi i controlli sulle modifiche non salvate.
+- **Migliori per tattica: verifica di fattibilità.** Il lettore recupera record e slot delle tattiche della squadra, ma posizioni e sottoruoli sono ancora codici senza mappatura verificata. Non è quindi ancora disponibile il sotto-tab automatico: [dati leggibili, limiti e verifiche necessarie](docs/SavedTactics.md).
 
 ## Novità della versione 14.1
 

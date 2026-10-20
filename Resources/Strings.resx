@@ -1861,4 +1861,5 @@ Passa sul punto per il valore.</value>
   <data name="TacticalMethod" xml:space="preserve">
     <value>Sports Interactive indica familiarità nella posizione e attributi del ruolo come fattori di idoneità; nelle fonti consultate non è pubblicata la formula numerica. Questi profili e pesi sono valutazioni dell’editor, non dati ufficiali di idoneità. Profilo generico: pesi 3/2/1 del report per posizione. Sottoruolo: attributi di enfasi ×3, supporto ×2 e restanti attributi della posizione ×1. Si usa la media ponderata dei valori visibili 1–20; occorrono tutti i dati e familiarità ≥12/20. Due selezioni: media dei due punteggi, con idoneità richiesta in entrambe. Stelle = punteggio/4, arrotondate a mezza stella; CA e PA non alterano il punteggio. Nomi inglesi e disponibilità derivano dal catalogo di riferimento FM26; le traduzioni italiane sono descrittive.</value>
   </data>
+  <data name="QuickComparePair" xml:space="preserve"><value>Confronta i due giocatori selezionati</value></data>
 </root>

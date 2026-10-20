@@ -138,6 +138,7 @@ public sealed class MainForm : Form
         mySquadTab.Controls.Add(mySquad);
         mySquad.PlayerOpenRequested += async uid => await LoadPlayer(uid);
         mySquad.AddComparisonRequested += AddComparison;
+        mySquad.QuickComparisonRequested += async (first, second) => await ComparePair(first, second);
         mySquad.StaffRequested += async uid => await RefreshStaff(uid);
         mySquad.ReloadRequested += async () => { mySquadLoaded = false; await RefreshMySquad(); };
         comparisonTab.Controls.Add(comparison); historyTab.Controls.Add(historyPanel);
@@ -239,7 +240,7 @@ public sealed class MainForm : Form
         search.Controls.Add(loanOptions, 0, 2); search.SetColumnSpan(loanOptions, 2);
         var filtersHeader = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, Margin = Padding.Empty, WrapContents = false };
         filtersHeader.Controls.AddRange([showFilters, clearFilters, searchInfo]);
-        ConfigureGrid(players); players.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; players.ReadOnly = true; players.MultiSelect = false;
+        ConfigureGrid(players); players.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; players.ReadOnly = true; players.MultiSelect = true;
         players.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         players.Columns.Add(Column("Name", L10n.Get("Text_f537c6bd038e"), 20)); players.Columns.Add(Column("SearchTeamDisplay", L10n.Get("Text_3b0a75ea292b"), 19));
         players.Columns.Add(Column("MainPosition", L10n.Get("Text_045cb480645d"), 10)); players.Columns.Add(Column("Age", L10n.Get("Text_9efdc62c88bf"), 4)); players.Columns.Add(Column("PositionSummary", L10n.Get("Text_5aa749965391"), 12));
@@ -262,22 +263,27 @@ public sealed class MainForm : Form
         };
         var addComparison = new ToolStripMenuItem(L10n.Get("Text_885725b27cce"));
         var compareNow = new ToolStripMenuItem(L10n.Get("Text_f101d9a9a54f"));
+        var comparePair = new ToolStripMenuItem(L10n.Get("QuickComparePair")) { Name = "QuickComparePair" };
         PlayerRow? contextPlayer = null;
-        comparisonMenu.Items.AddRange([addComparison,compareNow]); players.ContextMenuStrip = comparisonMenu;
+        comparisonMenu.Items.AddRange([comparePair,addComparison,compareNow]); players.ContextMenuStrip = comparisonMenu;
         players.CellMouseDown += (_, args) =>
         {
             if (args.Button != MouseButtons.Right || args.RowIndex < 0) return;
-            players.ClearSelection(); players.Rows[args.RowIndex].Selected = true;
-            if (args.ColumnIndex >= 0) players.CurrentCell = players.Rows[args.RowIndex].Cells[args.ColumnIndex];
+            QuickComparison.SelectContextRow(players, args.RowIndex, args.ColumnIndex);
         };
         comparisonMenu.Opening += (_, args) =>
         {
-            var row = SelectedRow(); contextPlayer = row; args.Cancel = row is null || busy;
+            var row = SelectedRow(); contextPlayer = row; args.Cancel = players.SelectedRows.Count == 0 || busy;
+            comparePair.Enabled = QuickComparison.TryPair(players, out _, out _);
             addComparison.Enabled = row is not null && !comparisonPool.Contains(row.Uid);
             addComparison.Text = addComparison.Enabled ? L10n.Get("Text_885725b27cce") : L10n.Get("Text_8b48e2e8ec50");
             compareNow.Enabled = row is not null && detail is not null && row.Uid != detail.Player.Uid;
         };
         addComparison.Click += (_, _) => { if (contextPlayer is PlayerRow row) AddComparison(row.Uid); };
+        comparePair.Click += async (_, _) =>
+        {
+            if (QuickComparison.TryPair(players, out uint first, out uint second)) await ComparePair(first, second);
+        };
         compareNow.Click += (_, _) =>
         {
             if (contextPlayer is not PlayerRow row || detail is null || !FinishEdits()) return;
@@ -476,6 +482,19 @@ public sealed class MainForm : Form
         if (busy || binding || tabs.SelectedTab != comparisonTab) return;
         comparison.SetContext(detail,(int)ca.Value,(int)pa.Value,HasChanges(),catalog,comparisonPool,UseItalian,
             uid => backend.Send<PlayerDetail>(new { command = "inspect", uid }));
+    }
+
+    private async Task ComparePair(uint first, uint second)
+    {
+        if (busy || binding || first == second || !catalogByUid.ContainsKey(first) || !catalogByUid.ContainsKey(second) || !FinishEdits()) return;
+        // Reuse the normal loading/discard flow. Cancellation or loading failure must
+        // never compare against whichever player happened to be open previously.
+        await LoadPlayer(first);
+        if (detail?.Player.Uid != first) return;
+        AddComparison(first); AddComparison(second);
+        comparison.SetPreferredReference(second);
+        if (tabs.SelectedTab == comparisonTab) RefreshComparison();
+        else tabs.SelectedTab = comparisonTab;
     }
 
     private void RefreshHistory()

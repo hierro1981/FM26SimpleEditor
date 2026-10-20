@@ -109,7 +109,15 @@ public sealed class ComparisonPanel : UserControl
 
     public void PreferReference(uint uid)
     {
-        preferredUid = uid; updating = true; query.Clear(); source.SelectedIndex = 1; updating = false; RebuildPlayerChoices();
+        SetPreferredReference(uid); RebuildPlayerChoices();
+    }
+
+    public void SetPreferredReference(uint uid)
+    {
+        preferredUid = uid;
+        bool wasUpdating = updating; updating = true;
+        query.Clear(); source.SelectedIndex = 1;
+        updating = wasUpdating;
     }
 
     private async void RebuildPlayerChoices()

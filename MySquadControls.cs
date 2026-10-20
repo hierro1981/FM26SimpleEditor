@@ -39,6 +39,7 @@ public sealed class MySquadPanel : UserControl
     public event Action? ReloadRequested;
     public event Action<uint>? PlayerOpenRequested;
     public event Action<uint>? AddComparisonRequested;
+    public event Action<uint, uint>? QuickComparisonRequested;
     private sealed record PositionChoice(string Key) { public override string ToString() => Key.Length == 0 ? L10n.Get("MySquadSecondNone") : Labels.Position(Key, L10n.IsItalian); }
     private sealed record RoleChoice(string? Id)
     {
@@ -148,12 +149,21 @@ public sealed class MySquadPanel : UserControl
         open.Click += (_, _) => Open(roster); openRanked.Click += (_, _) => Open(ranking);
         roster.CellDoubleClick += (_, e) => { if (e.RowIndex >= 0) Open(roster); };
         ranking.CellDoubleClick += (_, e) => { if (e.RowIndex >= 0) Open(ranking); };
-        menu.Items.Add(L10n.Get("Text_885725b27cce"), null, (_, _) => { if (menu.SourceControl is DataGridView grid && SelectedUid(grid) is uint uid) AddComparisonRequested?.Invoke(uid); });
-        menu.Opening += (_, e) => e.Cancel = menu.SourceControl is not DataGridView grid || SelectedUid(grid) is null;
+        var quickCompare = new ToolStripMenuItem(L10n.Get("QuickComparePair")) { Name = "QuickComparePair" };
+        quickCompare.Click += (_, _) => { if (menu.SourceControl is DataGridView grid && QuickComparison.TryPair(grid, out uint first, out uint second)) QuickComparisonRequested?.Invoke(first, second); };
+        menu.Items.Add(quickCompare);
+        var addComparison = menu.Items.Add(L10n.Get("Text_885725b27cce"), null, (_, _) => { if (menu.SourceControl is DataGridView grid && SelectedUid(grid) is uint uid) AddComparisonRequested?.Invoke(uid); });
+        menu.Opening += (_, e) =>
+        {
+            if (menu.SourceControl is not DataGridView grid) { e.Cancel = true; return; }
+            e.Cancel = grid.SelectedRows.Count == 0;
+            quickCompare.Enabled = QuickComparison.TryPair(grid, out _, out _);
+            addComparison.Enabled = SelectedUid(grid).HasValue;
+        };
         foreach (var grid in new[] { roster, ranking })
         {
             grid.ContextMenuStrip = menu;
-            grid.CellMouseDown += (_, e) => { if (e.Button == MouseButtons.Right && e.RowIndex >= 0) { grid.ClearSelection(); grid.CurrentCell = grid.Rows[e.RowIndex].Cells[Math.Max(0, e.ColumnIndex)]; grid.Rows[e.RowIndex].Selected = true; } };
+            grid.CellMouseDown += (_, e) => { if (e.Button == MouseButtons.Right) QuickComparison.SelectContextRow(grid, e.RowIndex, e.ColumnIndex); };
         }
         root.SizeChanged += (_, _) => status.MaximumSize = new Size(Math.Max(100, root.ClientSize.Width - 30), 0);
         right.SizeChanged += (_, _) => advice.MaximumSize = new Size(Math.Max(100, right.ClientSize.Width - 12), 0);
@@ -163,7 +173,7 @@ public sealed class MySquadPanel : UserControl
 
     private static DataGridView Grid(string name) => new()
     {
-        Name = name, Dock = DockStyle.Fill, AutoGenerateColumns = false, ReadOnly = true, MultiSelect = false,
+        Name = name, Dock = DockStyle.Fill, AutoGenerateColumns = false, ReadOnly = true, MultiSelect = true,
         AllowUserToAddRows = false, AllowUserToDeleteRows = false, AllowUserToResizeRows = false,
         RowHeadersVisible = false, BackgroundColor = SystemColors.Window, BorderStyle = BorderStyle.FixedSingle,
         SelectionMode = DataGridViewSelectionMode.FullRowSelect, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None,

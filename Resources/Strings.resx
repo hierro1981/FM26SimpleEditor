@@ -1631,7 +1631,7 @@ Passa sul punto per il valore.</value>
     <value>{0} candidati per la posizione selezionata, su {1} giocatori nella rosa.</value>
   </data>
   <data name="MySquadMethod" xml:space="preserve">
-    <value>Ctrl/Shift+clic: aggiungi/rimuovi la seconda posizione (o usa i menu). Pesi attributi 3/2/1; due posizioni: media dei punteggi e familiarità ≥12/20 in entrambe. Fino a 5 profili completi. Stelle = punteggio/4, a mezze stelle; non sono quelle del gioco. Parità: familiarità minima, nome, ID. Dati salvati.</value>
+    <value>Ctrl/Shift+clic o i menu: fino a due posizioni/sottoruoli. Familiarità ≥12/20 in entrambe. Stelle stimate, non quelle del gioco. PA informativa; dati salvati.</value>
   </data>
   <data name="MySquadLoading" xml:space="preserve">
     <value>Caricamento della mia squadra</value>
@@ -1827,5 +1827,38 @@ Passa sul punto per il valore.</value>
   </data>
   <data name="MySquadTeamNamesHint" xml:space="preserve">
     <value>Le sotto-squadre sono selezionabili singolarmente. Se il nome U20/U18/B non è leggibile, la rosa è identificata da slot e ID.</value>
+  </data>
+  <data name="TacticalPhaseIP" xml:space="preserve">
+    <value>In possesso</value>
+  </data>
+  <data name="TacticalPhaseOP" xml:space="preserve">
+    <value>Non in possesso</value>
+  </data>
+  <data name="TacticalGeneric" xml:space="preserve">
+    <value>Profilo generico della posizione</value>
+  </data>
+  <data name="TacticalCriteria" xml:space="preserve">
+    <value>Criteri e fonti</value>
+  </data>
+  <data name="TacticalTarget" xml:space="preserve">
+    <value>Posizione e sottoruolo</value>
+  </data>
+  <data name="TacticalWeight" xml:space="preserve">
+    <value>Peso</value>
+  </data>
+  <data name="TacticalEstimateShort" xml:space="preserve">
+    <value>Stima dell’editor: pesi consultabili in Criteri e fonti.</value>
+  </data>
+  <data name="TacticalSelectSecond" xml:space="preserve">
+    <value>Seleziona prima la seconda posizione.</value>
+  </data>
+  <data name="TacticalOfficialSource" xml:space="preserve">
+    <value>Principi ufficiali Sports Interactive</value>
+  </data>
+  <data name="TacticalCatalogueSource" xml:space="preserve">
+    <value>Catalogo FM26 verificato dalla community</value>
+  </data>
+  <data name="TacticalMethod" xml:space="preserve">
+    <value>Sports Interactive indica familiarità nella posizione e attributi del ruolo come fattori di idoneità; nelle fonti consultate non è pubblicata la formula numerica. Questi profili e pesi sono valutazioni dell’editor, non dati ufficiali di idoneità. Profilo generico: pesi 3/2/1 del report per posizione. Sottoruolo: attributi di enfasi ×3, supporto ×2 e restanti attributi della posizione ×1. Si usa la media ponderata dei valori visibili 1–20; occorrono tutti i dati e familiarità ≥12/20. Due selezioni: media dei due punteggi, con idoneità richiesta in entrambe. Stelle = punteggio/4, arrotondate a mezza stella; CA e PA non alterano il punteggio. Nomi inglesi e disponibilità derivano dal catalogo di riferimento FM26; le traduzioni italiane sono descrittive.</value>
   </data>
 </root>

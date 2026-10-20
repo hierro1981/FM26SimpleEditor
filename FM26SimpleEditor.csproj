@@ -12,6 +12,7 @@
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Data/tactical_roles.json" LogicalName="FM26SimpleEditor.TacticalRoles.json" />
     <EmbeddedResource Include="Assets\App.ico" LogicalName="FM26SimpleEditor.App.ico" />
     <Compile Remove="tests/**/*.cs" />
     <None Update="runtime_probe.py" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />

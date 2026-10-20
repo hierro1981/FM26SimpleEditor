@@ -33,6 +33,11 @@ Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Per
 
 ## Novità della versione 14.1
 
+- Catalogo di **79 combinazioni uniche sottoruolo/fase FM26** (40 in possesso, 39 non in possesso), filtrate per posizione: attaccante di manovra, centravanti, fulcro del gioco e gli altri ruoli del riferimento FM26 26.3.2. Le traduzioni italiane sono descrittive; il catalogo conserva i nomi inglesi.
+- Si possono valutare due sottoruoli anche per la stessa posizione. I menu conservano le scelte durante il cambio lingua e scartano un ruolo se incompatibile con una nuova posizione.
+- Aggiunta **PA** accanto alla CA nei migliori per posizione; una PA non leggibile resta **—** e non influenza il punteggio.
+- **Criteri e fonti** mostra gli attributi e i pesi effettivi. La fonte ufficiale indica familiarità e attributi del ruolo, ma nelle fonti consultate non pubblica una formula numerica: i profili/pesi e le stelle dell’editor sono quindi stime dichiarate, non valutazioni ufficiali del gioco. [Metodo, provenienza e limiti](docs/TacticalRoles.md).
+
 - Corretto il filtro rose disabilitato al primo ingresso dopo il caricamento. Oltre ai gruppi, ogni sotto-squadra si può scegliere separatamente: nome leggibile quando disponibile, altrimenti slot/ID senza inventare U20/U18.
 - Ordinamento iniziale della rosa per posizione (portiere → attaccante, sinistra → centro → destra), poi CA decrescente.
 - Fino a **5** candidati per posizione, con stelle derivate dal punteggio (`punteggio / 4`, arrotondato a mezza stella).

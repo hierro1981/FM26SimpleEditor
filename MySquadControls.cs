@@ -15,6 +15,11 @@ public sealed class MySquadPanel : UserControl
     private readonly PitchControl pitch = new() { SelectionEnabled = true, MultiSelectionEnabled = true, SelectedPosition = "MC", MinimumSize = new Size(230, 350) };
     private readonly ComboBox position = new() { Name = "MySquadPosition", DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
     private readonly ComboBox secondPosition = new() { Name = "MySquadSecondPosition", DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
+    private readonly ComboBox role = new() { Name = "MySquadRole", DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill, DropDownWidth = 480 };
+    private readonly ComboBox secondRole = new() { Name = "MySquadSecondRole", DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill, DropDownWidth = 480 };
+    private readonly ToolTip roleTips = new() { AutoPopDelay = 20000 };
+    private string? selectedRoleId;
+    private string? secondaryRoleId;
     private readonly Label advice = new() { AutoSize = true, ForeColor = Color.DimGray };
     private readonly Button open = new() { Text = L10n.Get("Text_9337b648a0e1"), AutoSize = true };
     private readonly Button openRanked = new() { Text = L10n.Get("Text_9337b648a0e1"), AutoSize = true };
@@ -35,6 +40,10 @@ public sealed class MySquadPanel : UserControl
     public event Action<uint>? PlayerOpenRequested;
     public event Action<uint>? AddComparisonRequested;
     private sealed record PositionChoice(string Key) { public override string ToString() => Key.Length == 0 ? L10n.Get("MySquadSecondNone") : Labels.Position(Key, L10n.IsItalian); }
+    private sealed record RoleChoice(string? Id)
+    {
+        public override string ToString() => Id is null ? L10n.Get("TacticalGeneric") : TacticalRoles.All.Single(r => r.Id == Id).Label;
+    }
     private sealed record ScopeChoice(SquadScope Mode, uint? TeamId = null, string? Name = null, int? Slot = null)
     {
         public override string ToString() => TeamId.HasValue ? !string.IsNullOrWhiteSpace(Name) ? Name + " · ID " + TeamId :
@@ -96,24 +105,28 @@ public sealed class MySquadPanel : UserControl
             }
             roster.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText = p.LoanDescription;
         };
-        var role = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1, Padding = new Padding(6) };
-        role.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        role.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35)); role.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65));
+        var roleLayout = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1, Padding = new Padding(6) };
+        roleLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        roleLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35)); roleLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65));
         var field = new Panel { Dock = DockStyle.Fill, AutoScroll = true };
         field.Controls.Add(pitch);
         var right = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 4 };
         right.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         right.RowStyles.Add(new RowStyle(SizeType.AutoSize)); right.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         right.RowStyles.Add(new RowStyle(SizeType.AutoSize)); right.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        var positionSelectors = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, ColumnCount = 1, RowCount = 2 };
-        positionSelectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        var positionSelectors = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, ColumnCount = 2, RowCount = 2 };
+        positionSelectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40)); positionSelectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
         positionSelectors.RowStyles.Add(new RowStyle(SizeType.AutoSize)); positionSelectors.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        positionSelectors.Controls.Add(position, 0, 0); positionSelectors.Controls.Add(secondPosition, 0, 1);
-        right.Controls.Add(positionSelectors, 0, 0); right.Controls.Add(ranking, 0, 1); right.Controls.Add(advice, 0, 2); right.Controls.Add(openRanked, 0, 3);
-        role.Controls.Add(field, 0, 0); role.Controls.Add(right, 1, 0); roleTab.Controls.Add(role);
-        string[] rankHeaders = ["#", L10n.Get("Text_f537c6bd038e"), L10n.Get("Text_045cb480645d"), L10n.Get("MySquadScore"), L10n.Get("MySquadStars"), L10n.Get("MySquadFamiliarity"), "CA"];
-        int[] rankWidths = [45, 180, 135, 100, 130, 165, 60];
+        positionSelectors.Controls.Add(position, 0, 0); positionSelectors.Controls.Add(role, 1, 0); positionSelectors.Controls.Add(secondPosition, 0, 1); positionSelectors.Controls.Add(secondRole, 1, 1);
+        right.Controls.Add(positionSelectors, 0, 0); right.Controls.Add(ranking, 0, 1); right.Controls.Add(advice, 0, 2); var rankingActions = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, WrapContents = true };
+        var criteria = new Button { Name = "MySquadCriteria", Text = L10n.Get("TacticalCriteria"), AutoSize = true };
+        criteria.Click += (_, _) => { using var dialog = new TacticalCriteriaForm(SelectedTargets); dialog.ShowDialog(this); };
+        rankingActions.Controls.AddRange([openRanked, criteria]); right.Controls.Add(rankingActions, 0, 3);
+        roleLayout.Controls.Add(field, 0, 0); roleLayout.Controls.Add(right, 1, 0); roleTab.Controls.Add(roleLayout);
+        string[] rankHeaders = ["#", L10n.Get("Text_f537c6bd038e"), L10n.Get("Text_045cb480645d"), L10n.Get("MySquadScore"), L10n.Get("MySquadStars"), L10n.Get("MySquadFamiliarity"), "CA", "PA"];
+        int[] rankWidths = [45, 180, 135, 100, 130, 165, 60, 60];
         for (int i = 0; i < rankHeaders.Length; i++) ranking.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = rankHeaders[i], Width = rankWidths[i], SortMode = DataGridViewColumnSortMode.NotSortable, DefaultCellStyle = new DataGridViewCellStyle { Alignment = i is 0 or >= 3 ? DataGridViewContentAlignment.MiddleRight : DataGridViewContentAlignment.MiddleLeft } });
+        ranking.Columns[6].Name = "Ca"; ranking.Columns[7].Name = "Pa"; ranking.Columns[7].DefaultCellStyle.NullValue = "—";
         ranking.Columns[4].CellTemplate = new StarRatingCell();
         ranking.Columns[4].DefaultCellStyle.Format = "0.0"; ranking.RowTemplate.Height = 41;
         club.SelectedIndexChanged += (_, _) => { if (!binding) { staff.ClearForClub(SelectedClub?.ClubUid); RebuildScopes(reset: true); RefreshView(); } };
@@ -123,9 +136,12 @@ public sealed class MySquadPanel : UserControl
         secondPosition.SelectedIndexChanged += (_, _) =>
         {
             if (binding || secondPosition.SelectedItem is not PositionChoice selected) return;
-            secondaryPosition = selected.Key.Length == 0 || selected.Key == selectedPosition ? null : selected.Key;
+            secondaryPosition = selected.Key.Length == 0 ? null : selected.Key;
+            if (secondaryPosition is null) secondaryRoleId = null;
             UpdateSelectedPositions(); RefreshRanking();
         };
+        role.SelectedIndexChanged += (_, _) => { if (!binding) { selectedRoleId = (role.SelectedItem as RoleChoice)?.Id; RefreshRanking(); } };
+        secondRole.SelectedIndexChanged += (_, _) => { if (!binding) { secondaryRoleId = (secondRole.SelectedItem as RoleChoice)?.Id; RefreshRanking(); } };
         pitch.PositionActivated += SelectPosition;
         roster.SelectionChanged += (_, _) => open.Enabled = SelectedUid(roster).HasValue;
         ranking.SelectionChanged += (_, _) => openRanked.Enabled = SelectedUid(ranking).HasValue;
@@ -159,6 +175,7 @@ public sealed class MySquadPanel : UserControl
     private ManagedSquad? SelectedClub => club.SelectedItem as ManagedSquad;
     private IReadOnlyList<PlayerDetail> Members => SquadSelection.Members(data, SelectedClub,
         (scope.SelectedItem as ScopeChoice)?.Mode ?? SquadScope.FirstTeam, (scope.SelectedItem as ScopeChoice)?.TeamId);
+    private SquadTarget[] SelectedTargets => secondaryPosition is null ? [new(selectedPosition, selectedRoleId)] : [new(selectedPosition, selectedRoleId), new(secondaryPosition, secondaryRoleId)];
     private string[] SelectedPositions => secondaryPosition is null ? [selectedPosition] : [selectedPosition, secondaryPosition];
     private void RebuildScopes(bool reset = false)
     {
@@ -200,9 +217,9 @@ public sealed class MySquadPanel : UserControl
     public void SelectPosition(string key, bool extendSelection)
     {
         if (!PositionScheme.Order.Contains(key)) return;
-        if (!extendSelection) { selectedPosition = key; secondaryPosition = null; }
-        else if (key == secondaryPosition) secondaryPosition = null;
-        else if (key == selectedPosition && secondaryPosition is not null) { selectedPosition = secondaryPosition; secondaryPosition = null; }
+        if (!extendSelection) { selectedPosition = key; secondaryPosition = null; secondaryRoleId = null; }
+        else if (key == secondaryPosition) { secondaryPosition = null; secondaryRoleId = null; }
+        else if (key == selectedPosition && secondaryPosition is not null) { selectedPosition = secondaryPosition; selectedRoleId = secondaryRoleId; secondaryPosition = null; secondaryRoleId = null; }
         else if (key != selectedPosition) secondaryPosition = key;
         UpdateSelectedPositions(); RefreshRanking();
     }
@@ -211,8 +228,19 @@ public sealed class MySquadPanel : UserControl
         bool wasBinding = binding; binding = true;
         position.SelectedIndex = PositionScheme.Rank(selectedPosition);
         secondPosition.SelectedIndex = secondaryPosition is null ? 0 : PositionScheme.Rank(secondaryPosition) + 1;
+        selectedRoleId = FillRoleChoices(role, selectedPosition, selectedRoleId);
+        secondaryRoleId = FillRoleChoices(secondRole, secondaryPosition, secondaryRoleId);
         pitch.SelectedPosition = selectedPosition; pitch.SecondarySelectedPosition = secondaryPosition ?? "";
         binding = wasBinding;
+    }
+    private string? FillRoleChoices(ComboBox choice, string? positionKey, string? previousId)
+    {
+        choice.Items.Clear(); choice.Items.Add(new RoleChoice(null));
+        if (positionKey is not null)
+            choice.Items.AddRange(TacticalRoles.ForPosition(positionKey).OrderBy(r => r.Phase).ThenBy(r => r.Label, Labels.Comparer(L10n.IsItalian)).Select(r => (object)new RoleChoice(r.Id)).ToArray());
+        int index = choice.Items.Cast<RoleChoice>().ToList().FindIndex(r => r.Id == previousId);
+        choice.SelectedIndex = Math.Max(0, index); choice.Enabled = positionKey is not null;
+        return (choice.SelectedItem as RoleChoice)?.Id;
     }
     private void RefreshView()
     {
@@ -254,18 +282,22 @@ public sealed class MySquadPanel : UserControl
     {
         ranking.Rows.Clear();
         var members = Members;
-        var best = SquadSelection.TopFive(members, SelectedPositions);
+        var best = SquadSelection.TopFiveForRoles(members, SelectedTargets);
         for (int i = 0; i < best.Count; i++)
         {
-            var p = best[i]; int at = ranking.Rows.Add(i + 1, p.Player.Name, PositionScheme.Compact(p.Player.Positions, L10n.IsItalian), p.Score, p.Stars, string.Join(" · ", p.Familiarities.Select(pair => Labels.PositionCode(pair.Key, L10n.IsItalian) + ": " + pair.Value)), p.Player.Ca);
+            var p = best[i]; int at = ranking.Rows.Add(i + 1, p.Player.Name, PositionScheme.Compact(p.Player.Positions, L10n.IsItalian), p.Score, p.Stars, string.Join(" · ", p.Familiarities.Select(pair => Labels.PositionCode(pair.Key, L10n.IsItalian) + ": " + pair.Value)), p.Player.Ca, p.Player.Pa);
             ranking.Rows[at].Tag = p;
-            ranking.Rows[at].Cells[3].ToolTipText = string.Join(" · ", p.PositionScores.Select(pair => Labels.Position(pair.Key, L10n.IsItalian) + ": " + pair.Value.ToString("0.00", L10n.Culture) + "/20"));
+            ranking.Rows[at].Cells[3].ToolTipText = string.Join(" · ", p.PositionScores.Select(pair => TacticalRoles.LabelKey(pair.Key) + ": " + pair.Value.ToString("0.00", L10n.Culture) + "/20"));
             ranking.Rows[at].Cells[4].ToolTipText = L10n.Format("MySquadStarsValue", p.Stars);
         }
         ranking.Columns[3].DefaultCellStyle.Format = "0.00";
         ranking.Columns[3].DefaultCellStyle.FormatProvider = L10n.Culture;
         ranking.ClearSelection(); openRanked.Enabled = false;
-        advice.Text = string.Join(" + ", SelectedPositions.Select(key => Labels.Position(key, L10n.IsItalian))) + "\n" + L10n.Format("MySquadRankingInfo", best.Count, members.Count) + "\n" + L10n.Get("MySquadMethod");
+        roleTips.SetToolTip(role, TargetTip(SelectedTargets[0]));
+        roleTips.SetToolTip(secondRole, secondaryPosition is null ? L10n.Get("TacticalSelectSecond") : TargetTip(SelectedTargets[1]));
+        advice.Text = string.Join(" + ", SelectedTargets.Select(TacticalRoles.Label)) + "\n" + L10n.Format("MySquadRankingInfo", best.Count, members.Count) + "\n" + L10n.Get("MySquadMethod") + (SelectedTargets.Any(t => t.RoleId is not null) ? "\n" + L10n.Get("TacticalEstimateShort") : "");
     }
-    protected override void Dispose(bool disposing) { if (disposing) menu.Dispose(); base.Dispose(disposing); }
+    private static string TargetTip(SquadTarget target) => TacticalRoles.Label(target) + "\n" + L10n.Get("TacticalEstimateShort") + "\n" +
+        string.Join("\n", TacticalRoles.Weights(target).OrderByDescending(f => f.Value).ThenBy(f => Labels.Attribute(f.Key, L10n.IsItalian)).Select(f => Labels.Attribute(f.Key, L10n.IsItalian) + " ×" + f.Value));
+    protected override void Dispose(bool disposing) { if (disposing) { menu.Dispose(); roleTips.Dispose(); } base.Dispose(disposing); }
 }

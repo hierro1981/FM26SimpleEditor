@@ -77,6 +77,7 @@ internal static class Checks
             HistoryInteractionChecks.Run(Check);
             MySquadChecks.Run(Check);
             MySquadEnhancementChecks.Run(Check);
+            TacticalRoleChecks.Run(Check);
             Console.WriteLine($"{count} C# checks passed"); return 0;
         }
         catch (Exception exc) { Console.Error.WriteLine(exc); return 1; }

@@ -1,0 +1,1668 @@
+{
+  "schema": 1,
+  "game": "FM26",
+  "referenceBuild": "26.3.2",
+  "reviewed": "2026-10-20",
+  "scoreSource": "editor-heuristic",
+  "officialFormulaAvailable": false,
+  "roles": [
+    {
+      "id": "ip_goalkeeper",
+      "phase": "ip",
+      "positions": [
+        "GK"
+      ],
+      "english": "Goalkeeper",
+      "italian": "Portiere",
+      "focus": [
+        "passing",
+        "kicking",
+        "throwing",
+        "decisions"
+      ],
+      "support": [
+        "first_touch",
+        "composure",
+        "technique"
+      ]
+    },
+    {
+      "id": "ip_ball-playing-goalkeeper",
+      "phase": "ip",
+      "positions": [
+        "GK"
+      ],
+      "english": "Ball-Playing Goalkeeper",
+      "italian": "Portiere che imposta",
+      "focus": [
+        "passing",
+        "first_touch",
+        "technique",
+        "composure"
+      ],
+      "support": [
+        "vision",
+        "decisions",
+        "kicking",
+        "anticipation"
+      ]
+    },
+    {
+      "id": "ip_no-nonsense-goalkeeper",
+      "phase": "ip",
+      "positions": [
+        "GK"
+      ],
+      "english": "No-Nonsense Goalkeeper",
+      "italian": "Portiere senza fronzoli",
+      "focus": [
+        "kicking",
+        "decisions",
+        "composure",
+        "concentration"
+      ],
+      "support": [
+        "first_touch",
+        "anticipation",
+        "positioning"
+      ]
+    },
+    {
+      "id": "op_goalkeeper",
+      "phase": "op",
+      "positions": [
+        "GK"
+      ],
+      "english": "Goalkeeper",
+      "italian": "Portiere",
+      "focus": [
+        "reflexes",
+        "handling",
+        "positioning",
+        "one_on_ones"
+      ],
+      "support": [
+        "aerial_reach",
+        "command_of_area",
+        "anticipation",
+        "decisions"
+      ]
+    },
+    {
+      "id": "op_sweeper-keeper",
+      "phase": "op",
+      "positions": [
+        "GK"
+      ],
+      "english": "Sweeper Keeper",
+      "italian": "Portiere libero",
+      "focus": [
+        "rushing_out",
+        "anticipation",
+        "decisions",
+        "one_on_ones"
+      ],
+      "support": [
+        "acceleration",
+        "reflexes",
+        "positioning",
+        "concentration"
+      ]
+    },
+    {
+      "id": "op_line-holding-goalkeeper",
+      "phase": "op",
+      "positions": [
+        "GK"
+      ],
+      "english": "Line-Holding Goalkeeper",
+      "italian": "Portiere di posizione",
+      "focus": [
+        "reflexes",
+        "handling",
+        "positioning",
+        "concentration"
+      ],
+      "support": [
+        "aerial_reach",
+        "command_of_area",
+        "one_on_ones"
+      ]
+    },
+    {
+      "id": "ip_centre-back",
+      "phase": "ip",
+      "positions": [
+        "DC"
+      ],
+      "english": "Centre-Back",
+      "italian": "Difensore centrale",
+      "focus": [
+        "positioning",
+        "anticipation",
+        "decisions"
+      ],
+      "support": [
+        "passing",
+        "first_touch",
+        "concentration",
+        "strength"
+      ]
+    },
+    {
+      "id": "ip_no-nonsense-centre-back",
+      "phase": "ip",
+      "positions": [
+        "DC"
+      ],
+      "english": "No-Nonsense Centre-Back",
+      "italian": "Difensore centrale senza fronzoli",
+      "focus": [
+        "heading",
+        "strength",
+        "concentration",
+        "decisions"
+      ],
+      "support": [
+        "jumping_reach",
+        "bravery",
+        "anticipation"
+      ]
+    },
+    {
+      "id": "ip_wide-centre-back",
+      "phase": "ip",
+      "positions": [
+        "DC"
+      ],
+      "english": "Wide Centre-Back",
+      "italian": "Difensore centrale largo",
+      "focus": [
+        "passing",
+        "first_touch",
+        "positioning"
+      ],
+      "support": [
+        "pace",
+        "dribbling",
+        "decisions",
+        "technique"
+      ]
+    },
+    {
+      "id": "ip_ball-playing-centre-back",
+      "phase": "ip",
+      "positions": [
+        "DC"
+      ],
+      "english": "Ball-Playing Centre-Back",
+      "italian": "Difensore centrale che imposta",
+      "focus": [
+        "passing",
+        "technique",
+        "composure",
+        "vision"
+      ],
+      "support": [
+        "decisions",
+        "first_touch",
+        "anticipation"
+      ]
+    },
+    {
+      "id": "ip_overlapping-centre-back",
+      "phase": "ip",
+      "positions": [
+        "DC"
+      ],
+      "english": "Overlapping Centre-Back",
+      "italian": "Difensore in sovrapposizione",
+      "focus": [
+        "crossing",
+        "stamina",
+        "pace",
+        "work_rate"
+      ],
+      "support": [
+        "dribbling",
+        "off_the_ball",
+        "technique",
+        "acceleration"
+      ]
+    },
+    {
+      "id": "ip_advanced-centre-back",
+      "phase": "ip",
+      "positions": [
+        "DC"
+      ],
+      "english": "Advanced Centre-Back",
+      "italian": "Difensore centrale avanzato",
+      "focus": [
+        "passing",
+        "decisions",
+        "technique",
+        "composure"
+      ],
+      "support": [
+        "vision",
+        "first_touch",
+        "positioning",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "op_centre-back",
+      "phase": "op",
+      "positions": [
+        "DC"
+      ],
+      "english": "Centre-Back",
+      "italian": "Difensore centrale",
+      "focus": [
+        "tackling",
+        "marking",
+        "positioning",
+        "anticipation"
+      ],
+      "support": [
+        "heading",
+        "concentration",
+        "strength"
+      ]
+    },
+    {
+      "id": "op_covering-centre-back",
+      "phase": "op",
+      "positions": [
+        "DC"
+      ],
+      "english": "Covering Centre-Back",
+      "italian": "Difensore centrale in copertura",
+      "focus": [
+        "anticipation",
+        "positioning",
+        "pace",
+        "concentration"
+      ],
+      "support": [
+        "decisions",
+        "acceleration",
+        "marking"
+      ]
+    },
+    {
+      "id": "op_stopping-centre-back",
+      "phase": "op",
+      "positions": [
+        "DC"
+      ],
+      "english": "Stopping Centre-Back",
+      "italian": "Difensore centrale in anticipo",
+      "focus": [
+        "tackling",
+        "aggression",
+        "bravery",
+        "anticipation"
+      ],
+      "support": [
+        "heading",
+        "strength",
+        "decisions",
+        "work_rate"
+      ]
+    },
+    {
+      "id": "op_wide-centre-back",
+      "phase": "op",
+      "positions": [
+        "DC"
+      ],
+      "english": "Wide Centre-Back",
+      "italian": "Difensore centrale largo",
+      "focus": [
+        "marking",
+        "tackling",
+        "positioning"
+      ],
+      "support": [
+        "pace",
+        "agility",
+        "anticipation",
+        "concentration"
+      ]
+    },
+    {
+      "id": "op_covering-wide-centre-back",
+      "phase": "op",
+      "positions": [
+        "DC"
+      ],
+      "english": "Covering Wide Centre-Back",
+      "italian": "Difensore largo in copertura",
+      "focus": [
+        "positioning",
+        "anticipation",
+        "pace",
+        "agility"
+      ],
+      "support": [
+        "acceleration",
+        "marking",
+        "concentration"
+      ]
+    },
+    {
+      "id": "op_stopping-wide-centre-back",
+      "phase": "op",
+      "positions": [
+        "DC"
+      ],
+      "english": "Stopping Wide Centre-Back",
+      "italian": "Difensore largo in anticipo",
+      "focus": [
+        "tackling",
+        "aggression",
+        "bravery",
+        "pace"
+      ],
+      "support": [
+        "anticipation",
+        "agility",
+        "decisions",
+        "strength"
+      ]
+    },
+    {
+      "id": "ip_full-back",
+      "phase": "ip",
+      "positions": [
+        "DL",
+        "DR"
+      ],
+      "english": "Full-Back",
+      "italian": "Terzino",
+      "focus": [
+        "passing",
+        "crossing",
+        "off_the_ball",
+        "teamwork"
+      ],
+      "support": [
+        "first_touch",
+        "decisions",
+        "stamina"
+      ]
+    },
+    {
+      "id": "ip_wing-back",
+      "phase": "ip",
+      "positions": [
+        "DL",
+        "DR",
+        "WBL",
+        "WBR"
+      ],
+      "english": "Wing-Back",
+      "italian": "Fluidificante",
+      "focus": [
+        "crossing",
+        "pace",
+        "stamina",
+        "off_the_ball"
+      ],
+      "support": [
+        "dribbling",
+        "acceleration",
+        "work_rate"
+      ]
+    },
+    {
+      "id": "ip_inside-wing-back",
+      "phase": "ip",
+      "positions": [
+        "DL",
+        "DR",
+        "WBL",
+        "WBR"
+      ],
+      "english": "Inside Wing-Back",
+      "italian": "Fluidificante invertito",
+      "focus": [
+        "passing",
+        "decisions",
+        "positioning",
+        "teamwork"
+      ],
+      "support": [
+        "first_touch",
+        "composure",
+        "tackling",
+        "technique"
+      ]
+    },
+    {
+      "id": "ip_playmaking-wing-back",
+      "phase": "ip",
+      "positions": [
+        "DL",
+        "DR",
+        "WBL",
+        "WBR"
+      ],
+      "english": "Playmaking Wing-Back",
+      "italian": "Fluidificante regista",
+      "focus": [
+        "passing",
+        "vision",
+        "technique",
+        "decisions"
+      ],
+      "support": [
+        "composure",
+        "first_touch",
+        "teamwork",
+        "agility"
+      ]
+    },
+    {
+      "id": "ip_inside-full-back",
+      "phase": "ip",
+      "positions": [
+        "DL",
+        "DR"
+      ],
+      "english": "Inside Full-Back",
+      "italian": "Terzino invertito",
+      "focus": [
+        "positioning",
+        "anticipation",
+        "composure",
+        "decisions"
+      ],
+      "support": [
+        "heading",
+        "strength",
+        "passing",
+        "tackling"
+      ]
+    },
+    {
+      "id": "ip_advanced-wing-back",
+      "phase": "ip",
+      "positions": [
+        "WBL",
+        "WBR"
+      ],
+      "english": "Advanced Wing-Back",
+      "italian": "Fluidificante avanzato",
+      "focus": [
+        "crossing",
+        "dribbling",
+        "pace",
+        "off_the_ball"
+      ],
+      "support": [
+        "acceleration",
+        "stamina",
+        "technique",
+        "agility"
+      ]
+    },
+    {
+      "id": "op_full-back",
+      "phase": "op",
+      "positions": [
+        "DL",
+        "DR"
+      ],
+      "english": "Full-Back",
+      "italian": "Terzino",
+      "focus": [
+        "marking",
+        "tackling",
+        "positioning",
+        "anticipation"
+      ],
+      "support": [
+        "pace",
+        "teamwork",
+        "concentration"
+      ]
+    },
+    {
+      "id": "op_pressing-full-back",
+      "phase": "op",
+      "positions": [
+        "DL",
+        "DR"
+      ],
+      "english": "Pressing Full-Back",
+      "italian": "Terzino in pressing",
+      "focus": [
+        "work_rate",
+        "aggression",
+        "tackling",
+        "acceleration"
+      ],
+      "support": [
+        "anticipation",
+        "stamina",
+        "decisions",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "op_holding-full-back",
+      "phase": "op",
+      "positions": [
+        "DL",
+        "DR"
+      ],
+      "english": "Holding Full-Back",
+      "italian": "Terzino bloccato",
+      "focus": [
+        "positioning",
+        "concentration",
+        "anticipation",
+        "decisions"
+      ],
+      "support": [
+        "marking",
+        "pace",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "op_wing-back",
+      "phase": "op",
+      "positions": [
+        "DL",
+        "DR",
+        "WBL",
+        "WBR"
+      ],
+      "english": "Wing-Back",
+      "italian": "Fluidificante",
+      "focus": [
+        "marking",
+        "tackling",
+        "positioning",
+        "pace"
+      ],
+      "support": [
+        "stamina",
+        "anticipation",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "op_pressing-wing-back",
+      "phase": "op",
+      "positions": [
+        "WBL",
+        "WBR"
+      ],
+      "english": "Pressing Wing-Back",
+      "italian": "Fluidificante in pressing",
+      "focus": [
+        "work_rate",
+        "stamina",
+        "acceleration",
+        "aggression"
+      ],
+      "support": [
+        "tackling",
+        "anticipation",
+        "pace",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "op_holding-wing-back",
+      "phase": "op",
+      "positions": [
+        "WBL",
+        "WBR"
+      ],
+      "english": "Holding Wing-Back",
+      "italian": "Fluidificante bloccato",
+      "focus": [
+        "positioning",
+        "anticipation",
+        "concentration",
+        "decisions"
+      ],
+      "support": [
+        "marking",
+        "pace",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "ip_defensive-midfielder",
+      "phase": "ip",
+      "positions": [
+        "DM"
+      ],
+      "english": "Defensive Midfielder",
+      "italian": "Mediano",
+      "focus": [
+        "positioning",
+        "decisions",
+        "passing",
+        "teamwork"
+      ],
+      "support": [
+        "anticipation",
+        "first_touch",
+        "composure"
+      ]
+    },
+    {
+      "id": "ip_deep-lying-playmaker",
+      "phase": "ip",
+      "positions": [
+        "DM"
+      ],
+      "english": "Deep-Lying Playmaker",
+      "italian": "Regista arretrato",
+      "focus": [
+        "passing",
+        "vision",
+        "technique",
+        "composure"
+      ],
+      "support": [
+        "decisions",
+        "first_touch",
+        "positioning"
+      ]
+    },
+    {
+      "id": "ip_half-back",
+      "phase": "ip",
+      "positions": [
+        "DM"
+      ],
+      "english": "Half-Back",
+      "italian": "Mediano che si abbassa",
+      "focus": [
+        "positioning",
+        "anticipation",
+        "decisions",
+        "passing"
+      ],
+      "support": [
+        "heading",
+        "strength",
+        "composure",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "ip_box-to-box-midfielder",
+      "phase": "ip",
+      "positions": [
+        "DM"
+      ],
+      "english": "Box-to-Box Midfielder",
+      "italian": "Centrocampista box-to-box",
+      "focus": [
+        "stamina",
+        "work_rate",
+        "off_the_ball",
+        "teamwork"
+      ],
+      "support": [
+        "passing",
+        "tackling",
+        "acceleration",
+        "finishing"
+      ]
+    },
+    {
+      "id": "ip_box-to-box-playmaker",
+      "phase": "ip",
+      "positions": [
+        "DM"
+      ],
+      "english": "Box-to-Box Playmaker",
+      "italian": "Regista box-to-box",
+      "focus": [
+        "passing",
+        "vision",
+        "work_rate",
+        "stamina"
+      ],
+      "support": [
+        "technique",
+        "composure",
+        "off_the_ball",
+        "decisions"
+      ]
+    },
+    {
+      "id": "op_defensive-midfielder",
+      "phase": "op",
+      "positions": [
+        "DM"
+      ],
+      "english": "Defensive Midfielder",
+      "italian": "Mediano",
+      "focus": [
+        "positioning",
+        "tackling",
+        "anticipation",
+        "teamwork"
+      ],
+      "support": [
+        "decisions",
+        "work_rate",
+        "strength"
+      ]
+    },
+    {
+      "id": "op_pressing-defensive-midfielder",
+      "phase": "op",
+      "positions": [
+        "DM"
+      ],
+      "english": "Pressing Defensive Midfielder",
+      "italian": "Mediano in pressing",
+      "focus": [
+        "tackling",
+        "work_rate",
+        "aggression",
+        "stamina"
+      ],
+      "support": [
+        "anticipation",
+        "decisions",
+        "strength",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "op_screening-defensive-midfielder",
+      "phase": "op",
+      "positions": [
+        "DM"
+      ],
+      "english": "Screening Defensive Midfielder",
+      "italian": "Mediano schermante",
+      "focus": [
+        "positioning",
+        "anticipation",
+        "concentration",
+        "marking"
+      ],
+      "support": [
+        "decisions",
+        "tackling",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "op_dropping-defensive-midfielder",
+      "phase": "op",
+      "positions": [
+        "DM"
+      ],
+      "english": "Dropping Defensive Midfielder",
+      "italian": "Mediano che arretra",
+      "focus": [
+        "positioning",
+        "anticipation",
+        "heading",
+        "marking"
+      ],
+      "support": [
+        "concentration",
+        "strength",
+        "jumping_reach",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "op_wide-covering-defensive-midfielder",
+      "phase": "op",
+      "positions": [
+        "DM"
+      ],
+      "english": "Wide Covering Defensive Midfielder",
+      "italian": "Mediano in copertura laterale",
+      "focus": [
+        "positioning",
+        "work_rate",
+        "agility",
+        "anticipation"
+      ],
+      "support": [
+        "tackling",
+        "pace",
+        "stamina",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "ip_central-midfielder",
+      "phase": "ip",
+      "positions": [
+        "MC"
+      ],
+      "english": "Central Midfielder",
+      "italian": "Centrocampista centrale",
+      "focus": [
+        "passing",
+        "first_touch",
+        "decisions",
+        "teamwork"
+      ],
+      "support": [
+        "tackling",
+        "composure",
+        "off_the_ball",
+        "stamina"
+      ]
+    },
+    {
+      "id": "ip_wide-central-midfielder",
+      "phase": "ip",
+      "positions": [
+        "MC"
+      ],
+      "english": "Wide Central Midfielder",
+      "italian": "Centrocampista centrale largo",
+      "focus": [
+        "passing",
+        "teamwork",
+        "off_the_ball",
+        "decisions"
+      ],
+      "support": [
+        "crossing",
+        "dribbling",
+        "stamina",
+        "agility"
+      ]
+    },
+    {
+      "id": "ip_midfield-playmaker",
+      "phase": "ip",
+      "positions": [
+        "MC"
+      ],
+      "english": "Midfield Playmaker",
+      "italian": "Regista",
+      "focus": [
+        "passing",
+        "vision",
+        "decisions",
+        "technique"
+      ],
+      "support": [
+        "composure",
+        "first_touch",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "ip_advanced-playmaker",
+      "phase": "ip",
+      "positions": [
+        "MC",
+        "AMC"
+      ],
+      "english": "Advanced Playmaker",
+      "italian": "Regista avanzato",
+      "focus": [
+        "vision",
+        "passing",
+        "first_touch",
+        "technique"
+      ],
+      "support": [
+        "decisions",
+        "composure",
+        "off_the_ball",
+        "flair"
+      ]
+    },
+    {
+      "id": "ip_attacking-midfielder",
+      "phase": "ip",
+      "positions": [
+        "MC",
+        "AMC"
+      ],
+      "english": "Attacking Midfielder",
+      "italian": "Trequartista",
+      "focus": [
+        "first_touch",
+        "technique",
+        "off_the_ball",
+        "long_shots"
+      ],
+      "support": [
+        "passing",
+        "composure",
+        "flair",
+        "finishing"
+      ]
+    },
+    {
+      "id": "ip_channel-midfielder",
+      "phase": "ip",
+      "positions": [
+        "MC",
+        "AMC"
+      ],
+      "english": "Channel Midfielder",
+      "italian": "Centrocampista tra gli spazi",
+      "focus": [
+        "off_the_ball",
+        "acceleration",
+        "work_rate",
+        "passing"
+      ],
+      "support": [
+        "crossing",
+        "first_touch",
+        "stamina",
+        "technique"
+      ]
+    },
+    {
+      "id": "op_central-midfielder",
+      "phase": "op",
+      "positions": [
+        "MC"
+      ],
+      "english": "Central Midfielder",
+      "italian": "Centrocampista centrale",
+      "focus": [
+        "tackling",
+        "decisions",
+        "teamwork",
+        "work_rate"
+      ],
+      "support": [
+        "anticipation",
+        "positioning",
+        "concentration"
+      ]
+    },
+    {
+      "id": "op_attacking-midfielder",
+      "phase": "op",
+      "positions": [
+        "MC",
+        "AMC"
+      ],
+      "english": "Attacking Midfielder",
+      "italian": "Trequartista",
+      "focus": [
+        "anticipation",
+        "decisions",
+        "work_rate",
+        "positioning"
+      ],
+      "support": [
+        "marking",
+        "teamwork",
+        "stamina"
+      ]
+    },
+    {
+      "id": "op_pressing-central-midfielder",
+      "phase": "op",
+      "positions": [
+        "MC"
+      ],
+      "english": "Pressing Central Midfielder",
+      "italian": "Centrocampista centrale in pressing",
+      "focus": [
+        "tackling",
+        "aggression",
+        "work_rate",
+        "stamina"
+      ],
+      "support": [
+        "anticipation",
+        "decisions",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "op_screening-central-midfielder",
+      "phase": "op",
+      "positions": [
+        "MC"
+      ],
+      "english": "Screening Central Midfielder",
+      "italian": "Centrocampista centrale schermante",
+      "focus": [
+        "positioning",
+        "marking",
+        "concentration",
+        "decisions"
+      ],
+      "support": [
+        "anticipation",
+        "tackling",
+        "teamwork"
+      ]
+    },
+    {
+      "id": "op_wide-covering-central-midfielder",
+      "phase": "op",
+      "positions": [
+        "MC"
+      ],
+      "english": "Wide Covering Central Midfielder",
+      "italian": "Centrocampista in copertura laterale",
+      "focus": [
+        "work_rate",
+        "agility",
+        "tackling",
+        "teamwork"
+      ],
+      "support": [
+        "positioning",
+        "pace",
+        "anticipation",
+        "stamina"
+      ]
+    },
+    {
+      "id": "ip_wide-midfielder",
+      "phase": "ip",
+      "positions": [
+        "ML",
+        "MR"
+      ],
+      "english": "Wide Midfielder",
+      "italian": "Centrocampista laterale",
+      "focus": [
+        "crossing",
+        "passing",
+        "work_rate",
+        "teamwork"
+      ],
+      "support": [
+        "stamina",
+        "pace",
+        "decisions",
+        "technique"
+      ]
+    },
+    {
+      "id": "ip_winger",
+      "phase": "ip",
+      "positions": [
+        "ML",
+        "MR",
+        "AML",
+        "AMR"
+      ],
+      "english": "Winger",
+      "italian": "Ala",
+      "focus": [
+        "crossing",
+        "dribbling",
+        "pace",
+        "acceleration"
+      ],
+      "support": [
+        "agility",
+        "technique",
+        "off_the_ball"
+      ]
+    },
+    {
+      "id": "ip_inside-winger",
+      "phase": "ip",
+      "positions": [
+        "ML",
+        "MR",
+        "AML",
+        "AMR"
+      ],
+      "english": "Inside Winger",
+      "italian": "Ala interna",
+      "focus": [
+        "dribbling",
+        "first_touch",
+        "technique",
+        "agility"
+      ],
+      "support": [
+        "composure",
+        "teamwork",
+        "passing",
+        "acceleration"
+      ]
+    },
+    {
+      "id": "ip_playmaking-winger",
+      "phase": "ip",
+      "positions": [
+        "ML",
+        "MR",
+        "AML",
+        "AMR"
+      ],
+      "english": "Playmaking Winger",
+      "italian": "Ala regista",
+      "focus": [
+        "passing",
+        "vision",
+        "technique",
+        "first_touch"
+      ],
+      "support": [
+        "decisions",
+        "dribbling",
+        "composure",
+        "crossing"
+      ]
+    },
+    {
+      "id": "ip_inside-forward",
+      "phase": "ip",
+      "positions": [
+        "AML",
+        "AMR"
+      ],
+      "english": "Inside Forward",
+      "italian": "Attaccante esterno",
+      "focus": [
+        "dribbling",
+        "off_the_ball",
+        "composure",
+        "acceleration"
+      ],
+      "support": [
+        "finishing",
+        "technique",
+        "agility",
+        "first_touch"
+      ]
+    },
+    {
+      "id": "ip_wide-forward",
+      "phase": "ip",
+      "positions": [
+        "AML",
+        "AMR"
+      ],
+      "english": "Wide Forward",
+      "italian": "Attaccante largo",
+      "focus": [
+        "pace",
+        "acceleration",
+        "dribbling",
+        "off_the_ball"
+      ],
+      "support": [
+        "finishing",
+        "crossing",
+        "first_touch",
+        "technique"
+      ]
+    },
+    {
+      "id": "op_wide-midfielder",
+      "phase": "op",
+      "positions": [
+        "ML",
+        "MR"
+      ],
+      "english": "Wide Midfielder",
+      "italian": "Centrocampista laterale",
+      "focus": [
+        "work_rate",
+        "teamwork",
+        "decisions",
+        "acceleration"
+      ],
+      "support": [
+        "marking",
+        "stamina",
+        "anticipation"
+      ]
+    },
+    {
+      "id": "op_tracking-wide-midfielder",
+      "phase": "op",
+      "positions": [
+        "ML",
+        "MR"
+      ],
+      "english": "Tracking Wide Midfielder",
+      "italian": "Centrocampista laterale di ripiegamento",
+      "focus": [
+        "work_rate",
+        "stamina",
+        "teamwork",
+        "marking"
+      ],
+      "support": [
+        "tackling",
+        "acceleration",
+        "positioning"
+      ]
+    },
+    {
+      "id": "op_wide-outlet-wide-midfielder",
+      "phase": "op",
+      "positions": [
+        "ML",
+        "MR"
+      ],
+      "english": "Wide Outlet Midfielder",
+      "italian": "Centrocampista laterale di sbocco",
+      "focus": [
+        "off_the_ball",
+        "pace",
+        "anticipation",
+        "decisions"
+      ],
+      "support": [
+        "first_touch",
+        "dribbling",
+        "acceleration"
+      ]
+    },
+    {
+      "id": "op_winger",
+      "phase": "op",
+      "positions": [
+        "AML",
+        "AMR"
+      ],
+      "english": "Winger",
+      "italian": "Ala",
+      "focus": [
+        "work_rate",
+        "acceleration",
+        "decisions",
+        "teamwork"
+      ],
+      "support": [
+        "marking",
+        "anticipation",
+        "stamina"
+      ]
+    },
+    {
+      "id": "op_tracking-winger",
+      "phase": "op",
+      "positions": [
+        "AML",
+        "AMR"
+      ],
+      "english": "Tracking Winger",
+      "italian": "Ala di ripiegamento",
+      "focus": [
+        "work_rate",
+        "stamina",
+        "aggression",
+        "teamwork"
+      ],
+      "support": [
+        "marking",
+        "tackling",
+        "positioning",
+        "acceleration"
+      ]
+    },
+    {
+      "id": "op_wide-outlet-winger",
+      "phase": "op",
+      "positions": [
+        "AML",
+        "AMR"
+      ],
+      "english": "Wide Outlet Winger",
+      "italian": "Ala di sbocco largo",
+      "focus": [
+        "off_the_ball",
+        "pace",
+        "anticipation",
+        "concentration"
+      ],
+      "support": [
+        "dribbling",
+        "first_touch",
+        "acceleration"
+      ]
+    },
+    {
+      "id": "op_inside-outlet-winger",
+      "phase": "op",
+      "positions": [
+        "AML",
+        "AMR"
+      ],
+      "english": "Inside Outlet Winger",
+      "italian": "Ala di sbocco interno",
+      "focus": [
+        "off_the_ball",
+        "balance",
+        "decisions",
+        "anticipation"
+      ],
+      "support": [
+        "first_touch",
+        "strength",
+        "composure"
+      ]
+    },
+    {
+      "id": "ip_free-role",
+      "phase": "ip",
+      "positions": [
+        "AMC"
+      ],
+      "english": "Free Role",
+      "italian": "Ruolo libero",
+      "focus": [
+        "flair",
+        "vision",
+        "technique",
+        "dribbling"
+      ],
+      "support": [
+        "passing",
+        "composure",
+        "off_the_ball",
+        "first_touch"
+      ]
+    },
+    {
+      "id": "ip_second-striker",
+      "phase": "ip",
+      "positions": [
+        "AMC"
+      ],
+      "english": "Second Striker",
+      "italian": "Seconda punta",
+      "focus": [
+        "finishing",
+        "off_the_ball",
+        "anticipation",
+        "acceleration"
+      ],
+      "support": [
+        "composure",
+        "first_touch",
+        "decisions"
+      ]
+    },
+    {
+      "id": "op_tracking-attacking-midfielder",
+      "phase": "op",
+      "positions": [
+        "AMC"
+      ],
+      "english": "Tracking Attacking Midfielder",
+      "italian": "Trequartista di ripiegamento",
+      "focus": [
+        "work_rate",
+        "stamina",
+        "teamwork",
+        "anticipation"
+      ],
+      "support": [
+        "positioning",
+        "marking",
+        "decisions"
+      ]
+    },
+    {
+      "id": "op_central-outlet-attacking-midfielder",
+      "phase": "op",
+      "positions": [
+        "AMC"
+      ],
+      "english": "Central Outlet Attacking Midfielder",
+      "italian": "Trequartista di sbocco centrale",
+      "focus": [
+        "off_the_ball",
+        "balance",
+        "anticipation",
+        "decisions"
+      ],
+      "support": [
+        "strength",
+        "first_touch",
+        "composure"
+      ]
+    },
+    {
+      "id": "op_splitting-outlet-attacking-midfielder",
+      "phase": "op",
+      "positions": [
+        "AMC"
+      ],
+      "english": "Splitting Outlet Attacking Midfielder",
+      "italian": "Trequartista di sbocco tra gli spazi",
+      "focus": [
+        "off_the_ball",
+        "pace",
+        "anticipation",
+        "decisions"
+      ],
+      "support": [
+        "acceleration",
+        "first_touch",
+        "concentration"
+      ]
+    },
+    {
+      "id": "ip_centre-forward",
+      "phase": "ip",
+      "positions": [
+        "STC"
+      ],
+      "english": "Centre Forward",
+      "italian": "Centravanti",
+      "focus": [
+        "finishing",
+        "first_touch",
+        "off_the_ball",
+        "heading"
+      ],
+      "support": [
+        "composure",
+        "strength",
+        "acceleration",
+        "technique"
+      ]
+    },
+    {
+      "id": "ip_deep-lying-forward",
+      "phase": "ip",
+      "positions": [
+        "STC"
+      ],
+      "english": "Deep-Lying Forward",
+      "italian": "Attaccante di manovra",
+      "focus": [
+        "passing",
+        "first_touch",
+        "technique",
+        "vision"
+      ],
+      "support": [
+        "teamwork",
+        "decisions",
+        "off_the_ball",
+        "strength"
+      ]
+    },
+    {
+      "id": "ip_channel-forward",
+      "phase": "ip",
+      "positions": [
+        "STC"
+      ],
+      "english": "Channel Forward",
+      "italian": "Attaccante tra gli spazi",
+      "focus": [
+        "off_the_ball",
+        "acceleration",
+        "dribbling",
+        "work_rate"
+      ],
+      "support": [
+        "finishing",
+        "technique",
+        "pace",
+        "stamina"
+      ]
+    },
+    {
+      "id": "ip_target-forward",
+      "phase": "ip",
+      "positions": [
+        "STC"
+      ],
+      "english": "Target Forward",
+      "italian": "Fulcro del gioco",
+      "focus": [
+        "strength",
+        "heading",
+        "jumping_reach",
+        "balance"
+      ],
+      "support": [
+        "bravery",
+        "first_touch",
+        "teamwork",
+        "off_the_ball"
+      ]
+    },
+    {
+      "id": "ip_poacher",
+      "phase": "ip",
+      "positions": [
+        "STC"
+      ],
+      "english": "Poacher",
+      "italian": "Rapace d’area",
+      "focus": [
+        "finishing",
+        "anticipation",
+        "off_the_ball"
+      ],
+      "support": [
+        "composure",
+        "acceleration",
+        "concentration"
+      ]
+    },
+    {
+      "id": "ip_false-nine",
+      "phase": "ip",
+      "positions": [
+        "STC"
+      ],
+      "english": "False Nine",
+      "italian": "Falso nove",
+      "focus": [
+        "passing",
+        "vision",
+        "dribbling",
+        "technique"
+      ],
+      "support": [
+        "decisions",
+        "first_touch",
+        "teamwork",
+        "composure"
+      ]
+    },
+    {
+      "id": "op_centre-forward",
+      "phase": "op",
+      "positions": [
+        "STC"
+      ],
+      "english": "Centre Forward",
+      "italian": "Centravanti",
+      "focus": [
+        "anticipation",
+        "decisions",
+        "work_rate"
+      ],
+      "support": [
+        "teamwork",
+        "marking",
+        "stamina"
+      ]
+    },
+    {
+      "id": "op_tracking-centre-forward",
+      "phase": "op",
+      "positions": [
+        "STC"
+      ],
+      "english": "Tracking Centre Forward",
+      "italian": "Centravanti di ripiegamento",
+      "focus": [
+        "work_rate",
+        "stamina",
+        "teamwork",
+        "aggression"
+      ],
+      "support": [
+        "anticipation",
+        "positioning",
+        "decisions"
+      ]
+    },
+    {
+      "id": "op_central-outlet-centre-forward",
+      "phase": "op",
+      "positions": [
+        "STC"
+      ],
+      "english": "Central Outlet Centre Forward",
+      "italian": "Centravanti di sbocco centrale",
+      "focus": [
+        "off_the_ball",
+        "balance",
+        "anticipation",
+        "decisions"
+      ],
+      "support": [
+        "strength",
+        "first_touch",
+        "composure"
+      ]
+    },
+    {
+      "id": "op_splitting-outlet-centre-forward",
+      "phase": "op",
+      "positions": [
+        "STC"
+      ],
+      "english": "Splitting Outlet Centre Forward",
+      "italian": "Centravanti di sbocco tra gli spazi",
+      "focus": [
+        "off_the_ball",
+        "pace",
+        "anticipation",
+        "decisions"
+      ],
+      "support": [
+        "acceleration",
+        "first_touch",
+        "concentration"
+      ]
+    }
+  ]
+}

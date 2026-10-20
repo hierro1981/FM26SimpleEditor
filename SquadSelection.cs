@@ -20,20 +20,27 @@ public static class SquadSelection
     }
 
     public static IReadOnlyList<SquadRecommendation> TopFive(IEnumerable<PlayerDetail> members, params string[] positions)
+        => TopFiveForRoles(members, positions.Select(p => new SquadTarget(p)).ToArray());
+
+    public static IReadOnlyList<SquadRecommendation> TopFiveForRoles(IEnumerable<PlayerDetail> members, params SquadTarget[] targets)
     {
-        var keys = positions.Distinct().ToArray();
-        if (keys.Length is < 1 or > 2 || keys.Any(key => !PositionScheme.Order.Contains(key))) throw new ArgumentException(nameof(positions));
+        var keys = targets.Distinct().ToArray();
+        if (keys.Length is < 1 or > 2 || keys.Any(t => !PositionScheme.Order.Contains(t.Position) || !TacticalRoles.CanUse(t.RoleId, t.Position))) throw new ArgumentException(nameof(targets));
         var candidates = new List<SquadRecommendation>();
         foreach (var p in members.GroupBy(p => p.Player.Uid).Select(g => g.First()))
         {
-            var profiles = keys.Select(key => RoleComparison.Compare(p, p, key)).ToArray();
-            if (profiles.All(r => r.Complete && r.ScoreA.HasValue && r.FamiliarityA is >= RoleComparison.PlayableMinimum))
+            var profiles = keys.Select(target =>
             {
-                // Each position counts equally; competence is required in BOTH.
-                candidates.Add(new(p.Player, profiles.Average(r => r.ScoreA!.Value), profiles.Min(r => r.FamiliarityA!.Value))
+                var positions = p.Positions.Where(x => x.Key == target.Position).ToArray();
+                int? familiarity = positions.Length == 1 && positions[0].Value is >= 1 and <= 20 ? positions[0].Value : null;
+                return (Target: target, Score: TacticalRoles.Score(p, target), Familiarity: familiarity);
+            }).ToArray();
+            if (profiles.All(r => r.Score.HasValue && r.Familiarity is >= RoleComparison.PlayableMinimum))
+            {
+                candidates.Add(new(p.Player, profiles.Average(r => r.Score!.Value), profiles.Min(r => r.Familiarity!.Value))
                 {
-                    PositionScores = profiles.ToDictionary(r => r.Position, r => r.ScoreA!.Value),
-                    Familiarities = profiles.ToDictionary(r => r.Position, r => r.FamiliarityA!.Value)
+                    PositionScores = profiles.ToDictionary(r => r.Target.Key, r => r.Score!.Value),
+                    Familiarities = profiles.GroupBy(r => r.Target.Position).ToDictionary(g => g.Key, g => g.Min(r => r.Familiarity!.Value))
                 });
             }
         }

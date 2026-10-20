@@ -33,6 +33,11 @@ A C# Windows Forms project for Visual Studio 2026, with a local Python reader. B
 
 ## Changes in version 14.1
 
+- Catalogue of **79 unique FM26 tactical role/phase combinations** (40 in possession, 39 out of possession), filtered by position, including Deep-Lying Forward, Centre Forward, Target Forward and the other roles in the FM26 26.3.2 reference. Italian translations are descriptive; the catalogue retains English names.
+- Two roles can be assessed even in the same position. Selectors preserve choices across language changes and discard a role incompatible with a newly selected position.
+- **PA** is displayed alongside CA in position recommendations; unreadable PA remains **—** and does not affect the score.
+- **Criteria and sources** lists the actual attributes and weights. The official source identifies familiarity and role attributes but the consulted sources do not publish a numerical formula: editor profiles/weights and stars are therefore labelled estimates, not official game ratings. [Method, provenance and limits](docs/TacticalRoles.md).
+
 - Fixed the squad filter remaining disabled on the first visit after loading. In addition to grouped options, every sub-squad is individually selectable: readable name when available, otherwise slot/ID without inventing U20/U18 labels.
 - Default squad sorting follows position (keeper → striker, left → centre → right), then descending CA.
 - Up to **5** position candidates, with stars derived from the score (`score / 4`, rounded to half a star).

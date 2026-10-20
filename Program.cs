@@ -276,7 +276,7 @@ public sealed class MainForm : Form
             var row = SelectedRow(); contextPlayer = row; args.Cancel = players.SelectedRows.Count == 0 || busy;
             comparePair.Enabled = QuickComparison.TryPair(players, out _, out _);
             addComparison.Enabled = row is not null && !comparisonPool.Contains(row.Uid);
-            addComparison.Text = addComparison.Enabled ? L10n.Get("Text_885725b27cce") : L10n.Get("Text_8b48e2e8ec50");
+            addComparison.Text = row is not null && comparisonPool.Contains(row.Uid) ? L10n.Get("Text_8b48e2e8ec50") : L10n.Get("Text_885725b27cce");
             compareNow.Enabled = row is not null && detail is not null && row.Uid != detail.Player.Uid;
         };
         addComparison.Click += (_, _) => { if (contextPlayer is PlayerRow row) AddComparison(row.Uid); };

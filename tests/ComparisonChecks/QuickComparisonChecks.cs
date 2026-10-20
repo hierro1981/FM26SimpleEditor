@@ -13,7 +13,7 @@ internal static class QuickComparisonChecks
         Attributes = PositionScheme.Order.SelectMany(RoleImportance.Fields).Select(f => f.Key).Distinct().Select((key, i) => new EditableField { Index = i, Key = key, Value = 75 }).ToList(),
         Positions = [new EditableField { Key = "MC", Value = 20 }]
     };
-    private static void ContextClick(DataGridView grid, int row) => typeof(DataGridView).GetMethod("OnCellMouseDown", Private)!.Invoke(grid,
+    private static void ContextClick(DataGridView grid, int row) => typeof(DataGridView).GetMethod("OnCellMouseDown", Private, null, [typeof(DataGridViewCellMouseEventArgs)], null)!.Invoke(grid,
         [new DataGridViewCellMouseEventArgs(0, row, 3, 3, new MouseEventArgs(MouseButtons.Right, 1, 3, 3, 0))]);
 
     public static void Run(Action<bool, string> check)
@@ -73,8 +73,10 @@ internal static class QuickComparisonChecks
         var pool = (HashSet<uint>)typeof(MainForm).GetField("comparisonPool", Private)!.GetValue(main)!;
         check(pool.Contains(1) && pool.Contains(2) && compare.Visible, "quick comparison adds both players to pool and opens the comparison tab");
         // Reopening the pair must clear a stale search query and older reference.
+        pool.Add(3);
         var query = All(compare).OfType<TextBox>().Single(); query.Text = "not a player";
         typeof(ComparisonPanel).GetMethod("PreferReference")!.Invoke(compare, [3u]);
+        check(ReferenceEquals(typeof(ComparisonPanel).GetField("other", Private)!.GetValue(compare), players[2]), "test starts with a different comparison reference");
         ((Task)typeof(MainForm).GetMethod("ComparePair", Private)!.Invoke(main, [1u, 2u])!).GetAwaiter().GetResult(); Application.DoEvents();
         check(query.Text.Length == 0 && ReferenceEquals(typeof(ComparisonPanel).GetField("other", Private)!.GetValue(compare), players[1]), "repeated quick comparison replaces stale reference and filter");
         search.ClearSelection(); foreach (DataGridViewRow row in search.Rows) row.Selected = true;

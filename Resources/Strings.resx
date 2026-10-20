@@ -1648,4 +1648,166 @@ Passa sul punto per il valore.</value>
   <data name="Backend_MySquadAttributes" xml:space="preserve">
     <value>Lettura della rosa e degli attributi</value>
   </data>
+  <data name="StaffTab" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="StaffSearch" xml:space="preserve">
+    <value>Cerca staff per nome, club o ID</value>
+  </data>
+  <data name="StaffReload" xml:space="preserve">
+    <value>Aggiorna staff</value>
+  </data>
+  <data name="StaffRole" xml:space="preserve">
+    <value>Ruolo</value>
+  </data>
+  <data name="StaffHuman" xml:space="preserve">
+    <value>Allenatore umano</value>
+  </data>
+  <data name="StaffUnknownRole" xml:space="preserve">
+    <value>Non identificato</value>
+  </data>
+  <data name="StaffClub" xml:space="preserve">
+    <value>Club del contratto / staff</value>
+  </data>
+  <data name="StaffListedClub" xml:space="preserve">
+    <value>Club che lo elenca</value>
+  </data>
+  <data name="StaffBirth" xml:space="preserve">
+    <value>Data di nascita</value>
+  </data>
+  <data name="StaffWage" xml:space="preserve">
+    <value>Paga sett. (valuta base)</value>
+  </data>
+  <data name="StaffContract" xml:space="preserve">
+    <value>Contratto</value>
+  </data>
+  <data name="StaffContractFound" xml:space="preserve">
+    <value>Rilevato</value>
+  </data>
+  <data name="StaffContractMissing" xml:space="preserve">
+    <value>Non rilevato</value>
+  </data>
+  <data name="StaffContractStart" xml:space="preserve">
+    <value>Inizio contratto</value>
+  </data>
+  <data name="StaffGroup" xml:space="preserve">
+    <value>Gruppo</value>
+  </data>
+  <data name="StaffValue" xml:space="preserve">
+    <value>Valore /20</value>
+  </data>
+  <data name="StaffPersonality" xml:space="preserve">
+    <value>Personalità</value>
+  </data>
+  <data name="StaffPreferences" xml:space="preserve">
+    <value>Preferenze</value>
+  </data>
+  <data name="StaffAttributes" xml:space="preserve">
+    <value>Attributi decodificati</value>
+  </data>
+  <data name="StaffSelectClub" xml:space="preserve">
+    <value>Identifica prima la squadra allenata per leggere il suo staff.</value>
+  </data>
+  <data name="StaffPending" xml:space="preserve">
+    <value>Apri il sotto-tab per caricare lo staff.</value>
+  </data>
+  <data name="StaffUnavailable" xml:space="preserve">
+    <value>Lettura dello staff non disponibile: {0}</value>
+  </data>
+  <data name="StaffReadOnlyNote" xml:space="preserve">
+    <value>Sola lettura: staff dell’intero club e delle affiliate controllate; il filtro delle rose riguarda solo i giocatori. Il ruolo preciso e gran parte degli attributi professionali non sono decodificati; l’allenatore umano è riconoscibile. Preferenze = stile desiderato, non capacità. Paga nella valuta base del salvataggio; — indica un dato non disponibile. La dirigenza non è inclusa.</value>
+  </data>
+  <data name="StaffCount" xml:space="preserve">
+    <value>{0} persone mostrate su {1}. Seleziona una riga per i dettagli disponibili.</value>
+  </data>
+  <data name="StaffLoading" xml:space="preserve">
+    <value>Caricamento dello staff</value>
+  </data>
+  <data name="StaffLoaded" xml:space="preserve">
+    <value>Elenco dello staff aggiornato</value>
+  </data>
+  <data name="StaffLoadError" xml:space="preserve">
+    <value>Errore nel caricamento dello staff</value>
+  </data>
+  <data name="Backend_StaffClub" xml:space="preserve">
+    <value>Identificazione del club dello staff</value>
+  </data>
+  <data name="Backend_StaffProfiles" xml:space="preserve">
+    <value>Lettura dei contratti e dei profili dello staff</value>
+  </data>
+  <data name="Backend_StaffRows" xml:space="preserve">
+    <value>Preparazione elenco dello staff</value>
+  </data>
+  <data name="Backend_StaffPeople" xml:space="preserve">
+    <value>persone</value>
+  </data>
+  <data name="StaffAttribute_adaptability" xml:space="preserve">
+    <value>Adattabilità (stesso valore della personalità)</value>
+  </data>
+  <data name="StaffPersonality_adaptability" xml:space="preserve">
+    <value>Adattabilità</value>
+  </data>
+  <data name="StaffPersonality_ambition" xml:space="preserve">
+    <value>Ambizione</value>
+  </data>
+  <data name="StaffPersonality_loyalty" xml:space="preserve">
+    <value>Lealtà</value>
+  </data>
+  <data name="StaffPersonality_pressure" xml:space="preserve">
+    <value>Gestione della pressione</value>
+  </data>
+  <data name="StaffPersonality_professionalism" xml:space="preserve">
+    <value>Professionalità</value>
+  </data>
+  <data name="StaffPersonality_sportsmanship" xml:space="preserve">
+    <value>Sportività</value>
+  </data>
+  <data name="StaffPersonality_temperament" xml:space="preserve">
+    <value>Temperamento</value>
+  </data>
+  <data name="StaffPersonality_controversy" xml:space="preserve">
+    <value>Controversia</value>
+  </data>
+  <data name="StaffPreference_attacking" xml:space="preserve">
+    <value>Propensione offensiva</value>
+  </data>
+  <data name="StaffPreference_business" xml:space="preserve">
+    <value>Orientamento commerciale</value>
+  </data>
+  <data name="StaffPreference_directness" xml:space="preserve">
+    <value>Passaggi diretti</value>
+  </data>
+  <data name="StaffPreference_interference" xml:space="preserve">
+    <value>Intromissione</value>
+  </data>
+  <data name="StaffPreference_patience" xml:space="preserve">
+    <value>Pazienza</value>
+  </data>
+  <data name="StaffPreference_trigger_press" xml:space="preserve">
+    <value>Propensione al pressing</value>
+  </data>
+  <data name="StaffPreference_resources" xml:space="preserve">
+    <value>Impiego delle risorse</value>
+  </data>
+  <data name="StaffPreference_buying_players" xml:space="preserve">
+    <value>Propensione agli acquisti</value>
+  </data>
+  <data name="StaffPreference_mind_games" xml:space="preserve">
+    <value>Giochi mentali</value>
+  </data>
+  <data name="StaffPreference_flexibility" xml:space="preserve">
+    <value>Flessibilità</value>
+  </data>
+  <data name="StaffPreference_hardness_of_training" xml:space="preserve">
+    <value>Durezza degli allenamenti</value>
+  </data>
+  <data name="StaffPreference_squad_rotation" xml:space="preserve">
+    <value>Rotazione della rosa</value>
+  </data>
+  <data name="StaffPreference_tempo" xml:space="preserve">
+    <value>Ritmo</value>
+  </data>
+  <data name="StaffPreference_width" xml:space="preserve">
+    <value>Ampiezza</value>
+  </data>
 </root>

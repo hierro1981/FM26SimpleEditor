@@ -17,6 +17,9 @@ public sealed class MySquadPanel : UserControl
     private readonly Label advice = new() { AutoSize = true, ForeColor = Color.DimGray };
     private readonly Button open = new() { Text = L10n.Get("Text_9337b648a0e1"), AutoSize = true };
     private readonly Button openRanked = new() { Text = L10n.Get("Text_9337b648a0e1"), AutoSize = true };
+    private readonly StaffPanel staff = new();
+    private readonly TabPage staffTab = new(L10n.Get("StaffTab"));
+    private readonly TabControl views = new() { Dock = DockStyle.Fill };
     private readonly ContextMenuStrip menu = new();
     private MySquadResult data = new();
     private bool binding;
@@ -24,6 +27,7 @@ public sealed class MySquadPanel : UserControl
     private string selectedPosition = "MC";
     private string sortField = "Name";
     private bool descending;
+    public event Action<uint>? StaffRequested;
     public event Action? ReloadRequested;
     public event Action<uint>? PlayerOpenRequested;
     public event Action<uint>? AddComparisonRequested;
@@ -43,9 +47,12 @@ public sealed class MySquadPanel : UserControl
         var reload = new Button { Name = "MySquadReload", Text = L10n.Get("MySquadReload"), AutoSize = true };
         reload.Click += (_, _) => ReloadRequested?.Invoke(); selection.Controls.Add(reload, 2, 0);
         root.Controls.Add(selection, 0, 0); root.Controls.Add(scope, 0, 1); root.Controls.Add(status, 0, 2);
-        var tabs = new TabControl { Dock = DockStyle.Fill };
+        var tabs = views;
         var listTab = new TabPage(L10n.Get("MySquadRoster")); var roleTab = new TabPage(L10n.Get("MySquadBest"));
-        tabs.TabPages.AddRange([listTab, roleTab]); root.Controls.Add(tabs, 0, 3);
+        staffTab.Controls.Add(staff);
+        staff.ReloadRequested += () => { staff.ClearForClub(SelectedClub?.ClubUid); EnsureStaffLoaded(); };
+        tabs.SelectedIndexChanged += (_, _) => { scope.Enabled = data.Status == "ready" && tabs.SelectedTab != staffTab; EnsureStaffLoaded(); };
+        tabs.TabPages.AddRange([listTab, roleTab, staffTab]); root.Controls.Add(tabs, 0, 3);
         var list = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3, Padding = new Padding(6) };
         list.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         list.RowStyles.Add(new RowStyle(SizeType.AutoSize)); list.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); list.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -95,7 +102,7 @@ public sealed class MySquadPanel : UserControl
         int[] rankWidths = [45, 180, 135, 100, 110, 60];
         for (int i = 0; i < rankHeaders.Length; i++) ranking.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = rankHeaders[i], Width = rankWidths[i], SortMode = DataGridViewColumnSortMode.NotSortable, DefaultCellStyle = new DataGridViewCellStyle { Alignment = i is 0 or >= 3 ? DataGridViewContentAlignment.MiddleRight : DataGridViewContentAlignment.MiddleLeft } });
         ranking.Columns[4].CellTemplate = new ValueBarCell(20); ranking.RowTemplate.Height = 41;
-        club.SelectedIndexChanged += (_, _) => { if (!binding) RefreshView(); };
+        club.SelectedIndexChanged += (_, _) => { if (!binding) { staff.ClearForClub(SelectedClub?.ClubUid); RefreshView(); } };
         scope.SelectedIndexChanged += (_, _) => { if (!binding) RefreshView(); };
         search.TextChanged += (_, _) => { if (!binding) RefreshRoster(); };
         position.SelectedIndexChanged += (_, _) => { if (!binding && position.SelectedItem is PositionChoice p) SelectPosition(p.Key); };
@@ -134,18 +141,19 @@ public sealed class MySquadPanel : UserControl
 
     public void ClearForSave(bool loaded)
     {
-        hasSave = loaded; data = new(); binding = true; club.Items.Clear(); search.Clear(); scope.SelectedIndex = 0; binding = false; RefreshView();
+        hasSave = loaded; data = new(); staff.ClearForClub(null); binding = true; club.Items.Clear(); search.Clear(); scope.SelectedIndex = 0; binding = false; RefreshView();
     }
     public void SetData(MySquadResult result)
     {
         uint? previous = SelectedClub?.ClubUid;
         hasSave = true; data = result; binding = true; club.Items.Clear(); club.Items.AddRange(result.Clubs.Cast<object>().ToArray());
         if (club.Items.Count > 0) club.SelectedIndex = Math.Max(0, result.Clubs.FindIndex(c => c.ClubUid == previous));
+        staff.ClearForClub(SelectedClub?.ClubUid);
         binding = false; RefreshView();
     }
     public void SetLanguage()
     {
-        L10n.Apply(this); binding = true;
+        L10n.Apply(this); staff.SetLanguage(); binding = true;
         int old = Math.Max(0, scope.SelectedIndex); scope.Items.Clear();
         scope.Items.AddRange([L10n.Get("MySquadFirst"), L10n.Get("MySquadOther"), L10n.Get("MySquadAll")]); scope.SelectedIndex = old;
         position.Items.Clear(); position.Items.AddRange(PositionScheme.Order.Select(key => (object)new PositionChoice(key)).ToArray());
@@ -162,8 +170,15 @@ public sealed class MySquadPanel : UserControl
     {
         status.Text = !hasSave ? L10n.Get("MySquadOpen") : data.Status == "unavailable" ? L10n.Format("MySquadUnavailable", data.Error ?? "—") :
             data.Status != "ready" ? L10n.Get("MySquadNone") : data.FirstHumanOnly ? L10n.Get("MySquadFirstHuman") : "";
-        club.Enabled = scope.Enabled = data.Status == "ready" && data.Clubs.Count > 0;
-        RefreshRoster(); RefreshRanking();
+        club.Enabled = data.Status == "ready" && data.Clubs.Count > 0;
+        scope.Enabled = club.Enabled && views.SelectedTab != staffTab;
+        RefreshRoster(); RefreshRanking(); EnsureStaffLoaded();
+    }
+    public void SetStaffData(StaffResult result) => staff.SetData(result);
+    public void EnsureStaffLoaded()
+    {
+        if (!binding && views.SelectedTab == staffTab && data.Status == "ready" && SelectedClub is ManagedSquad selected && !staff.IsLoadedFor(selected.ClubUid))
+            StaffRequested?.Invoke(selected.ClubUid);
     }
     private void RefreshRoster()
     {

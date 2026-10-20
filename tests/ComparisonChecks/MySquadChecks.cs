@@ -65,10 +65,46 @@ internal static class MySquadChecks
         L10n.SetLanguage("en"); panel.SetLanguage(); Application.DoEvents();
         check(scope.SelectedIndex == 2 && scope.Items[0].ToString() == "First team only" && search.Text == "1002" && ranking.Columns[3].HeaderText == "Score /20", "language switch preserves squad scope and search while translating controls");
         check(((ManagedSquad)All(panel).OfType<ComboBox>().Single(c => c.Name == "ManagedClubChoice").SelectedItem).ClubName == "Club", "language switch preserves club and manager names");
+        StaffChecks(check, panel, tabs);
         panel.ClearForSave(false); Application.DoEvents();
         check(scope.SelectedIndex == 0 && roster.Rows.Count == 0 && ranking.Rows.Count == 0 && All(panel).OfType<Label>().Any(l => l.Text == L10n.Get("MySquadOpen")), "new save clears previous squad and resets default scope");
         panel.SetData(new MySquadResult { Status = "unavailable", Error = "Unknown layout" });
         check(roster.Rows.Count == 0 && !scope.Enabled && All(panel).OfType<Label>().Any(l => l.Text.Contains("Unknown layout")), "optional reader failure has an explicit empty UI state");
         host.Close(); L10n.SetLanguage("it");
     }
+    private static void StaffChecks(Action<bool, string> check, MySquadPanel panel, TabControl tabs)
+    {
+        int requests = 0; panel.StaffRequested += _ => requests++;
+        check(requests == 0, "staff is not scanned before opening its sub-tab");
+        tabs.SelectedIndex = 2; Application.DoEvents();
+        check(requests == 1 && !All(panel).OfType<ComboBox>().Single(c => c.Name == "MySquadScope").Enabled, "staff loads on demand and player-only squad filter is disabled");
+        var staff = All(panel).OfType<StaffPanel>().Single();
+        var grid = All(staff).OfType<DataGridView>().Single(g => g.Name == "StaffList");
+        var details = All(staff).OfType<DataGridView>().Single(g => g.Name == "StaffDetails");
+        var a = new StaffRow { Uid = 1, Id = 111, ClubUid = 1, Name = "Alice", ClubName = "Club", ListedClubName = "B team", Age = 40, Wage = 100, Ca = 140, Pa = 160, HasContract = true, Birth = "1980-01-02", Personality = new() { ["professionalism"] = 17 }, Preferences = new() { ["tempo"] = 18 } };
+        var b = new StaffRow { Uid = 2, ClubUid = 1, Name = "Bob", ClubName = "Club", Wage = 0, IsHumanManager = true, HasContract = true };
+        var c = new StaffRow { Uid = 3, ClubUid = 1, Name = "Carol", ClubName = "Club" };
+        panel.SetStaffData(new StaffResult { Status = "ready", ClubUid = 1, Staff = [a, b, c] });
+        panel.EnsureStaffLoaded();
+        check(requests == 1 && grid.Rows.Count == 3, "cached staff is not reloaded by returning to the tab");
+        check(grid.ReadOnly && details.ReadOnly && grid.ScrollBars == ScrollBars.Both && grid.Columns["Wage"].DefaultCellStyle.Alignment == DataGridViewContentAlignment.MiddleRight, "staff tables are read-only with scrolling and numeric alignment");
+        check(a.RoleDisplay == "Not identified" && b.RoleDisplay == "Human manager" && b.Ca is null && c.ContractDisplay == "Not found", "only human manager gets a known job label; unavailable data stays absent");
+        check(grid.Rows[1].Cells["Ca"].FormattedValue.ToString() == "—" && b.Wage == 0 && a.BirthDisplay == "02/01/1980", "staff nulls differ from real zero pay and dates are displayed correctly");
+        grid.Rows[0].Selected = true; Application.DoEvents();
+        check(details.Rows.Count == 2 && details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[0].Value?.ToString() == "Preferences" && r.Cells[1].Value?.ToString() == "Tempo"), "staff selection separates personality from preferences");
+        staff.SortBy("Wage"); staff.SortBy("Wage");
+        check(((StaffRow)grid.Rows[0].DataBoundItem).Uid == 1 && ((StaffRow)grid.Rows[2].DataBoundItem).Uid == 3, "salary sort is numeric with missing values last in descending order");
+        var filter = All(staff).OfType<TextBox>().Single(t => t.Name == "StaffSearch"); filter.Text = "111";
+        check(grid.Rows.Count == 1 && ((StaffRow)grid.Rows[0].DataBoundItem).Uid == 1, "staff search supports public IDs");
+        L10n.SetLanguage("it"); panel.SetLanguage(); Application.DoEvents();
+        check(filter.Text == "111" && grid.Columns["RoleDisplay"].HeaderText == "Ruolo" && a.RoleDisplay == "Non identificato" && details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[0].Value?.ToString() == "Preferenze"), "staff language changes preserve search and translate detail groups");
+        panel.SetStaffData(new StaffResult { ClubUid = 99, Status = "ready" });
+        check(grid.Rows.Count == 1, "stale staff response for another club is ignored");
+        panel.SetStaffData(new StaffResult { ClubUid = 1, Status = "unavailable", Error = "Staff failure" });
+        check(grid.Rows.Count == 0 && details.Rows.Count == 0 && All(staff).OfType<Label>().Any(l => l.Text.Contains("Staff failure")), "staff errors clear only staff results with explicit feedback");
+        tabs.SelectedIndex = 0; Application.DoEvents();
+        check(All(panel).OfType<DataGridView>().Single(g => g.Name == "MySquadRoster").Rows.Count == 1, "staff reader error preserves player roster and its search");
+        L10n.SetLanguage("en"); panel.SetLanguage();
+    }
+
 }

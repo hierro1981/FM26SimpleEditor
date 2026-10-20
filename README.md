@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v14
+# FM26 Simple Editor · v14.1
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -30,6 +30,15 @@ Lo ZIP resta disponibile come versione portatile. Il setup viene compilato e ver
 ## Progetto e requisiti tecnici
 
 Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Per compilare richiede Windows, SDK .NET 8 e carico di lavoro **Sviluppo di applicazioni desktop .NET**. Il lettore usa Python 3.12 o successivo e le dipendenze in `requirements.txt`, verificate e predisposte all’avvio.
+
+## Novità della versione 14.1
+
+- Sotto-tab **Staff** in **La mia squadra**, caricato su richiesta e aggiornabile senza ricaricare il salvataggio.
+- Elenco in sola lettura con ricerca per nome, club o ID, colonne ordinabili, scrollbar e numeri allineati a destra. Include lo staff del club gestito e delle affiliate controllate presenti nel suo elenco squadre, indipendentemente dal filtro delle rose giocatori.
+- Anagrafica, club del contratto/staff e club che lo elenca, paga settimanale nella valuta base del salvataggio, date del contratto e CA/PA quando disponibili. I dati assenti sono indicati con **—**, non sostituiti da zero.
+- Selezionando una persona si vedono personalità, adattabilità e preferenze decodificate. Le preferenze descrivono uno stile, non la qualità professionale. Per il gestore umano abilità e preferenze possono mancare.
+- L’allenatore umano è identificato esplicitamente; per gli altri il ruolo resta **Non identificato**. Gran parte degli attributi professionali e la dirigenza non sono leggibili. Nessuna modifica dello staff è consentita.
+- Gli errori del lettore staff restano confinati al suo sotto-tab: rosa, suggerimenti ed editor giocatori continuano a funzionare. Interfaccia e messaggi in italiano e inglese.
 
 ## Novità della versione 14
 

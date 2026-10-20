@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v14
+# FM26 Simple Editor · v14.1
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -30,6 +30,15 @@ The portable ZIP remains available. Setup is compiled and checked on `main`, but
 ## Project and technical requirements
 
 A C# Windows Forms project for Visual Studio 2026, with a local Python reader. Building requires Windows, the .NET 8 SDK and the **.NET desktop development** workload. The reader uses Python 3.12 or newer and the dependencies in `requirements.txt`, checked and prepared at startup.
+
+## Changes in version 14.1
+
+- New **Staff** sub-tab in **My squad**, loaded on demand and refreshable without reopening the save.
+- Read-only list with name/club/ID search, sortable columns, scrollbars and right-aligned numeric fields. Includes the managed club and controlled affiliates in its team list, independently of the player squad filter.
+- Identity, contract/staff club and listing club, weekly pay in the save’s base currency, contract dates and CA/PA when available. Missing values show **—** instead of zero.
+- Select a person to see decoded personality, adaptability and preferences. Preferences describe style, not professional quality. The human manager may have no readable ability or preferences.
+- The human manager is explicitly identified; other job titles remain **Not identified**. Most professional attributes and the board are not readable. Staff cannot be edited.
+- Staff reader errors stay within the sub-tab: squad lists, recommendations and player editing remain usable. Italian and English UI and messages.
 
 ## Changes in version 14
 

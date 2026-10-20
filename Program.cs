@@ -138,6 +138,7 @@ public sealed class MainForm : Form
         mySquadTab.Controls.Add(mySquad);
         mySquad.PlayerOpenRequested += async uid => await LoadPlayer(uid);
         mySquad.AddComparisonRequested += AddComparison;
+        mySquad.StaffRequested += async uid => await RefreshStaff(uid);
         mySquad.ReloadRequested += async () => { mySquadLoaded = false; await RefreshMySquad(); };
         comparisonTab.Controls.Add(comparison); historyTab.Controls.Add(historyPanel);
         comparison.RemoveRequested += uid => { comparisonPool.Remove(uid); UpdatePoolLabel(); RefreshComparison(); };
@@ -496,6 +497,21 @@ public sealed class MainForm : Form
             state.Text = L10n.Get("MySquadLoaded");
         }
         catch (Exception exc) { Error(L10n.Get("MySquadLoadError"), exc); }
+        finally { SetBusy(false); mySquad.EnsureStaffLoaded(); }
+    }
+
+    private async Task RefreshStaff(uint clubUid)
+    {
+        if (busy || binding || catalog.Count == 0) return;
+        SetBusy(true, L10n.Get("StaffLoading"), determinate: true);
+        try
+        {
+            var result = await backend.Send<StaffResult>(new { command = "my_staff", clubUid }, ReportProgress);
+            mySquad.SetStaffData(result);
+            progress.Value = 100; progressText.Text = "100%";
+            state.Text = L10n.Get("StaffLoaded");
+        }
+        catch (Exception exc) { Error(L10n.Get("StaffLoadError"), exc); }
         finally { SetBusy(false); }
     }
 

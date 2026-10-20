@@ -169,3 +169,22 @@ public sealed class BackendProgress
 
 
 
+
+public sealed class ManagedSquad
+{
+    public uint ClubUid { get; set; }
+    public string ClubName { get; set; } = "";
+    public string? ManagerName { get; set; }
+    public uint FirstTeamId { get; set; }
+    public List<uint> TeamIds { get; set; } = [];
+    public override string ToString() => ClubName + (string.IsNullOrEmpty(ManagerName) ? "" : " · " + ManagerName);
+}
+
+public sealed class MySquadResult
+{
+    public string Status { get; set; } = "none";
+    public List<ManagedSquad> Clubs { get; set; } = [];
+    public List<PlayerDetail> Players { get; set; } = [];
+    public bool FirstHumanOnly { get; set; } = true;
+    public string? Error { get; set; }
+}

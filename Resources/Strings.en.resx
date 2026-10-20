@@ -1579,4 +1579,73 @@ Hover over a position for its rating.</value>
   <data name="Backend_Inspect_12" xml:space="preserve">
     <value>attributes</value>
   </data>
+  <data name="MySquadTab" xml:space="preserve">
+    <value>6  My squad</value>
+  </data>
+  <data name="MySquadClub" xml:space="preserve">
+    <value>Managed club</value>
+  </data>
+  <data name="MySquadSearch" xml:space="preserve">
+    <value>Search the squad by name or ID</value>
+  </data>
+  <data name="MySquadRoster" xml:space="preserve">
+    <value>Squad list</value>
+  </data>
+  <data name="MySquadBest" xml:space="preserve">
+    <value>Best players by position</value>
+  </data>
+  <data name="MySquadScore" xml:space="preserve">
+    <value>Score /20</value>
+  </data>
+  <data name="MySquadFamiliarity" xml:space="preserve">
+    <value>Familiarity /20</value>
+  </data>
+  <data name="MySquadFirst" xml:space="preserve">
+    <value>First team only</value>
+  </data>
+  <data name="MySquadOther" xml:space="preserve">
+    <value>Other squads</value>
+  </data>
+  <data name="MySquadAll" xml:space="preserve">
+    <value>All players</value>
+  </data>
+  <data name="MySquadReload" xml:space="preserve">
+    <value>Refresh squad</value>
+  </data>
+  <data name="MySquadOpen" xml:space="preserve">
+    <value>Open a save to identify the club you manage.</value>
+  </data>
+  <data name="MySquadNone" xml:space="preserve">
+    <value>No managed club identified: the first human manager may be between jobs.</value>
+  </data>
+  <data name="MySquadUnavailable" xml:space="preserve">
+    <value>Could not identify the managed club: {0}</value>
+  </data>
+  <data name="MySquadFirstHuman" xml:space="preserve">
+    <value>Detects the save’s first human manager. Other human managers in multiplayer saves are not yet supported.</value>
+  </data>
+  <data name="MySquadCount" xml:space="preserve">
+    <value>Showing {0} of {1} players in the selected squad</value>
+  </data>
+  <data name="MySquadRankingInfo" xml:space="preserve">
+    <value>{0} candidates for the selected position, from {1} squad members.</value>
+  </data>
+  <data name="MySquadMethod" xml:space="preserve">
+    <value>Choose a position on the pitch or in the menu. Weighted mean of 1–20 attributes: essential ×3, important ×2, useful ×1, as in the role report. Requires complete attributes and familiarity ≥12/20. Ties: familiarity, name, then ID. Shows up to 3 players without filling empty places with unsuitable candidates. Data updates after saving edits.</value>
+  </data>
+  <data name="MySquadLoading" xml:space="preserve">
+    <value>Loading my squad</value>
+  </data>
+  <data name="MySquadLoaded" xml:space="preserve">
+    <value>Squad data refreshed</value>
+  </data>
+  <data name="MySquadLoadError" xml:space="preserve">
+    <value>Could not load squad data</value>
+  </data>
+  <data name="Backend_MySquadIdentification" xml:space="preserve">
+    <value>Identifying the managed club</value>
+  </data>
+  <data name="Backend_MySquadAttributes" xml:space="preserve">
+    <value>Reading squad members and attributes</value>
+  </data>
 </root>

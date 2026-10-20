@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v13.1.1
+# FM26 Simple Editor · v14
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -30,6 +30,17 @@ Lo ZIP resta disponibile come versione portatile. Il setup viene compilato e ver
 ## Progetto e requisiti tecnici
 
 Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Per compilare richiede Windows, SDK .NET 8 e carico di lavoro **Sviluppo di applicazioni desktop .NET**. Il lettore usa Python 3.12 o successivo e le dipendenze in `requirements.txt`, verificate e predisposte all’avvio.
+
+## Novità della versione 14
+
+- Nuovo tab **La mia squadra**, con rilevamento del club gestito dal primo allenatore umano del salvataggio.
+- Filtro **Solo prima squadra** predefinito, **Altre squadre** o **Tutti i giocatori**, basato sugli ID delle rose e comprensivo delle squadre affiliate presenti nell’elenco del club.
+- Elenco con ricerca per nome/ID, colonne ordinabili, scrollbar, prestiti evidenziati e apertura del giocatore o aggiunta al confronto.
+- Sotto-tab **Migliori per posizione**: scegli sul campo o nel menu la posizione e visualizza fino ai tre migliori candidati della rosa selezionata.
+- Il punteggio usa gli stessi profili del report per ruolo: media degli attributi su scala 1–20, pesi 3/2/1. Richiede familiarità almeno 12/20 e dati completi; CA e PA non alterano il punteggio. A parità contano familiarità, nome e ID. Non è la formula di valutazione del gioco.
+- Dopo aver salvato un giocatore la rosa viene riletta all’apertura del tab; **Aggiorna rosa** permette di rileggerla anche manualmente. Le modifiche non salvate non entrano nella classifica.
+- Se il gestore è senza contratto o non è riconoscibile, il tab segnala l’assenza senza scegliere un club arbitrario. Con `fmsave 0.5.10` è supportato solo il primo allenatore umano, anche nelle carriere multigiocatore.
+- Tutti i nuovi testi sono disponibili in italiano e inglese. Il branch `v14` esegue verifiche DLL/Python senza generare EXE, ZIP o setup.
 
 ## Novità della versione 13.1.1
 

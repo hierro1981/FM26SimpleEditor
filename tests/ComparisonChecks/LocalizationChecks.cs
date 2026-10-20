@@ -45,10 +45,10 @@ internal static class LocalizationChecks
         }
         finally { L10n.SetLanguage("it"); Directory.Delete(directory, recursive: true); }
         check(UpdateChecker.TryVersion("v13", out var simple) && UpdateChecker.TryVersion("v13.0.0", out var full) && simple == full, "release version components normalize");
-        check(UpdateChecker.TryVersion("v9", out var older) && UpdateChecker.TryVersion("v13.2", out var newer) && older < AppInfo.Version && newer > AppInfo.Version, "release version comparison is numeric");
+        check(UpdateChecker.TryVersion("v9", out var older) && UpdateChecker.TryVersion("v99", out var newer) && older < AppInfo.Version && newer > AppInfo.Version, "release version comparison is numeric");
         check(!UpdateChecker.TryVersion("v14-beta", out _) && !UpdateChecker.TryVersion("latest", out _) && !UpdateChecker.TryVersion("v999999999999", out _), "invalid and prerelease versions are rejected");
         string Json(string tag, string url, bool draft = false, bool pre = false) => JsonSerializer.Serialize(new { tag_name = tag, html_url = url, draft, prerelease = pre });
-        check(UpdateChecker.Parse(Json("v14", AppInfo.RepositoryUrl + "/releases/tag/v14"))?.Version > AppInfo.Version, "valid newer GitHub release is recognized");
+        check(UpdateChecker.Parse(Json("v99", AppInfo.RepositoryUrl + "/releases/tag/v99"))?.Version > AppInfo.Version, "valid newer GitHub release is recognized");
         check(UpdateChecker.Parse(Json("v14", "https://example.org/releases/tag/v14")) is null && UpdateChecker.Parse(Json("v14", "http://github.com/hierro1981/FM26SimpleEditor/releases/tag/v14")) is null, "release links are restricted to this HTTPS GitHub repository");
         check(UpdateChecker.Parse(Json("v14", AppInfo.RepositoryUrl + "/releases/tag/v14", pre: true)) is null && UpdateChecker.Parse(Json("v14", AppInfo.RepositoryUrl + "/releases/tag/v14", draft: true)) is null && UpdateChecker.Parse("{}") is null, "draft, prerelease and incomplete release payloads are ignored");
         using (var about = new AboutForm(_ => Task.FromResult<ReleaseUpdate?>(new(new Version(99, 0, 0), "v99", new Uri(AppInfo.RepositoryUrl + "/releases/tag/v99")))))

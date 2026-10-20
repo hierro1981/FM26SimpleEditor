@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v13.1.1
+# FM26 Simple Editor · v14
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -30,6 +30,17 @@ The portable ZIP remains available. Setup is compiled and checked on `main`, but
 ## Project and technical requirements
 
 A C# Windows Forms project for Visual Studio 2026, with a local Python reader. Building requires Windows, the .NET 8 SDK and the **.NET desktop development** workload. The reader uses Python 3.12 or newer and the dependencies in `requirements.txt`, checked and prepared at startup.
+
+## Changes in version 14
+
+- New **My squad** tab, detecting the club managed by the save’s first human manager.
+- **First team only** by default, with **Other squads** and **All players** options, using squad IDs and including affiliated teams listed by the managed club.
+- Searchable name/ID list with sortable columns, scrollbars, highlighted loans, player opening and comparison-pool actions.
+- **Best players by position** sub-tab: choose on the pitch or in the menu to see up to three candidates from the selected squad.
+- The score reuses the role report’s attribute profiles: weighted mean on the 1–20 scale with weights 3/2/1. Requires familiarity of at least 12/20 and complete data; CA/PA do not change the score. Ties use familiarity, name and ID. This is not the game’s evaluation formula.
+- Saving a player invalidates the squad cache; returning to the tab reloads it. **Refresh squad** also rereads it manually. Unsaved edits do not enter the ranking.
+- Unemployed or unidentified managers produce an explanatory empty state rather than an arbitrary club. With `fmsave 0.5.10`, only the first human manager is supported, including multiplayer careers.
+- All new text is available in Italian and English. The `v14` branch runs DLL/Python validation without creating EXE, ZIP or setup files.
 
 ## Changes in version 13.1.1
 

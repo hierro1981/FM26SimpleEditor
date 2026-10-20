@@ -24,6 +24,9 @@ public sealed class MainForm : Form
     private readonly TabPage editTab = new(L10n.Get("Text_d10c243588b5"));
     private readonly TabPage previewTab = new(L10n.Get("Text_e17d380480a5"));
     private readonly TabPage comparisonTab = new(L10n.Get("Text_49be2b3731fc"));
+    private readonly TabPage mySquadTab = new(L10n.Get("MySquadTab"));
+    private readonly MySquadPanel mySquad = new();
+    private bool mySquadLoaded;
     private readonly TabPage historyTab = new(L10n.Get("Text_53a436ea8c92"));
     private readonly ComparisonPanel comparison = new();
     private readonly HistoryPanel historyPanel = new();
@@ -130,8 +133,12 @@ public sealed class MainForm : Form
         status.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         status.Controls.Add(state, 0, 0); status.Controls.Add(progress, 1, 0); status.Controls.Add(progressText, 2, 0);
-        tabs.TabPages.AddRange([searchTab, editTab, previewTab, comparisonTab, historyTab]);
+        tabs.TabPages.AddRange([searchTab, editTab, previewTab, comparisonTab, historyTab, mySquadTab]);
         BuildSearch(); BuildEditor();
+        mySquadTab.Controls.Add(mySquad);
+        mySquad.PlayerOpenRequested += async uid => await LoadPlayer(uid);
+        mySquad.AddComparisonRequested += AddComparison;
+        mySquad.ReloadRequested += async () => { mySquadLoaded = false; await RefreshMySquad(); };
         comparisonTab.Controls.Add(comparison); historyTab.Controls.Add(historyPanel);
         comparison.RemoveRequested += uid => { comparisonPool.Remove(uid); UpdatePoolLabel(); RefreshComparison(); };
         comparison.ClearRequested += () => { comparisonPool.Clear(); UpdatePoolLabel(); RefreshComparison(); };
@@ -162,11 +169,12 @@ public sealed class MainForm : Form
         {
             if (!binding && !busy && (args.TabPage == previewTab || args.TabPage == comparisonTab || args.TabPage == historyTab) && !FinishEdits()) args.Cancel = true;
         };
-        tabs.SelectedIndexChanged += (_, _) =>
+        tabs.SelectedIndexChanged += async (_, _) =>
         {
             if (tabs.SelectedTab == previewTab) { FinishEdits(); RefreshPreview(); }
             if (tabs.SelectedTab == comparisonTab) { FinishEdits(); RefreshComparison(); }
             if (tabs.SelectedTab == historyTab) RefreshHistory();
+            if (tabs.SelectedTab == mySquadTab) await RefreshMySquad();
         };
         copyPlayerName.Click += (_, _) => CopyIdentity(detail?.Player.Name);
         copyPublicId.Click += (_, _) => CopyIdentity(detail?.Player.Id?.ToString(CultureInfo.InvariantCulture));
@@ -195,7 +203,7 @@ public sealed class MainForm : Form
             if (!FinishEdits()) { language.SelectedIndex = UseItalian ? 0 : 1; return; }
             L10n.SetLanguage(selected.Id);
             L10n.Apply(this);
-            options.SetLanguage(UseItalian);
+            options.SetLanguage(UseItalian); mySquad.SetLanguage();
             state.Text = L10n.Translate(state.Text);
             UpdatePlayerIdentity();
             if (detail is not null) birthInfo.Text = detail.BirthEditable ? L10n.Get("Text_ec60709e94bb") : L10n.Backend(detail.BirthWarning);
@@ -476,6 +484,21 @@ public sealed class MainForm : Form
             (uid,sources) => backend.Send<HistoryResult>(new { command = "history", uid, sources }));
     }
 
+    private async Task RefreshMySquad()
+    {
+        if (busy || binding || mySquadLoaded || catalog.Count == 0) return;
+        SetBusy(true, L10n.Get("MySquadLoading"), determinate: true);
+        try
+        {
+            var result = await backend.Send<MySquadResult>(new { command = "my_squad" }, ReportProgress);
+            mySquad.SetData(result); mySquadLoaded = true;
+            progress.Value = 100; progressText.Text = "100%";
+            state.Text = L10n.Get("MySquadLoaded");
+        }
+        catch (Exception exc) { Error(L10n.Get("MySquadLoadError"), exc); }
+        finally { SetBusy(false); }
+    }
+
     private async Task OpenFile()
     {
         using var dialog = new OpenFileDialog { Filter = L10n.Get("Text_b67eeb7fa174") };
@@ -488,6 +511,7 @@ public sealed class MainForm : Form
             await Task.Yield();
             catalog = result.Players; catalogByUid = catalog.ToDictionary(player => player.Uid); file.Text = result.Source;
             gameDate = DateTime.TryParseExact(result.GameDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var clock) ? clock : null;
+            mySquadLoaded = false; mySquad.ClearForSave(true);
             detail = null; originalAttributes = []; originalPositions = [];
             comparisonPool.Clear(); UpdatePoolLabel(); comparison.ClearCache(); historyPanel.ClearSources();
             identity.Text = L10n.Get("Text_3f8498e92e4b"); affiliation.Text = L10n.Get("Text_9a36d649406a");
@@ -505,7 +529,12 @@ public sealed class MainForm : Form
 
     private async Task LoadSelected()
     {
-        if (busy || players.SelectedRows.Count != 1 || players.SelectedRows[0].DataBoundItem is not PlayerRow row) return;
+        if (SelectedRow() is PlayerRow row) await LoadPlayer(row.Uid);
+    }
+
+    private async Task LoadPlayer(uint uid)
+    {
+        if (busy || !catalogByUid.TryGetValue(uid, out var row)) return;
         if (detail?.Player.Uid == row.Uid) { tabs.SelectedTab = editTab; return; }
         if (!ConfirmDiscard()) return;
         SetBusy(true, L10n.Format("Text_0af5b1bce786", row.Name), determinate: true);
@@ -656,7 +685,7 @@ public sealed class MainForm : Form
             int at = catalog.FindIndex(player => player.Uid == result.Detail.Player.Uid);
             if (at >= 0) catalog[at] = result.Detail.Player;
             catalogByUid[result.Detail.Player.Uid] = result.Detail.Player;
-            comparison.ClearCache();
+            comparison.ClearCache(); mySquadLoaded = false;
             SetDetail(result.Detail);
             progress.Value = 100; progressText.Text = "100%";
             state.Text = L10n.Get("Text_6aef1e9c089a");

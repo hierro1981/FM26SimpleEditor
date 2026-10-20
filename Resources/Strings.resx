@@ -1579,4 +1579,73 @@ Passa sul punto per il valore.</value>
   <data name="Backend_Inspect_12" xml:space="preserve">
     <value>attributi</value>
   </data>
+  <data name="MySquadTab" xml:space="preserve">
+    <value>6  La mia squadra</value>
+  </data>
+  <data name="MySquadClub" xml:space="preserve">
+    <value>Squadra allenata</value>
+  </data>
+  <data name="MySquadSearch" xml:space="preserve">
+    <value>Cerca nella rosa per nome o ID</value>
+  </data>
+  <data name="MySquadRoster" xml:space="preserve">
+    <value>Rosa</value>
+  </data>
+  <data name="MySquadBest" xml:space="preserve">
+    <value>Migliori per posizione</value>
+  </data>
+  <data name="MySquadScore" xml:space="preserve">
+    <value>Punteggio /20</value>
+  </data>
+  <data name="MySquadFamiliarity" xml:space="preserve">
+    <value>Familiarità /20</value>
+  </data>
+  <data name="MySquadFirst" xml:space="preserve">
+    <value>Solo prima squadra</value>
+  </data>
+  <data name="MySquadOther" xml:space="preserve">
+    <value>Altre squadre</value>
+  </data>
+  <data name="MySquadAll" xml:space="preserve">
+    <value>Tutti i giocatori</value>
+  </data>
+  <data name="MySquadReload" xml:space="preserve">
+    <value>Aggiorna rosa</value>
+  </data>
+  <data name="MySquadOpen" xml:space="preserve">
+    <value>Apri un salvataggio per identificare la squadra che alleni.</value>
+  </data>
+  <data name="MySquadNone" xml:space="preserve">
+    <value>Nessuna squadra allenata identificata: il primo allenatore umano potrebbe essere senza contratto.</value>
+  </data>
+  <data name="MySquadUnavailable" xml:space="preserve">
+    <value>Impossibile identificare la squadra allenata: {0}</value>
+  </data>
+  <data name="MySquadFirstHuman" xml:space="preserve">
+    <value>Rilevamento del primo allenatore umano del salvataggio. Nelle partite con più utenti gli altri allenatori non sono ancora supportati.</value>
+  </data>
+  <data name="MySquadCount" xml:space="preserve">
+    <value>{0} giocatori mostrati su {1} nella rosa selezionata</value>
+  </data>
+  <data name="MySquadRankingInfo" xml:space="preserve">
+    <value>{0} candidati per la posizione selezionata, su {1} giocatori nella rosa.</value>
+  </data>
+  <data name="MySquadMethod" xml:space="preserve">
+    <value>Seleziona una posizione sul campo o nel menu. Media degli attributi 1–20: fondamentali ×3, importanti ×2, utili ×1, come nel report per ruolo. Sono ammessi solo profili completi e familiarità ≥12/20. A parità: familiarità, nome e ID. Mostra fino a 3 giocatori, senza completare con candidati inadatti. I dati cambiano dopo il salvataggio delle modifiche.</value>
+  </data>
+  <data name="MySquadLoading" xml:space="preserve">
+    <value>Caricamento della mia squadra</value>
+  </data>
+  <data name="MySquadLoaded" xml:space="preserve">
+    <value>Rosa della squadra aggiornata</value>
+  </data>
+  <data name="MySquadLoadError" xml:space="preserve">
+    <value>Errore nel caricamento della squadra</value>
+  </data>
+  <data name="Backend_MySquadIdentification" xml:space="preserve">
+    <value>Identificazione della squadra allenata</value>
+  </data>
+  <data name="Backend_MySquadAttributes" xml:space="preserve">
+    <value>Lettura della rosa e degli attributi</value>
+  </data>
 </root>

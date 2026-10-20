@@ -1,0 +1,68 @@
+import io
+import json
+import unittest
+from types import SimpleNamespace as NS
+from my_squad import read_my_squad
+from operation_progress import ProgressReporter
+
+
+class MySquadTests(unittest.TestCase):
+    def store(self, managed=True):
+        manager = NS(club_uid=10, manager_name='Human')
+        teams = [NS(team_id=100, slot=0, is_affiliate=False),
+                 NS(team_id=101, slot=1, is_affiliate=False),
+                 NS(team_id=900, slot=2, is_affiliate=True)]
+        club = NS(uid=10, name='Club', teams=teams)
+        rows = [dict(uid=1, teamId=100, positions={'MC':20}),
+                dict(uid=2, teamId=101, positions={'MC':15}),
+                dict(uid=3, teamId=900, positions={'MC':12}),
+                # Outgoing loan: owner club must not override current squad.
+                dict(uid=4, teamId=500, ownerTeam='Club', positions={'MC':20}),
+                dict(uid=5, teamId=None, team='Club', positions={'MC':20})]
+        layout = NS(attribute_field_order=['passing','technique'], attribute_count=4,
+                    left_foot_index=2, right_foot_index=3, attributes_offset=0)
+        return NS(save=NS(managed_clubs=lambda:[manager] if managed else [], clubs=lambda:[club]),
+                  rows=rows, layout=layout, raw=bytes([50,75,10,20]),
+                  player=lambda uid:NS(uid=uid), offsets=lambda p:(0,4))
+
+    def test_exact_team_ids_include_affiliate_but_exclude_loans_and_name_matches(self):
+        result=read_my_squad(self.store())
+        self.assertEqual(result['status'],'ready')
+        self.assertEqual(result['clubs'][0],dict(clubUid=10,clubName='Club',managerName='Human',firstTeamId=100,teamIds=[100,101,900]))
+        self.assertEqual([p['player']['uid'] for p in result['players']],[1,2,3])
+        self.assertTrue(result['firstHumanOnly'])
+
+    def test_attributes_and_positions_keep_raw_values_without_loading_edit_details(self):
+        result=read_my_squad(self.store())
+        player=result['players'][0]
+        self.assertEqual([(a['key'],a['value']) for a in player['attributes']], [('passing',50),('technique',75),('left_foot',10),('right_foot',20)])
+        self.assertEqual(player['positions'],[dict(key='MC',value=20)])
+
+    def test_unemployed_manager_does_not_fall_back_to_arbitrary_club(self):
+        store=self.store(managed=False)
+        store.save.clubs=lambda: self.fail('No club search should be needed')
+        self.assertEqual(read_my_squad(store)['status'],'none')
+
+    def test_reader_failure_is_an_explicit_optional_feature_error(self):
+        store=self.store()
+        def fail(): raise ValueError('Unsupported layout')
+        store.save.managed_clubs=fail
+        result=read_my_squad(store)
+        self.assertEqual(result['status'],'unavailable')
+        self.assertEqual(result['players'],[])
+        self.assertEqual(result['error'],'Unsupported layout')
+
+    def test_ambiguous_first_team_is_not_guessed(self):
+        store=self.store(); club=store.save.clubs()[0]
+        club.teams.append(NS(team_id=102,slot=0,is_affiliate=False))
+        store.save.clubs=lambda:[club]
+        self.assertEqual(read_my_squad(store)['status'],'unavailable')
+
+    def test_progress_is_monotonic_and_counts_squad_members(self):
+        out=io.StringIO();read_my_squad(self.store(),ProgressReporter(out))
+        events=[json.loads(line) for line in out.getvalue().splitlines()]
+        self.assertEqual([e['percent'] for e in events],sorted(e['percent'] for e in events))
+        self.assertEqual((events[-1]['done'],events[-1]['total']),(3,3))
+
+
+if __name__=='__main__': unittest.main()

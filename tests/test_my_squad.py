@@ -28,9 +28,18 @@ class MySquadTests(unittest.TestCase):
     def test_exact_team_ids_include_affiliate_but_exclude_loans_and_name_matches(self):
         result=read_my_squad(self.store())
         self.assertEqual(result['status'],'ready')
-        self.assertEqual(result['clubs'][0],dict(clubUid=10,clubName='Club',managerName='Human',firstTeamId=100,teamIds=[100,101,900]))
+        self.assertEqual(result['clubs'][0],dict(clubUid=10,clubName='Club',managerName='Human',firstTeamId=100,teamIds=[100,101,900],teams=[dict(teamId=100,slot=0,name=None),dict(teamId=101,slot=1,name=None),dict(teamId=900,slot=2,name=None)]))
         self.assertEqual([p['player']['uid'] for p in result['players']],[1,2,3])
         self.assertTrue(result['firstHumanOnly'])
+
+    def test_squad_names_only_use_readable_names_not_slot_guesses(self):
+        store=self.store();club=store.save.clubs()[0]
+        club.teams[2].club_uid=50
+        store.save.clubs=lambda:[club,NS(uid=50,name='Club B')]
+        teams=read_my_squad(store)['clubs'][0]['teams']
+        self.assertEqual(teams[2]['name'],'Club B')
+        self.assertIsNone(teams[1]['name'])  # An unknown internal slot is not invented U20.
+        self.assertEqual(teams[1]['teamId'],101)
 
     def test_attributes_and_positions_keep_raw_values_without_loading_edit_details(self):
         result=read_my_squad(self.store())

@@ -24,16 +24,16 @@ internal static class MySquadChecks
         check(members.Select(p => p.Player.Uid).SequenceEqual(new uint[] { 1, 2, 4, 5 }), "my squad default membership uses first-team ID");
         check(SquadSelection.Members(data, club, SquadScope.OtherTeams).Select(p => p.Player.Uid).SequenceEqual(new uint[] { 3, 6 }), "other squads include affiliated team IDs");
         check(SquadSelection.Members(data, club, SquadScope.All).Count == 6, "all squads exclude outside and outgoing-loan team IDs");
-        var top = SquadSelection.TopThree(members, "MC");
+        var top = SquadSelection.TopFive(members, "MC");
         check(top.Count == 2 && top[0].Player.Uid == 2 && top[0].Score == 18 && top[1].Player.Uid == 1, "ranking uses position attributes instead of CA; no unsuitable filler");
         check(!top.Any(p => p.Player.Uid is 4 or 5), "ranking excludes inadequate familiarity and incomplete attributes");
-        check(SquadSelection.TopThree(SquadSelection.Members(data, club, SquadScope.All), "MC").Select(p => p.Player.Uid).SequenceEqual(new uint[] { 3, 2, 6 }), "ranking respects scope and returns at most three");
-        check(SquadSelection.TopThree(members, "GK").Count == 0, "no playable keeper yields an empty recommendation list");
+        check(SquadSelection.TopFive(SquadSelection.Members(data, club, SquadScope.All), "MC").Select(p => p.Player.Uid).SequenceEqual(new uint[] { 3, 2, 6, 1 }), "ranking respects scope and returns the five-candidate limit");
+        check(SquadSelection.TopFive(members, "GK").Count == 0, "no playable keeper yields an empty recommendation list");
         check(top[0].Score == RoleComparison.Compare(better, better, "MC").ScoreA, "recommendation score matches role comparison exactly");
         var t1 = Player(10, 10, 75, 15); var t2 = Player(11, 10, 75, 20); var t3 = Player(12, 10, 75, 20);
         t2.Player.Name = "Same"; t3.Player.Name = "Same";
-        check(SquadSelection.TopThree([t3, t1, t2], "MC").Select(p => p.Player.Uid).SequenceEqual(new uint[] { 11, 12, 10 }), "equal scores use familiarity and stable UID tie-breaker");
-        bool invalid = false; try { SquadSelection.TopThree(members, "bogus"); } catch (ArgumentException) { invalid = true; }
+        check(SquadSelection.TopFive([t3, t1, t2], "MC").Select(p => p.Player.Uid).SequenceEqual(new uint[] { 11, 12, 10 }), "equal scores use familiarity and stable UID tie-breaker");
+        bool invalid = false; try { SquadSelection.TopFive(members, "bogus"); } catch (ArgumentException) { invalid = true; }
         check(invalid, "unknown recommendation position rejected");
         check(SquadSelection.Members(new MySquadResult(), club, SquadScope.All).Count == 0, "unidentified managed club never returns arbitrary players");
         L10n.SetLanguage("it");
@@ -45,9 +45,9 @@ internal static class MySquadChecks
         check(scope.SelectedIndex == 0 && roster.Rows.Count == 4, "my squad UI defaults to first team");
         check(roster.ScrollBars == ScrollBars.Both && roster.Columns.Cast<DataGridViewColumn>().All(c => c.SortMode == DataGridViewColumnSortMode.Programmatic) && roster.Columns["Age"].DefaultCellStyle.Alignment == DataGridViewContentAlignment.MiddleRight, "squad grid retains scrolling sorting and numeric alignment");
         scope.SelectedIndex = 2; Application.DoEvents();
-        check(roster.Rows.Count == 6 && ranking.Rows.Count == 3, "scope applies to list and ranking together");
+        check(roster.Rows.Count == 6 && ranking.Rows.Count == 4, "scope applies to list and ranking together");
         var search = All(panel).OfType<TextBox>().Single(t => t.Name == "MySquadSearch"); search.Text = "1002";
-        check(roster.Rows.Count == 1 && ((PlayerRow)roster.Rows[0].DataBoundItem).Uid == 2 && ranking.Rows.Count == 3, "public ID search filters roster without hiding ranking candidates");
+        check(roster.Rows.Count == 1 && ((PlayerRow)roster.Rows[0].DataBoundItem).Uid == 2 && ranking.Rows.Count == 4, "public ID search filters roster without hiding ranking candidates");
         uint? opened = null; panel.PlayerOpenRequested += uid => opened = uid;
         roster.Rows[0].Selected = true;
         All(panel).OfType<Button>().Where(b => b.Text == L10n.Get("Text_9337b648a0e1")).First().PerformClick();

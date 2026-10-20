@@ -33,6 +33,11 @@ A C# Windows Forms project for Visual Studio 2026, with a local Python reader. B
 
 ## Changes in version 14.1
 
+- Fixed the squad filter remaining disabled on the first visit after loading. In addition to grouped options, every sub-squad is individually selectable: readable name when available, otherwise slot/ID without inventing U20/U18 labels.
+- Default squad sorting follows position (keeper → striker, left → centre → right), then descending CA.
+- Up to **5** position candidates, with stars derived from the score (`score / 4`, rounded to half a star).
+- **Ctrl/Shift+click on the pitch** adds/removes a second position; a second menu provides the same selection. A player must be playable in both positions: the score averages both profiles and both familiarity values are shown. Hover over the score for individual position scores.
+
 - New **Staff** sub-tab in **My squad**, loaded on demand and refreshable without reopening the save.
 - Read-only list with name/club/ID search, sortable columns, scrollbars and right-aligned numeric fields. Includes the managed club and controlled affiliates in its team list, independently of the player squad filter.
 - Identity, contract/staff club and listing club, weekly pay in the save’s base currency, contract dates and CA/PA when available. Missing values show **—** instead of zero.

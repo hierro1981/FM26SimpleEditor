@@ -52,6 +52,16 @@ public sealed class PitchControl : Control
     private string selectedPosition = "";
     public bool SelectionEnabled { get; set; }
     public event Action<string>? PositionSelected;
+    public bool MultiSelectionEnabled { get; set; }
+    public event Action<string, bool>? PositionActivated;
+    private string secondarySelectedPosition = "";
+    public string SecondarySelectedPosition { get => secondarySelectedPosition; set { secondarySelectedPosition = value; Invalidate(); } }
+    public void ActivatePosition(string key, bool extendSelection)
+    {
+        if (!SelectionEnabled || !PositionScheme.Order.Contains(key)) return;
+        if (MultiSelectionEnabled) PositionActivated?.Invoke(key, extendSelection);
+        else { SelectedPosition = key; PositionSelected?.Invoke(key); }
+    }
     public string SelectedPosition { get => selectedPosition; set { selectedPosition = value; Invalidate(); } }
     private static readonly (string Key, float X, float Y)[] Nodes =
     [
@@ -96,7 +106,7 @@ public sealed class PitchControl : Control
             var rating = ratings.GetValueOrDefault(key, 1);
             var box = new RectangleF(pitch.Left + x * pitch.Width - dot / 2, pitch.Top + y * pitch.Height - dot / 2, dot, dot);
             hitAreas[key] = box;
-            var color = SelectionEnabled ? key == SelectedPosition ? Color.Gold : Color.LightSteelBlue : rating >= 18 ? Color.FromArgb(89, 220, 126) : rating >= 15 ? Color.FromArgb(244, 203, 82) : rating >= 12 ? Color.FromArgb(223, 151, 76) : Color.FromArgb(73, 112, 93);
+            var color = SelectionEnabled ? (key == SelectedPosition || key == SecondarySelectedPosition) ? Color.Gold : Color.LightSteelBlue : rating >= 18 ? Color.FromArgb(89, 220, 126) : rating >= 15 ? Color.FromArgb(244, 203, 82) : rating >= 12 ? Color.FromArgb(223, 151, 76) : Color.FromArgb(73, 112, 93);
             using var fill = new SolidBrush(color);
             using var border = new Pen(Color.FromArgb(220, 242, 232), rating >= 15 ? 2 : 1);
             g.FillEllipse(fill, box); g.DrawEllipse(border, box);
@@ -121,7 +131,7 @@ public sealed class PitchControl : Control
         if (!SelectionEnabled || args.Button != MouseButtons.Left) return;
         var key = hitAreas.FirstOrDefault(pair => pair.Value.Contains(args.Location)).Key;
         if (key is null) return;
-        SelectedPosition = key; PositionSelected?.Invoke(key);
+        ActivatePosition(key, (ModifierKeys & (Keys.Control | Keys.Shift)) != Keys.None);
     }
     protected override void Dispose(bool disposing) { if (disposing) tip.Dispose(); base.Dispose(disposing); }
 }

@@ -177,6 +177,7 @@ public sealed class ManagedSquad
     public string? ManagerName { get; set; }
     public uint FirstTeamId { get; set; }
     public List<uint> TeamIds { get; set; } = [];
+    public List<ManagedSquadTeam> Teams { get; set; } = [];
     public override string ToString() => ClubName + (string.IsNullOrEmpty(ManagerName) ? "" : " · " + ManagerName);
 }
 
@@ -225,4 +226,11 @@ public sealed class StaffResult
     public uint? ClubUid { get; set; }
     public List<StaffRow> Staff { get; set; } = [];
     public string? Error { get; set; }
+}
+
+public sealed class ManagedSquadTeam
+{
+    public uint TeamId { get; set; }
+    public int? Slot { get; set; }
+    public string? Name { get; set; }
 }

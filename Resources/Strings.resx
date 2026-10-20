@@ -1631,7 +1631,7 @@ Passa sul punto per il valore.</value>
     <value>{0} candidati per la posizione selezionata, su {1} giocatori nella rosa.</value>
   </data>
   <data name="MySquadMethod" xml:space="preserve">
-    <value>Seleziona una posizione sul campo o nel menu. Media degli attributi 1–20: fondamentali ×3, importanti ×2, utili ×1, come nel report per ruolo. Sono ammessi solo profili completi e familiarità ≥12/20. A parità: familiarità, nome e ID. Mostra fino a 3 giocatori, senza completare con candidati inadatti. I dati cambiano dopo il salvataggio delle modifiche.</value>
+    <value>Ctrl/Shift+clic: aggiungi/rimuovi la seconda posizione (o usa i menu). Pesi attributi 3/2/1; due posizioni: media dei punteggi e familiarità ≥12/20 in entrambe. Fino a 5 profili completi. Stelle = punteggio/4, a mezze stelle; non sono quelle del gioco. Parità: familiarità minima, nome, ID. Dati salvati.</value>
   </data>
   <data name="MySquadLoading" xml:space="preserve">
     <value>Caricamento della mia squadra</value>
@@ -1809,5 +1809,23 @@ Passa sul punto per il valore.</value>
   </data>
   <data name="StaffPreference_width" xml:space="preserve">
     <value>Ampiezza</value>
+  </data>
+  <data name="MySquadSecondNone" xml:space="preserve">
+    <value>Seconda posizione: nessuna</value>
+  </data>
+  <data name="MySquadStars" xml:space="preserve">
+    <value>Stelle (posizione)</value>
+  </data>
+  <data name="MySquadStarsValue" xml:space="preserve">
+    <value>{0:0.0}/5 · punteggio / 4, arrotondato a mezza stella</value>
+  </data>
+  <data name="MySquadTeamSlot" xml:space="preserve">
+    <value>Rosa · slot {0} · ID {1}</value>
+  </data>
+  <data name="MySquadTeamId" xml:space="preserve">
+    <value>Rosa · ID {0}</value>
+  </data>
+  <data name="MySquadTeamNamesHint" xml:space="preserve">
+    <value>Le sotto-squadre sono selezionabili singolarmente. Se il nome U20/U18/B non è leggibile, la rosa è identificata da slot e ID.</value>
   </data>
 </root>

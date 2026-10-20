@@ -12,8 +12,9 @@ public sealed class MySquadPanel : UserControl
     private readonly Label count = new() { AutoSize = true, Anchor = AnchorStyles.Left };
     private readonly DataGridView roster = Grid("MySquadRoster");
     private readonly DataGridView ranking = Grid("MySquadRanking");
-    private readonly PitchControl pitch = new() { SelectionEnabled = true, SelectedPosition = "MC", MinimumSize = new Size(230, 350) };
+    private readonly PitchControl pitch = new() { SelectionEnabled = true, MultiSelectionEnabled = true, SelectedPosition = "MC", MinimumSize = new Size(230, 350) };
     private readonly ComboBox position = new() { Name = "MySquadPosition", DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
+    private readonly ComboBox secondPosition = new() { Name = "MySquadSecondPosition", DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
     private readonly Label advice = new() { AutoSize = true, ForeColor = Color.DimGray };
     private readonly Button open = new() { Text = L10n.Get("Text_9337b648a0e1"), AutoSize = true };
     private readonly Button openRanked = new() { Text = L10n.Get("Text_9337b648a0e1"), AutoSize = true };
@@ -25,13 +26,21 @@ public sealed class MySquadPanel : UserControl
     private bool binding;
     private bool hasSave;
     private string selectedPosition = "MC";
-    private string sortField = "Name";
+    private string? secondaryPosition;
+    private string sortField = "MainPosition";
+    private bool defaultOrder = true;
     private bool descending;
     public event Action<uint>? StaffRequested;
     public event Action? ReloadRequested;
     public event Action<uint>? PlayerOpenRequested;
     public event Action<uint>? AddComparisonRequested;
-    private sealed record PositionChoice(string Key) { public override string ToString() => Labels.Position(Key, L10n.IsItalian); }
+    private sealed record PositionChoice(string Key) { public override string ToString() => Key.Length == 0 ? L10n.Get("MySquadSecondNone") : Labels.Position(Key, L10n.IsItalian); }
+    private sealed record ScopeChoice(SquadScope Mode, uint? TeamId = null, string? Name = null, int? Slot = null)
+    {
+        public override string ToString() => TeamId.HasValue ? !string.IsNullOrWhiteSpace(Name) ? Name + " · ID " + TeamId :
+            Slot.HasValue ? L10n.Format("MySquadTeamSlot", Slot.Value, TeamId) : L10n.Format("MySquadTeamId", TeamId) :
+            L10n.Get(Mode == SquadScope.FirstTeam ? "MySquadFirst" : Mode == SquadScope.OtherTeams ? "MySquadOther" : "MySquadAll");
+    }
 
     public MySquadPanel()
     {
@@ -51,7 +60,7 @@ public sealed class MySquadPanel : UserControl
         var listTab = new TabPage(L10n.Get("MySquadRoster")); var roleTab = new TabPage(L10n.Get("MySquadBest"));
         staffTab.Controls.Add(staff);
         staff.ReloadRequested += () => { staff.ClearForClub(SelectedClub?.ClubUid); EnsureStaffLoaded(); };
-        tabs.SelectedIndexChanged += (_, _) => { scope.Enabled = data.Status == "ready" && tabs.SelectedTab != staffTab; EnsureStaffLoaded(); };
+        tabs.SelectedIndexChanged += (_, _) => { scope.Enabled = data.Status == "ready" && data.Clubs.Count > 0 && tabs.SelectedTab != staffTab; EnsureStaffLoaded(); };
         tabs.TabPages.AddRange([listTab, roleTab, staffTab]); root.Controls.Add(tabs, 0, 3);
         var list = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3, Padding = new Padding(6) };
         list.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
@@ -72,7 +81,7 @@ public sealed class MySquadPanel : UserControl
         roster.ColumnHeaderMouseClick += (_, e) =>
         {
             string key = roster.Columns[e.ColumnIndex].DataPropertyName;
-            descending = key == sortField && !descending; sortField = key; RefreshRoster();
+            descending = key == sortField && !descending; sortField = key; defaultOrder = false; RefreshRoster();
         };
         roster.CellFormatting += (_, e) =>
         {
@@ -96,17 +105,28 @@ public sealed class MySquadPanel : UserControl
         right.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         right.RowStyles.Add(new RowStyle(SizeType.AutoSize)); right.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         right.RowStyles.Add(new RowStyle(SizeType.AutoSize)); right.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        right.Controls.Add(position, 0, 0); right.Controls.Add(ranking, 0, 1); right.Controls.Add(advice, 0, 2); right.Controls.Add(openRanked, 0, 3);
+        var positionSelectors = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, ColumnCount = 1, RowCount = 2 };
+        positionSelectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        positionSelectors.RowStyles.Add(new RowStyle(SizeType.AutoSize)); positionSelectors.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        positionSelectors.Controls.Add(position, 0, 0); positionSelectors.Controls.Add(secondPosition, 0, 1);
+        right.Controls.Add(positionSelectors, 0, 0); right.Controls.Add(ranking, 0, 1); right.Controls.Add(advice, 0, 2); right.Controls.Add(openRanked, 0, 3);
         role.Controls.Add(field, 0, 0); role.Controls.Add(right, 1, 0); roleTab.Controls.Add(role);
-        string[] rankHeaders = ["#", L10n.Get("Text_f537c6bd038e"), L10n.Get("Text_045cb480645d"), L10n.Get("MySquadScore"), L10n.Get("MySquadFamiliarity"), "CA"];
-        int[] rankWidths = [45, 180, 135, 100, 110, 60];
+        string[] rankHeaders = ["#", L10n.Get("Text_f537c6bd038e"), L10n.Get("Text_045cb480645d"), L10n.Get("MySquadScore"), L10n.Get("MySquadStars"), L10n.Get("MySquadFamiliarity"), "CA"];
+        int[] rankWidths = [45, 180, 135, 100, 130, 165, 60];
         for (int i = 0; i < rankHeaders.Length; i++) ranking.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = rankHeaders[i], Width = rankWidths[i], SortMode = DataGridViewColumnSortMode.NotSortable, DefaultCellStyle = new DataGridViewCellStyle { Alignment = i is 0 or >= 3 ? DataGridViewContentAlignment.MiddleRight : DataGridViewContentAlignment.MiddleLeft } });
-        ranking.Columns[4].CellTemplate = new ValueBarCell(20); ranking.RowTemplate.Height = 41;
-        club.SelectedIndexChanged += (_, _) => { if (!binding) { staff.ClearForClub(SelectedClub?.ClubUid); RefreshView(); } };
+        ranking.Columns[4].CellTemplate = new StarRatingCell();
+        ranking.Columns[4].DefaultCellStyle.Format = "0.0"; ranking.RowTemplate.Height = 41;
+        club.SelectedIndexChanged += (_, _) => { if (!binding) { staff.ClearForClub(SelectedClub?.ClubUid); RebuildScopes(reset: true); RefreshView(); } };
         scope.SelectedIndexChanged += (_, _) => { if (!binding) RefreshView(); };
         search.TextChanged += (_, _) => { if (!binding) RefreshRoster(); };
         position.SelectedIndexChanged += (_, _) => { if (!binding && position.SelectedItem is PositionChoice p) SelectPosition(p.Key); };
-        pitch.PositionSelected += SelectPosition;
+        secondPosition.SelectedIndexChanged += (_, _) =>
+        {
+            if (binding || secondPosition.SelectedItem is not PositionChoice selected) return;
+            secondaryPosition = selected.Key.Length == 0 || selected.Key == selectedPosition ? null : selected.Key;
+            UpdateSelectedPositions(); RefreshRanking();
+        };
+        pitch.PositionActivated += SelectPosition;
         roster.SelectionChanged += (_, _) => open.Enabled = SelectedUid(roster).HasValue;
         ranking.SelectionChanged += (_, _) => openRanked.Enabled = SelectedUid(ranking).HasValue;
         open.Click += (_, _) => Open(roster); openRanked.Click += (_, _) => Open(ranking);
@@ -137,41 +157,72 @@ public sealed class MySquadPanel : UserControl
         grid.SelectedRows[0].DataBoundItem is PlayerRow p ? p.Uid : (grid.SelectedRows[0].Tag as SquadRecommendation)?.Player.Uid;
     private void Open(DataGridView grid) { if (SelectedUid(grid) is uint uid) PlayerOpenRequested?.Invoke(uid); }
     private ManagedSquad? SelectedClub => club.SelectedItem as ManagedSquad;
-    private IReadOnlyList<PlayerDetail> Members => SquadSelection.Members(data, SelectedClub, (SquadScope)Math.Max(0, scope.SelectedIndex));
+    private IReadOnlyList<PlayerDetail> Members => SquadSelection.Members(data, SelectedClub,
+        (scope.SelectedItem as ScopeChoice)?.Mode ?? SquadScope.FirstTeam, (scope.SelectedItem as ScopeChoice)?.TeamId);
+    private string[] SelectedPositions => secondaryPosition is null ? [selectedPosition] : [selectedPosition, secondaryPosition];
+    private void RebuildScopes(bool reset = false)
+    {
+        var selected = reset ? null : scope.SelectedItem as ScopeChoice;
+        bool wasBinding = binding; binding = true; scope.Items.Clear();
+        scope.Items.AddRange([new ScopeChoice(SquadScope.FirstTeam), new ScopeChoice(SquadScope.OtherTeams), new ScopeChoice(SquadScope.All)]);
+        if (SelectedClub is ManagedSquad current)
+        {
+            var teams = current.Teams.Concat(current.TeamIds.Where(id => current.Teams.All(t => t.TeamId != id)).Select(id => new ManagedSquadTeam { TeamId = id }));
+            foreach (var team in teams.Where(t => t.TeamId != current.FirstTeamId).DistinctBy(t => t.TeamId).OrderBy(t => t.Slot ?? int.MaxValue).ThenBy(t => t.TeamId))
+                scope.Items.Add(new ScopeChoice(SquadScope.All, team.TeamId, team.Name, team.Slot));
+        }
+        int index = selected is null ? -1 : scope.Items.Cast<ScopeChoice>().ToList().FindIndex(c => c.Mode == selected.Mode && c.TeamId == selected.TeamId);
+        scope.SelectedIndex = Math.Max(0, index); binding = wasBinding;
+    }
 
     public void ClearForSave(bool loaded)
     {
-        hasSave = loaded; data = new(); staff.ClearForClub(null); binding = true; club.Items.Clear(); search.Clear(); scope.SelectedIndex = 0; binding = false; RefreshView();
+        hasSave = loaded; data = new(); defaultOrder = true; sortField = "MainPosition"; descending = false; staff.ClearForClub(null); binding = true; club.Items.Clear(); search.Clear(); RebuildScopes(reset: true); binding = false; RefreshView();
     }
     public void SetData(MySquadResult result)
     {
         uint? previous = SelectedClub?.ClubUid;
         hasSave = true; data = result; binding = true; club.Items.Clear(); club.Items.AddRange(result.Clubs.Cast<object>().ToArray());
         if (club.Items.Count > 0) club.SelectedIndex = Math.Max(0, result.Clubs.FindIndex(c => c.ClubUid == previous));
-        staff.ClearForClub(SelectedClub?.ClubUid);
+        staff.ClearForClub(SelectedClub?.ClubUid); RebuildScopes();
         binding = false; RefreshView();
     }
     public void SetLanguage()
     {
         L10n.Apply(this); staff.SetLanguage(); binding = true;
-        int old = Math.Max(0, scope.SelectedIndex); scope.Items.Clear();
-        scope.Items.AddRange([L10n.Get("MySquadFirst"), L10n.Get("MySquadOther"), L10n.Get("MySquadAll")]); scope.SelectedIndex = old;
+        RebuildScopes();
         position.Items.Clear(); position.Items.AddRange(PositionScheme.Order.Select(key => (object)new PositionChoice(key)).ToArray());
-        position.SelectedIndex = PositionScheme.Rank(selectedPosition); pitch.SetPositions([], L10n.IsItalian);
-        binding = false; RefreshView();
+        secondPosition.Items.Clear(); secondPosition.Items.Add(new PositionChoice("")); secondPosition.Items.AddRange(PositionScheme.Order.Select(key => (object)new PositionChoice(key)).ToArray());
+        pitch.SetPositions([], L10n.IsItalian);
+        binding = false; UpdateSelectedPositions(); RefreshView();
     }
-    public void SelectPosition(string key)
+    public void SelectPosition(string key) => SelectPosition(key, false);
+    public void SelectPosition(string key, bool extendSelection)
     {
         if (!PositionScheme.Order.Contains(key)) return;
-        selectedPosition = key; pitch.SelectedPosition = key;
-        binding = true; position.SelectedIndex = PositionScheme.Rank(key); binding = false; RefreshRanking();
+        if (!extendSelection) { selectedPosition = key; secondaryPosition = null; }
+        else if (key == secondaryPosition) secondaryPosition = null;
+        else if (key == selectedPosition && secondaryPosition is not null) { selectedPosition = secondaryPosition; secondaryPosition = null; }
+        else if (key != selectedPosition) secondaryPosition = key;
+        UpdateSelectedPositions(); RefreshRanking();
+    }
+    private void UpdateSelectedPositions()
+    {
+        bool wasBinding = binding; binding = true;
+        position.SelectedIndex = PositionScheme.Rank(selectedPosition);
+        secondPosition.SelectedIndex = secondaryPosition is null ? 0 : PositionScheme.Rank(secondaryPosition) + 1;
+        pitch.SelectedPosition = selectedPosition; pitch.SecondarySelectedPosition = secondaryPosition ?? "";
+        binding = wasBinding;
     }
     private void RefreshView()
     {
         status.Text = !hasSave ? L10n.Get("MySquadOpen") : data.Status == "unavailable" ? L10n.Format("MySquadUnavailable", data.Error ?? "—") :
             data.Status != "ready" ? L10n.Get("MySquadNone") : data.FirstHumanOnly ? L10n.Get("MySquadFirstHuman") : "";
-        club.Enabled = data.Status == "ready" && data.Clubs.Count > 0;
-        scope.Enabled = club.Enabled && views.SelectedTab != staffTab;
+        // Enabled getters include ancestor state; the main form disables tabs during loading.
+        // Store the desired state from the data rather than reading a temporarily disabled peer.
+        bool ready = data.Status == "ready" && data.Clubs.Count > 0;
+        club.Enabled = ready; scope.Enabled = ready && views.SelectedTab != staffTab;
+        if (ready) status.Text += "\n" + L10n.Get("MySquadTeamNamesHint");
         RefreshRoster(); RefreshRanking(); EnsureStaffLoaded();
     }
     public void SetStaffData(StaffResult result) => staff.SetData(result);
@@ -193,26 +244,28 @@ public sealed class MySquadPanel : UserControl
             "ContractLabel" => p.ContractLabel, "PositionSummary" => p.PositionSummary, _ => p.Name
         };
         var known = rows.Where(p => Value(p) is not null);
-        var sorted = (descending ? known.OrderByDescending(Value) : known.OrderBy(Value)).ThenBy(p => p.Uid)
+        var sorted = defaultOrder ? SquadSelection.DefaultOrder(rows).ToList() : (descending ? known.OrderByDescending(Value) : known.OrderBy(Value)).ThenBy(p => p.Uid)
             .Concat(rows.Where(p => Value(p) is null)).ToList();
         roster.DataSource = new BindingList<PlayerRow>(sorted); roster.ClearSelection(); open.Enabled = false;
-        foreach (DataGridViewColumn c in roster.Columns) c.HeaderCell.SortGlyphDirection = c.DataPropertyName == sortField ? descending ? SortOrder.Descending : SortOrder.Ascending : SortOrder.None;
+        foreach (DataGridViewColumn c in roster.Columns) c.HeaderCell.SortGlyphDirection = defaultOrder && c.DataPropertyName == "Ca" ? SortOrder.Descending : c.DataPropertyName == sortField ? descending ? SortOrder.Descending : SortOrder.Ascending : SortOrder.None;
         count.Text = L10n.Format("MySquadCount", sorted.Count, members.Count);
     }
     private void RefreshRanking()
     {
         ranking.Rows.Clear();
         var members = Members;
-        var best = SquadSelection.TopThree(members, selectedPosition);
+        var best = SquadSelection.TopFive(members, SelectedPositions);
         for (int i = 0; i < best.Count; i++)
         {
-            var p = best[i]; int at = ranking.Rows.Add(i + 1, p.Player.Name, PositionScheme.Compact(p.Player.Positions, L10n.IsItalian), p.Score, p.Familiarity, p.Player.Ca);
+            var p = best[i]; int at = ranking.Rows.Add(i + 1, p.Player.Name, PositionScheme.Compact(p.Player.Positions, L10n.IsItalian), p.Score, p.Stars, string.Join(" · ", p.Familiarities.Select(pair => Labels.PositionCode(pair.Key, L10n.IsItalian) + ": " + pair.Value)), p.Player.Ca);
             ranking.Rows[at].Tag = p;
+            ranking.Rows[at].Cells[3].ToolTipText = string.Join(" · ", p.PositionScores.Select(pair => Labels.Position(pair.Key, L10n.IsItalian) + ": " + pair.Value.ToString("0.00", L10n.Culture) + "/20"));
+            ranking.Rows[at].Cells[4].ToolTipText = L10n.Format("MySquadStarsValue", p.Stars);
         }
         ranking.Columns[3].DefaultCellStyle.Format = "0.00";
         ranking.Columns[3].DefaultCellStyle.FormatProvider = L10n.Culture;
         ranking.ClearSelection(); openRanked.Enabled = false;
-        advice.Text = L10n.Format("MySquadRankingInfo", best.Count, members.Count) + "\n" + L10n.Get("MySquadMethod");
+        advice.Text = string.Join(" + ", SelectedPositions.Select(key => Labels.Position(key, L10n.IsItalian))) + "\n" + L10n.Format("MySquadRankingInfo", best.Count, members.Count) + "\n" + L10n.Get("MySquadMethod");
     }
     protected override void Dispose(bool disposing) { if (disposing) menu.Dispose(); base.Dispose(disposing); }
 }

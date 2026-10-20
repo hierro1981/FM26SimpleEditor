@@ -33,6 +33,11 @@ Progetto C# Windows Forms per Visual Studio 2026, con lettore locale Python. Per
 
 ## Novità della versione 14.1
 
+- Corretto il filtro rose disabilitato al primo ingresso dopo il caricamento. Oltre ai gruppi, ogni sotto-squadra si può scegliere separatamente: nome leggibile quando disponibile, altrimenti slot/ID senza inventare U20/U18.
+- Ordinamento iniziale della rosa per posizione (portiere → attaccante, sinistra → centro → destra), poi CA decrescente.
+- Fino a **5** candidati per posizione, con stelle derivate dal punteggio (`punteggio / 4`, arrotondato a mezza stella).
+- **Ctrl/Shift+clic sul campo** aggiunge/rimuove una seconda posizione; un secondo menu consente la stessa scelta. Con due posizioni, il giocatore deve essere utilizzabile in entrambe: il punteggio è la media dei due profili e la familiarità mostrata comprende entrambe. Passa sul punteggio per i valori separati.
+
 - Sotto-tab **Staff** in **La mia squadra**, caricato su richiesta e aggiornabile senza ricaricare il salvataggio.
 - Elenco in sola lettura con ricerca per nome, club o ID, colonne ordinabili, scrollbar e numeri allineati a destra. Include lo staff del club gestito e delle affiliate controllate presenti nel suo elenco squadre, indipendentemente dal filtro delle rose giocatori.
 - Anagrafica, club del contratto/staff e club che lo elenca, paga settimanale nella valuta base del salvataggio, date del contratto e CA/PA quando disponibili. I dati assenti sono indicati con **—**, non sostituiti da zero.

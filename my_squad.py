@@ -21,10 +21,17 @@ def read_my_squad(store, progress=None):
             if len(first) != 1:
                 raise ValueError('Prima squadra non identificata univocamente')
             ids = sorted({team.team_id for team in teams})
+            choices = []
+            for team in sorted(teams, key=lambda team: (team.slot, team.team_id)):
+                owner = clubs.get(getattr(team, 'club_uid', club.uid))
+                name = getattr(team, 'name', None)
+                if not name and owner is not None and owner.uid != club.uid:
+                    name = owner.name
+                choices.append(dict(teamId=team.team_id, slot=team.slot, name=name))
             wanted.update(ids)
             result_clubs.append(dict(clubUid=club.uid, clubName=club.name,
                                      managerName=manager.manager_name,
-                                     firstTeamId=first[0], teamIds=ids))
+                                     firstTeamId=first[0], teamIds=ids, teams=choices))
         # Registration in an affiliated B team is included when that team belongs
         # to the managed club's own team list. Outgoing loans have different team IDs.
         members = [row for row in store.rows if row['teamId'] in wanted]

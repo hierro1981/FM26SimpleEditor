@@ -1631,7 +1631,7 @@ Hover over a position for its rating.</value>
     <value>{0} candidates for the selected position, from {1} squad members.</value>
   </data>
   <data name="MySquadMethod" xml:space="preserve">
-    <value>Choose a position on the pitch or in the menu. Weighted mean of 1–20 attributes: essential ×3, important ×2, useful ×1, as in the role report. Requires complete attributes and familiarity ≥12/20. Ties: familiarity, name, then ID. Shows up to 3 players without filling empty places with unsuitable candidates. Data updates after saving edits.</value>
+    <value>Ctrl/Shift+click: add/remove the second position (or use the menus). Attribute weights 3/2/1; two positions: mean score and familiarity ≥12/20 in both. Up to 5 complete profiles. Stars = score/4, rounded to half stars; not the game’s stars. Ties: lowest familiarity, name, ID. Saved data.</value>
   </data>
   <data name="MySquadLoading" xml:space="preserve">
     <value>Loading my squad</value>
@@ -1809,5 +1809,23 @@ Hover over a position for its rating.</value>
   </data>
   <data name="StaffPreference_width" xml:space="preserve">
     <value>Width</value>
+  </data>
+  <data name="MySquadSecondNone" xml:space="preserve">
+    <value>Second position: none</value>
+  </data>
+  <data name="MySquadStars" xml:space="preserve">
+    <value>Stars (position)</value>
+  </data>
+  <data name="MySquadStarsValue" xml:space="preserve">
+    <value>{0:0.0}/5 · score / 4, rounded to half a star</value>
+  </data>
+  <data name="MySquadTeamSlot" xml:space="preserve">
+    <value>Squad · slot {0} · ID {1}</value>
+  </data>
+  <data name="MySquadTeamId" xml:space="preserve">
+    <value>Squad · ID {0}</value>
+  </data>
+  <data name="MySquadTeamNamesHint" xml:space="preserve">
+    <value>Individual squads can be selected. Where a U20/U18/B name is not readable, the squad is identified by slot and ID.</value>
   </data>
 </root>

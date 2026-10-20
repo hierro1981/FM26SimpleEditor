@@ -153,7 +153,7 @@ public sealed class MySquadPanel : UserControl
         quickCompare.Click += (_, _) => { if (menu.SourceControl is DataGridView grid && QuickComparison.TryPair(grid, out uint first, out uint second)) QuickComparisonRequested?.Invoke(first, second); };
         menu.Items.Add(quickCompare);
         var addComparison = menu.Items.Add(L10n.Get("Text_885725b27cce"), null, (_, _) => { if (menu.SourceControl is DataGridView grid && SelectedUid(grid) is uint uid) AddComparisonRequested?.Invoke(uid); });
-        menu.Opening += (_, e) =>
+        menu.Opening += (sender, e) =>
         {
             if (menu.SourceControl is not DataGridView grid) { e.Cancel = true; return; }
             e.Cancel = grid.SelectedRows.Count == 0;

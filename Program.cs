@@ -271,7 +271,7 @@ public sealed class MainForm : Form
             if (args.Button != MouseButtons.Right || args.RowIndex < 0) return;
             QuickComparison.SelectContextRow(players, args.RowIndex, args.ColumnIndex);
         };
-        comparisonMenu.Opening += (_, args) =>
+        comparisonMenu.Opening += (sender, args) =>
         {
             var row = SelectedRow(); contextPlayer = row; args.Cancel = players.SelectedRows.Count == 0 || busy;
             comparePair.Enabled = QuickComparison.TryPair(players, out _, out _);

@@ -7,3 +7,5 @@ __pycache__/
 
 /FM26SimpleEditor.config.json
 /FM26SimpleEditor.config.json.*.tmp
+
+/artifacts/

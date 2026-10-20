@@ -12,9 +12,20 @@ Include un’anteprima dei valori sulla scala 1–20 del gioco e grafici per ana
 
 La compilazione automatica **Build Windows executable** genera `FM26SimpleEditor-win-x64.zip` a ogni push su `main`, su avvio manuale da `main` e per le release pubblicate. Nei branch di sviluppo e nelle pull request non genera EXE o ZIP; anche l’avvio manuale su un branch diverso da `main` viene saltato. Apri [Actions](https://github.com/hierro1981/FM26SimpleEditor/actions/workflows/build-windows.yml), seleziona una compilazione riuscita e scarica **FM26SimpleEditor-win-x64** da **Artifacts** (richiede l’accesso a GitHub; conservazione 30 giorni). Per avviare una compilazione manuale usa **Run workflow**.
 
-Quando viene pubblicata una nuova release basata su un commit che contiene questo workflow, lo ZIP viene allegato automaticamente alla [release](https://github.com/hierro1981/FM26SimpleEditor/releases). Le release già pubblicate non vengono ricompilate né aggiornate.
+Quando viene pubblicata una nuova release basata su un commit che contiene questo workflow, lo ZIP portatile e il setup `FM26SimpleEditor-<versione>-Setup-win-x64.exe` vengono allegati automaticamente alla [release](https://github.com/hierro1981/FM26SimpleEditor/releases). Le release già pubblicate non vengono ricompilate né aggiornate.
 
 Estrai lo ZIP completo e avvia **FM26SimpleEditor.exe**, mantenendo gli script e `requirements.txt` nella stessa cartella. Il pacchetto è per **Windows x64** e richiede **.NET 8 Desktop Runtime x64** installato sul PC; il framework non è incluso. Puoi scaricarlo dalla [pagina ufficiale .NET 8](https://dotnet.microsoft.com/download/dotnet/8.0), scegliendo **.NET Desktop Runtime → Windows → x64**. Il solo runtime .NET generico non basta per Windows Forms. Non servono Visual Studio o l’SDK. Mantieni anche le DLL e i file `.json` dello ZIP accanto all’EXE. Python e le dipendenze vengono verificati e predisposti all’avvio come descritto sotto. Sono inclusi anche licenza, documentazione e sorgenti del commit compilato.
+
+### Installazione guidata (dalle prossime release)
+
+Esegui il file **Setup-win-x64.exe** della release. Il setup installa l'editor per l'utente corrente, crea un collegamento nel menu Start e offre quello sul desktop. Nella pagina delle operazioni facoltative puoi autorizzare separatamente:
+
+- **Python e dipendenze:** cerca un interprete compatibile; se manca, scarica Python **3.13.16 x64 direttamente da python.org**, verifica la firma e lo installa per l'utente corrente, senza WinGet e senza modificare il PATH. Prepara le dipendenze in `%LOCALAPPDATA%\FM26SimpleEditor\runtimes`, usando gli stessi ambienti dei controlli all'avvio.
+- **.NET 8 Desktop Runtime x64:** se manca, scarica il runtime ufficiale Microsoft e verifica checksum e firma. Questa installazione puo richiedere il consenso amministrativo di Windows.
+
+Entrambe le opzioni sono inizialmente deselezionate: puoi installare solo l'editor e configurare i prerequisiti successivamente. I download richiedono Internet. Se la configurazione fallisce, il setup segnala il problema e salva i dettagli in `%LOCALAPPDATA%\FM26SimpleEditor\installer-prerequisites.log`; puoi rieseguirlo. Gli aggiornamenti riutilizzano la cartella e preservano la configurazione locale. La disinstallazione rimuove l'editor e i collegamenti, conservando configurazione, ambienti Python e prerequisiti condivisi.
+
+Lo ZIP resta disponibile come versione portatile. Il setup viene compilato e verificato su `main`, ma distribuito automaticamente solo per le nuove release; non viene generato nei branch di sviluppo. Le release precedenti restano invariate.
 
 ## Progetto e requisiti tecnici
 

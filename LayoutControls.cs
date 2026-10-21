@@ -62,8 +62,18 @@ public sealed class ContentViewport : Panel
         try
         {
             AutoScrollMinSize = content.MinimumSize;
-            var size = new Size(Math.Max(content.MinimumSize.Width, ClientSize.Width), Math.Max(content.MinimumSize.Height, ClientSize.Height));
+            // Recover the area currently occupied by scrollbars before deciding
+            // whether they are still needed after a resize.
+            int width = ClientSize.Width + (VerticalScroll.Visible ? SystemInformation.VerticalScrollBarWidth : 0);
+            int height = ClientSize.Height + (HorizontalScroll.Visible ? SystemInformation.HorizontalScrollBarHeight : 0);
+            bool vertical = content.MinimumSize.Height > height;
+            bool horizontal = content.MinimumSize.Width > width;
+            vertical |= content.MinimumSize.Height > height - (horizontal ? SystemInformation.HorizontalScrollBarHeight : 0);
+            horizontal |= content.MinimumSize.Width > width - (vertical ? SystemInformation.VerticalScrollBarWidth : 0);
+            var size = new Size(Math.Max(content.MinimumSize.Width, width - (vertical ? SystemInformation.VerticalScrollBarWidth : 0)),
+                Math.Max(content.MinimumSize.Height, height - (horizontal ? SystemInformation.HorizontalScrollBarHeight : 0)));
             if (content.Size != size) content.Size = size;
+            if (!vertical && !horizontal) AutoScrollPosition = Point.Empty;
             base.OnLayout(e);
         }
         finally { fitting = false; }

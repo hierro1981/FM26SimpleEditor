@@ -84,6 +84,7 @@ internal static class TacticsChecks
         check(outerViewport.ClientRectangle.Contains(outerViewport.RectangleToClient(open.RectangleToScreen(open.ClientRectangle))),
             "footer actions remain reachable by scrolling at small sizes");
         host.Size = new Size(1800, 1150); Application.DoEvents();
+        Console.WriteLine($"Resize geometry: host={host.Size}, outer={outerViewport.ClientSize}, content={outerViewport.Controls[0].Bounds}, outer bars={outerViewport.HorizontalScroll.Visible}/{outerViewport.VerticalScroll.Visible}, pitches={pitchesViewport.ClientSize}, pitch content={pitchesViewport.Controls[0].Bounds}, pitch bars={pitchesViewport.HorizontalScroll.Visible}/{pitchesViewport.VerticalScroll.Visible}");
         check(!outerViewport.VerticalScroll.Visible && !outerViewport.HorizontalScroll.Visible && !pitchesViewport.VerticalScroll.Visible,
             "growing the window removes unnecessary scrollbars and expands the pitches");
         squad.ClearForSave(true);

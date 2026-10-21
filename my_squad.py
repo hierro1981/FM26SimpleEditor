@@ -3,7 +3,7 @@ from operation_progress import report
 
 
 def read_my_squad(store, progress=None):
-    # fmsave 0.5.10 resolves the first human manager only. Never guess a club.
+    # fmsave 0.5.11 resolves the first human manager only. Never guess a club.
     report(progress, 0, 'Identificazione della squadra allenata')
     try:
         managed = list(store.save.managed_clubs())

@@ -50,5 +50,5 @@ The effective 64-bit terminal role/duty mask is decoded against the 79 active ma
 ## Riferimenti / Sources
 
 - Resource labels, active UI role definitions and managed enums from the installation files supplied for read-only research; original files are not distributed.
-- [fmsave structural reader](https://github.com/rhiever/fmsave/blob/main/src/fmsave/readers/tactics.py), pinned dependency `0.5.10`.
+- [fmsave structural reader](https://github.com/rhiever/fmsave/blob/main/src/fmsave/readers/tactics.py), pinned dependency `0.5.11`.
 - [Il2CppDumper metadata structures](https://github.com/Perfare/Il2CppDumper/blob/master/Il2CppDumper/Il2Cpp/MetadataClass.cs), consulted to read managed enum constants.

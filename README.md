@@ -79,6 +79,8 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ### v14.6 · in sviluppo
 
+- **Top 11 per tattica:** un terzo campo mostra la formazione con la migliore somma dei punteggi per sottoruolo, usando ciascun giocatore una sola volta. Rispetta i filtri della rosa e la fase selezionata; segnala gli slot che non è possibile coprire.
+
 - Nel tab **Staff** sono disponibili 20 attributi aggiuntivi su scala 1–20, tra cui allenamento, valutazione di abilità e potenziale, motivazione, fisioterapia e scienze motorie.
 - Gli incarichi dello staff vengono letti dal contratto e sono ricercabili e ordinabili. Sono riconosciuti anche preparatori dei portieri, allenatori in seconda, direttori tecnici e preparatori dei calci piazzati; gli analisti mostrano la categoria generale quando la specializzazione non è ancora decodificata.
 - Le informazioni dello staff restano in sola lettura; i campi non riconosciuti non vengono mostrati.

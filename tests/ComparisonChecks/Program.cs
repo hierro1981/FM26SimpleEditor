@@ -80,6 +80,7 @@ internal static class Checks
             TacticalRoleChecks.Run(Check);
             QuickComparisonChecks.Run(Check);
             TacticsChecks.Run(Check);
+            LineupChecks.Run(Check);
             LayoutChecks.Run(Check);
             Console.WriteLine($"{count} C# checks passed"); return 0;
         }

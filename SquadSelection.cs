@@ -32,6 +32,10 @@ public static class SquadSelection
         => BestForRoles(members, positions.Select(p => new SquadTarget(p)).ToArray());
 
     public static IReadOnlyList<SquadRecommendation> BestForRoles(IEnumerable<PlayerDetail> members, params SquadTarget[] targets)
+        => CandidatesForRoles(members, targets).Take(Math.Clamp(ResultLimit, 1, 100)).ToArray();
+
+    // Full eligible pool: an XI must not depend on the UI's per-position limit.
+    public static IReadOnlyList<SquadRecommendation> CandidatesForRoles(IEnumerable<PlayerDetail> members, params SquadTarget[] targets)
     {
         var keys = targets.Distinct().ToArray();
         if (keys.Length is < 1 or > 2 || keys.Any(t => !PositionScheme.Order.Contains(t.Position) || !TacticalRoles.CanUse(t.RoleId, t.Position))) throw new ArgumentException(nameof(targets));
@@ -54,7 +58,7 @@ public static class SquadSelection
             }
         }
         return candidates.OrderByDescending(p => p.Score).ThenByDescending(p => p.Familiarity)
-            .ThenBy(p => p.Player.Name, StringComparer.OrdinalIgnoreCase).ThenBy(p => p.Player.Uid).Take(Math.Clamp(ResultLimit, 1, 100)).ToArray();
+            .ThenBy(p => p.Player.Name, StringComparer.OrdinalIgnoreCase).ThenBy(p => p.Player.Uid).ToArray();
     }
 
     public static IOrderedEnumerable<PlayerRow> DefaultOrder(IEnumerable<PlayerRow> players) => players

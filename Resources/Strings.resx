@@ -2003,4 +2003,25 @@ Passa sul punto per il valore.</value>
   <data name="StaffJobFamilyNote" xml:space="preserve">
     <value>Categoria identificata dal contratto; la specializzazione o qualifica precisa non è ancora decodificata.</value>
   </data>
+  <data name="LineupTitle" xml:space="preserve">
+    <value>Top 11 · {0}</value>
+  </data>
+  <data name="LineupUnfilled" xml:space="preserve">
+    <value>Non coperto</value>
+  </data>
+  <data name="LineupUnknownRole" xml:space="preserve">
+    <value>Sottoruolo non riconosciuto per la fase scelta: nessuna assegnazione.</value>
+  </data>
+  <data name="LineupNoCandidate" xml:space="preserve">
+    <value>Nessun giocatore con dati completi e familiarità sufficiente nelle posizioni richieste.</value>
+  </data>
+  <data name="LineupUsedElsewhere" xml:space="preserve">
+    <value>I candidati idonei sono stati assegnati ad altri slot per ottenere la migliore formazione complessiva.</value>
+  </data>
+  <data name="LineupSummary" xml:space="preserve">
+    <value>Top 11: {0}/{1} slot coperti · Totale {2} · Media {3}/20.</value>
+  </data>
+  <data name="LineupMethod" xml:space="preserve">
+    <value>Ogni giocatore è utilizzato una sola volta. Prima si coprono più slot possibili, poi si massimizza la somma dei punteggi per sottoruolo della fase scelta. Il campo usa le posizioni in possesso se sono selezionate entrambe le fasi. Stima basata sugli attributi, senza forma, infortuni o squalifiche.</value>
+  </data>
 </root>

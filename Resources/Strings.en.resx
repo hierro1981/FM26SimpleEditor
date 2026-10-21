@@ -2003,4 +2003,25 @@ Hover over a position for its rating.</value>
   <data name="StaffJobFamilyNote" xml:space="preserve">
     <value>Category identified from the contract; the specific specialisation or seniority is not decoded yet.</value>
   </data>
+  <data name="LineupTitle" xml:space="preserve">
+    <value>Best XI · {0}</value>
+  </data>
+  <data name="LineupUnfilled" xml:space="preserve">
+    <value>Unfilled</value>
+  </data>
+  <data name="LineupUnknownRole" xml:space="preserve">
+    <value>The role is not recognised for the selected phase: no assignment.</value>
+  </data>
+  <data name="LineupNoCandidate" xml:space="preserve">
+    <value>No player has complete attributes and sufficient familiarity in the required positions.</value>
+  </data>
+  <data name="LineupUsedElsewhere" xml:space="preserve">
+    <value>Eligible candidates have been assigned elsewhere to obtain the best overall lineup.</value>
+  </data>
+  <data name="LineupSummary" xml:space="preserve">
+    <value>Best XI: {0}/{1} slots filled · Total {2} · Average {3}/20.</value>
+  </data>
+  <data name="LineupMethod" xml:space="preserve">
+    <value>Each player is used once. Fill as many slots as possible, then maximise the sum of role scores for the selected phase. The pitch uses in-possession positions when both phases are selected. Attribute-based estimate; form, injuries and suspensions are not considered.</value>
+  </data>
 </root>

@@ -1866,7 +1866,6 @@ Hover over a position for its rating.</value>
   <data name="TacticsBoth" xml:space="preserve"><value>Both phases</value></data>
   <data name="TacticsUnknownRole" xml:space="preserve"><value>Unrecognised role</value></data>
   <data name="TacticsUnavailable" xml:space="preserve"><value>Tactics unavailable: {0}</value></data>
-  <data name="TacticsReadOnly" xml:space="preserve"><value>First-team tactics, read only. Select a slot on the pitch or in the list.</value></data>
   <data name="TacticsEmpty" xml:space="preserve"><value>Open a save and select a managed club to read tactics.</value></data>
   <data name="TacticsCannotRank" xml:space="preserve"><value>Unrecognised position or role in the selected phase: recommendations unavailable.</value></data>
   <data name="TacticsMethod" xml:space="preserve"><value>Up to 5 players from the filtered squad, with familiarity of at least 12/20 in each required position. Both phases use the mean of the two profiles. Scores and stars are editor estimates, not the official game rating.</value></data>

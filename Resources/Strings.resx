@@ -1866,7 +1866,6 @@ Passa sul punto per il valore.</value>
   <data name="TacticsBoth" xml:space="preserve"><value>Entrambe le fasi</value></data>
   <data name="TacticsUnknownRole" xml:space="preserve"><value>Sottoruolo non riconosciuto</value></data>
   <data name="TacticsUnavailable" xml:space="preserve"><value>Tattiche non disponibili: {0}</value></data>
-  <data name="TacticsReadOnly" xml:space="preserve"><value>Tattiche della prima squadra, in sola lettura. Seleziona uno slot sul campo o nell’elenco.</value></data>
   <data name="TacticsEmpty" xml:space="preserve"><value>Apri un salvataggio e seleziona una squadra gestita per leggere le tattiche.</value></data>
   <data name="TacticsCannotRank" xml:space="preserve"><value>Posizione o sottoruolo non riconosciuto nella fase selezionata: suggerimenti non disponibili.</value></data>
   <data name="TacticsMethod" xml:space="preserve"><value>Fino a 5 giocatori della rosa filtrata, con familiarità almeno 12/20 in ogni posizione richiesta. Per entrambe le fasi si usa la media dei due profili. Punteggio e stelle sono stime dell’editor, non la valutazione ufficiale del gioco.</value></data>

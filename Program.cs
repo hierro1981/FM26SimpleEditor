@@ -19,7 +19,7 @@ internal static class Program
 public sealed class MainForm : Form
 {
     private readonly BackendClient backend;
-    private readonly TabControl tabs = new() { Dock = DockStyle.Fill };
+    private readonly AccentTabControl tabs = new() { Dock = DockStyle.Fill };
     private readonly TabPage searchTab = new(L10n.Get("Text_632c1126bbb8"));
     private readonly TabPage editTab = new(L10n.Get("Text_d10c243588b5"));
     private readonly TabPage previewTab = new(L10n.Get("Text_e17d380480a5"));

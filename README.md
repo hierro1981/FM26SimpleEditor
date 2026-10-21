@@ -77,6 +77,7 @@ Scegli **Italiano** o **English** dal selettore della lingua. La scelta viene ri
 
 ### v14.4 · in sviluppo
 
+- Migliorata la visualizzazione delle tattiche nelle finestre piccole, con scorrimento e meno testo fisso; schede più riconoscibili grazie ai colori.
 - README riorganizzati attorno a installazione, utilizzo e funzioni dell’editor; dettagli di configurazione e sviluppo nella documentazione dedicata.
 - Migliorato il riconoscimento dei club che giocano in campionati di un’altra nazione e dei relativi collegamenti alle squadre affiliate.
 

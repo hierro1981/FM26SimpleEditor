@@ -77,6 +77,7 @@ Choose **Italiano** or **English** from the language selector. Your choice is re
 
 ### v14.4 · in development
 
+- Improved tactics layout in small windows, with scrolling and fewer fixed help paragraphs; coloured tab headers make navigation clearer.
 - READMEs reorganised around installation, everyday use and editor features; configuration and development details moved to dedicated documentation.
 - Improved recognition of clubs playing in another nation’s league and links to their affiliated teams.
 

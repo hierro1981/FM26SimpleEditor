@@ -64,7 +64,28 @@ internal static class TacticsChecks
         using (var image = new Bitmap(host.Width, host.Height)) host.DrawToBitmap(image, host.ClientRectangle);
         host.Size = new Size(760, 650); Application.DoEvents();
         using (var image = new Bitmap(host.Width, host.Height)) host.DrawToBitmap(image, host.ClientRectangle);
-        check(All(panel).OfType<Panel>().Any(p => p.AutoScroll), "small tactics view provides scrollable pitch layout");
+        var pitchesViewport = All(panel).OfType<ContentViewport>().Single(p => p.Name == "TacticPitchesScroll");
+        var outerViewport = All(panel).OfType<ContentViewport>().Single(p => p.Name == "TacticsScroll");
+        check(pitchesViewport.VerticalScroll.Visible && pitchesViewport.DisplayRectangle.Height >= pitchesViewport.Controls[0].Height,
+            "small tactics view actually exposes a scrollbar for the full pitches");
+        pitchesViewport.AutoScrollPosition = new Point(0, pitchesViewport.Controls[0].Height); Application.DoEvents();
+        var pitch = All(panel).OfType<SavedTacticPitch>().First();
+        var keeperPoint = pitchesViewport.PointToClient(pitch.PointToScreen(new Point(pitch.Width / 2, (int)(5 + (pitch.Height - 10) * .92))));
+        check(pitchesViewport.ClientRectangle.Contains(keeperPoint), "scrolling reaches goalkeeper row instead of clipping it");
+        check(!All(panel).OfType<Label>().Single(l => l.Name == "TacticsStatus").Visible &&
+              !All(squad).OfType<Label>().Single(l => l.Name == "MySquadStatus").Visible,
+            "ready tactics and squad do not reserve rows for informational paragraphs");
+        check(scope.AccessibleDescription == L10n.Get("MySquadTeamNamesHint"), "sub-squad explanation is attached to its selector and follows the language");
+        check(tabs is AccentTabControl && tabs.DrawMode == TabDrawMode.OwnerDrawFixed, "squad tab headers use the shared highlighted style");
+        host.Size = new Size(520, 520); Application.DoEvents();
+        check(outerViewport.VerticalScroll.Visible && outerViewport.HorizontalScroll.Visible, "very small window scrolls the entire tactics surface in both directions");
+        var open = All(panel).OfType<Button>().Single(b => b.Text == L10n.Get("Text_9337b648a0e1"));
+        outerViewport.ScrollControlIntoView(open); Application.DoEvents();
+        check(outerViewport.ClientRectangle.Contains(outerViewport.RectangleToClient(open.RectangleToScreen(open.ClientRectangle))),
+            "footer actions remain reachable by scrolling at small sizes");
+        host.Size = new Size(1800, 1150); Application.DoEvents();
+        check(!outerViewport.VerticalScroll.Visible && !outerViewport.HorizontalScroll.Visible && !pitchesViewport.VerticalScroll.Visible,
+            "growing the window removes unnecessary scrollbars and expands the pitches");
         squad.ClearForSave(true);
         check(choice.Items.Count == 0 && slots.Items.Count == 0 && grid.Rows.Count == 0, "new save clears tactics and all previous recommendations");
         host.Close(); L10n.SetLanguage("it");

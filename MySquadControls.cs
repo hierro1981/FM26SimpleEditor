@@ -8,7 +8,7 @@ public sealed class MySquadPanel : UserControl
     private readonly ComboBox club = new() { Name = "ManagedClubChoice", DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
     private readonly ComboBox scope = new() { Name = "MySquadScope", DropDownStyle = ComboBoxStyle.DropDownList, Width = 270 };
     private readonly TextBox search = new() { Name = "MySquadSearch", Dock = DockStyle.Fill, PlaceholderText = L10n.Get("MySquadSearch") };
-    private readonly Label status = new() { AutoSize = true, ForeColor = Color.DimGray };
+    private readonly Label status = new() { Name = "MySquadStatus", AutoSize = true, ForeColor = Color.DimGray };
     private readonly Label count = new() { AutoSize = true, Anchor = AnchorStyles.Left };
     private readonly DataGridView roster = Grid("MySquadRoster");
     private readonly DataGridView ranking = Grid("MySquadRanking");
@@ -27,7 +27,7 @@ public sealed class MySquadPanel : UserControl
     private readonly TacticsPanel tactics = new();
     private readonly TabPage tacticsTab = new(L10n.Get("TacticsTab"));
     private readonly TabPage staffTab = new(L10n.Get("StaffTab"));
-    private readonly TabControl views = new() { Dock = DockStyle.Fill };
+    private readonly AccentTabControl views = new() { Dock = DockStyle.Fill };
     private readonly ContextMenuStrip menu = new();
     private MySquadResult data = new();
     private bool binding;
@@ -262,12 +262,16 @@ public sealed class MySquadPanel : UserControl
     private void RefreshView()
     {
         status.Text = !hasSave ? L10n.Get("MySquadOpen") : data.Status == "unavailable" ? L10n.Format("MySquadUnavailable", data.Error ?? "—") :
-            data.Status != "ready" ? L10n.Get("MySquadNone") : data.FirstHumanOnly ? L10n.Get("MySquadFirstHuman") : "";
+            data.Status != "ready" ? L10n.Get("MySquadNone") : "";
+        status.Visible = status.Text.Length > 0;
         // Enabled getters include ancestor state; the main form disables tabs during loading.
         // Store the desired state from the data rather than reading a temporarily disabled peer.
         bool ready = data.Status == "ready" && data.Clubs.Count > 0;
         club.Enabled = ready; scope.Enabled = ready && views.SelectedTab != staffTab;
-        if (ready) status.Text += "\n" + L10n.Get("MySquadTeamNamesHint");
+        scope.AccessibleDescription = L10n.Get("MySquadTeamNamesHint");
+        club.AccessibleDescription = data.FirstHumanOnly ? L10n.Get("MySquadFirstHuman") : "";
+        roleTips.SetToolTip(scope, scope.AccessibleDescription);
+        roleTips.SetToolTip(club, club.AccessibleDescription);
         RefreshRoster(); RefreshRanking(); tactics.SetMembers(Members); EnsureStaffLoaded(); EnsureTacticsLoaded();
     }
     public void SetStaffData(StaffResult result) => staff.SetData(result);

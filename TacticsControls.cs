@@ -118,7 +118,7 @@ public sealed class TacticsPanel : UserControl
     private readonly ComboBox phase = new() { Name = "SavedTacticPhase", Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
     private readonly ComboBox slotChoice = new() { Name = "SavedTacticSlot", Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList, DropDownWidth = 800 };
     private readonly SavedTacticPitch ip = new() { Name = "SavedTacticIP" }, op = new() { Name = "SavedTacticOP" };
-    private readonly Label status = new() { AutoSize = true, Dock = DockStyle.Fill };
+    private readonly Label status = new() { Name = "TacticsStatus", AutoSize = true, Dock = DockStyle.Fill };
     private readonly Label method = new() { AutoSize = true, Dock = DockStyle.Fill, ForeColor = Color.DimGray };
     private readonly DataGridView ranking = new() { Name = "TacticRanking", Dock = DockStyle.Fill, ReadOnly = true, MultiSelect = true, AllowUserToAddRows = false, AllowUserToDeleteRows = false, AllowUserToResizeRows = false, RowHeadersVisible = false, SelectionMode = DataGridViewSelectionMode.FullRowSelect, ScrollBars = ScrollBars.Both, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None };
     private readonly ContextMenuStrip menu = new();
@@ -142,7 +142,7 @@ public sealed class TacticsPanel : UserControl
     public TacticsPanel()
     {
         Dock = DockStyle.Fill;
-        var root = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 7, Padding = new Padding(6) };
+        var root = new TableLayoutPanel { Name = "TacticsContent", ColumnCount = 1, RowCount = 7, Padding = new Padding(6) };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 65)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -153,12 +153,13 @@ public sealed class TacticsPanel : UserControl
         reload.Click += (_, _) => ReloadRequested?.Invoke();
         selectors.Controls.Add(choice, 0, 0); selectors.Controls.Add(phase, 1, 0); selectors.Controls.Add(reload, 2, 0);
         root.Controls.Add(selectors, 0, 0); root.Controls.Add(status, 0, 1);
-        var scroll = new Panel { Dock = DockStyle.Fill, AutoScroll = true };
-        var pitches = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 2, MinimumSize = new Size(560, 340) };
+        var pitches = new TableLayoutPanel { Name = "TacticPitchesContent", ColumnCount = 2, RowCount = 2 };
         pitches.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); pitches.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         pitches.RowStyles.Add(new RowStyle(SizeType.AutoSize)); pitches.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         pitches.Controls.Add(new Label { AutoSize = true, Text = L10n.Get("TacticalPhaseIP") }, 0, 0); pitches.Controls.Add(new Label { AutoSize = true, Text = L10n.Get("TacticalPhaseOP") }, 1, 0);
-        pitches.Controls.Add(ip, 0, 1); pitches.Controls.Add(op, 1, 1); scroll.Controls.Add(pitches); root.Controls.Add(scroll, 0, 2);
+        pitches.Controls.Add(ip, 0, 1); pitches.Controls.Add(op, 1, 1);
+        var scroll = new ContentViewport(pitches, new Size(560, 350)) { Name = "TacticPitchesScroll" };
+        root.Controls.Add(scroll, 0, 2);
         root.Controls.Add(slotChoice, 0, 3); root.Controls.Add(ranking, 0, 4); root.Controls.Add(method, 0, 5);
         var actions = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; actions.Controls.AddRange([open, criteria]); root.Controls.Add(actions, 0, 6);
         string[] keys = ["#", "Text_f537c6bd038e", "Text_045cb480645d", "MySquadScore", "MySquadStars", "MySquadFamiliarity", "CA", "PA"];
@@ -180,7 +181,7 @@ public sealed class TacticsPanel : UserControl
         menu.Items.AddRange([compare, add]); menu.Opening += (sender, e) => { e.Cancel = ranking.SelectedRows.Count == 0; compare.Enabled = QuickComparison.TryPair(ranking, out _, out _); add.Enabled = SelectedUid.HasValue; };
         ranking.ContextMenuStrip = menu; ranking.CellMouseDown += (_, e) => { if (e.Button == MouseButtons.Right) QuickComparison.SelectContextRow(ranking, e.RowIndex, e.ColumnIndex); };
         root.SizeChanged += (_, _) => { status.MaximumSize = new Size(Math.Max(100, root.ClientSize.Width - 16), 0); method.MaximumSize = status.MaximumSize; };
-        Controls.Add(root); L10n.Capture(this); RefreshRanking();
+        Controls.Add(new ContentViewport(root, new Size(620, 520)) { Name = "TacticsScroll" }); L10n.Capture(this); RefreshRanking();
     }
     private uint? SelectedUid => ranking.SelectedRows.Count == 1 ? (ranking.SelectedRows[0].Tag as SquadRecommendation)?.Player.Uid : null;
     private void Open() { if (SelectedUid is uint uid) PlayerOpenRequested?.Invoke(uid); }
@@ -218,7 +219,8 @@ public sealed class TacticsPanel : UserControl
     {
         var slot = (slotChoice.SelectedItem as SlotChoice)?.Slot;
         ip.SetTactic(SelectedTactic?.Slots ?? [], "ip", slot?.Number ?? -1); op.SetTactic(SelectedTactic?.Slots ?? [], "op", slot?.Number ?? -1);
-        status.Text = data.Status == "unavailable" ? L10n.Format("TacticsUnavailable", data.Error ?? "—") : data.Status == "ready" ? L10n.Get("TacticsReadOnly") : L10n.Get("TacticsEmpty");
+        status.Text = data.Status == "unavailable" ? L10n.Format("TacticsUnavailable", data.Error ?? "—") : data.Status == "ready" ? "" : L10n.Get("TacticsEmpty");
+        status.Visible = status.Text.Length > 0;
         var targets = Targets; IReadOnlyList<SquadRecommendation> best = targets.Length == 0 ? [] : SquadSelection.TopFiveForRoles(members, targets);
         ranking.Rows.Clear();
         for (int i = 0; i < best.Count; i++)

@@ -1715,7 +1715,7 @@ Passa sul punto per il valore.</value>
     <value>Lettura dello staff non disponibile: {0}</value>
   </data>
   <data name="StaffReadOnlyNote" xml:space="preserve">
-    <value>Sola lettura: staff dell’intero club e delle affiliate controllate; il filtro delle rose riguarda solo i giocatori. Attributi su scala 1–20, dove leggibili. Il ruolo preciso resta sconosciuto; l’allenatore umano è riconoscibile. Preferenze = stile desiderato, non capacità. Paga nella valuta base del salvataggio; — indica un dato non disponibile. La dirigenza non è inclusa.</value>
+    <value>Sola lettura: staff dell’intero club e delle affiliate controllate; il filtro delle rose riguarda solo i giocatori. Attributi su scala 1–20, dove leggibili. Gli incarichi vengono letti dal contratto, dove riconosciuti; «categoria» indica che la qualifica precisa non è ancora decodificata. L’allenatore umano è riconoscibile. Preferenze = stile desiderato, non capacità. Paga nella valuta base del salvataggio; — indica un dato non disponibile. La dirigenza non è inclusa.</value>
   </data>
   <data name="StaffCount" xml:space="preserve">
     <value>{0} persone mostrate su {1}. Seleziona una riga per i dettagli disponibili.</value>
@@ -1939,5 +1939,68 @@ Passa sul punto per il valore.</value>
   </data>
   <data name="StaffAttribute_judging_staff_ability" xml:space="preserve">
     <value>Giudizio abilità staff</value>
+  </data>
+  <data name="StaffJob_coach" xml:space="preserve">
+    <value>Preparatore</value>
+  </data>
+  <data name="StaffJob_director_of_football" xml:space="preserve">
+    <value>Direttore sportivo</value>
+  </data>
+  <data name="StaffJob_physio" xml:space="preserve">
+    <value>Fisioterapista</value>
+  </data>
+  <data name="StaffJob_scout" xml:space="preserve">
+    <value>Osservatore</value>
+  </data>
+  <data name="StaffJob_manager" xml:space="preserve">
+    <value>Allenatore</value>
+  </data>
+  <data name="StaffJob_assistant_manager" xml:space="preserve">
+    <value>Allenatore in seconda</value>
+  </data>
+  <data name="StaffJob_set_piece_coach" xml:space="preserve">
+    <value>Preparatore calci piazzati</value>
+  </data>
+  <data name="StaffJob_fitness_coach" xml:space="preserve">
+    <value>Preparatore atletico</value>
+  </data>
+  <data name="StaffJob_goalkeeping_coach" xml:space="preserve">
+    <value>Preparatore dei portieri</value>
+  </data>
+  <data name="StaffJob_doctor" xml:space="preserve">
+    <value>Medico</value>
+  </data>
+  <data name="StaffJob_head_sports_science" xml:space="preserve">
+    <value>Responsabile scienze motorie</value>
+  </data>
+  <data name="StaffJob_chief_scout" xml:space="preserve">
+    <value>Capo osservatore</value>
+  </data>
+  <data name="StaffJob_sports_scientist" xml:space="preserve">
+    <value>Esperto di scienze motorie</value>
+  </data>
+  <data name="StaffJob_head_physio" xml:space="preserve">
+    <value>Responsabile fisioterapisti</value>
+  </data>
+  <data name="StaffJob_analyst" xml:space="preserve">
+    <value>Analista</value>
+  </data>
+  <data name="StaffJob_head_youth_development" xml:space="preserve">
+    <value>Responsabile settore giovanile</value>
+  </data>
+  <data name="StaffJob_head_player_development" xml:space="preserve">
+    <value>Responsabile sviluppo giocatori</value>
+  </data>
+  <data name="StaffJob_technical_director" xml:space="preserve">
+    <value>Direttore tecnico</value>
+  </data>
+  <data name="StaffJobFamilyFormat" xml:space="preserve">
+    <value>{0} (categoria)</value>
+  </data>
+  <data name="StaffPlayerJobFormat" xml:space="preserve">
+    <value>Giocatore / {0}</value>
+  </data>
+  <data name="StaffJobFamilyNote" xml:space="preserve">
+    <value>Categoria identificata dal contratto; la specializzazione o qualifica precisa non è ancora decodificata.</value>
   </data>
 </root>

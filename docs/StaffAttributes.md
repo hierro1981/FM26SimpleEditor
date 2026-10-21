@@ -1,7 +1,8 @@
 # Staff attribute decoding
 
 This extension reads saved attributes only. It does not edit staff, infer job
-titles, reproduce job-dependent effective ratings, or calculate coach stars.
+titles from attributes, reproduce job-dependent effective ratings, or calculate
+coach stars. Contract-based job decoding is documented in [StaffJobs.md](StaffJobs.md).
 
 ## Evidence and layout
 

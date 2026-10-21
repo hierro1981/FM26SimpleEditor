@@ -1715,7 +1715,7 @@ Hover over a position for its rating.</value>
     <value>Staff reading unavailable: {0}</value>
   </data>
   <data name="StaffReadOnlyNote" xml:space="preserve">
-    <value>Read-only: staff of the whole club and its controlled affiliates; the squad filter applies only to players. Attributes use a 1–20 scale, where readable. Exact job titles remain unknown; the human manager is identifiable. Preferences describe desired style, not ability. Pay uses the save’s base currency; — means unavailable. The board is not included.</value>
+    <value>Read-only: staff of the whole club and its controlled affiliates; the squad filter applies only to players. Attributes use a 1–20 scale, where readable. Jobs are read from contracts where recognised; “category” means the specific title is not decoded yet. The human manager is identifiable. Preferences describe desired style, not ability. Pay uses the save’s base currency; — means unavailable. The board is not included.</value>
   </data>
   <data name="StaffCount" xml:space="preserve">
     <value>Showing {0} of {1} people. Select a row for available details.</value>
@@ -1939,5 +1939,68 @@ Hover over a position for its rating.</value>
   </data>
   <data name="StaffAttribute_judging_staff_ability" xml:space="preserve">
     <value>Judging staff ability</value>
+  </data>
+  <data name="StaffJob_coach" xml:space="preserve">
+    <value>Coach</value>
+  </data>
+  <data name="StaffJob_director_of_football" xml:space="preserve">
+    <value>Director of football</value>
+  </data>
+  <data name="StaffJob_physio" xml:space="preserve">
+    <value>Physiotherapist</value>
+  </data>
+  <data name="StaffJob_scout" xml:space="preserve">
+    <value>Scout</value>
+  </data>
+  <data name="StaffJob_manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="StaffJob_assistant_manager" xml:space="preserve">
+    <value>Assistant manager</value>
+  </data>
+  <data name="StaffJob_set_piece_coach" xml:space="preserve">
+    <value>Set piece coach</value>
+  </data>
+  <data name="StaffJob_fitness_coach" xml:space="preserve">
+    <value>Fitness coach</value>
+  </data>
+  <data name="StaffJob_goalkeeping_coach" xml:space="preserve">
+    <value>Goalkeeping coach</value>
+  </data>
+  <data name="StaffJob_doctor" xml:space="preserve">
+    <value>Doctor</value>
+  </data>
+  <data name="StaffJob_head_sports_science" xml:space="preserve">
+    <value>Head of sports science</value>
+  </data>
+  <data name="StaffJob_chief_scout" xml:space="preserve">
+    <value>Chief scout</value>
+  </data>
+  <data name="StaffJob_sports_scientist" xml:space="preserve">
+    <value>Sports scientist</value>
+  </data>
+  <data name="StaffJob_head_physio" xml:space="preserve">
+    <value>Head of physiotherapy</value>
+  </data>
+  <data name="StaffJob_analyst" xml:space="preserve">
+    <value>Analyst</value>
+  </data>
+  <data name="StaffJob_head_youth_development" xml:space="preserve">
+    <value>Head of youth development</value>
+  </data>
+  <data name="StaffJob_head_player_development" xml:space="preserve">
+    <value>Head of player development</value>
+  </data>
+  <data name="StaffJob_technical_director" xml:space="preserve">
+    <value>Technical director</value>
+  </data>
+  <data name="StaffJobFamilyFormat" xml:space="preserve">
+    <value>{0} (category)</value>
+  </data>
+  <data name="StaffPlayerJobFormat" xml:space="preserve">
+    <value>Player / {0}</value>
+  </data>
+  <data name="StaffJobFamilyNote" xml:space="preserve">
+    <value>Category identified from the contract; the specific specialisation or seniority is not decoded yet.</value>
   </data>
 </root>

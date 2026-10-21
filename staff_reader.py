@@ -21,8 +21,8 @@ NATIVE_ATTRIBUTES = {
 }
 
 
-def native_staff_attributes(raw, person, layout):
-    """Read a uniquely identified, validated staff block; never modify it.
+def native_staff_block(raw, person, layout):
+    """Locate a uniquely identified, validated staff block; never modify it.
 
     UID hits alone do not establish a record. Identity words, kind, complete
     ability/preferences and all 26 further bytes must pass the pinned reader.
@@ -31,12 +31,12 @@ def native_staff_attributes(raw, person, layout):
     from fmsave.readers.staff import _header_reader, _header_values, _read_ability_block
 
     if person.is_human_manager or person.ability is None:
-        return {}
+        return None
     if (layout.preferences_offset, layout.preference_count, layout.block_40_offset,
             layout.block_40_count, layout.sentinel_value) != (14, 26, 40, 26, 12):
-        return {}
+        return None
     if type(person.uid) is not int or not 0 < person.uid < 0xFFFFFFFF:
-        return {}
+        return None
     needle = struct.pack('<I', person.uid)
     result = None
     start = 0
@@ -53,14 +53,24 @@ def native_staff_attributes(raw, person, layout):
         if any(person.unknown.get(key) != value for key, value in block.unknown.items()):
             continue
         if result is not None:
-            return {}
+            return None
         ability_at = header + layout.ability_base_offset + layout.entry_bytes * raw[header + layout.entry_count_offset]
-        # The serializer copies native bytes +0x10..+0x43 after marker 12.
-        # Generic indices >= 26 use the native (raw + 2) / 5 conversion.
-        attributes_at = ability_at + layout.preferences_offset
-        result = {key: max(1, min(20, (raw[attributes_at + index] + 2) // 5))
-                  for index, key in NATIVE_ATTRIBUTES.items()}
-    return result or {}
+        result = (header, ability_at)
+    return result
+
+
+def attributes_at_block(raw, block, layout):
+    if block is None:
+        return {}
+    # The serializer copies native bytes +0x10..+0x43 after marker 12.
+    # Generic indices >= 26 use the native (raw + 2) / 5 conversion.
+    attributes_at = block[1] + layout.preferences_offset
+    return {key: max(1, min(20, (raw[attributes_at + index] + 2) // 5))
+            for index, key in NATIVE_ATTRIBUTES.items()}
+
+
+def native_staff_attributes(raw, person, layout):
+    return attributes_at_block(raw, native_staff_block(raw, person, layout), layout)
 
 
 def values(record, keys):
@@ -84,12 +94,18 @@ def read_my_staff(store, club_uid, progress=None):
         report(progress, 10, 'Lettura dei contratti e dei profili dello staff')
         decoded = list(store.save.staff())
         native_layout = None
+        job_reader = None
         if getattr(store, 'raw', None) is not None:
             try:
                 from fmsave.readers.staff import find_staff_layouts
                 native_layout = find_staff_layouts(store.save.info.section_schemas, store.save.info.build).staff
             except (AttributeError, ValueError, LookupError):
                 pass  # Optional extension: keep the ordinary staff data available.
+            try:
+                from staff_jobs import StaffJobReader
+                job_reader = StaffJobReader(store)
+            except (AttributeError, ValueError, LookupError):
+                pass
         result = []
         for index, person in enumerate(decoded):
             # fmsave assigns staff paid by a parent but listed at an affiliate to
@@ -97,8 +113,12 @@ def read_my_staff(store, club_uid, progress=None):
             if person.club_uid in associated:
                 ability = person.ability
                 attributes = values(person.attributes, ('adaptability',))
+                job = {}
                 if native_layout is not None:
-                    attributes.update(native_staff_attributes(store.raw, person, native_layout))
+                    block = native_staff_block(store.raw, person, native_layout)
+                    attributes.update(attributes_at_block(store.raw, block, native_layout))
+                    if block is not None and job_reader is not None:
+                        job = job_reader.read(person, block[0])
                 result.append(dict(
                     uid=person.uid, id=person.unique_id, name=person.name or str(person.uid),
                     clubUid=person.club_uid, clubName=person.club_name,
@@ -113,7 +133,7 @@ def read_my_staff(store, club_uid, progress=None):
                     pa=ability.potential if ability else None,
                     personality=values(person.personality, PERSONALITY),
                     attributes=attributes,
-                    preferences=values(person.preferences, PREFERENCES)))
+                    preferences=values(person.preferences, PREFERENCES), **job))
             if person.club_uid in associated or (index + 1) % 1000 == 0 or index + 1 == len(decoded):
                 report(progress, 10 + 90 * (index + 1) / max(1, len(decoded)),
                        'Preparazione elenco dello staff', index + 1, len(decoded), 'persone')

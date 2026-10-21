@@ -31,7 +31,7 @@ public sealed class StaffPanel : UserControl
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2); root.Controls.Add(count, 0, 3); root.Controls.Add(details, 0, 4);
         (string Field, string Header, int Width)[] columns =
         [
-            ("Name", "Text_f537c6bd038e", 190), ("RoleDisplay", "StaffRole", 155),
+            ("Name", "Text_f537c6bd038e", 190), ("RoleDisplay", "StaffRole", 225),
             ("ClubName", "StaffClub", 180), ("ListedClubName", "StaffListedClub", 180),
             ("Age", "Text_9efdc62c88bf", 60), ("BirthDisplay", "StaffBirth", 105),
             ("Ca", "", 65), ("Pa", "", 65), ("Wage", "StaffWage", 160),
@@ -51,6 +51,11 @@ public sealed class StaffPanel : UserControl
         details.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = L10n.Get("StaffValue"), Width = 90, DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight } });
         foreach (DataGridViewColumn column in details.Columns) column.SortMode = DataGridViewColumnSortMode.NotSortable;
         list.ColumnHeaderMouseClick += (_, e) => SortBy(list.Columns[e.ColumnIndex].DataPropertyName);
+        list.CellToolTipTextNeeded += (_, e) =>
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "RoleDisplay" &&
+                list.Rows[e.RowIndex].DataBoundItem is StaffRow person) e.ToolTipText = person.RoleTooltip;
+        };
         list.SelectionChanged += (_, _) => ShowDetails(); search.TextChanged += (_, _) => RefreshRows();
         root.SizeChanged += (_, _) => status.MaximumSize = new Size(Math.Max(100, root.ClientSize.Width - 20), 0);
         Controls.Add(root); RefreshRows(); L10n.Capture(this);
@@ -85,6 +90,7 @@ public sealed class StaffPanel : UserControl
         var selected = Selected;
         string text = search.Text.Trim();
         var rows = (data?.Staff ?? []).Where(p => data!.Status == "ready" && (text.Length == 0 || p.Name.Contains(text, StringComparison.CurrentCultureIgnoreCase) ||
+            p.RoleDisplay.Contains(text, StringComparison.CurrentCultureIgnoreCase) ||
             p.ClubName.Contains(text, StringComparison.CurrentCultureIgnoreCase) || p.ListedClubName?.Contains(text, StringComparison.CurrentCultureIgnoreCase) == true ||
             p.Uid.ToString(CultureInfo.InvariantCulture).Contains(text) || p.Id?.ToString(CultureInfo.InvariantCulture).Contains(text) == true)).ToArray();
         object? Value(StaffRow p) => sortField switch

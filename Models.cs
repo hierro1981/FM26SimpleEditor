@@ -205,6 +205,10 @@ public sealed class StaffRow
     public string? Birth { get; set; }
     public bool IsHumanManager { get; set; }
     public bool HasContract { get; set; }
+    public int? JobCode { get; set; }
+    public string? JobKey { get; set; }
+    public bool JobFamilyOnly { get; set; }
+    public bool IsPlayerJob { get; set; }
     public long? Wage { get; set; }
     public string? ContractStart { get; set; }
     public string? ContractEnd { get; set; }
@@ -213,7 +217,19 @@ public sealed class StaffRow
     public Dictionary<string, int> Personality { get; set; } = new();
     public Dictionary<string, int> Attributes { get; set; } = new();
     public Dictionary<string, int> Preferences { get; set; } = new();
-    [JsonIgnore] public string RoleDisplay => L10n.Get(IsHumanManager ? "StaffHuman" : "StaffUnknownRole");
+    [JsonIgnore] public string RoleDisplay
+    {
+        get
+        {
+            if (IsHumanManager) return L10n.Get("StaffHuman");
+            string key = "StaffJob_" + JobKey;
+            if (!JobCode.HasValue || string.IsNullOrEmpty(JobKey) || !L10n.Keys.Contains(key)) return L10n.Get("StaffUnknownRole");
+            string label = L10n.Get(key);
+            if (JobFamilyOnly) label = L10n.Format("StaffJobFamilyFormat", label);
+            return IsPlayerJob ? L10n.Format("StaffPlayerJobFormat", label) : label;
+        }
+    }
+    [JsonIgnore] public string RoleTooltip => JobFamilyOnly ? L10n.Get("StaffJobFamilyNote") : "";
     [JsonIgnore] public string ContractDisplay => L10n.Get(HasContract ? "StaffContractFound" : "StaffContractMissing");
     [JsonIgnore] public string BirthDisplay => DisplayDate(Birth);
     [JsonIgnore] public string ContractStartDisplay => DisplayDate(ContractStart);

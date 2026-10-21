@@ -54,7 +54,7 @@ Players can also be added to the comparison list; every opened player is added a
 - **Squad list:** initially sorted by position, then current ability.
 - **Best by position:** select a position and tactical role to see a configurable number of candidates (10 by default). **Ctrl/Shift+click** on the pitch requests two positions; a second selector also supports different roles in the same position.
 - **Best by tactic:** choose a first-team tactic and a slot on the paired pitches. Assess candidates for in possession, out of possession or both, using the tactic’s actual roles. The squad filter also applies to these recommendations.
-- **Staff:** view readable identity, contracts, ability, personality, preferences and 20 additional professional attributes on a 1–20 scale. This is read only; exact job titles remain unidentified.
+- **Staff:** view readable jobs, identity, contracts, ability, personality, preferences and 20 additional professional attributes on a 1–20 scale. You can also search by job. This is read only; “category” indicates that the specific title is not decoded yet.
 
 Recommendations require complete data and sufficient familiarity in every requested position. Selecting both phases requires players to cover both. An unrecognised role does not produce a generic recommendation in its place.
 
@@ -80,6 +80,7 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 ### v14.6 · in development
 
 - The **Staff** tab displays 20 additional attributes on a 1–20 scale, including coaching, judging ability and potential, motivating, physiotherapy and sports science.
+- Staff jobs are read from contracts and can be searched and sorted. Recognised jobs include goalkeeping coaches, assistant managers, technical directors and set piece coaches; analysts display their general category where the specialisation is not decoded yet.
 - Staff information remains read-only; unidentified fields are not displayed.
 
 ### v14.5

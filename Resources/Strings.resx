@@ -2024,4 +2024,64 @@ Passa sul punto per il valore.</value>
   <data name="LineupMethod" xml:space="preserve">
     <value>Ogni giocatore è utilizzato una sola volta. Prima si coprono più slot possibili, poi si massimizza la somma dei punteggi per sottoruolo della fase scelta. Il campo usa le posizioni in possesso se sono selezionate entrambe le fasi. Stima basata sugli attributi, senza forma, infortuni o squalifiche.</value>
   </data>
+  <data name="StaffAttribute_discipline" xml:space="preserve">
+    <value>Autorità / Disciplina</value>
+  </data>
+  <data name="StaffAttribute_determination" xml:space="preserve">
+    <value>Determinazione</value>
+  </data>
+  <data name="StaffAttribute_working_with_youngsters" xml:space="preserve">
+    <value>Lavoro con i giovani</value>
+  </data>
+  <data name="StaffAttribute_man_management" xml:space="preserve">
+    <value>Gestione del personale</value>
+  </data>
+  <data name="StaffAttribute_coaching_set_pieces" xml:space="preserve">
+    <value>Calci piazzati</value>
+  </data>
+  <data name="StaffCoachingStars" xml:space="preserve">
+    <value>Stelle allenamento (stima)</value>
+  </data>
+  <data name="StaffCoachingCategory" xml:space="preserve">
+    <value>Categoria</value>
+  </data>
+  <data name="StaffCoachingScore" xml:space="preserve">
+    <value>Indice /300</value>
+  </data>
+  <data name="StaffCoachingCalculation" xml:space="preserve">
+    <value>Calcolo dagli attributi</value>
+  </data>
+  <data name="StaffCoachingMissing" xml:space="preserve">
+    <value>Dati mancanti: nessuna stella calcolata.</value>
+  </data>
+  <data name="StaffCoachingEstimate" xml:space="preserve">
+    <value>Stime teoriche per una sola categoria, senza carico di lavoro o assegnazioni. La formula FM26 non è verificata: le stelle possono differire dal gioco e da Genie Scout. CA e PA non entrano nel calcolo.</value>
+  </data>
+  <data name="CoachingCategory_AttackTactical" xml:space="preserve">
+    <value>Offensivo · Tattica</value>
+  </data>
+  <data name="CoachingCategory_AttackTechnical" xml:space="preserve">
+    <value>Offensivo · Tecnica</value>
+  </data>
+  <data name="CoachingCategory_DefenceTactical" xml:space="preserve">
+    <value>Difensivo · Tattica</value>
+  </data>
+  <data name="CoachingCategory_DefenceTechnical" xml:space="preserve">
+    <value>Difensivo · Tecnica</value>
+  </data>
+  <data name="CoachingCategory_PossessionTactical" xml:space="preserve">
+    <value>Possesso · Tattica</value>
+  </data>
+  <data name="CoachingCategory_PossessionTechnical" xml:space="preserve">
+    <value>Possesso · Tecnica</value>
+  </data>
+  <data name="CoachingCategory_Goalkeeping" xml:space="preserve">
+    <value>Portieri</value>
+  </data>
+  <data name="CoachingCategory_Fitness" xml:space="preserve">
+    <value>Atletico</value>
+  </data>
+  <data name="CoachingCategory_SetPieces" xml:space="preserve">
+    <value>Calci piazzati</value>
+  </data>
 </root>

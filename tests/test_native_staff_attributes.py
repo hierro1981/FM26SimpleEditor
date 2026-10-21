@@ -9,7 +9,7 @@ from staff_reader import NATIVE_ATTRIBUTES, native_staff_attributes
 
 
 class NativeStaffAttributeTests(unittest.TestCase):
-    def fixture(self):
+    def fixture(self, changed=None, valid=True):
         raw = bytearray(100)
         struct.pack_into('<IIIBB', raw, 0, 7, 12345, 12345, 1, 0)
         struct.pack_into('<HhB', raw, 21, 100, 150, 4)
@@ -17,22 +17,40 @@ class NativeStaffAttributeTests(unittest.TestCase):
         raw[34] = 12
         raw[35:61] = bytes([10] * 26)
         raw[61:87] = bytes([50] * 26)
+        for index, value in (changed or {}).items():
+            raw[35 + index] = value
         block, prefs_ok, _, further_ok = _read_ability_block(raw, 0, STAFF)
-        self.assertTrue(prefs_ok and further_ok)
+        if valid:
+            self.assertTrue(prefs_ok and further_ok)
         person = NS(uid=12345, is_human_manager=False, ability=block.ability,
                     preferences=block.preferences, unknown=block.unknown)
         return raw, person
 
-    def test_twenty_named_attributes_and_native_rounding(self):
+    def test_twenty_five_named_attributes_and_native_rounding(self):
         raw, person = self.fixture()
         # Boundary values distinguish nearest-integer conversion from flooring.
         for value, expected in [(1, 1), (7, 1), (8, 2), (52, 10), (53, 11), (98, 20), (100, 20)]:
             raw[61 + 6] = value  # Generic attribute 32 = physiotherapy.
             result = native_staff_attributes(raw, person, STAFF)
-            self.assertEqual(len(result), 20)
+            self.assertEqual(len(result), 25)
             self.assertEqual(result['physiotherapy'], expected)
             self.assertEqual(result['coaching_goalkeeping'], 10)
-        self.assertEqual(len(NATIVE_ATTRIBUTES), 20)
+        self.assertEqual(len(NATIVE_ATTRIBUTES), 25)
+
+    def test_mixed_scale_coaching_inputs_and_set_pieces(self):
+        raw, person = self.fixture({4: 18, 12: 8, 13: 68, 30: 42, 51: 93})
+        result = native_staff_attributes(raw, person, STAFF)
+        self.assertEqual({k: result[k] for k in ('discipline', 'working_with_youngsters',
+                         'determination', 'man_management', 'coaching_set_pieces')},
+                         dict(discipline=18, working_with_youngsters=8,
+                              determination=14, man_management=8, coaching_set_pieces=19))
+
+    def test_unavailable_or_out_of_range_mental_inputs_are_not_invented(self):
+        for index, key, maximum in [(4, 'discipline', 20), (12, 'working_with_youngsters', 20),
+                                     (13, 'determination', 100)]:
+            for value in [0, maximum + 1, 255]:
+                raw, person = self.fixture({index: value}, valid=False)
+                self.assertNotIn(key, native_staff_attributes(raw, person, STAFF))
 
     def test_identity_kind_ability_marker_preferences_and_range_are_required(self):
         for offset, value in [(8, 0), (12, 2), (21, 99), (34, 11), (35, 9), (61, 0), (61, 101)]:

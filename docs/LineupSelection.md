@@ -53,12 +53,5 @@ than the configured recommendation count, and 30 random small problems checked
 against exhaustive enumeration. UI checks cover squad/phase/language changes,
 clearing a save, rendering and scrolling to the third pitch.
 
-## Staff training stars: remaining prerequisite
-
-The staff extension currently exposes Motivating and named coaching attributes,
-but has not validated saved Determination and Level of Discipline. No official
-FM26 category-star formula has been established. Historical community formulas
-are not sufficient evidence to label new numbers as the game's FM26 stars.
-Training-category stars remain unimplemented pending decoding and comparison
-against game screenshots for known coaches; CA must not be used as a substitute
-for the missing attributes.
+Staff training estimates and their separate validation limits are documented
+in [CoachingStars.md](CoachingStars.md).

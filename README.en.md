@@ -79,9 +79,11 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 ### v14.6 · in development
 
+- **Training stars (estimate):** staff details include nine categories with stars, an index and the attributes used. Determination, Authority/Discipline, People management, Working with youngsters and Set Pieces are now readable too. Stars are indicative and may differ from the game.
+
 - **Best XI per tactic:** a third pitch shows the lineup with the highest combined role scores, using each player once. It follows squad filters and the selected phase, and highlights slots that cannot be filled.
 
-- The **Staff** tab displays 20 additional attributes on a 1–20 scale, including coaching, judging ability and potential, motivating, physiotherapy and sports science.
+- The **Staff** tab displays 25 additional attributes on a 1–20 scale, including coaching, judging ability and potential, motivating, physiotherapy and sports science.
 - Staff jobs are read from contracts and can be searched and sorted. Recognised jobs include goalkeeping coaches, assistant managers, technical directors and set piece coaches; analysts display their general category where the specialisation is not decoded yet.
 - Staff information remains read-only; unidentified fields are not displayed.
 

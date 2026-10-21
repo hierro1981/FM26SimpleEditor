@@ -81,6 +81,7 @@ internal static class Checks
             QuickComparisonChecks.Run(Check);
             TacticsChecks.Run(Check);
             LineupChecks.Run(Check);
+            CoachingChecks.Run(Check);
             LayoutChecks.Run(Check);
             Console.WriteLine($"{count} C# checks passed"); return 0;
         }

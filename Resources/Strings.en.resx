@@ -2024,4 +2024,64 @@ Hover over a position for its rating.</value>
   <data name="LineupMethod" xml:space="preserve">
     <value>Each player is used once. Fill as many slots as possible, then maximise the sum of role scores for the selected phase. The pitch uses in-possession positions when both phases are selected. Attribute-based estimate; form, injuries and suspensions are not considered.</value>
   </data>
+  <data name="StaffAttribute_discipline" xml:space="preserve">
+    <value>Authority / Discipline</value>
+  </data>
+  <data name="StaffAttribute_determination" xml:space="preserve">
+    <value>Determination</value>
+  </data>
+  <data name="StaffAttribute_working_with_youngsters" xml:space="preserve">
+    <value>Working with youngsters</value>
+  </data>
+  <data name="StaffAttribute_man_management" xml:space="preserve">
+    <value>People management</value>
+  </data>
+  <data name="StaffAttribute_coaching_set_pieces" xml:space="preserve">
+    <value>Set pieces</value>
+  </data>
+  <data name="StaffCoachingStars" xml:space="preserve">
+    <value>Training stars (estimate)</value>
+  </data>
+  <data name="StaffCoachingCategory" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="StaffCoachingScore" xml:space="preserve">
+    <value>Index /300</value>
+  </data>
+  <data name="StaffCoachingCalculation" xml:space="preserve">
+    <value>Attribute calculation</value>
+  </data>
+  <data name="StaffCoachingMissing" xml:space="preserve">
+    <value>Missing data: no star rating calculated.</value>
+  </data>
+  <data name="StaffCoachingEstimate" xml:space="preserve">
+    <value>Theoretical estimates for a single category, without workload or assignments. The FM26 formula is not verified: stars may differ from the game and Genie Scout. CA and PA are not used.</value>
+  </data>
+  <data name="CoachingCategory_AttackTactical" xml:space="preserve">
+    <value>Attacking · Tactical</value>
+  </data>
+  <data name="CoachingCategory_AttackTechnical" xml:space="preserve">
+    <value>Attacking · Technical</value>
+  </data>
+  <data name="CoachingCategory_DefenceTactical" xml:space="preserve">
+    <value>Defending · Tactical</value>
+  </data>
+  <data name="CoachingCategory_DefenceTechnical" xml:space="preserve">
+    <value>Defending · Technical</value>
+  </data>
+  <data name="CoachingCategory_PossessionTactical" xml:space="preserve">
+    <value>Possession · Tactical</value>
+  </data>
+  <data name="CoachingCategory_PossessionTechnical" xml:space="preserve">
+    <value>Possession · Technical</value>
+  </data>
+  <data name="CoachingCategory_Goalkeeping" xml:space="preserve">
+    <value>Goalkeeping</value>
+  </data>
+  <data name="CoachingCategory_Fitness" xml:space="preserve">
+    <value>Fitness</value>
+  </data>
+  <data name="CoachingCategory_SetPieces" xml:space="preserve">
+    <value>Set pieces</value>
+  </data>
 </root>

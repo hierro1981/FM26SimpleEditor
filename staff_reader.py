@@ -11,13 +11,14 @@ PREFERENCES = ('attacking', 'business', 'directness', 'interference', 'patience'
 # Indices of the native generic non-player attribute enum, not the separate
 # job-dependent getter enum. See docs/StaffAttributes.md for the evidence.
 NATIVE_ATTRIBUTES = {
+    4: 'discipline', 12: 'working_with_youngsters', 13: 'determination',
     26: 'coaching', 27: 'coaching_goalkeeping', 28: 'judging_ability',
-    29: 'judging_potential', 31: 'motivating', 32: 'physiotherapy',
+    29: 'judging_potential', 30: 'man_management', 31: 'motivating', 32: 'physiotherapy',
     33: 'tactical_knowledge', 34: 'coaching_attacking', 35: 'coaching_defending',
     36: 'coaching_fitness', 37: 'coaching_possession', 38: 'coaching_technical',
     39: 'coaching_tactical', 41: 'goalkeeping_handling',
     42: 'goalkeeping_distribution', 44: 'analysing_data', 47: 'sports_science',
-    48: 'eccentricity', 49: 'negotiating', 50: 'judging_staff_ability',
+    48: 'eccentricity', 49: 'negotiating', 50: 'judging_staff_ability', 51: 'coaching_set_pieces',
 }
 
 
@@ -65,8 +66,15 @@ def attributes_at_block(raw, block, layout):
     # The serializer copies native bytes +0x10..+0x43 after marker 12.
     # Generic indices >= 26 use the native (raw + 2) / 5 conversion.
     attributes_at = block[1] + layout.preferences_offset
-    return {key: max(1, min(20, (raw[attributes_at + index] + 2) // 5))
-            for index, key in NATIVE_ATTRIBUTES.items()}
+    result = {}
+    for index, key in NATIVE_ATTRIBUTES.items():
+        value = raw[attributes_at + index]
+        scaled = index >= 26 or index == 13
+        # The first block mixes preferences and abilities. In particular, zero
+        # or an unknown sentinel must not become an invented 1/20 rating.
+        if 1 <= value <= (100 if scaled else 20):
+            result[key] = max(1, min(20, (value + 2) // 5)) if scaled else value
+    return result
 
 
 def native_staff_attributes(raw, person, layout):

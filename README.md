@@ -54,7 +54,7 @@ Puoi anche aggiungere giocatori all’elenco di confronto; ogni giocatore aperto
 - **Rosa:** elenco ordinato inizialmente per posizione e abilità attuale.
 - **Migliori per posizione:** seleziona posizione e sottoruolo per vedere un numero configurabile di candidati (10 predefiniti). Con **Ctrl/Shift+clic** sul campo puoi richiedere due posizioni; un secondo selettore permette anche due sottoruoli differenti nella stessa posizione.
 - **Migliori per tattica:** scegli una tattica della prima squadra e uno slot nei campi affiancati. Valuta i candidati per la fase in possesso, non in possesso o entrambe, con i sottoruoli effettivi della tattica. Il filtro della rosa si applica anche a questi suggerimenti.
-- **Staff:** consulta incarichi, identità, contratti, abilità, personalità, preferenze e 20 attributi professionali aggiuntivi su scala 1–20, dove leggibili. Puoi cercare anche per incarico. È una vista in sola lettura; «categoria» segnala quando non è ancora riconosciuta la qualifica specifica.
+- **Staff:** consulta incarichi, identità, contratti, abilità, personalità, preferenze e 25 attributi professionali aggiuntivi su scala 1–20, dove leggibili. Puoi cercare anche per incarico. È una vista in sola lettura; «categoria» segnala quando non è ancora riconosciuta la qualifica specifica.
 
 I suggerimenti richiedono dati completi e una familiarità sufficiente nelle posizioni richieste. Quando scegli entrambe le fasi, un giocatore deve poter ricoprire entrambe. Un ruolo non riconosciuto non produce una raccomandazione generica al suo posto.
 
@@ -79,9 +79,11 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ### v14.6 · in sviluppo
 
+- **Stelle allenamento (stima):** nel dettaglio dello staff puoi consultare nove categorie, con stelle, indice e attributi usati. Sono ora leggibili anche Determinazione, Autorità/Disciplina, Gestione del personale, Lavoro con i giovani e Calci piazzati. Le stelle sono indicative e possono differire dal gioco.
+
 - **Top 11 per tattica:** un terzo campo mostra la formazione con la migliore somma dei punteggi per sottoruolo, usando ciascun giocatore una sola volta. Rispetta i filtri della rosa e la fase selezionata; segnala gli slot che non è possibile coprire.
 
-- Nel tab **Staff** sono disponibili 20 attributi aggiuntivi su scala 1–20, tra cui allenamento, valutazione di abilità e potenziale, motivazione, fisioterapia e scienze motorie.
+- Nel tab **Staff** sono disponibili 25 attributi aggiuntivi su scala 1–20, tra cui allenamento, valutazione di abilità e potenziale, motivazione, fisioterapia e scienze motorie.
 - Gli incarichi dello staff vengono letti dal contratto e sono ricercabili e ordinabili. Sono riconosciuti anche preparatori dei portieri, allenatori in seconda, direttori tecnici e preparatori dei calci piazzati; gli analisti mostrano la categoria generale quando la specializzazione non è ancora decodificata.
 - Le informazioni dello staff restano in sola lettura; i campi non riconosciuti non vengono mostrati.
 

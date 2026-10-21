@@ -1,8 +1,10 @@
 # Staff attribute decoding
 
 This extension reads saved attributes only. It does not edit staff, infer job
-titles from attributes, reproduce job-dependent effective ratings, or calculate
-coach stars. Contract-based job decoding is documented in [StaffJobs.md](StaffJobs.md).
+titles from attributes, or reproduce job-dependent effective ratings.
+Contract-based job decoding is documented in [StaffJobs.md](StaffJobs.md).
+The separate, explicitly estimated training stars are documented in
+[CoachingStars.md](CoachingStars.md).
 
 ## Evidence and layout
 
@@ -56,7 +58,26 @@ stored values 1–100.
 | 49 | 23 | Negotiating |
 | 50 | 24 | Judging Staff Ability |
 
-Indices 30, 40, 43, 45, 46 and 51 are intentionally omitted. Native names such
+### Five further coaching inputs
+
+The command dispatch also names generic index **4** as `Authority`, **12** as
+`Youngsters`, **13** as `Determination`, and **30** as `Man Management`.
+The matched branches return these indices, rather than their order in the
+command list. Indices 4 and 12 already store 1–20; index 13 and index 30 store
+1–100 and require the conversion above. They match the supplied independent
+staff-profile screenshots, including their different scales.
+
+The `Ncsp` property (0x4e637370) in the property dispatcher at `0x14ae130`
+branches to `0x14b09fe` and requests effective attribute **9**. The jump table
+at `0x4491d44` sends case 9 to `0x14a1247`, which reads primary-object byte
+`+0x43`: generic index **51**, **Set Pieces**. This is not an assumption that
+effective and generic enum indices coincide. The two supplied staff profiles
+also match this value after conversion. All five additional values are exposed
+only from the same uniquely validated staff block, with explicit range checks;
+zero and unknown sentinels are never converted into invented 1/20 values.
+
+The extension now exposes **25** named values in addition to the upstream
+Adaptability field. Indices 40, 43, 45 and 46 remain omitted. Native names such
 as general Coaching and Goalkeeping are kept distinct from the more specific
 coaching categories; legacy fields are not claimed to appear on every FM screen.
 
@@ -73,6 +94,10 @@ The real-save regression returned all 20 additional attributes for all 66
 records and confirmed that the input file hash was unchanged. The upstream
 reader reported its existing `staff_unowned_tailed_contracts=1` warning;
 this is not a successful validation of every staff contract in the save.
+
+The newer uploaded save contains 67 staff rows including the human manager.
+The five newly identified inputs were cross-checked against two supplied
+Genie Scout profiles. The input hash was checked before and after research.
 
 Synthetic tests cover rounding boundaries, entries of variable length, shifted
 headers, duplicate matches, mismatched identity, CA/PA, preferences, signatures,

@@ -93,6 +93,7 @@ internal static class LineupChecks
         check(summary.Text.StartsWith("Best XI:") && All(panel).OfType<Label>().Single(l => l.Name == "LineupTitle").Text.Contains("In possession"),
             "XI labels and method change language while preserving the phase");
         using (var bitmap = new Bitmap(host.Width, host.Height)) host.DrawToBitmap(bitmap, host.ClientRectangle);
+        host.Size = new Size(760, 650); Application.DoEvents();
         var viewport = All(panel).OfType<ContentViewport>().Single(c => c.Name == "TacticPitchesScroll");
         check(viewport.HorizontalScroll.Visible, "three pitches remain scrollable when the window is narrow");
         viewport.ScrollControlIntoView(pitch); Application.DoEvents();

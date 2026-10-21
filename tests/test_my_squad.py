@@ -32,6 +32,14 @@ class MySquadTests(unittest.TestCase):
         self.assertEqual([p['player']['uid'] for p in result['players']],[1,2,3])
         self.assertTrue(result['firstHumanOnly'])
 
+    def test_outgoing_loans_are_loaded_by_confirmed_owner_id_only(self):
+        store = self.store()
+        store.rows[3].update(onLoan=True, ownerClubUid=10)
+        store.rows.append(dict(uid=6, teamId=500, onLoan=True, ownerClubUid=99, ownerTeam='Club', positions={'MC':20}))
+        result = read_my_squad(store)
+        self.assertEqual(result['status'], 'ready')
+        self.assertEqual([p['player']['uid'] for p in result['players']], [1,2,3,4])
+
     def test_squad_names_only_use_readable_names_not_slot_guesses(self):
         store=self.store();club=store.save.clubs()[0]
         club.teams[2].club_uid=50

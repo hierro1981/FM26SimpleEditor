@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v14.4
+# FM26 Simple Editor · v14.5
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -8,7 +8,7 @@ A free **Football Manager 26** editor for Windows. Open a save, find a player an
 
 ## Download and launch
 
-Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The v14.4 changes described here are in development and will be available in that release.
+Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The v14.5 changes described here are in development and will be available in that release.
 
 - **Setup, when available in the release:** guided installation, with options to install Python and the .NET runtime if needed. Additional installations require your consent and an Internet connection.
 - **Portable ZIP:** extract the complete package into a folder and run **FM26SimpleEditor.exe**. Keep all package files together.
@@ -50,7 +50,7 @@ Players can also be added to the comparison list; every opened player is added a
 **My squad** identifies the club managed by the save’s first recognised human manager. It defaults to the first team; select another available squad or all club players when needed.
 
 - **Squad list:** initially sorted by position, then current ability.
-- **Best by position:** select a position and tactical role to see up to five candidates. **Ctrl/Shift+click** on the pitch requests two positions; a second selector also supports different roles in the same position.
+- **Best by position:** select a position and tactical role to see a configurable number of candidates (10 by default). **Ctrl/Shift+click** on the pitch requests two positions; a second selector also supports different roles in the same position.
 - **Best by tactic:** choose a first-team tactic and a slot on the paired pitches. Assess candidates for in possession, out of possession or both, using the tactic’s actual roles. The squad filter also applies to these recommendations.
 - **Staff:** view readable identity, contracts, ability, personality and preferences. This is read only; job titles and many professional attributes are not yet available.
 
@@ -64,7 +64,7 @@ Where available, internal history works from the open save alone. Reconstructed 
 
 ### Language and updates
 
-Choose **Italiano** or **English** from the language selector. Your choice is remembered automatically. **About** shows the editor version and lets you check for updates with a link to the release.
+Open **Options** to choose **Italiano** or **English** and the number of position/tactic recommendations (10 by default). Your choice is remembered automatically. **About** shows the editor version and lets you check for updates with a link to the release.
 
 ## Compatibility and limitations
 
@@ -75,7 +75,13 @@ Choose **Italiano** or **English** from the language selector. Your choice is re
 
 ## Changes, newest first
 
-### v14.4 · in development
+### v14.5 · in development
+
+- **Options** window for language and number of recommendations (10 by default); preferences are remembered.
+- Include players loaned out in your squad and position/tactic recommendations.
+- More accurate tactical flank placement, compact role labels and readable tabs in narrow windows.
+
+### v14.4
 
 - Improved tactics layout in small windows, with scrolling and fewer fixed help paragraphs; coloured tab headers make navigation clearer.
 - READMEs reorganised around installation, everyday use and editor features; configuration and development details moved to dedicated documentation.

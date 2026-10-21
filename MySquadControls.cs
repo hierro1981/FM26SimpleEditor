@@ -7,6 +7,7 @@ public sealed class MySquadPanel : UserControl
 {
     private readonly ComboBox club = new() { Name = "ManagedClubChoice", DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
     private readonly ComboBox scope = new() { Name = "MySquadScope", DropDownStyle = ComboBoxStyle.DropDownList, Width = 270 };
+    private readonly CheckBox includeLoans = new() { Name = "MySquadIncludeLoans", Text = L10n.Get("IncludeOutgoingLoans"), AutoSize = true };
     private readonly TextBox search = new() { Name = "MySquadSearch", Dock = DockStyle.Fill, PlaceholderText = L10n.Get("MySquadSearch") };
     private readonly Label status = new() { Name = "MySquadStatus", AutoSize = true, ForeColor = Color.DimGray };
     private readonly Label count = new() { AutoSize = true, Anchor = AnchorStyles.Left };
@@ -68,7 +69,9 @@ public sealed class MySquadPanel : UserControl
         selection.Controls.Add(club, 1, 0);
         var reload = new Button { Name = "MySquadReload", Text = L10n.Get("MySquadReload"), AutoSize = true };
         reload.Click += (_, _) => ReloadRequested?.Invoke(); selection.Controls.Add(reload, 2, 0);
-        root.Controls.Add(selection, 0, 0); root.Controls.Add(scope, 0, 1); root.Controls.Add(status, 0, 2);
+        var squadFilters = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true, Margin = Padding.Empty };
+        squadFilters.Controls.AddRange([scope, includeLoans]);
+        root.Controls.Add(selection, 0, 0); root.Controls.Add(squadFilters, 0, 1); root.Controls.Add(status, 0, 2);
         var tabs = views;
         var listTab = new TabPage(L10n.Get("MySquadRoster")); var roleTab = new TabPage(L10n.Get("MySquadBest"));
         staffTab.Controls.Add(staff); tacticsTab.Controls.Add(tactics);
@@ -77,7 +80,7 @@ public sealed class MySquadPanel : UserControl
         tactics.QuickComparisonRequested += (a, b) => QuickComparisonRequested?.Invoke(a, b);
         tactics.ReloadRequested += () => { tactics.ClearForClub(SelectedClub?.ClubUid); EnsureTacticsLoaded(); };
         staff.ReloadRequested += () => { staff.ClearForClub(SelectedClub?.ClubUid); EnsureStaffLoaded(); };
-        tabs.SelectedIndexChanged += (_, _) => { scope.Enabled = data.Status == "ready" && data.Clubs.Count > 0 && tabs.SelectedTab != staffTab; EnsureStaffLoaded(); EnsureTacticsLoaded(); };
+        tabs.SelectedIndexChanged += (_, _) => { scope.Enabled = includeLoans.Enabled = data.Status == "ready" && data.Clubs.Count > 0 && tabs.SelectedTab != staffTab; EnsureStaffLoaded(); EnsureTacticsLoaded(); };
         tabs.TabPages.AddRange([listTab, roleTab, staffTab, tacticsTab]); root.Controls.Add(tabs, 0, 3);
         var list = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3, Padding = new Padding(6) };
         list.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
@@ -138,6 +141,7 @@ public sealed class MySquadPanel : UserControl
         ranking.Columns[4].CellTemplate = new StarRatingCell();
         ranking.Columns[4].DefaultCellStyle.Format = "0.0"; ranking.RowTemplate.Height = 41;
         club.SelectedIndexChanged += (_, _) => { if (!binding) { staff.ClearForClub(SelectedClub?.ClubUid); tactics.ClearForClub(SelectedClub?.ClubUid); RebuildScopes(reset: true); RefreshView(); } };
+        includeLoans.CheckedChanged += (_, _) => { if (!binding) RefreshView(); };
         scope.SelectedIndexChanged += (_, _) => { if (!binding) RefreshView(); };
         search.TextChanged += (_, _) => { if (!binding) RefreshRoster(); };
         position.SelectedIndexChanged += (_, _) => { if (!binding && position.SelectedItem is PositionChoice p) SelectPosition(p.Key); };
@@ -191,7 +195,7 @@ public sealed class MySquadPanel : UserControl
     private void Open(DataGridView grid) { if (SelectedUid(grid) is uint uid) PlayerOpenRequested?.Invoke(uid); }
     private ManagedSquad? SelectedClub => club.SelectedItem as ManagedSquad;
     private IReadOnlyList<PlayerDetail> Members => SquadSelection.Members(data, SelectedClub,
-        (scope.SelectedItem as ScopeChoice)?.Mode ?? SquadScope.FirstTeam, (scope.SelectedItem as ScopeChoice)?.TeamId);
+        (scope.SelectedItem as ScopeChoice)?.Mode ?? SquadScope.FirstTeam, (scope.SelectedItem as ScopeChoice)?.TeamId, includeLoans.Checked);
     private SquadTarget[] SelectedTargets => secondaryPosition is null ? [new(selectedPosition, selectedRoleId)] : [new(selectedPosition, selectedRoleId), new(secondaryPosition, secondaryRoleId)];
     private string[] SelectedPositions => secondaryPosition is null ? [selectedPosition] : [selectedPosition, secondaryPosition];
     private void RebuildScopes(bool reset = false)
@@ -267,6 +271,8 @@ public sealed class MySquadPanel : UserControl
         // Enabled getters include ancestor state; the main form disables tabs during loading.
         // Store the desired state from the data rather than reading a temporarily disabled peer.
         bool ready = data.Status == "ready" && data.Clubs.Count > 0;
+        includeLoans.Enabled = ready && views.SelectedTab != staffTab;
+        roleTips.SetToolTip(includeLoans, L10n.Get("IncludeOutgoingLoansHint"));
         club.Enabled = ready; scope.Enabled = ready && views.SelectedTab != staffTab;
         scope.AccessibleDescription = L10n.Get("MySquadTeamNamesHint");
         club.AccessibleDescription = data.FirstHumanOnly ? L10n.Get("MySquadFirstHuman") : "";
@@ -274,6 +280,7 @@ public sealed class MySquadPanel : UserControl
         roleTips.SetToolTip(club, club.AccessibleDescription);
         RefreshRoster(); RefreshRanking(); tactics.SetMembers(Members); EnsureStaffLoaded(); EnsureTacticsLoaded();
     }
+    public void RefreshOptions() => RefreshView();
     public void SetStaffData(StaffResult result) => staff.SetData(result);
     public void EnsureStaffLoaded()
     {
@@ -309,7 +316,7 @@ public sealed class MySquadPanel : UserControl
     {
         ranking.Rows.Clear();
         var members = Members;
-        var best = SquadSelection.TopFiveForRoles(members, SelectedTargets);
+        var best = SquadSelection.BestForRoles(members, SelectedTargets);
         for (int i = 0; i < best.Count; i++)
         {
             var p = best[i]; int at = ranking.Rows.Add(i + 1, p.Player.Name, PositionScheme.Compact(p.Player.Positions, L10n.IsItalian), p.Score, p.Stars, string.Join(" · ", p.Familiarities.Select(pair => Labels.PositionCode(pair.Key, L10n.IsItalian) + ": " + pair.Value)), p.Player.Ca, p.Player.Pa);

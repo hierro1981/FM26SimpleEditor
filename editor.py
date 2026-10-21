@@ -49,7 +49,7 @@ def player_row(player, clock):
     positions = {key: getattr(player.positions, key.lower()) for key in POSITION_ORDER}
     main = primary_position(positions)
     return dict(uid=player.uid, id=player.unique_id, name=player.name or f"Giocatore {player.uid}",
-                team=team, ownerTeam=owner, birth=player.birth_date.isoformat() if player.birth_date else None,
+                team=team, ownerTeam=owner, ownerClubUid=getattr(player, "loan_parent_club_uid", None) if player.on_loan is True else player.club_uid, birth=player.birth_date.isoformat() if player.birth_date else None,
                 ca=player.ability.current, pa=player.ability.potential,
                 paRange=player.ability.potential_range_code, teamId=player.team_id, clubUid=player.club_uid,
                 age=player.age, height=player.height_cm if player.height_cm > 0 else None,

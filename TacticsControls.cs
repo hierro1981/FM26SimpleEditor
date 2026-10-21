@@ -87,13 +87,29 @@ public sealed class SavedTacticPitch : Control
             var p = Phase(slot); if (p.Position is null) continue;
             float y = Row(p);
             var row = slots.Where(s => Phase(s).Position is not null && Row(Phase(s)) == y).OrderBy(s => Column(Phase(s))).ThenBy(s => s.Number).ToList();
-            float x = (row.FindIndex(s => s.Number == slot.Number) + .5f) / row.Count;
-            float w = Math.Min(area.Width * .30f, area.Width / row.Count * .92f), h = Math.Clamp(area.Height * .12f, 30, 54);
+            float X(SavedTacticSlot item)
+            {
+                int column = Column(Phase(item));
+                float anchor = column switch { 0 => .12f, 1 => .31f, 3 => .69f, 4 => .88f, _ => .5f };
+                var peers = row.Where(s => Column(Phase(s)) == column).ToList();
+                float spacing = peers.Count <= 1 ? 0 : Math.Min(.18f, 2 * Math.Min(anchor - .05f, .95f - anchor) / (peers.Count - 1));
+                return anchor + (peers.IndexOf(item) - (peers.Count - 1) / 2f) * spacing;
+            }
+            float x = X(slot);
+            float gap = row.Where(s => s.Number != slot.Number).Select(s => Math.Abs(X(s) - x)).DefaultIfEmpty(.32f).Min();
+            float w = area.Width * Math.Min(.28f, Math.Min(gap * .92f, Math.Min(x, 1 - x) * 1.9f));
+            float h = Math.Min(area.Height * .145f, Font.Height * 2 + 5);
             var box = new RectangleF(area.Left + area.Width * x - w / 2, area.Top + area.Height * y - h / 2, w, h);
             hits[slot.Number] = box;
             using var fill = new SolidBrush(slot.Number == selected ? Color.Goldenrod : Color.FromArgb(236, 244, 240));
             g.FillRectangle(fill, box); g.DrawRectangle(line, box.X, box.Y, box.Width, box.Height);
-            TextRenderer.DrawText(g, p.PositionLabel + "\n" + p.Label, Font, Rectangle.Round(box), Color.FromArgb(15, 40, 30), TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix);
+            using var roleFont = new Font(Font.FontFamily, Font.Size * .85f, Font.Style);
+            var bounds = Rectangle.Round(box);
+            var titleBounds = new Rectangle(bounds.X + 2, bounds.Y, Math.Max(1, bounds.Width - 4), bounds.Height / 2);
+            var roleBounds = new Rectangle(bounds.X + 2, bounds.Y + bounds.Height / 2, Math.Max(1, bounds.Width - 4), bounds.Height - bounds.Height / 2);
+            var flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine;
+            TextRenderer.DrawText(g, p.PositionLabel, Font, titleBounds, Color.FromArgb(15, 40, 30), flags);
+            TextRenderer.DrawText(g, p.Label, roleFont, roleBounds, Color.FromArgb(15, 40, 30), flags);
         }
     }
     protected override void OnMouseMove(MouseEventArgs e)
@@ -221,7 +237,7 @@ public sealed class TacticsPanel : UserControl
         ip.SetTactic(SelectedTactic?.Slots ?? [], "ip", slot?.Number ?? -1); op.SetTactic(SelectedTactic?.Slots ?? [], "op", slot?.Number ?? -1);
         status.Text = data.Status == "unavailable" ? L10n.Format("TacticsUnavailable", data.Error ?? "—") : data.Status == "ready" ? "" : L10n.Get("TacticsEmpty");
         status.Visible = status.Text.Length > 0;
-        var targets = Targets; IReadOnlyList<SquadRecommendation> best = targets.Length == 0 ? [] : SquadSelection.TopFiveForRoles(members, targets);
+        var targets = Targets; IReadOnlyList<SquadRecommendation> best = targets.Length == 0 ? [] : SquadSelection.BestForRoles(members, targets);
         ranking.Rows.Clear();
         for (int i = 0; i < best.Count; i++)
         {
@@ -234,7 +250,7 @@ public sealed class TacticsPanel : UserControl
         ranking.ClearSelection(); open.Enabled = false; criteria.Enabled = targets.Length > 0;
         choice.Enabled = data.Status == "ready" && data.Tactics.Count > 0;
         slotChoice.Enabled = choice.Items.Count > 0; phase.Enabled = slotChoice.Items.Count > 0;
-        method.Text = slot is not null && targets.Length == 0 ? L10n.Get("TacticsCannotRank") : L10n.Get("TacticsMethod");
+        method.Text = slot is not null && targets.Length == 0 ? L10n.Get("TacticsCannotRank") : L10n.Format("TacticsMethod", SquadSelection.ResultLimit);
     }
     protected override void Dispose(bool disposing) { if (disposing) menu.Dispose(); base.Dispose(disposing); }
 }

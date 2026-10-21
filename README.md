@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v14.4
+# FM26 Simple Editor · v14.5
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -8,7 +8,7 @@ Editor gratuito per **Football Manager 26** su Windows. Apri un salvataggio, cer
 
 ## Scarica e avvia
 
-Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). Le novità della v14.4 qui descritte sono in sviluppo e saranno disponibili nel relativo rilascio.
+Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). Le novità della v14.5 qui descritte sono in sviluppo e saranno disponibili nel relativo rilascio.
 
 - **Setup, quando presente nella release:** installazione guidata dell’editor, con opzioni per installare anche Python e il runtime .NET se necessari. Le installazioni aggiuntive richiedono il tuo consenso e una connessione Internet.
 - **ZIP portatile:** estrai tutto il contenuto in una cartella e avvia **FM26SimpleEditor.exe**. Conserva insieme tutti i file del pacchetto.
@@ -50,7 +50,7 @@ Puoi anche aggiungere giocatori all’elenco di confronto; ogni giocatore aperto
 **La mia squadra** individua il club del primo allenatore umano riconosciuto nel salvataggio. Mostra la prima squadra per impostazione iniziale; puoi scegliere le altre squadre disponibili oppure tutti i giocatori del club.
 
 - **Rosa:** elenco ordinato inizialmente per posizione e abilità attuale.
-- **Migliori per posizione:** seleziona posizione e sottoruolo per vedere fino a cinque candidati. Con **Ctrl/Shift+clic** sul campo puoi richiedere due posizioni; un secondo selettore permette anche due sottoruoli differenti nella stessa posizione.
+- **Migliori per posizione:** seleziona posizione e sottoruolo per vedere un numero configurabile di candidati (10 predefiniti). Con **Ctrl/Shift+clic** sul campo puoi richiedere due posizioni; un secondo selettore permette anche due sottoruoli differenti nella stessa posizione.
 - **Migliori per tattica:** scegli una tattica della prima squadra e uno slot nei campi affiancati. Valuta i candidati per la fase in possesso, non in possesso o entrambe, con i sottoruoli effettivi della tattica. Il filtro della rosa si applica anche a questi suggerimenti.
 - **Staff:** consulta identità, contratti, abilità, personalità e preferenze leggibili. È una vista in sola lettura; incarichi e molti attributi professionali non sono ancora disponibili.
 
@@ -64,7 +64,7 @@ Quando disponibile, lo storico interno funziona con il solo salvataggio aperto. 
 
 ### Lingua e aggiornamenti
 
-Scegli **Italiano** o **English** dal selettore della lingua. La scelta viene ricordata automaticamente. La finestra **Informazioni** mostra la versione dell’editor e consente di verificare la presenza di aggiornamenti con un collegamento alla release.
+Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocatori consigliati per posizione o tattica (10 predefiniti). La scelta viene ricordata automaticamente. La finestra **Informazioni** mostra la versione dell’editor e consente di verificare la presenza di aggiornamenti con un collegamento alla release.
 
 ## Compatibilità e limiti
 
@@ -75,7 +75,13 @@ Scegli **Italiano** o **English** dal selettore della lingua. La scelta viene ri
 
 ## Novità, dalla versione più recente
 
-### v14.4 · in sviluppo
+### v14.5 · in sviluppo
+
+- Finestra **Opzioni** per scegliere lingua e numero di giocatori consigliati (10 predefiniti); le preferenze vengono ricordate.
+- Possibilità di includere i giocatori dati in prestito nella propria rosa e nei consigli per posizione o tattica.
+- Disposizione tattica più fedele alle fasce, sottoruoli più compatti e linguette leggibili anche nelle finestre strette.
+
+### v14.4
 
 - Migliorata la visualizzazione delle tattiche nelle finestre piccole, con scorrimento e meno testo fisso; schede più riconoscibili grazie ai colori.
 - README riorganizzati attorno a installazione, utilizzo e funzioni dell’editor; dettagli di configurazione e sviluppo nella documentazione dedicata.

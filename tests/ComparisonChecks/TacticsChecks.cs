@@ -41,7 +41,7 @@ internal static class TacticsChecks
         var slots = All(squad).OfType<ComboBox>().Single(c => c.Name == "SavedTacticSlot");
         var grid = All(squad).OfType<DataGridView>().Single(g => g.Name == "TacticRanking");
         check(choice.Items.Count == 3 && slots.Items.Count == 11 && All(squad).OfType<SavedTacticPitch>().Count() == 2, "tactics UI exposes three choices, eleven slots, and separate IP/OOP pitches immediately");
-        check(grid.Rows.Count == 5 && grid.Rows.Cast<DataGridViewRow>().All(r => ((SquadRecommendation)r.Tag!).Player.Uid != 1 && ((SquadRecommendation)r.Tag!).Player.TeamId == 10), "both-phase top five respects first-team scope and both familiarity thresholds");
+        check(grid.Rows.Count == 6 && grid.Rows.Cast<DataGridViewRow>().All(r => ((SquadRecommendation)r.Tag!).Player.Uid != 1 && ((SquadRecommendation)r.Tag!).Player.TeamId == 10), "both-phase ranking respects first-team scope and both familiarity thresholds");
         check(grid.Rows[0].Cells[7].FormattedValue.ToString() == "—" && grid.ReadOnly && grid.ScrollBars == ScrollBars.Both, "tactic ranking keeps missing PA, read-only data and both scrollbars");
         phase.SelectedIndex = 1;
         check(((SquadRecommendation)grid.Rows[0].Tag!).Player.Uid == 1 && ((SquadRecommendation)grid.Rows[0].Tag!).PositionScores.Count == 1, "IP-only selection uses just that phase without an OOP familiarity penalty");

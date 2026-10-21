@@ -24,6 +24,25 @@ internal static class LayoutChecks
         }
         tabs.SelectedIndex = 1; Application.DoEvents();
         check(tabs.SelectedTab == tabs.TabPages[1] && tabs.DisplayRectangle.Height > 0, "coloured headers retain native tab selection and content layout");
+        tabs.TabPages[0].Text = "3  Anteprima nel gioco";
+        tabs.TabPages[1].Text = "Migliori per posizione";
+        tabs.TabPages.Add(new TabPage("6  La mia squadra"));
+        tabs.Width = 350; Application.DoEvents();
+        check(tabs.Multiline && tabs.TabPages.Cast<TabPage>().Select((p, i) => tabs.GetTabRect(i).Width >= TextRenderer.MeasureText(p.Text, tabs.Font).Width + 10).All(x => x),
+            "tab widths follow full captions after changes and support multiple rows");
+        using (var pitch = new SavedTacticPitch { Dock = DockStyle.None, Size = new Size(800, 400) })
+        {
+            var positions = new[] { "WBL", "WBR", "DC", "DC", "DC", "GK" };
+            var sides = new[] { "left", "right", "left", "centre", "right", "centre" };
+            pitch.SetTactic(positions.Select((pos, i) => new SavedTacticSlot { Number = i, InPossession = new SavedTacticPhase { Position = pos, Side = sides[i] } }).ToArray(), "ip", -1);
+            using var field = new Bitmap(800, 400); pitch.DrawToBitmap(field, pitch.ClientRectangle);
+            var hits = (Dictionary<int, RectangleF>)typeof(SavedTacticPitch).GetField("hits", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.GetValue(pitch)!;
+            float Center(int i) => hits[i].Left + hits[i].Width / 2;
+            check(Center(0) < 800 * .2 && Center(1) > 800 * .8 && Math.Abs(Center(5) - 400) < 2,
+                "isolated wingbacks stay on the flanks while the goalkeeper remains central");
+            check(Center(2) < Center(3) && Center(3) < Center(4) && !hits[2].IntersectsWith(hits[3]) && !hits[3].IntersectsWith(hits[4]),
+                "three central defenders keep their actual left centre right lanes without overlap");
+        }
         using var viewport = new ContentViewport(new Panel(), new Size(560, 350)) { Dock = DockStyle.None, Size = new Size(300, 200) };
         host.Controls.Add(viewport); viewport.BringToFront(); viewport.CreateControl(); Application.DoEvents();
         check(viewport.HorizontalScroll.Visible && viewport.VerticalScroll.Visible, "minimum content dimensions enable both scrollbars");

@@ -7,14 +7,32 @@ public sealed class AccentTabControl : TabControl
     {
         DrawMode = TabDrawMode.OwnerDrawFixed;
         Padding = new Point(9, 4);
-        ItemSize = new Size(0, Font.Height + 10);
+        Multiline = true; SizeMode = TabSizeMode.Fixed;
+        UpdateHeaderSize();
     }
     protected override void OnFontChanged(EventArgs e)
     {
         base.OnFontChanged(e);
-        ItemSize = new Size(0, Font.Height + 10);
+        UpdateHeaderSize();
         Invalidate();
     }
+    private void UpdateHeaderSize()
+    {
+        int width = TabPages.Cast<TabPage>().Select(p => TextRenderer.MeasureText(p.Text, Font).Width + 24).DefaultIfEmpty(80).Max();
+        ItemSize = new Size(width, Font.Height + 12);
+    }
+    protected override void OnControlAdded(ControlEventArgs e)
+    {
+        base.OnControlAdded(e);
+        if (e.Control is TabPage page) page.TextChanged += HeaderTextChanged;
+        UpdateHeaderSize();
+    }
+    protected override void OnControlRemoved(ControlEventArgs e)
+    {
+        if (e.Control is TabPage page) page.TextChanged -= HeaderTextChanged;
+        base.OnControlRemoved(e); UpdateHeaderSize();
+    }
+    private void HeaderTextChanged(object? sender, EventArgs e) { UpdateHeaderSize(); Invalidate(); }
     protected override void OnSelectedIndexChanged(EventArgs e)
     {
         base.OnSelectedIndexChanged(e); Invalidate();

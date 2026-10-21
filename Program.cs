@@ -34,8 +34,8 @@ public sealed class MainForm : Form
     private readonly ContextMenuStrip comparisonMenu = new();
     private readonly Button open = new() { Text = L10n.Get("Text_96b6ef93f726"), AutoSize = true };
     private readonly TextBox file = new() { ReadOnly = true, Dock = DockStyle.Fill };
-    private sealed record LanguageChoice(string Id, string Label) { public override string ToString() => Label; }
-    private readonly ComboBox language = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 125, Name = "LanguageSelector", AccessibleName = L10n.Get("LanguageLabel") };
+    private readonly Button settingsButton = new() { Name = "OptionsButton", Text = L10n.Get("OptionsButton"), AutoSize = true };
+    private AppSettings settings = new();
     private readonly Button about = new() { Text = L10n.Get("AboutButton"), AutoSize = true };
     private readonly string configurationDirectory;
     private bool changingLanguage;
@@ -103,8 +103,8 @@ public sealed class MainForm : Form
     {
         this.configurationDirectory = configurationDirectory ?? AppContext.BaseDirectory;
         backend = new BackendClient(pythonExecutable);
-        language.Items.AddRange([new LanguageChoice("it", "Italiano"), new LanguageChoice("en", "English")]);
-        language.SelectedIndex = UseItalian ? 0 : 1;
+        settings = AppSettings.Load(this.configurationDirectory) with { Language = L10n.Language };
+        SquadSelection.ResultLimit = settings.RecommendationCount;
         using var iconStream = typeof(MainForm).Assembly.GetManifestResourceStream("FM26SimpleEditor.App.ico");
         if (iconStream is not null) Icon = new Icon(iconStream);
         Text = AppInfo.Title;
@@ -126,7 +126,7 @@ public sealed class MainForm : Form
         toolbar.Controls.Add(open, 0, 0); toolbar.Controls.Add(save, 1, 0);
         toolbar.Controls.Add(changes, 2, 0);
         var languageTools = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, WrapContents = false, Margin = Padding.Empty };
-        languageTools.Controls.AddRange([new Label { Text = L10n.Get("LanguageLabel"), AutoSize = true, Anchor = AnchorStyles.Left }, language, about]);
+        languageTools.Controls.AddRange([settingsButton, about]);
         toolbar.Controls.Add(languageTools, 3, 0);
         toolbar.Controls.Add(file, 0, 1); toolbar.SetColumnSpan(file, 4);
         var status = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 3, Padding = new Padding(5, 7, 5, 0) };
@@ -159,7 +159,10 @@ public sealed class MainForm : Form
         clearFilters.Click += (_, _) => ResetSearch();
         showFilters.CheckedChanged += (_, _) => options.Visible = showFilters.Checked;
         debounce.Tick += (_, _) => { debounce.Stop(); RefreshSearch(); };
-        language.SelectedIndexChanged += (_, _) => ChangeLanguage();
+        settingsButton.Click += (_, _) => {
+            using var dialog = new OptionsForm(settings);
+            if (dialog.ShowDialog(this) == DialogResult.OK) ApplySettings(dialog.Settings);
+        };
         about.Click += (_, _) => { using var dialog = new AboutForm(); dialog.ShowDialog(this); };
         ca.ValueChanged += (_, _) => Changed(); pa.ValueChanged += (_, _) => Changed(); birth.ValueChanged += (_, _) => Changed();
         changeBirth.CheckedChanged += (_, _) => { birth.Enabled = changeBirth.Checked && detail?.BirthEditable == true && !busy; Changed(); };
@@ -185,7 +188,6 @@ public sealed class MainForm : Form
         tips.SetToolTip(copyPlayerName, L10n.Get("CopyPlayerName"));
         tips.SetToolTip(copyPublicId, L10n.Get("CopyPublicId"));
         tips.SetToolTip(copyInternalId, L10n.Get("CopyInternalId"));
-        tips.SetToolTip(language, L10n.Get("Text_c7ba90415dbf"));
         tips.SetToolTip(ca, L10n.Get("Text_a2e3e958ed35"));
         tips.SetToolTip(pa, L10n.Get("Text_064e19de6695"));
         tips.SetToolTip(save, L10n.Get("Text_47d9a2b22da4"));
@@ -197,14 +199,22 @@ public sealed class MainForm : Form
         L10n.Capture(this, tips);
     }
 
-    private void ChangeLanguage()
+    private void ApplySettings(AppSettings selected)
     {
-        if (changingLanguage || language.SelectedItem is not LanguageChoice selected) return;
+        if (changingLanguage) return;
         changingLanguage = true;
         try
         {
-            if (!FinishEdits()) { language.SelectedIndex = UseItalian ? 0 : 1; return; }
-            L10n.SetLanguage(selected.Id);
+            if (!FinishEdits()) return;
+            try { AppSettings.Save(configurationDirectory, selected); }
+            catch (Exception exc) when (exc is IOException or UnauthorizedAccessException)
+            {
+                MessageBox.Show(this, L10n.Format("ConfigSaveError", Path.Combine(configurationDirectory, AppSettings.FileName), exc.Message),
+                    L10n.Get("ConfigWarning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            settings = selected; SquadSelection.ResultLimit = selected.RecommendationCount;
+            L10n.SetLanguage(selected.Language);
             L10n.Apply(this);
             options.SetLanguage(UseItalian); mySquad.SetLanguage();
             state.Text = L10n.Translate(state.Text);
@@ -213,12 +223,7 @@ public sealed class MainForm : Form
             UpdatePoolLabel(); BindFields(); RebuildTeamChoices(); RefreshSearch();
             previewStale = true; RefreshPreview(); RefreshComparison(); historyPanel.SetLanguage(UseItalian);
             Changed();
-            try { AppSettings.Save(configurationDirectory, selected.Id); }
-            catch (Exception exc) when (exc is IOException or UnauthorizedAccessException)
-            {
-                MessageBox.Show(this, L10n.Format("ConfigSaveError", Path.Combine(configurationDirectory, AppSettings.FileName), exc.Message),
-                    L10n.Get("ConfigWarning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+
         }
         finally { changingLanguage = false; }
     }
@@ -769,7 +774,7 @@ public sealed class MainForm : Form
         progressText.Visible = value && determinate;
         if (value) { progress.Value = 0; progressText.Text = "0%"; progress.Style = determinate ? ProgressBarStyle.Continuous : ProgressBarStyle.Marquee; }
         if (value) ++searchVersion;
-        open.Enabled = language.Enabled = tabs.Enabled = !value;
+        open.Enabled = settingsButton.Enabled = tabs.Enabled = !value;
         if (message is not null) state.Text = message;
         choose.Enabled = !value && players.SelectedRows.Count == 1;
         if (detail is not null) { editing.Enabled = !value; changeBirth.Enabled = !value && detail.BirthEditable; birth.Enabled = !value && changeBirth.Checked && detail.BirthEditable; }

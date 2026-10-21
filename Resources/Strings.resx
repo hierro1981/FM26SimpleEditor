@@ -1868,8 +1868,16 @@ Passa sul punto per il valore.</value>
   <data name="TacticsUnavailable" xml:space="preserve"><value>Tattiche non disponibili: {0}</value></data>
   <data name="TacticsEmpty" xml:space="preserve"><value>Apri un salvataggio e seleziona una squadra gestita per leggere le tattiche.</value></data>
   <data name="TacticsCannotRank" xml:space="preserve"><value>Posizione o sottoruolo non riconosciuto nella fase selezionata: suggerimenti non disponibili.</value></data>
-  <data name="TacticsMethod" xml:space="preserve"><value>Fino a 5 giocatori della rosa filtrata, con familiarità almeno 12/20 in ogni posizione richiesta. Per entrambe le fasi si usa la media dei due profili. Punteggio e stelle sono stime dell’editor, non la valutazione ufficiale del gioco.</value></data>
+  <data name="TacticsMethod" xml:space="preserve"><value>Fino a {0} giocatori della rosa filtrata, con familiarità almeno 12/20 in ogni posizione richiesta. Per entrambe le fasi si usa la media dei due profili. Punteggio e stelle sono stime dell’editor, non la valutazione ufficiale del gioco.</value></data>
   <data name="TacticsLoading" xml:space="preserve"><value>Lettura delle tattiche della squadra…</value></data>
   <data name="TacticsLoaded" xml:space="preserve"><value>Tattiche caricate</value></data>
   <data name="TacticsLoadError" xml:space="preserve"><value>Impossibile leggere le tattiche</value></data>
+  <data name="OptionsButton" xml:space="preserve"><value>Opzioni…</value></data>
+  <data name="OptionsTitle" xml:space="preserve"><value>Opzioni</value></data>
+  <data name="RecommendationCountLabel" xml:space="preserve"><value>Giocatori suggeriti per posizione</value></data>
+  <data name="RecommendationCountHint" xml:space="preserve"><value>Da 1 a 100, predefinito 10. Vale per Migliori per posizione e Migliori per tattica.</value></data>
+  <data name="OptionsCancel" xml:space="preserve"><value>Annulla</value></data>
+  <data name="OptionsSave" xml:space="preserve"><value>Salva</value></data>
+  <data name="IncludeOutgoingLoans" xml:space="preserve"><value>Includi giocatori dati in prestito</value></data>
+  <data name="IncludeOutgoingLoansHint" xml:space="preserve"><value>Include i giocatori di proprietà del club che giocano altrove, nella prima squadra o in tutte le squadre. Non assegna loro una sotto-squadra non verificata.</value></data>
 </root>

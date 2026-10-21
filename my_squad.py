@@ -32,9 +32,10 @@ def read_my_squad(store, progress=None):
             result_clubs.append(dict(clubUid=club.uid, clubName=club.name,
                                      managerName=manager.manager_name,
                                      firstTeamId=first[0], teamIds=ids, teams=choices))
-        # Registration in an affiliated B team is included when that team belongs
-        # to the managed club's own team list. Outgoing loans have different team IDs.
-        members = [row for row in store.rows if row['teamId'] in wanted]
+        # Load outgoing loans too, by confirmed owner ID; the UI filters them.
+        managed_ids = {club['clubUid'] for club in result_clubs}
+        members = [row for row in store.rows if row['teamId'] in wanted or
+                   row.get('onLoan') is True and row.get('ownerClubUid') in managed_ids]
         report(progress, 15, 'Lettura della rosa e degli attributi', 0, len(members), 'giocatori')
         players = []
         layout = store.layout

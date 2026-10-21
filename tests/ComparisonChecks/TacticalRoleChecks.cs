@@ -34,18 +34,18 @@ internal static class TacticalRoleChecks
         var link = new SquadTarget("STC", "ip_deep-lying-forward"); var hold = new SquadTarget("STC", "ip_target-forward");
         var weightsLink = TacticalRoles.Weights(link); var weightsHold = TacticalRoles.Weights(hold);
         check(weightsLink["passing"] == 3 && weightsLink["strength"] == 2 && weightsHold["strength"] == 3 && weightsHold["passing"] == 1, "linking and target striker profiles have genuinely different published editor weights");
-        check(SquadSelection.TopFiveForRoles([linking, target], link).First().Player.Uid == 1 && SquadSelection.TopFiveForRoles([linking, target], hold).First().Player.Uid == 2, "different tactical roles prefer different attribute profiles");
-        var dual = SquadSelection.TopFiveForRoles([linking, target], link, hold);
+        check(SquadSelection.BestForRoles([linking, target], link).First().Player.Uid == 1 && SquadSelection.BestForRoles([linking, target], hold).First().Player.Uid == 2, "different tactical roles prefer different attribute profiles");
+        var dual = SquadSelection.BestForRoles([linking, target], link, hold);
         check(dual.Count == 2 && dual[0].PositionScores.Count == 2 && dual[0].Familiarities.Count == 1, "two different roles in the same position retain separate scores without duplicate-key errors");
         check(Math.Abs(dual[0].Score - dual[0].PositionScores.Values.Average()) < 1e-9, "same-position dual-role rating averages both profiles equally");
         check(TacticalRoles.Score(linking, new("STC")) == RoleComparison.Compare(linking, linking, "STC").ScoreA, "generic role preserves the existing position score exactly");
         linking.Player.Ca = 1; linking.Player.Pa = 1;
-        check(SquadSelection.TopFiveForRoles([linking, target], link).First().Player.Uid == 1, "CA and PA remain informative and do not change tactical-role suitability");
+        check(SquadSelection.BestForRoles([linking, target], link).First().Player.Uid == 1, "CA and PA remain informative and do not change tactical-role suitability");
         linking.Player.Pa = 180;
-        bool invalid = false; try { SquadSelection.TopFiveForRoles([linking], new SquadTarget("STC", "op_sweeper-keeper")); } catch (ArgumentException) { invalid = true; }
+        bool invalid = false; try { SquadSelection.BestForRoles([linking], new SquadTarget("STC", "op_sweeper-keeper")); } catch (ArgumentException) { invalid = true; }
         check(invalid, "a role incompatible with the chosen position is rejected");
         var missing = Player(3, "Missing data"); missing.Attributes.RemoveAll(f => f.Key == "passing");
-        check(TacticalRoles.Score(missing, link) is null && !SquadSelection.TopFiveForRoles([missing], link).Any(), "missing tactical-role attributes do not create a partial recommendation");
+        check(TacticalRoles.Score(missing, link) is null && !SquadSelection.BestForRoles([missing], link).Any(), "missing tactical-role attributes do not create a partial recommendation");
         var boosted = Player(4, "Boosted"); foreach (var f in boosted.Attributes) f.Value = 125;
         check(TacticalRoles.Score(boosted, hold) == 20, "tactical scores retain the game-scale clamp for boosted attributes");
         L10n.SetLanguage("en");

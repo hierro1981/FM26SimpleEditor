@@ -12,6 +12,7 @@ public sealed class PlayerRow
     public uint? Id { get; set; }
     public string Name { get; set; } = "";
     public string Team { get; set; } = "";
+    public uint? OwnerClubUid { get; set; }
     public string OwnerTeam { get; set; } = "";
     [JsonIgnore] public bool ShowLoanOwner { get; set; }
     [JsonIgnore] public string SearchTeam => ShowLoanOwner && OnLoan is true ? OwnerTeam : Team;

@@ -24,16 +24,16 @@ internal static class MySquadChecks
         check(members.Select(p => p.Player.Uid).SequenceEqual(new uint[] { 1, 2, 4, 5 }), "my squad default membership uses first-team ID");
         check(SquadSelection.Members(data, club, SquadScope.OtherTeams).Select(p => p.Player.Uid).SequenceEqual(new uint[] { 3, 6 }), "other squads include affiliated team IDs");
         check(SquadSelection.Members(data, club, SquadScope.All).Count == 6, "all squads exclude outside and outgoing-loan team IDs");
-        var top = SquadSelection.TopFive(members, "MC");
+        var top = SquadSelection.BestForPositions(members, "MC");
         check(top.Count == 2 && top[0].Player.Uid == 2 && top[0].Score == 18 && top[1].Player.Uid == 1, "ranking uses position attributes instead of CA; no unsuitable filler");
         check(!top.Any(p => p.Player.Uid is 4 or 5), "ranking excludes inadequate familiarity and incomplete attributes");
-        check(SquadSelection.TopFive(SquadSelection.Members(data, club, SquadScope.All), "MC").Select(p => p.Player.Uid).SequenceEqual(new uint[] { 3, 2, 6, 1 }), "ranking respects scope and returns the five-candidate limit");
-        check(SquadSelection.TopFive(members, "GK").Count == 0, "no playable keeper yields an empty recommendation list");
+        check(SquadSelection.BestForPositions(SquadSelection.Members(data, club, SquadScope.All), "MC").Select(p => p.Player.Uid).SequenceEqual(new uint[] { 3, 2, 6, 1 }), "ranking respects scope and returns the five-candidate limit");
+        check(SquadSelection.BestForPositions(members, "GK").Count == 0, "no playable keeper yields an empty recommendation list");
         check(top[0].Score == RoleComparison.Compare(better, better, "MC").ScoreA, "recommendation score matches role comparison exactly");
         var t1 = Player(10, 10, 75, 15); var t2 = Player(11, 10, 75, 20); var t3 = Player(12, 10, 75, 20);
         t2.Player.Name = "Same"; t3.Player.Name = "Same";
-        check(SquadSelection.TopFive([t3, t1, t2], "MC").Select(p => p.Player.Uid).SequenceEqual(new uint[] { 11, 12, 10 }), "equal scores use familiarity and stable UID tie-breaker");
-        bool invalid = false; try { SquadSelection.TopFive(members, "bogus"); } catch (ArgumentException) { invalid = true; }
+        check(SquadSelection.BestForPositions([t3, t1, t2], "MC").Select(p => p.Player.Uid).SequenceEqual(new uint[] { 11, 12, 10 }), "equal scores use familiarity and stable UID tie-breaker");
+        bool invalid = false; try { SquadSelection.BestForPositions(members, "bogus"); } catch (ArgumentException) { invalid = true; }
         check(invalid, "unknown recommendation position rejected");
         check(SquadSelection.Members(new MySquadResult(), club, SquadScope.All).Count == 0, "unidentified managed club never returns arbitrary players");
         L10n.SetLanguage("it");

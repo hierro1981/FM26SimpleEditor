@@ -10,19 +10,28 @@ public sealed record SquadRecommendation(PlayerRow Player, double Score, int Fam
 
 public static class SquadSelection
 {
-    public static IReadOnlyList<PlayerDetail> Members(MySquadResult data, ManagedSquad? club, SquadScope scope, uint? exactTeamId = null)
+    public static int ResultLimit { get; set; } = 10;
+    public static IReadOnlyList<PlayerDetail> Members(MySquadResult data, ManagedSquad? club, SquadScope scope, uint? exactTeamId = null, bool includeOutgoingLoans = false)
     {
         if (club is null || data.Status != "ready") return [];
         var ids = club.TeamIds.ToHashSet();
-        return data.Players.Where(p => p.Player.TeamId is uint id && ids.Contains(id) &&
-            (exactTeamId.HasValue ? id == exactTeamId.Value : scope == SquadScope.All || (scope == SquadScope.FirstTeam ? id == club.FirstTeamId : id != club.FirstTeamId)))
+        return data.Players.Where(p =>
+        {
+            // Outgoing loans have no confirmed internal squad: include them at
+            // club level for First/All, never invent a youth/reserve assignment.
+            bool outgoing = p.Player.OnLoan is true && p.Player.OwnerClubUid == club.ClubUid &&
+                (p.Player.TeamId is not uint current || !ids.Contains(current));
+            if (outgoing) return includeOutgoingLoans && !exactTeamId.HasValue && scope != SquadScope.OtherTeams;
+            return p.Player.TeamId is uint id && ids.Contains(id) &&
+                (exactTeamId.HasValue ? id == exactTeamId.Value : scope == SquadScope.All || (scope == SquadScope.FirstTeam ? id == club.FirstTeamId : id != club.FirstTeamId));
+        })
             .GroupBy(p => p.Player.Uid).Select(g => g.First()).ToArray();
     }
 
-    public static IReadOnlyList<SquadRecommendation> TopFive(IEnumerable<PlayerDetail> members, params string[] positions)
-        => TopFiveForRoles(members, positions.Select(p => new SquadTarget(p)).ToArray());
+    public static IReadOnlyList<SquadRecommendation> BestForPositions(IEnumerable<PlayerDetail> members, params string[] positions)
+        => BestForRoles(members, positions.Select(p => new SquadTarget(p)).ToArray());
 
-    public static IReadOnlyList<SquadRecommendation> TopFiveForRoles(IEnumerable<PlayerDetail> members, params SquadTarget[] targets)
+    public static IReadOnlyList<SquadRecommendation> BestForRoles(IEnumerable<PlayerDetail> members, params SquadTarget[] targets)
     {
         var keys = targets.Distinct().ToArray();
         if (keys.Length is < 1 or > 2 || keys.Any(t => !PositionScheme.Order.Contains(t.Position) || !TacticalRoles.CanUse(t.RoleId, t.Position))) throw new ArgumentException(nameof(targets));
@@ -45,7 +54,7 @@ public static class SquadSelection
             }
         }
         return candidates.OrderByDescending(p => p.Score).ThenByDescending(p => p.Familiarity)
-            .ThenBy(p => p.Player.Name, StringComparer.OrdinalIgnoreCase).ThenBy(p => p.Player.Uid).Take(5).ToArray();
+            .ThenBy(p => p.Player.Name, StringComparer.OrdinalIgnoreCase).ThenBy(p => p.Player.Uid).Take(Math.Clamp(ResultLimit, 1, 100)).ToArray();
     }
 
     public static IOrderedEnumerable<PlayerRow> DefaultOrder(IEnumerable<PlayerRow> players) => players

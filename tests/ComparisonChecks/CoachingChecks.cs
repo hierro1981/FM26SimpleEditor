@@ -18,9 +18,22 @@ internal static class CoachingChecks
     public static void Run(Action<bool, string> check)
     {
         var person = Coach(); var ratings = CoachingStars.Calculate(person);
-        check(ratings.Select(r => r.Score).SequenceEqual(new int?[] { 159, 177, 183, 201, 195, 213, 138, 237, 174 }) &&
+        check(ratings.Select(r => r.Score).SequenceEqual(new int?[] { 159, 177, 183, 201, 180, 216, 138, 237, 171 }) &&
             ratings.Select(r => r.Stars).SequenceEqual(new double?[] { 3, 3, 3.5, 3.5, 3.5, 4, 2.5, 4, 3 }),
             "coaching model uses each category and determination, discipline and motivation");
+        var specialist = Coach();
+        foreach (string key in new[] { "determination", "discipline", "motivating" }) specialist.Attributes[key] = 10;
+        specialist.Attributes["coaching_possession"] = 20; specialist.Attributes["coaching_tactical"] = 1; specialist.Attributes["coaching_technical"] = 3;
+        var possession = CoachingStars.Calculate(specialist).Where(r => r.Category.Key.StartsWith("Possession")).ToArray();
+        check(possession.Select(r => r.Score).SequenceEqual(new int?[] { 126, 138 }) && possession.All(r => r.Stars == 2.5),
+            "possession ratings give the primary weight to tactical or technical coaching rather than possession");
+        specialist.Attributes["coaching_set_pieces"] = 5; specialist.Attributes["coaching_tactical"] = 20;
+        var setPieces = CoachingStars.Calculate(specialist).Single(r => r.Category.Key == "SetPieces");
+        check(setPieces.Score == 150 && setPieces.Stars == 3, "set pieces includes tactical coaching as its secondary input");
+        specialist.Attributes.Remove("coaching_tactical");
+        var incomplete = CoachingStars.Calculate(specialist);
+        check(incomplete.Where(r => r.Stars is null).Select(r => r.Category.Key).SequenceEqual(new[] { "AttackTactical", "DefenceTactical", "PossessionTactical", "SetPieces" }),
+            "missing tactical coaching blocks only the categories that actually require it, including set pieces");
         (int Score, double Stars)[] boundaries = [(0,.5), (29,.5), (30,1), (59,1), (60,1.5), (89,1.5), (90,2), (119,2),
             (120,2.5), (149,2.5), (150,3), (179,3), (180,3.5), (209,3.5), (210,4), (239,4), (240,4.5), (269,4.5), (270,5), (300,5)];
         check(boundaries.All(b => CoachingStars.FromScore(b.Score) == b.Stars), "half-star bands include both sides of every threshold and the upper cap");

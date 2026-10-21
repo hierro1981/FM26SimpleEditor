@@ -12,7 +12,7 @@ public sealed record CoachingRating(CoachingCategory Category, int? Score, IRead
 }
 
 // An explicit attribute-based estimate, not a decoded FM26 star function.
-// See docs/CoachingStars.md, including the observed Genie Scout discrepancy.
+// See docs/CoachingStars.md for observed agreement and remaining limits.
 public static class CoachingStars
 {
     public const string HistoricalSource = "https://community.sports-interactive.com/forums/topic/439305-coaches-and-their-star-ratings/";
@@ -21,11 +21,11 @@ public static class CoachingStars
         new("AttackTechnical", "coaching_attacking", "coaching_technical"),
         new("DefenceTactical", "coaching_defending", "coaching_tactical"),
         new("DefenceTechnical", "coaching_defending", "coaching_technical"),
-        new("PossessionTactical", "coaching_possession", "coaching_tactical"),
-        new("PossessionTechnical", "coaching_possession", "coaching_technical"),
+        new("PossessionTactical", "coaching_tactical", "coaching_possession"),
+        new("PossessionTechnical", "coaching_technical", "coaching_possession"),
         new("Goalkeeping", "coaching_goalkeeping"),
         new("Fitness", "coaching_fitness"),
-        new("SetPieces", "coaching_set_pieces")
+        new("SetPieces", "coaching_set_pieces", "coaching_tactical")
     ]);
     public static double FromScore(int score)
     {

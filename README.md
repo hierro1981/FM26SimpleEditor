@@ -79,7 +79,7 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ### v14.6 · in sviluppo
 
-- **Stelle allenamento (stima):** nel dettaglio dello staff puoi consultare nove categorie, con stelle, indice e attributi usati. Sono ora leggibili anche Determinazione, Autorità/Disciplina, Gestione del personale, Lavoro con i giovani e Calci piazzati. Le stelle sono indicative e possono differire dal gioco.
+- **Stelle allenamento (stima):** nel dettaglio dello staff puoi consultare nove categorie, con stelle, indice e attributi usati. Sono ora leggibili anche Determinazione, Autorità/Disciplina, Gestione del personale, Lavoro con i giovani e Calci piazzati. Pesi di Possesso e Calci piazzati affinati con i confronti disponibili; le stelle restano indicative e possono differire dal gioco.
 
 - **Top 11 per tattica:** un terzo campo mostra la formazione con la migliore somma dei punteggi per sottoruolo, usando ciascun giocatore una sola volta. Rispetta i filtri della rosa e la fase selezionata; segnala gli slot che non è possibile coprire.
 

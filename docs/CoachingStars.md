@@ -22,18 +22,22 @@ on a 1–20 scale. The model uses these weights:
 | Attacking · Technical | 6 × Attacking + 3 × Technical + 2 × DDM |
 | Defending · Tactical | 6 × Defending + 3 × Tactical + 2 × DDM |
 | Defending · Technical | 6 × Defending + 3 × Technical + 2 × DDM |
-| Possession · Tactical | 6 × Possession + 3 × Tactical + 2 × DDM |
-| Possession · Technical | 6 × Possession + 3 × Technical + 2 × DDM |
+| Possession · Tactical | 6 × Tactical + 3 × Possession + 2 × DDM |
+| Possession · Technical | 6 × Technical + 3 × Possession + 2 × DDM |
 | Goalkeeping | 9 × general Goalkeeping + 2 × DDM |
 | Fitness | 9 × Fitness + 2 × DDM |
-| Set Pieces | 9 × Set Pieces + 2 × DDM |
+| Set Pieces | 6 × Set Pieces + 3 × Tactical + 2 × DDM |
 
 The 6/3/2 and 9/2 weighting patterns and the half-star bands come from the
 [historical community discussion on SI's forum](https://community.sports-interactive.com/forums/topic/439305-coaches-and-their-star-ratings/).
 That discussion is not official confirmation of an FM26 formula and contains
-corrections and cautions. Applying the mixed pattern to the six modern
-categories and the single-speciality pattern to Set Pieces is an editor model,
-cross-checked against the supplied observations, not a recovered native rule.
+corrections and cautions. The category-specific choice of primary and secondary
+attributes is an editor model, cross-checked against the supplied observations,
+not a recovered native rule. In particular, Possession weights Tactical or
+Technical coaching more strongly than Possession, and Set Pieces also requires
+Tactical coaching. The additional profiles distinguish these choices from the
+previous model even when they happen to produce the same half-star band for
+other coaches.
 
 The bands are 0–29: 0.5 stars, 30–59: 1, 60–89: 1.5, 90–119: 2,
 120–149: 2.5, 150–179: 3, 180–209: 3.5, 210–239: 4,
@@ -48,16 +52,22 @@ rating shown in the staff list.
 
 ## Observed agreement and remaining uncertainty
 
-Across the two uploaded Genie Scout profiles, 17 of the 18 displayed category
-ratings match this model. The fitness coach's goalkeeper rating is **2.0** in
-the editor model and **2.5** in the supplied Genie Scout screenshot. This
-discrepancy is retained and documented rather than fitting an extra constant
-to two examples. The actual in-game training-category screen was not present
-among the supplied images: the supposed training image showed the chat.
-General in-game staff stars cannot validate a per-category training formula.
+Across four uploaded Genie Scout profiles, **36 of 36** category ratings match
+the corrected model. The comparison reads full and half stars separately;
+the earlier report of a goalkeeper discrepancy was a misreading of the image.
+The actual differences were in the weighting of Possession and Set Pieces.
+
+The two in-game assignment screens provide **12 readable, assigned categories
+for non-human staff**, all matching the model. Unassigned outline stars, the
+clipped row, the unsupported human manager and the aggregate lead-coach row
+are excluded. Workload and multiple-assignment adjustments remain outside the
+model. General in-game staff stars cannot validate per-category training stars.
+This is agreement with the supplied samples, not proof that every build,
+context or staff profile uses this exact formula.
 
 The individual saved inputs are verified separately from these estimated stars.
 Game binaries, save files, screenshots and extracted staff fixtures are not
 distributed in the repository. Tests use synthetic profiles, cover the nine
-weighted calculations, each half-star boundary, missing/invalid attributes,
+weighted calculations, distinguishing primary/secondary weighting, the tactical
+input to Set Pieces, each half-star boundary, missing/invalid attributes,
 unsupported human profiles, CA independence, and UI rendering/localisation.

@@ -4,6 +4,8 @@
 
 [Italiano](README.md)
 
+🌐 **Project website:** [English](https://hierro1981.github.io/FM26SimpleEditor/en/) · [Italiano](https://hierro1981.github.io/FM26SimpleEditor/)
+
 A free **Football Manager 26** editor for Windows. Open a save, find a player and edit attributes, ability, positions and date of birth. You can also compare players, track their progress and find the best candidates for your squad’s positions and tactics.
 
 ## Download and launch

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hierro1981.github.io/FM26SimpleEditor/sitemap.xml

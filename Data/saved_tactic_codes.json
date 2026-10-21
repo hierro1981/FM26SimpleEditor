@@ -1,0 +1,507 @@
+{
+  "schema": 2,
+  "build": "26.3.2+2329565",
+  "sectionSchema": 26,
+  "reviewed": "2026-10-21",
+  "source": "FM26 v31 managed role enums cross-referenced with 40 IP and 39 OOP UI role entries; numerical constants, no game/save files bundled",
+  "positionBits": {
+    "0": "GK",
+    "2": "DR",
+    "3": "DL",
+    "4": "DC",
+    "5": "WBR",
+    "6": "WBL",
+    "7": "DM",
+    "8": "MR",
+    "9": "ML",
+    "10": "MC",
+    "11": "AMR",
+    "12": "AML",
+    "13": "AMC",
+    "14": "STC"
+  },
+  "dutyBits": {
+    "2097152": "defend",
+    "4194304": "support",
+    "8388608": "attack",
+    "33554432": "stopper",
+    "67108864": "cover",
+    "17179869184": "float"
+  },
+  "roles": [
+    {
+      "phase": "ip",
+      "roleCode": 1,
+      "internalId": "Goalkeeper",
+      "catalogueRoleId": "ip_goalkeeper"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 4096,
+      "internalId": "BallPlayingGoalkeeper",
+      "catalogueRoleId": "ip_ball-playing-goalkeeper"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 9007199254740992,
+      "internalId": "NoNonsenseGoalkeeper",
+      "catalogueRoleId": "ip_no-nonsense-goalkeeper"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 2,
+      "internalId": "CentralDefender",
+      "catalogueRoleId": "ip_centre-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 536870912,
+      "internalId": "NoNonsenseCentreBack",
+      "catalogueRoleId": "ip_no-nonsense-centre-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 2251799813685248,
+      "internalId": "WideCentreBack",
+      "catalogueRoleId": "ip_wide-centre-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 16777216,
+      "internalId": "BallPlayingDefender",
+      "catalogueRoleId": "ip_ball-playing-centre-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 18014398509481984,
+      "internalId": "OverlappingCentreBack",
+      "catalogueRoleId": "ip_overlapping-centre-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 16384,
+      "internalId": "Libero",
+      "catalogueRoleId": "ip_advanced-centre-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 4,
+      "internalId": "FullBack",
+      "catalogueRoleId": "ip_full-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 8,
+      "internalId": "WingBack",
+      "catalogueRoleId": "ip_wing-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 17592186044416,
+      "internalId": "InvertedWingBack",
+      "catalogueRoleId": "ip_inside-wing-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 36028797018963968,
+      "internalId": "PlaymakingWingBack",
+      "catalogueRoleId": "ip_playmaking-wing-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 4503599627370496,
+      "internalId": "InvertedFullBack",
+      "catalogueRoleId": "ip_inside-full-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 274877906944,
+      "internalId": "AdvancedWingBack",
+      "catalogueRoleId": "ip_advanced-wing-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 16,
+      "internalId": "DefensiveMidfielder",
+      "catalogueRoleId": "ip_defensive-midfielder"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 32768,
+      "internalId": "DeepLyingPlaymaker",
+      "catalogueRoleId": "ip_deep-lying-playmaker"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 34359738368,
+      "internalId": "HalfBack",
+      "catalogueRoleId": "ip_half-back"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 65536,
+      "internalId": "BoxToBoxMidfielder",
+      "catalogueRoleId": "ip_box-to-box-midfielder"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 70368744177664,
+      "internalId": "BoxToBoxPlaymaker",
+      "catalogueRoleId": "ip_box-to-box-playmaker"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 32,
+      "internalId": "CentralMidfielder",
+      "catalogueRoleId": "ip_central-midfielder"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 281474976710656,
+      "internalId": "WideCentralMidfielder",
+      "catalogueRoleId": "ip_wide-central-midfielder"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 144115188075855872,
+      "internalId": "MidfieldPlaymaker",
+      "catalogueRoleId": "ip_midfield-playmaker"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 131072,
+      "internalId": "AdvancedPlaymaker",
+      "catalogueRoleId": "ip_advanced-playmaker"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 512,
+      "internalId": "AttackingMidfielder",
+      "catalogueRoleId": "ip_attacking-midfielder"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 72057594037927936,
+      "internalId": "ChannelMidfielder",
+      "catalogueRoleId": "ip_channel-midfielder"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 64,
+      "internalId": "WideMidfielder",
+      "catalogueRoleId": "ip_wide-midfielder"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 128,
+      "internalId": "Winger",
+      "catalogueRoleId": "ip_winger"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 562949953421312,
+      "internalId": "InvertedWinger",
+      "catalogueRoleId": "ip_inside-winger"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 8796093022208,
+      "internalId": "WidePlaymaker",
+      "catalogueRoleId": "ip_playmaking-winger"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 134217728,
+      "internalId": "InsideForward",
+      "catalogueRoleId": "ip_inside-forward"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 35184372088832,
+      "internalId": "WideForward",
+      "catalogueRoleId": "ip_wide-forward"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 4294967296,
+      "internalId": "Trequartista",
+      "catalogueRoleId": "ip_free-role"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 2199023255552,
+      "internalId": "ShadowStriker",
+      "catalogueRoleId": "ip_second-striker"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 2048,
+      "internalId": "CentreForward",
+      "catalogueRoleId": "ip_centre-forward"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 1024,
+      "internalId": "DeepLyingForward",
+      "catalogueRoleId": "ip_deep-lying-forward"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 2147483648,
+      "internalId": "ChannelForward",
+      "catalogueRoleId": "ip_channel-forward"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 262144,
+      "internalId": "TargetMan",
+      "catalogueRoleId": "ip_target-forward"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 524288,
+      "internalId": "Poacher",
+      "catalogueRoleId": "ip_poacher"
+    },
+    {
+      "phase": "ip",
+      "roleCode": 1099511627776,
+      "internalId": "FalseNumberNine",
+      "catalogueRoleId": "ip_false-nine"
+    },
+    {
+      "phase": "op",
+      "roleCode": 1,
+      "internalId": "OPGoalkeeper",
+      "catalogueRoleId": "op_goalkeeper"
+    },
+    {
+      "phase": "op",
+      "roleCode": 2,
+      "internalId": "OPSweeperKeeper",
+      "catalogueRoleId": "op_sweeper-keeper"
+    },
+    {
+      "phase": "op",
+      "roleCode": 4,
+      "internalId": "OPLineKeeper",
+      "catalogueRoleId": "op_line-holding-goalkeeper"
+    },
+    {
+      "phase": "op",
+      "roleCode": 8,
+      "internalId": "OPCentreBack",
+      "catalogueRoleId": "op_centre-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 32,
+      "internalId": "OPCoveringCentreBack",
+      "catalogueRoleId": "op_covering-centre-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 16,
+      "internalId": "OPStoppingCentreBack",
+      "catalogueRoleId": "op_stopping-centre-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 64,
+      "internalId": "OPWideCentreBack",
+      "catalogueRoleId": "op_wide-centre-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 256,
+      "internalId": "OPCoveringWideCentreBack",
+      "catalogueRoleId": "op_covering-wide-centre-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 128,
+      "internalId": "OPStoppingWideCentreBack",
+      "catalogueRoleId": "op_stopping-wide-centre-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 512,
+      "internalId": "OPFullBack",
+      "catalogueRoleId": "op_full-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 1024,
+      "internalId": "OPPressingFullBack",
+      "catalogueRoleId": "op_pressing-full-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 2048,
+      "internalId": "OPHoldingFullBack",
+      "catalogueRoleId": "op_holding-full-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 4096,
+      "internalId": "OPWingBack",
+      "catalogueRoleId": "op_wing-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 8192,
+      "internalId": "OPPressingWingBack",
+      "catalogueRoleId": "op_pressing-wing-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 16384,
+      "internalId": "OPHoldingWingBack",
+      "catalogueRoleId": "op_holding-wing-back"
+    },
+    {
+      "phase": "op",
+      "roleCode": 32768,
+      "internalId": "OPDefensiveMidfielder",
+      "catalogueRoleId": "op_defensive-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 131072,
+      "internalId": "OPPressingDefensiveMidfielder",
+      "catalogueRoleId": "op_pressing-defensive-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 262144,
+      "internalId": "OPScreeningDefensiveMidfielder",
+      "catalogueRoleId": "op_screening-defensive-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 65536,
+      "internalId": "OPDroppingDefensiveMidfielder",
+      "catalogueRoleId": "op_dropping-defensive-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 524288,
+      "internalId": "OPWideCoverDefensiveMidfielder",
+      "catalogueRoleId": "op_wide-covering-defensive-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 1048576,
+      "internalId": "OPCentralMidfielder",
+      "catalogueRoleId": "op_central-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 1073741824,
+      "internalId": "OPAtackingMidfielder",
+      "catalogueRoleId": "op_attacking-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 134217728,
+      "internalId": "OPPressingCentralMidfielder",
+      "catalogueRoleId": "op_pressing-central-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 268435456,
+      "internalId": "OPScreeningCentralMidfielder",
+      "catalogueRoleId": "op_screening-central-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 536870912,
+      "internalId": "OPWideCoverCentralMidfielder",
+      "catalogueRoleId": "op_wide-covering-central-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 34359738368,
+      "internalId": "OPWideMidfielder",
+      "catalogueRoleId": "op_wide-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 68719476736,
+      "internalId": "OPTrackingWideMidfielder",
+      "catalogueRoleId": "op_tracking-wide-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 137438953472,
+      "internalId": "OPWideOutletWideMidfielder",
+      "catalogueRoleId": "op_wide-outlet-wide-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 274877906944,
+      "internalId": "OPWinger",
+      "catalogueRoleId": "op_winger"
+    },
+    {
+      "phase": "op",
+      "roleCode": 549755813888,
+      "internalId": "OPTrackingWinger",
+      "catalogueRoleId": "op_tracking-winger"
+    },
+    {
+      "phase": "op",
+      "roleCode": 2199023255552,
+      "internalId": "OPWideOutletWinger",
+      "catalogueRoleId": "op_wide-outlet-winger"
+    },
+    {
+      "phase": "op",
+      "roleCode": 1099511627776,
+      "internalId": "OPInvertingOutletWinger",
+      "catalogueRoleId": "op_inside-outlet-winger"
+    },
+    {
+      "phase": "op",
+      "roleCode": 2147483648,
+      "internalId": "OPTrackingAtackingMidfielder",
+      "catalogueRoleId": "op_tracking-attacking-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 4294967296,
+      "internalId": "OPCentralOutletMidfielder",
+      "catalogueRoleId": "op_central-outlet-attacking-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 8589934592,
+      "internalId": "OPSplittingOutletAtackingMidfielder",
+      "catalogueRoleId": "op_splitting-outlet-attacking-midfielder"
+    },
+    {
+      "phase": "op",
+      "roleCode": 4398046511104,
+      "internalId": "OPCentreForward",
+      "catalogueRoleId": "op_centre-forward"
+    },
+    {
+      "phase": "op",
+      "roleCode": 8796093022208,
+      "internalId": "OPTrackingCentreForward",
+      "catalogueRoleId": "op_tracking-centre-forward"
+    },
+    {
+      "phase": "op",
+      "roleCode": 17592186044416,
+      "internalId": "OPCentralOutletCentreForward",
+      "catalogueRoleId": "op_central-outlet-centre-forward"
+    },
+    {
+      "phase": "op",
+      "roleCode": 35184372088832,
+      "internalId": "OPSplittingOutletCentreForward",
+      "catalogueRoleId": "op_splitting-outlet-centre-forward"
+    }
+  ]
+}

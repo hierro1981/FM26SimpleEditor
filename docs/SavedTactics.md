@@ -1,37 +1,54 @@
-# Tattiche salvate / Saved tactics
+# Tattiche salvate / Saved tactics · v14.3
 
-Verifica per v14.3, 20 ottobre 2026.
+## Uso nell’editor
 
-## Italiano
+In **La mia squadra → Migliori per tattica**, scegli una delle tattiche lette dalla prima squadra del club gestito. I campi mostrano separatamente **in possesso** e **non in possesso**, con posizione, lato e sottoruolo. Clicca uno slot oppure selezionalo nell’elenco: le due disposizioni evidenziano lo stesso slot.
 
-È stata controllata sia la dipendenza fissata `fmsave 0.5.10`, sia la definizione upstream dei record tattici. Il lettore espone `Save.tactics()`, ma non rende ancora possibile un affidabile **Migliori per tattica** automatico.
+Il selettore delle fasi permette di valutare solo IP, solo OOP oppure entrambe. La classifica mostra fino a cinque giocatori della rosa scelta dal filtro comune della squadra, con punteggio /20, stelle stimate, familiarità, CA e PA. Con entrambe le fasi il punteggio è la media dei due profili; servono familiarità almeno 12/20 in entrambe le posizioni e tutti gli attributi richiesti. Un ruolo sconosciuto o incompatibile non viene sostituito con un profilo generico. L’apertura del giocatore, l’elenco di confronto e il confronto rapido di due selezioni sono disponibili nella classifica.
 
-| Dato | Stato della lettura |
-| --- | --- |
-| Squadra e indice del record | Disponibili; ogni sotto-squadra conserva copie proprie, non necessariamente identiche |
-| Nome e testo dello stile | Disponibili come testo; significato dello stile non confermato dal lettore |
-| Mentalità | Sette codici con nomi verificati |
-| Undici slot | Disponibili, con maschere separate in possesso e non in possesso |
-| Posizioni in campo | Bit letti, ma tutti etichettati `UNKNOWN`; nessuna corrispondenza verificata con le posizioni visualizzate nel gioco |
-| Sottoruoli | Campi grezzi `in_possession_role_bits` e `out_of_possession_role_bits`; l'interpretazione come ruolo è ancora non confermata |
-| Tattica attualmente selezionata | Non identificata |
+Le tattiche sono **in sola lettura**: non si cambia formazione, non si assegnano giocatori e non si modifica il salvataggio. La tattica attualmente attiva non viene dedotta; il menu presenta i record disponibili. La lettura è su richiesta e può essere aggiornata con il pulsante di ricaricamento. Cambiare salvataggio o club invalida i risultati precedenti. Come per il resto di La mia squadra, viene usato il primo allenatore umano riconosciuto.
 
-Tre record non vanno assunti automaticamente come le tre tattiche attualmente utilizzate. Non sono utilizzabili come mappatura né l'ordine delle posizioni degli attributi del giocatore, né l'enum delle posizioni nelle partite, né l'ordine del catalogo dei 79 profili dell'editor: sono campi differenti.
+## Decodifica e compatibilità
 
-Non è stato aggiunto un campo con posizioni o ruoli indovinati, né una classifica spacciata per quella della tattica salvata. La selezione manuale di posizioni e sottoruoli rimane disponibile in **Migliori per posizione**.
+Il lettore è limitato a **FM26 `26.3.2+2329565`, sezione `tactics_man` schema 26**. Verifica club gestito, ID della prima squadra, proprietario del blocco, conteggio dei record, undici coppie di slot complete e permutazione valida tra le fasi. Le copie delle giovanili non diventano altre tattiche della prima squadra. Un errore opzionale viene mostrato nel sotto-tab e non impedisce la modifica dei giocatori.
 
-Per completare la funzione servono salvataggi e schermate corrispondenti delle tattiche in entrambe le fasi, poi coppie di salvataggi con una sola posizione o un solo sottoruolo cambiato alla volta. La mappatura ottenuta va verificata su più moduli e versioni del gioco, includendo le colonne sinistra/centro/destra e l'associazione degli slot tra le due fasi. La sola posizione naturale del giocatore schierato non dimostra la posizione effettiva della tattica. In questa verifica non erano disponibili salvataggi reali nella cartella di lavoro.
+La parola `role_bits` iniziale letta da fmsave non rappresenta sempre il sottoruolo effettivo. Il lettore ricompone invece il valore a 64 bit come:
+
+```text
+roleAndDuty = terminal.second_bits_high | (trail_bits << 32)
+roleCode = roleAndDuty & ~dutyMask
+```
+
+Gli enum IP/OOP gestiti del gioco, incrociati con le 40/39 definizioni UI attive, forniscono i codici in `Data/saved_tactic_codes.json`. I bit interni del compito vengono separati; non sono esposti come scelte di vecchie versioni di FM. Solo un ruolo attivo esatto, un singolo compito e campi terminali supportati ricevono una corrispondenza. Bit sconosciuti, combinazioni ambigue e campi mancanti rimangono sconosciuti. Le maschere delle posizioni sono distinte dall’ordine della familiarità del giocatore; il vecchio sweeper non viene abilitato.
+
+Il wrapper locale accetta il marcatore dei battitori `0b0502` e un limite finito di 4096 byte per i testi: entrambi servono al campione verificato e mantengono i controlli strutturali. Il pacchetto fmsave installato non viene modificato.
+
+La ricerca preliminare ha verificato 90 preset e tre tattiche del campione, per 2.046 posizioni/fasi e 74 dei 79 sottoruoli attivi effettivamente incontrati. I cinque restanti codici sono presenti negli enum e negli asset, ma non sono stati incontrati nei campioni. Non sono ancora disponibili coppie di salvataggi con una sola modifica controllata: il risultato espone ancora `controlledValidation=false` e non promette compatibilità con build diverse. I nomi completi confermano **AdM = Attaccante di movimento / Channel Forward** e **Amn = Attaccante di manovra / Deep-Lying Forward**.
+
+## Punteggi e stelle
+
+La lettura identifica i sottoruoli; **non ricostruisce la formula ufficiale delle stelle**. La classifica continua a usare i profili trasparenti dell’editor descritti in [TacticalRoles.md](TacticalRoles.md). Le etichette italiane sono quelle delle risorse del gioco, ma pesi degli attributi, punteggi e conversione in stelle restano stime. I pesi di selezione della squadra e i dati dei voti partita trovati negli archivi non vengono confusi con l’idoneità al sottoruolo.
+
+## Backend e verifiche
+
+```sh
+python tactics_reader.py "carriera.fm" --output tattiche.json
+```
+
+Il servizio espone anche `{"command":"my_tactics","clubUid":<id>}` con avanzamento. Il risultato include posizione, lato, ID del catalogo, ID interno, compito e valori grezzi per ogni fase. L’output del comando non può sovrascrivere un file `.fm`.
+
+I test pubblicabili costruiscono record interamente sintetici: verificano tutti i 79 codici, separazione dei compiti, lati centrali, corruzione/troncamento, build sconosciute, proprietario umano, conteggi e copie delle giovanili. **Non vengono distribuiti salvataggi, record estratti dai salvataggi, archivi del gioco o schermate.**
 
 ## English
 
-Both pinned `fmsave 0.5.10` and the upstream tactic record definitions were inspected. `Save.tactics()` exposes per-team stored copies, textual names, mentality and eleven slots with separate in-possession/out-of-possession masks. Position bits remain `UNKNOWN`; the proposed role-bit fields are unconfirmed and have no verified role-name mapping. The selected tactic is not identified. Stored copies must not be presented as exactly the three active tactics without further validation.
+**My squad → Best by tactic** lazily reads the managed first team’s saved tactics and shows separate IP/OOP pitches. Select the same paired slot on the pitch or in the list; rank up to five players from the current squad scope for IP, OOP or both. Each selected phase uses its saved position and named role. Both phases average the two attribute profiles and require playable familiarity and complete attributes in both positions. Unknown or incompatible roles never fall back to generic estimates.
 
-Player attribute-position order, match position enums and the editor's tactical-role catalogue do not establish a tactic-code mapping. An automatic pitch and role-specific rankings are therefore deferred. Manual position/role recommendations remain available.
+Tactics remain read only. Player opening, comparison-pool actions and two-player quick comparison are available. Club/save changes clear cached results. The active tactic is not inferred. Only the first identified human manager and build `26.3.2+2329565`, schema 26, are currently supported.
 
-Completing this requires matching saves and screenshots for both phases, controlled single-position/single-role changes and validation across multiple formations and supported game versions. No real save files were available in the workspace for this check.
+The effective 64-bit terminal role/duty mask is decoded against the 79 active managed role enum constants, cross-referenced with UI assets. Initial base-role headers are not used as effective roles. Structural checks and bounded compatibility adjustments protect the optional reader. Numerical role decoding does not reproduce the game’s suitability formula: recommendation weights and stars remain documented editor estimates. Tests use wholly synthetic records; no game archives or save-derived record fixtures are shipped.
 
-## Sources
+## Riferimenti / Sources
 
-- [fmsave tactic models and field verification status](https://github.com/rhiever/fmsave/blob/main/src/fmsave/models/tactics.py)
-- [fmsave Save.tactics documentation and entry point](https://github.com/rhiever/fmsave/blob/main/src/fmsave/_save.py)
-- Installed dependency: `fmsave==0.5.10`, `models/tactics.py`, `_save.py`, and `_layouts/fm26_26_3_2.py`.
+- Resource labels, active UI role definitions and managed enums from the installation files supplied for read-only research; original files are not distributed.
+- [fmsave structural reader](https://github.com/rhiever/fmsave/blob/main/src/fmsave/readers/tactics.py), pinned dependency `0.5.10`.
+- [Il2CppDumper metadata structures](https://github.com/Perfare/Il2CppDumper/blob/master/Il2CppDumper/Il2Cpp/MetadataClass.cs), consulted to read managed enum constants.

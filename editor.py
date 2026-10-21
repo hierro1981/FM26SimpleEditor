@@ -16,6 +16,7 @@ from operation_progress import ProgressReporter, report, scaled
 from history_reader import embedded_history
 from my_squad import read_my_squad
 from staff_reader import read_my_staff
+from tactics_reader import read_my_tactics
 
 
 def integer(value, minimum, maximum, label):
@@ -413,7 +414,7 @@ def serve():
             try:
                 request = json.loads(line)
                 command = request.get("command")
-                progress = ProgressReporter() if command in {"open", "save", "inspect", "my_squad", "my_staff"} else None
+                progress = ProgressReporter() if command in {"open", "save", "inspect", "my_squad", "my_staff", "my_tactics"} else None
                 if command == "open":
                     new_store = PlayerStore(request["source"], scaled(progress, 0, 95))
                     if store is not None:
@@ -430,6 +431,8 @@ def serve():
                     result = search_rows(store.rows, request, store.save.info.game_date)
                 elif command == "my_staff":
                     result = read_my_staff(store, request.get("clubUid"), scaled(progress, 0, 95))
+                elif command == "my_tactics":
+                    result = read_my_tactics(store, request.get("clubUid"), scaled(progress, 0, 95))
                 elif command == "my_squad":
                     result = read_my_squad(store, scaled(progress, 0, 95))
                 elif command == "history":

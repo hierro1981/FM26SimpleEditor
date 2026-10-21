@@ -1862,4 +1862,15 @@ Hover over a position for its rating.</value>
     <value>Sports Interactive identifies positional familiarity and role attributes as suitability factors; the consulted sources do not publish the numerical formula. These attribute profiles and weights are editor assessments, not official suitability data. General profile: the existing 3/2/1 position-report weights. Named role: focus attributes ×3, support ×2 and remaining position attributes ×1. Uses the weighted mean of visible 1–20 values; requires complete data and familiarity ≥12/20. Two selections: mean of both scores, with suitability required in both. Stars = score/4, rounded to half a star; CA and PA do not change scores. English names and availability follow the FM26 reference catalogue; Italian translations are descriptive.</value>
   </data>
   <data name="QuickComparePair" xml:space="preserve"><value>Compare the two selected players</value></data>
+  <data name="TacticsTab" xml:space="preserve"><value>Best by tactic</value></data>
+  <data name="TacticsBoth" xml:space="preserve"><value>Both phases</value></data>
+  <data name="TacticsUnknownRole" xml:space="preserve"><value>Unrecognised role</value></data>
+  <data name="TacticsUnavailable" xml:space="preserve"><value>Tactics unavailable: {0}</value></data>
+  <data name="TacticsReadOnly" xml:space="preserve"><value>First-team tactics, read only. Select a slot on the pitch or in the list.</value></data>
+  <data name="TacticsEmpty" xml:space="preserve"><value>Open a save and select a managed club to read tactics.</value></data>
+  <data name="TacticsCannotRank" xml:space="preserve"><value>Unrecognised position or role in the selected phase: recommendations unavailable.</value></data>
+  <data name="TacticsMethod" xml:space="preserve"><value>Up to 5 players from the filtered squad, with familiarity of at least 12/20 in each required position. Both phases use the mean of the two profiles. Scores and stars are editor estimates, not the official game rating.</value></data>
+  <data name="TacticsLoading" xml:space="preserve"><value>Reading team tactics…</value></data>
+  <data name="TacticsLoaded" xml:space="preserve"><value>Tactics loaded</value></data>
+  <data name="TacticsLoadError" xml:space="preserve"><value>Unable to read tactics</value></data>
 </root>

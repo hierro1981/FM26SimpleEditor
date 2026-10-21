@@ -24,6 +24,8 @@ public sealed class MySquadPanel : UserControl
     private readonly Button open = new() { Text = L10n.Get("Text_9337b648a0e1"), AutoSize = true };
     private readonly Button openRanked = new() { Text = L10n.Get("Text_9337b648a0e1"), AutoSize = true };
     private readonly StaffPanel staff = new();
+    private readonly TacticsPanel tactics = new();
+    private readonly TabPage tacticsTab = new(L10n.Get("TacticsTab"));
     private readonly TabPage staffTab = new(L10n.Get("StaffTab"));
     private readonly TabControl views = new() { Dock = DockStyle.Fill };
     private readonly ContextMenuStrip menu = new();
@@ -36,6 +38,7 @@ public sealed class MySquadPanel : UserControl
     private bool defaultOrder = true;
     private bool descending;
     public event Action<uint>? StaffRequested;
+    public event Action<uint>? TacticsRequested;
     public event Action? ReloadRequested;
     public event Action<uint>? PlayerOpenRequested;
     public event Action<uint>? AddComparisonRequested;
@@ -68,10 +71,14 @@ public sealed class MySquadPanel : UserControl
         root.Controls.Add(selection, 0, 0); root.Controls.Add(scope, 0, 1); root.Controls.Add(status, 0, 2);
         var tabs = views;
         var listTab = new TabPage(L10n.Get("MySquadRoster")); var roleTab = new TabPage(L10n.Get("MySquadBest"));
-        staffTab.Controls.Add(staff);
+        staffTab.Controls.Add(staff); tacticsTab.Controls.Add(tactics);
+        tactics.PlayerOpenRequested += uid => PlayerOpenRequested?.Invoke(uid);
+        tactics.AddComparisonRequested += uid => AddComparisonRequested?.Invoke(uid);
+        tactics.QuickComparisonRequested += (a, b) => QuickComparisonRequested?.Invoke(a, b);
+        tactics.ReloadRequested += () => { tactics.ClearForClub(SelectedClub?.ClubUid); EnsureTacticsLoaded(); };
         staff.ReloadRequested += () => { staff.ClearForClub(SelectedClub?.ClubUid); EnsureStaffLoaded(); };
-        tabs.SelectedIndexChanged += (_, _) => { scope.Enabled = data.Status == "ready" && data.Clubs.Count > 0 && tabs.SelectedTab != staffTab; EnsureStaffLoaded(); };
-        tabs.TabPages.AddRange([listTab, roleTab, staffTab]); root.Controls.Add(tabs, 0, 3);
+        tabs.SelectedIndexChanged += (_, _) => { scope.Enabled = data.Status == "ready" && data.Clubs.Count > 0 && tabs.SelectedTab != staffTab; EnsureStaffLoaded(); EnsureTacticsLoaded(); };
+        tabs.TabPages.AddRange([listTab, roleTab, staffTab, tacticsTab]); root.Controls.Add(tabs, 0, 3);
         var list = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3, Padding = new Padding(6) };
         list.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         list.RowStyles.Add(new RowStyle(SizeType.AutoSize)); list.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); list.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -130,7 +137,7 @@ public sealed class MySquadPanel : UserControl
         ranking.Columns[6].Name = "Ca"; ranking.Columns[7].Name = "Pa"; ranking.Columns[7].DefaultCellStyle.NullValue = "—";
         ranking.Columns[4].CellTemplate = new StarRatingCell();
         ranking.Columns[4].DefaultCellStyle.Format = "0.0"; ranking.RowTemplate.Height = 41;
-        club.SelectedIndexChanged += (_, _) => { if (!binding) { staff.ClearForClub(SelectedClub?.ClubUid); RebuildScopes(reset: true); RefreshView(); } };
+        club.SelectedIndexChanged += (_, _) => { if (!binding) { staff.ClearForClub(SelectedClub?.ClubUid); tactics.ClearForClub(SelectedClub?.ClubUid); RebuildScopes(reset: true); RefreshView(); } };
         scope.SelectedIndexChanged += (_, _) => { if (!binding) RefreshView(); };
         search.TextChanged += (_, _) => { if (!binding) RefreshRoster(); };
         position.SelectedIndexChanged += (_, _) => { if (!binding && position.SelectedItem is PositionChoice p) SelectPosition(p.Key); };
@@ -204,19 +211,19 @@ public sealed class MySquadPanel : UserControl
 
     public void ClearForSave(bool loaded)
     {
-        hasSave = loaded; data = new(); defaultOrder = true; sortField = "MainPosition"; descending = false; staff.ClearForClub(null); binding = true; club.Items.Clear(); search.Clear(); RebuildScopes(reset: true); binding = false; RefreshView();
+        hasSave = loaded; data = new(); defaultOrder = true; sortField = "MainPosition"; descending = false; staff.ClearForClub(null); tactics.ClearForClub(null); binding = true; club.Items.Clear(); search.Clear(); RebuildScopes(reset: true); binding = false; RefreshView();
     }
     public void SetData(MySquadResult result)
     {
         uint? previous = SelectedClub?.ClubUid;
         hasSave = true; data = result; binding = true; club.Items.Clear(); club.Items.AddRange(result.Clubs.Cast<object>().ToArray());
         if (club.Items.Count > 0) club.SelectedIndex = Math.Max(0, result.Clubs.FindIndex(c => c.ClubUid == previous));
-        staff.ClearForClub(SelectedClub?.ClubUid); RebuildScopes();
+        staff.ClearForClub(SelectedClub?.ClubUid); tactics.ClearForClub(SelectedClub?.ClubUid); RebuildScopes();
         binding = false; RefreshView();
     }
     public void SetLanguage()
     {
-        L10n.Apply(this); staff.SetLanguage(); binding = true;
+        L10n.Apply(this); staff.SetLanguage(); tactics.SetLanguage(); binding = true;
         RebuildScopes();
         position.Items.Clear(); position.Items.AddRange(PositionScheme.Order.Select(key => (object)new PositionChoice(key)).ToArray());
         secondPosition.Items.Clear(); secondPosition.Items.Add(new PositionChoice("")); secondPosition.Items.AddRange(PositionScheme.Order.Select(key => (object)new PositionChoice(key)).ToArray());
@@ -261,13 +268,19 @@ public sealed class MySquadPanel : UserControl
         bool ready = data.Status == "ready" && data.Clubs.Count > 0;
         club.Enabled = ready; scope.Enabled = ready && views.SelectedTab != staffTab;
         if (ready) status.Text += "\n" + L10n.Get("MySquadTeamNamesHint");
-        RefreshRoster(); RefreshRanking(); EnsureStaffLoaded();
+        RefreshRoster(); RefreshRanking(); tactics.SetMembers(Members); EnsureStaffLoaded(); EnsureTacticsLoaded();
     }
     public void SetStaffData(StaffResult result) => staff.SetData(result);
     public void EnsureStaffLoaded()
     {
         if (!binding && views.SelectedTab == staffTab && data.Status == "ready" && SelectedClub is ManagedSquad selected && !staff.IsLoadedFor(selected.ClubUid))
             StaffRequested?.Invoke(selected.ClubUid);
+    }
+    public void SetTacticsData(SavedTacticsResult result) => tactics.SetData(result);
+    public void EnsureTacticsLoaded()
+    {
+        if (!binding && views.SelectedTab == tacticsTab && data.Status == "ready" && SelectedClub is ManagedSquad selected && !tactics.IsLoadedFor(selected.ClubUid))
+            TacticsRequested?.Invoke(selected.ClubUid);
     }
     private void RefreshRoster()
     {

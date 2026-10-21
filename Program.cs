@@ -140,6 +140,7 @@ public sealed class MainForm : Form
         mySquad.AddComparisonRequested += AddComparison;
         mySquad.QuickComparisonRequested += async (first, second) => await ComparePair(first, second);
         mySquad.StaffRequested += async uid => await RefreshStaff(uid);
+        mySquad.TacticsRequested += async uid => await RefreshTactics(uid);
         mySquad.ReloadRequested += async () => { mySquadLoaded = false; await RefreshMySquad(); };
         comparisonTab.Controls.Add(comparison); historyTab.Controls.Add(historyPanel);
         comparison.RemoveRequested += uid => { comparisonPool.Remove(uid); UpdatePoolLabel(); RefreshComparison(); };
@@ -516,7 +517,7 @@ public sealed class MainForm : Form
             state.Text = L10n.Get("MySquadLoaded");
         }
         catch (Exception exc) { Error(L10n.Get("MySquadLoadError"), exc); }
-        finally { SetBusy(false); mySquad.EnsureStaffLoaded(); }
+        finally { SetBusy(false); mySquad.EnsureStaffLoaded(); mySquad.EnsureTacticsLoaded(); }
     }
 
     private async Task RefreshStaff(uint clubUid)
@@ -531,6 +532,25 @@ public sealed class MainForm : Form
             state.Text = L10n.Get("StaffLoaded");
         }
         catch (Exception exc) { Error(L10n.Get("StaffLoadError"), exc); }
+        finally { SetBusy(false); }
+    }
+
+    private async Task RefreshTactics(uint clubUid)
+    {
+        if (busy || binding || catalog.Count == 0) return;
+        SetBusy(true, L10n.Get("TacticsLoading"), determinate: true);
+        try
+        {
+            var result = await backend.Send<SavedTacticsResult>(new { command = "my_tactics", clubUid }, ReportProgress);
+            mySquad.SetTacticsData(result);
+            progress.Value = 100; progressText.Text = "100%";
+            state.Text = L10n.Get("TacticsLoaded");
+        }
+        catch (Exception exc)
+        {
+            mySquad.SetTacticsData(new SavedTacticsResult { ClubUid = clubUid, Status = "unavailable", Error = exc.Message });
+            Error(L10n.Get("TacticsLoadError"), exc);
+        }
         finally { SetBusy(false); }
     }
 

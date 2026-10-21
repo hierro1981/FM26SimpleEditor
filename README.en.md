@@ -35,11 +35,13 @@ A C# Windows Forms project for Visual Studio 2026, with a local Python reader. B
 
 - **Quick comparison:** Ctrl+click two players, then right-click and choose **Compare the two selected players** in player search, the **My squad** roster or **Best by position**. The first player in list order becomes the primary player and the second becomes the comparison player, including players from different teams. Both are added to the comparison pool; no previously open player is required.
 - Right-clicking a selected row preserves the multiple selection. Quick comparison requires exactly two distinct players; single-player actions remain available with one selection. Existing unsaved-edit checks still apply.
-- **Best by tactic: feasibility check.** The reader extracts stored tactics and slots, but position and tactical-role codes still have no verified mapping. The automatic sub-tab is therefore not available yet: [readable data, limitations and validation requirements](docs/SavedTactics.md).
+- **Best by tactic:** new **My squad** sub-tab reads first-team saved tactics and displays separate IP/OOP pitches. Select a pitch slot or list entry to rank the top five players from the filtered squad for either phase or both, using the actual saved positions and roles.
+- Italian labels for all **79 roles** now match game language resources, including **AdM = Channel Forward** and **Amn = Deep-Lying Forward**. Role codes come from game enums; the reader supports `26.3.2+2329565`, tactics schema 26. Unknown combinations do not produce guessed recommendations.
+- Tactics are read only. Player opening, comparison-pool actions and quick comparison are available in the new ranking. Stars and scores remain **editor estimates**, not the official game formula. [Reader, compatibility and limits](docs/SavedTactics.md).
 
 ## Changes in version 14.1
 
-- Catalogue of **79 unique FM26 tactical role/phase combinations** (40 in possession, 39 out of possession), filtered by position, including Deep-Lying Forward, Centre Forward, Target Forward and the other roles in the FM26 26.3.2 reference. Italian translations are descriptive; the catalogue retains English names.
+- Catalogue of **79 unique FM26 tactical role/phase combinations** (40 in possession, 39 out of possession), filtered by position, including Deep-Lying Forward, Centre Forward, Target Forward and the other roles in the FM26 26.3.2 reference. Italian labels match the supplied game language resources; the catalogue retains English names.
 - Two roles can be assessed even in the same position. Selectors preserve choices across language changes and discard a role incompatible with a newly selected position.
 - **PA** is displayed alongside CA in position recommendations; unreadable PA remains **—** and does not affect the score.
 - **Criteria and sources** lists the actual attributes and weights. The official source identifies familiarity and role attributes but the consulted sources do not publish a numerical formula: editor profiles/weights and stars are therefore labelled estimates, not official game ratings. [Method, provenance and limits](docs/TacticalRoles.md).

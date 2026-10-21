@@ -12,7 +12,7 @@ try {
     # No consent => no Python/.NET download. Silent installs are also opt-in.
     $process = Start-Process $SetupPath -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /TASKS= /DIR=`"$app`" /LOG=`"$testRoot/install.log`"" -Wait -PassThru
     if ($process.ExitCode -ne 0) { throw "Setup failed: $($process.ExitCode)" }
-    foreach ($file in @('FM26SimpleEditor.exe', 'en/FM26SimpleEditor.resources.dll', 'editor.py', 'requirements.txt', 'FM26SimpleEditor-source.zip', 'installer/Install-Prerequisites.ps1', 'unins000.exe')) {
+    foreach ($file in @('FM26SimpleEditor.exe', 'en/FM26SimpleEditor.resources.dll', 'editor.py', 'tactics_reader.py', 'Data/saved_tactic_codes.json', 'requirements.txt', 'FM26SimpleEditor-source.zip', 'installer/Install-Prerequisites.ps1', 'unins000.exe')) {
         if (-not (Test-Path (Join-Path $app $file))) { throw "Missing installed file: $file" }
     }
     if (Test-Path (Join-Path $originalLocal 'FM26SimpleEditor/installer-prerequisites.log')) { throw 'Unselected tasks unexpectedly ran.' }

@@ -2,7 +2,7 @@
 
 The embedded [catalogue](../Data/tactical_roles.json) contains **79 unique role/phase combinations**: 40 in possession and 39 out of possession. Position eligibility is merged when a role is available in several positions. Side-specific central roles use the editor's aggregate DC/DM/MC/AMC/STC familiarity; the save reader does not expose separate familiarity for the left/right central slots. SW keeps the generic position profile rather than inventing an FM26 sweeper role.
 
-The UI offers a generic position profile and the named in/out-of-possession roles eligible for each selected position. Italian names are descriptive translations; English names are retained in the dataset. The second selector can use the same position with a different role or phase. Duties from older FM versions are not added: FM26 removed them.
+The UI offers a generic position profile and the named in/out-of-possession roles eligible for each selected position. Italian names follow the game language resources (base plus changes), cross-checked against role menu screenshots and UI definitions; English names are retained in the dataset. The second selector can use the same position with a different role or phase. Legacy duties are not offered as user choices. The saved tactic role bitmask still contains internal duty flags, which are separated from the role code by the reader.
 
 ## Evidence and limits
 

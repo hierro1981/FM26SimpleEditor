@@ -1862,4 +1862,15 @@ Passa sul punto per il valore.</value>
     <value>Sports Interactive indica familiarità nella posizione e attributi del ruolo come fattori di idoneità; nelle fonti consultate non è pubblicata la formula numerica. Questi profili e pesi sono valutazioni dell’editor, non dati ufficiali di idoneità. Profilo generico: pesi 3/2/1 del report per posizione. Sottoruolo: attributi di enfasi ×3, supporto ×2 e restanti attributi della posizione ×1. Si usa la media ponderata dei valori visibili 1–20; occorrono tutti i dati e familiarità ≥12/20. Due selezioni: media dei due punteggi, con idoneità richiesta in entrambe. Stelle = punteggio/4, arrotondate a mezza stella; CA e PA non alterano il punteggio. Nomi inglesi e disponibilità derivano dal catalogo di riferimento FM26; le traduzioni italiane sono descrittive.</value>
   </data>
   <data name="QuickComparePair" xml:space="preserve"><value>Confronta i due giocatori selezionati</value></data>
+  <data name="TacticsTab" xml:space="preserve"><value>Migliori per tattica</value></data>
+  <data name="TacticsBoth" xml:space="preserve"><value>Entrambe le fasi</value></data>
+  <data name="TacticsUnknownRole" xml:space="preserve"><value>Sottoruolo non riconosciuto</value></data>
+  <data name="TacticsUnavailable" xml:space="preserve"><value>Tattiche non disponibili: {0}</value></data>
+  <data name="TacticsReadOnly" xml:space="preserve"><value>Tattiche della prima squadra, in sola lettura. Seleziona uno slot sul campo o nell’elenco.</value></data>
+  <data name="TacticsEmpty" xml:space="preserve"><value>Apri un salvataggio e seleziona una squadra gestita per leggere le tattiche.</value></data>
+  <data name="TacticsCannotRank" xml:space="preserve"><value>Posizione o sottoruolo non riconosciuto nella fase selezionata: suggerimenti non disponibili.</value></data>
+  <data name="TacticsMethod" xml:space="preserve"><value>Fino a 5 giocatori della rosa filtrata, con familiarità almeno 12/20 in ogni posizione richiesta. Per entrambe le fasi si usa la media dei due profili. Punteggio e stelle sono stime dell’editor, non la valutazione ufficiale del gioco.</value></data>
+  <data name="TacticsLoading" xml:space="preserve"><value>Lettura delle tattiche della squadra…</value></data>
+  <data name="TacticsLoaded" xml:space="preserve"><value>Tattiche caricate</value></data>
+  <data name="TacticsLoadError" xml:space="preserve"><value>Impossibile leggere le tattiche</value></data>
 </root>

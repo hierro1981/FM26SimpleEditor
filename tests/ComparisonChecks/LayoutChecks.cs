@@ -24,6 +24,13 @@ internal static class LayoutChecks
         }
         tabs.SelectedIndex = 1; Application.DoEvents();
         check(tabs.SelectedTab == tabs.TabPages[1] && tabs.DisplayRectangle.Height > 0, "coloured headers retain native tab selection and content layout");
+        using var viewport = new ContentViewport(new Panel(), new Size(560, 350)) { Dock = DockStyle.None, Size = new Size(300, 200) };
+        host.Controls.Add(viewport); viewport.BringToFront(); viewport.CreateControl(); Application.DoEvents();
+        check(viewport.HorizontalScroll.Visible && viewport.VerticalScroll.Visible, "minimum content dimensions enable both scrollbars");
+        viewport.AutoScrollPosition = new Point(560, 350);
+        viewport.Size = new Size(900, 700); Application.DoEvents();
+        check(!viewport.HorizontalScroll.Visible && !viewport.VerticalScroll.Visible && viewport.Controls[0].Location == Point.Empty &&
+              viewport.Controls[0].Size == viewport.ClientSize, "expanding a scrolled viewport removes both bars and fills the recovered space");
         host.Close();
     }
 }

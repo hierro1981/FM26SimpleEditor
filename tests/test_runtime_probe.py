@@ -19,10 +19,10 @@ class RuntimeProbeTests(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.requirements = Path(self.directory.name) / "requirements.txt"
-        self.requirements.write_text("fmsave==0.5.10\nzstandard==0.25.0\n", encoding="utf-8")
+        self.requirements.write_text("fmsave==0.5.11\nzstandard==0.25.0\n", encoding="utf-8")
 
     def inspect(self, version=(3, 12, 1), installed=None, import_error=None, pip=True):
-        versions = installed if installed is not None else {"fmsave": "0.5.10", "zstandard": "0.25.0"}
+        versions = installed if installed is not None else {"fmsave": "0.5.11", "zstandard": "0.25.0"}
         def metadata(name):
             if name not in versions:
                 raise probe.importlib.metadata.PackageNotFoundError(name)
@@ -55,7 +55,7 @@ class RuntimeProbeTests(unittest.TestCase):
     def test_missing_packages(self):
         result, _ = self.inspect(installed={})
         self.assertFalse(result["ready"])
-        self.assertIn("fmsave==0.5.10", result["missing"])
+        self.assertIn("fmsave==0.5.11", result["missing"])
         self.assertIn("zstandard==0.25.0", result["missing"])
 
     def test_wrong_version_requires_repair(self):

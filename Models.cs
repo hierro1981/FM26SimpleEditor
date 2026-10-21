@@ -12,6 +12,7 @@ public sealed class PlayerRow
     public uint? Id { get; set; }
     public string Name { get; set; } = "";
     public string Team { get; set; } = "";
+    public uint? OwnerClubUid { get; set; }
     public string OwnerTeam { get; set; } = "";
     [JsonIgnore] public bool ShowLoanOwner { get; set; }
     [JsonIgnore] public string SearchTeam => ShowLoanOwner && OnLoan is true ? OwnerTeam : Team;
@@ -169,3 +170,68 @@ public sealed class BackendProgress
 
 
 
+
+public sealed class ManagedSquad
+{
+    public uint ClubUid { get; set; }
+    public string ClubName { get; set; } = "";
+    public string? ManagerName { get; set; }
+    public uint FirstTeamId { get; set; }
+    public List<uint> TeamIds { get; set; } = [];
+    public List<ManagedSquadTeam> Teams { get; set; } = [];
+    public override string ToString() => ClubName + (string.IsNullOrEmpty(ManagerName) ? "" : " · " + ManagerName);
+}
+
+public sealed class MySquadResult
+{
+    public string Status { get; set; } = "none";
+    public List<ManagedSquad> Clubs { get; set; } = [];
+    public List<PlayerDetail> Players { get; set; } = [];
+    public bool FirstHumanOnly { get; set; } = true;
+    public string? Error { get; set; }
+}
+
+public sealed class StaffRow
+{
+    public uint Uid { get; set; }
+    public uint? Id { get; set; }
+    public string Name { get; set; } = "";
+    public uint ClubUid { get; set; }
+    public string ClubName { get; set; } = "";
+    public uint? ListedClubUid { get; set; }
+    public string? ListedClubName { get; set; }
+    public uint? TeamId { get; set; }
+    public int? Age { get; set; }
+    public string? Birth { get; set; }
+    public bool IsHumanManager { get; set; }
+    public bool HasContract { get; set; }
+    public long? Wage { get; set; }
+    public string? ContractStart { get; set; }
+    public string? ContractEnd { get; set; }
+    public int? Ca { get; set; }
+    public int? Pa { get; set; }
+    public Dictionary<string, int> Personality { get; set; } = new();
+    public Dictionary<string, int> Attributes { get; set; } = new();
+    public Dictionary<string, int> Preferences { get; set; } = new();
+    [JsonIgnore] public string RoleDisplay => L10n.Get(IsHumanManager ? "StaffHuman" : "StaffUnknownRole");
+    [JsonIgnore] public string ContractDisplay => L10n.Get(HasContract ? "StaffContractFound" : "StaffContractMissing");
+    [JsonIgnore] public string BirthDisplay => DisplayDate(Birth);
+    [JsonIgnore] public string ContractStartDisplay => DisplayDate(ContractStart);
+    [JsonIgnore] public string ContractEndDisplay => DisplayDate(ContractEnd);
+    private static string DisplayDate(string? value) => DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date) ? date.ToString("dd/MM/yyyy") : "—";
+}
+
+public sealed class StaffResult
+{
+    public string Status { get; set; } = "none";
+    public uint? ClubUid { get; set; }
+    public List<StaffRow> Staff { get; set; } = [];
+    public string? Error { get; set; }
+}
+
+public sealed class ManagedSquadTeam
+{
+    public uint TeamId { get; set; }
+    public int? Slot { get; set; }
+    public string? Name { get; set; }
+}

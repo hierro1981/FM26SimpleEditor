@@ -21,7 +21,7 @@ public sealed class ComparisonPanel : UserControl
     private readonly StarControl otherPotential = new();
     private readonly PitchControl primaryPitch = new() { MinimumSize = new Size(240, 210) };
     private readonly PitchControl otherPitch = new() { MinimumSize = new Size(240, 210) };
-    private readonly TabControl views = new() { Dock = DockStyle.Fill };
+    private readonly AccentTabControl views = new() { Dock = DockStyle.Fill };
     private readonly TabPage attributesTab = new(L10n.Get("Text_83f29bd14a6e"));
     private readonly TabPage reportTab = new(L10n.Get("Text_e50b26ad4723"));
     private readonly RoleReportPanel report = new();
@@ -109,7 +109,15 @@ public sealed class ComparisonPanel : UserControl
 
     public void PreferReference(uint uid)
     {
-        preferredUid = uid; updating = true; query.Clear(); source.SelectedIndex = 1; updating = false; RebuildPlayerChoices();
+        SetPreferredReference(uid); RebuildPlayerChoices();
+    }
+
+    public void SetPreferredReference(uint uid)
+    {
+        preferredUid = uid;
+        bool wasUpdating = updating; updating = true;
+        query.Clear(); source.SelectedIndex = 1;
+        updating = wasUpdating;
     }
 
     private async void RebuildPlayerChoices()

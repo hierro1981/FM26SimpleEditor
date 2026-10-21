@@ -75,6 +75,12 @@ internal static class Checks
             LocalizationChecks.Run(Check);
             PlayerToolsChecks.Run(Check);
             HistoryInteractionChecks.Run(Check);
+            MySquadChecks.Run(Check);
+            MySquadEnhancementChecks.Run(Check);
+            TacticalRoleChecks.Run(Check);
+            QuickComparisonChecks.Run(Check);
+            TacticsChecks.Run(Check);
+            LayoutChecks.Run(Check);
             Console.WriteLine($"{count} C# checks passed"); return 0;
         }
         catch (Exception exc) { Console.Error.WriteLine(exc); return 1; }

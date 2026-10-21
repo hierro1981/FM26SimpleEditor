@@ -19,11 +19,14 @@ internal static class Program
 public sealed class MainForm : Form
 {
     private readonly BackendClient backend;
-    private readonly TabControl tabs = new() { Dock = DockStyle.Fill };
+    private readonly AccentTabControl tabs = new() { Dock = DockStyle.Fill };
     private readonly TabPage searchTab = new(L10n.Get("Text_632c1126bbb8"));
     private readonly TabPage editTab = new(L10n.Get("Text_d10c243588b5"));
     private readonly TabPage previewTab = new(L10n.Get("Text_e17d380480a5"));
     private readonly TabPage comparisonTab = new(L10n.Get("Text_49be2b3731fc"));
+    private readonly TabPage mySquadTab = new(L10n.Get("MySquadTab"));
+    private readonly MySquadPanel mySquad = new();
+    private bool mySquadLoaded;
     private readonly TabPage historyTab = new(L10n.Get("Text_53a436ea8c92"));
     private readonly ComparisonPanel comparison = new();
     private readonly HistoryPanel historyPanel = new();
@@ -31,8 +34,8 @@ public sealed class MainForm : Form
     private readonly ContextMenuStrip comparisonMenu = new();
     private readonly Button open = new() { Text = L10n.Get("Text_96b6ef93f726"), AutoSize = true };
     private readonly TextBox file = new() { ReadOnly = true, Dock = DockStyle.Fill };
-    private sealed record LanguageChoice(string Id, string Label) { public override string ToString() => Label; }
-    private readonly ComboBox language = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 125, Name = "LanguageSelector", AccessibleName = L10n.Get("LanguageLabel") };
+    private readonly Button settingsButton = new() { Name = "OptionsButton", Text = L10n.Get("OptionsButton"), AutoSize = true };
+    private AppSettings settings = new();
     private readonly Button about = new() { Text = L10n.Get("AboutButton"), AutoSize = true };
     private readonly string configurationDirectory;
     private bool changingLanguage;
@@ -100,8 +103,8 @@ public sealed class MainForm : Form
     {
         this.configurationDirectory = configurationDirectory ?? AppContext.BaseDirectory;
         backend = new BackendClient(pythonExecutable);
-        language.Items.AddRange([new LanguageChoice("it", "Italiano"), new LanguageChoice("en", "English")]);
-        language.SelectedIndex = UseItalian ? 0 : 1;
+        settings = AppSettings.Load(this.configurationDirectory) with { Language = L10n.Language };
+        SquadSelection.ResultLimit = settings.RecommendationCount;
         using var iconStream = typeof(MainForm).Assembly.GetManifestResourceStream("FM26SimpleEditor.App.ico");
         if (iconStream is not null) Icon = new Icon(iconStream);
         Text = AppInfo.Title;
@@ -123,15 +126,22 @@ public sealed class MainForm : Form
         toolbar.Controls.Add(open, 0, 0); toolbar.Controls.Add(save, 1, 0);
         toolbar.Controls.Add(changes, 2, 0);
         var languageTools = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, WrapContents = false, Margin = Padding.Empty };
-        languageTools.Controls.AddRange([new Label { Text = L10n.Get("LanguageLabel"), AutoSize = true, Anchor = AnchorStyles.Left }, language, about]);
+        languageTools.Controls.AddRange([settingsButton, about]);
         toolbar.Controls.Add(languageTools, 3, 0);
         toolbar.Controls.Add(file, 0, 1); toolbar.SetColumnSpan(file, 4);
         var status = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 3, Padding = new Padding(5, 7, 5, 0) };
         status.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         status.Controls.Add(state, 0, 0); status.Controls.Add(progress, 1, 0); status.Controls.Add(progressText, 2, 0);
-        tabs.TabPages.AddRange([searchTab, editTab, previewTab, comparisonTab, historyTab]);
+        tabs.TabPages.AddRange([searchTab, editTab, previewTab, comparisonTab, historyTab, mySquadTab]);
         BuildSearch(); BuildEditor();
+        mySquadTab.Controls.Add(mySquad);
+        mySquad.PlayerOpenRequested += async uid => await LoadPlayer(uid);
+        mySquad.AddComparisonRequested += AddComparison;
+        mySquad.QuickComparisonRequested += async (first, second) => await ComparePair(first, second);
+        mySquad.StaffRequested += async uid => await RefreshStaff(uid);
+        mySquad.TacticsRequested += async uid => await RefreshTactics(uid);
+        mySquad.ReloadRequested += async () => { mySquadLoaded = false; await RefreshMySquad(); };
         comparisonTab.Controls.Add(comparison); historyTab.Controls.Add(historyPanel);
         comparison.RemoveRequested += uid => { comparisonPool.Remove(uid); UpdatePoolLabel(); RefreshComparison(); };
         comparison.ClearRequested += () => { comparisonPool.Clear(); UpdatePoolLabel(); RefreshComparison(); };
@@ -149,7 +159,10 @@ public sealed class MainForm : Form
         clearFilters.Click += (_, _) => ResetSearch();
         showFilters.CheckedChanged += (_, _) => options.Visible = showFilters.Checked;
         debounce.Tick += (_, _) => { debounce.Stop(); RefreshSearch(); };
-        language.SelectedIndexChanged += (_, _) => ChangeLanguage();
+        settingsButton.Click += (_, _) => {
+            using var dialog = new OptionsForm(settings);
+            if (dialog.ShowDialog(this) == DialogResult.OK) ApplySettings(dialog.Settings);
+        };
         about.Click += (_, _) => { using var dialog = new AboutForm(); dialog.ShowDialog(this); };
         ca.ValueChanged += (_, _) => Changed(); pa.ValueChanged += (_, _) => Changed(); birth.ValueChanged += (_, _) => Changed();
         changeBirth.CheckedChanged += (_, _) => { birth.Enabled = changeBirth.Checked && detail?.BirthEditable == true && !busy; Changed(); };
@@ -162,11 +175,12 @@ public sealed class MainForm : Form
         {
             if (!binding && !busy && (args.TabPage == previewTab || args.TabPage == comparisonTab || args.TabPage == historyTab) && !FinishEdits()) args.Cancel = true;
         };
-        tabs.SelectedIndexChanged += (_, _) =>
+        tabs.SelectedIndexChanged += async (_, _) =>
         {
             if (tabs.SelectedTab == previewTab) { FinishEdits(); RefreshPreview(); }
             if (tabs.SelectedTab == comparisonTab) { FinishEdits(); RefreshComparison(); }
             if (tabs.SelectedTab == historyTab) RefreshHistory();
+            if (tabs.SelectedTab == mySquadTab) await RefreshMySquad();
         };
         copyPlayerName.Click += (_, _) => CopyIdentity(detail?.Player.Name);
         copyPublicId.Click += (_, _) => CopyIdentity(detail?.Player.Id?.ToString(CultureInfo.InvariantCulture));
@@ -174,7 +188,6 @@ public sealed class MainForm : Form
         tips.SetToolTip(copyPlayerName, L10n.Get("CopyPlayerName"));
         tips.SetToolTip(copyPublicId, L10n.Get("CopyPublicId"));
         tips.SetToolTip(copyInternalId, L10n.Get("CopyInternalId"));
-        tips.SetToolTip(language, L10n.Get("Text_c7ba90415dbf"));
         tips.SetToolTip(ca, L10n.Get("Text_a2e3e958ed35"));
         tips.SetToolTip(pa, L10n.Get("Text_064e19de6695"));
         tips.SetToolTip(save, L10n.Get("Text_47d9a2b22da4"));
@@ -186,28 +199,31 @@ public sealed class MainForm : Form
         L10n.Capture(this, tips);
     }
 
-    private void ChangeLanguage()
+    private void ApplySettings(AppSettings selected)
     {
-        if (changingLanguage || language.SelectedItem is not LanguageChoice selected) return;
+        if (changingLanguage) return;
         changingLanguage = true;
         try
         {
-            if (!FinishEdits()) { language.SelectedIndex = UseItalian ? 0 : 1; return; }
-            L10n.SetLanguage(selected.Id);
+            if (!FinishEdits()) return;
+            try { AppSettings.Save(configurationDirectory, selected); }
+            catch (Exception exc) when (exc is IOException or UnauthorizedAccessException)
+            {
+                MessageBox.Show(this, L10n.Format("ConfigSaveError", Path.Combine(configurationDirectory, AppSettings.FileName), exc.Message),
+                    L10n.Get("ConfigWarning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            settings = selected; SquadSelection.ResultLimit = selected.RecommendationCount;
+            L10n.SetLanguage(selected.Language);
             L10n.Apply(this);
-            options.SetLanguage(UseItalian);
+            options.SetLanguage(UseItalian); mySquad.SetLanguage();
             state.Text = L10n.Translate(state.Text);
             UpdatePlayerIdentity();
             if (detail is not null) birthInfo.Text = detail.BirthEditable ? L10n.Get("Text_ec60709e94bb") : L10n.Backend(detail.BirthWarning);
             UpdatePoolLabel(); BindFields(); RebuildTeamChoices(); RefreshSearch();
             previewStale = true; RefreshPreview(); RefreshComparison(); historyPanel.SetLanguage(UseItalian);
             Changed();
-            try { AppSettings.Save(configurationDirectory, selected.Id); }
-            catch (Exception exc) when (exc is IOException or UnauthorizedAccessException)
-            {
-                MessageBox.Show(this, L10n.Format("ConfigSaveError", Path.Combine(configurationDirectory, AppSettings.FileName), exc.Message),
-                    L10n.Get("ConfigWarning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+
         }
         finally { changingLanguage = false; }
     }
@@ -230,7 +246,7 @@ public sealed class MainForm : Form
         search.Controls.Add(loanOptions, 0, 2); search.SetColumnSpan(loanOptions, 2);
         var filtersHeader = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, Margin = Padding.Empty, WrapContents = false };
         filtersHeader.Controls.AddRange([showFilters, clearFilters, searchInfo]);
-        ConfigureGrid(players); players.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; players.ReadOnly = true; players.MultiSelect = false;
+        ConfigureGrid(players); players.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; players.ReadOnly = true; players.MultiSelect = true;
         players.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         players.Columns.Add(Column("Name", L10n.Get("Text_f537c6bd038e"), 20)); players.Columns.Add(Column("SearchTeamDisplay", L10n.Get("Text_3b0a75ea292b"), 19));
         players.Columns.Add(Column("MainPosition", L10n.Get("Text_045cb480645d"), 10)); players.Columns.Add(Column("Age", L10n.Get("Text_9efdc62c88bf"), 4)); players.Columns.Add(Column("PositionSummary", L10n.Get("Text_5aa749965391"), 12));
@@ -253,22 +269,27 @@ public sealed class MainForm : Form
         };
         var addComparison = new ToolStripMenuItem(L10n.Get("Text_885725b27cce"));
         var compareNow = new ToolStripMenuItem(L10n.Get("Text_f101d9a9a54f"));
+        var comparePair = new ToolStripMenuItem(L10n.Get("QuickComparePair")) { Name = "QuickComparePair" };
         PlayerRow? contextPlayer = null;
-        comparisonMenu.Items.AddRange([addComparison,compareNow]); players.ContextMenuStrip = comparisonMenu;
+        comparisonMenu.Items.AddRange([comparePair,addComparison,compareNow]); players.ContextMenuStrip = comparisonMenu;
         players.CellMouseDown += (_, args) =>
         {
             if (args.Button != MouseButtons.Right || args.RowIndex < 0) return;
-            players.ClearSelection(); players.Rows[args.RowIndex].Selected = true;
-            if (args.ColumnIndex >= 0) players.CurrentCell = players.Rows[args.RowIndex].Cells[args.ColumnIndex];
+            QuickComparison.SelectContextRow(players, args.RowIndex, args.ColumnIndex);
         };
-        comparisonMenu.Opening += (_, args) =>
+        comparisonMenu.Opening += (sender, args) =>
         {
-            var row = SelectedRow(); contextPlayer = row; args.Cancel = row is null || busy;
+            var row = SelectedRow(); contextPlayer = row; args.Cancel = players.SelectedRows.Count == 0 || busy;
+            comparePair.Enabled = QuickComparison.TryPair(players, out _, out _);
             addComparison.Enabled = row is not null && !comparisonPool.Contains(row.Uid);
-            addComparison.Text = addComparison.Enabled ? L10n.Get("Text_885725b27cce") : L10n.Get("Text_8b48e2e8ec50");
+            addComparison.Text = row is not null && comparisonPool.Contains(row.Uid) ? L10n.Get("Text_8b48e2e8ec50") : L10n.Get("Text_885725b27cce");
             compareNow.Enabled = row is not null && detail is not null && row.Uid != detail.Player.Uid;
         };
         addComparison.Click += (_, _) => { if (contextPlayer is PlayerRow row) AddComparison(row.Uid); };
+        comparePair.Click += async (_, _) =>
+        {
+            if (QuickComparison.TryPair(players, out uint first, out uint second)) await ComparePair(first, second);
+        };
         compareNow.Click += (_, _) =>
         {
             if (contextPlayer is not PlayerRow row || detail is null || !FinishEdits()) return;
@@ -469,11 +490,73 @@ public sealed class MainForm : Form
             uid => backend.Send<PlayerDetail>(new { command = "inspect", uid }));
     }
 
+    private async Task ComparePair(uint first, uint second)
+    {
+        if (busy || binding || first == second || !catalogByUid.ContainsKey(first) || !catalogByUid.ContainsKey(second) || !FinishEdits()) return;
+        // Reuse the normal loading/discard flow. Cancellation or loading failure must
+        // never compare against whichever player happened to be open previously.
+        await LoadPlayer(first);
+        if (detail?.Player.Uid != first) return;
+        AddComparison(first); AddComparison(second);
+        comparison.SetPreferredReference(second);
+        if (tabs.SelectedTab == comparisonTab) RefreshComparison();
+        else tabs.SelectedTab = comparisonTab;
+    }
+
     private void RefreshHistory()
     {
         if (busy || tabs.SelectedTab != historyTab) return;
         historyPanel.SetContext(detail,UseItalian,
             (uid,sources) => backend.Send<HistoryResult>(new { command = "history", uid, sources }));
+    }
+
+    private async Task RefreshMySquad()
+    {
+        if (busy || binding || mySquadLoaded || catalog.Count == 0) return;
+        SetBusy(true, L10n.Get("MySquadLoading"), determinate: true);
+        try
+        {
+            var result = await backend.Send<MySquadResult>(new { command = "my_squad" }, ReportProgress);
+            mySquad.SetData(result); mySquadLoaded = true;
+            progress.Value = 100; progressText.Text = "100%";
+            state.Text = L10n.Get("MySquadLoaded");
+        }
+        catch (Exception exc) { Error(L10n.Get("MySquadLoadError"), exc); }
+        finally { SetBusy(false); mySquad.EnsureStaffLoaded(); mySquad.EnsureTacticsLoaded(); }
+    }
+
+    private async Task RefreshStaff(uint clubUid)
+    {
+        if (busy || binding || catalog.Count == 0) return;
+        SetBusy(true, L10n.Get("StaffLoading"), determinate: true);
+        try
+        {
+            var result = await backend.Send<StaffResult>(new { command = "my_staff", clubUid }, ReportProgress);
+            mySquad.SetStaffData(result);
+            progress.Value = 100; progressText.Text = "100%";
+            state.Text = L10n.Get("StaffLoaded");
+        }
+        catch (Exception exc) { Error(L10n.Get("StaffLoadError"), exc); }
+        finally { SetBusy(false); }
+    }
+
+    private async Task RefreshTactics(uint clubUid)
+    {
+        if (busy || binding || catalog.Count == 0) return;
+        SetBusy(true, L10n.Get("TacticsLoading"), determinate: true);
+        try
+        {
+            var result = await backend.Send<SavedTacticsResult>(new { command = "my_tactics", clubUid }, ReportProgress);
+            mySquad.SetTacticsData(result);
+            progress.Value = 100; progressText.Text = "100%";
+            state.Text = L10n.Get("TacticsLoaded");
+        }
+        catch (Exception exc)
+        {
+            mySquad.SetTacticsData(new SavedTacticsResult { ClubUid = clubUid, Status = "unavailable", Error = exc.Message });
+            Error(L10n.Get("TacticsLoadError"), exc);
+        }
+        finally { SetBusy(false); }
     }
 
     private async Task OpenFile()
@@ -488,6 +571,7 @@ public sealed class MainForm : Form
             await Task.Yield();
             catalog = result.Players; catalogByUid = catalog.ToDictionary(player => player.Uid); file.Text = result.Source;
             gameDate = DateTime.TryParseExact(result.GameDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var clock) ? clock : null;
+            mySquadLoaded = false; mySquad.ClearForSave(true);
             detail = null; originalAttributes = []; originalPositions = [];
             comparisonPool.Clear(); UpdatePoolLabel(); comparison.ClearCache(); historyPanel.ClearSources();
             identity.Text = L10n.Get("Text_3f8498e92e4b"); affiliation.Text = L10n.Get("Text_9a36d649406a");
@@ -505,7 +589,12 @@ public sealed class MainForm : Form
 
     private async Task LoadSelected()
     {
-        if (busy || players.SelectedRows.Count != 1 || players.SelectedRows[0].DataBoundItem is not PlayerRow row) return;
+        if (SelectedRow() is PlayerRow row) await LoadPlayer(row.Uid);
+    }
+
+    private async Task LoadPlayer(uint uid)
+    {
+        if (busy || !catalogByUid.TryGetValue(uid, out var row)) return;
         if (detail?.Player.Uid == row.Uid) { tabs.SelectedTab = editTab; return; }
         if (!ConfirmDiscard()) return;
         SetBusy(true, L10n.Format("Text_0af5b1bce786", row.Name), determinate: true);
@@ -656,7 +745,7 @@ public sealed class MainForm : Form
             int at = catalog.FindIndex(player => player.Uid == result.Detail.Player.Uid);
             if (at >= 0) catalog[at] = result.Detail.Player;
             catalogByUid[result.Detail.Player.Uid] = result.Detail.Player;
-            comparison.ClearCache();
+            comparison.ClearCache(); mySquadLoaded = false;
             SetDetail(result.Detail);
             progress.Value = 100; progressText.Text = "100%";
             state.Text = L10n.Get("Text_6aef1e9c089a");
@@ -685,7 +774,7 @@ public sealed class MainForm : Form
         progressText.Visible = value && determinate;
         if (value) { progress.Value = 0; progressText.Text = "0%"; progress.Style = determinate ? ProgressBarStyle.Continuous : ProgressBarStyle.Marquee; }
         if (value) ++searchVersion;
-        open.Enabled = language.Enabled = tabs.Enabled = !value;
+        open.Enabled = settingsButton.Enabled = tabs.Enabled = !value;
         if (message is not null) state.Text = message;
         choose.Enabled = !value && players.SelectedRows.Count == 1;
         if (detail is not null) { editing.Enabled = !value; changeBirth.Enabled = !value && detail.BirthEditable; birth.Enabled = !value && changeBirth.Checked && detail.BirthEditable; }

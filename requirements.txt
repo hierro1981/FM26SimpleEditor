@@ -1,2 +1,2 @@
-fmsave==0.5.10
+fmsave==0.5.11
 zstandard==0.25.0

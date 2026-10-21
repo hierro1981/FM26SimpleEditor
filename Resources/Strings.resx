@@ -1579,4 +1579,305 @@ Passa sul punto per il valore.</value>
   <data name="Backend_Inspect_12" xml:space="preserve">
     <value>attributi</value>
   </data>
+  <data name="MySquadTab" xml:space="preserve">
+    <value>6  La mia squadra</value>
+  </data>
+  <data name="MySquadClub" xml:space="preserve">
+    <value>Squadra allenata</value>
+  </data>
+  <data name="MySquadSearch" xml:space="preserve">
+    <value>Cerca nella rosa per nome o ID</value>
+  </data>
+  <data name="MySquadRoster" xml:space="preserve">
+    <value>Rosa</value>
+  </data>
+  <data name="MySquadBest" xml:space="preserve">
+    <value>Migliori per posizione</value>
+  </data>
+  <data name="MySquadScore" xml:space="preserve">
+    <value>Punteggio /20</value>
+  </data>
+  <data name="MySquadFamiliarity" xml:space="preserve">
+    <value>Familiarità /20</value>
+  </data>
+  <data name="MySquadFirst" xml:space="preserve">
+    <value>Solo prima squadra</value>
+  </data>
+  <data name="MySquadOther" xml:space="preserve">
+    <value>Altre squadre</value>
+  </data>
+  <data name="MySquadAll" xml:space="preserve">
+    <value>Tutti i giocatori</value>
+  </data>
+  <data name="MySquadReload" xml:space="preserve">
+    <value>Aggiorna rosa</value>
+  </data>
+  <data name="MySquadOpen" xml:space="preserve">
+    <value>Apri un salvataggio per identificare la squadra che alleni.</value>
+  </data>
+  <data name="MySquadNone" xml:space="preserve">
+    <value>Nessuna squadra allenata identificata: il primo allenatore umano potrebbe essere senza contratto.</value>
+  </data>
+  <data name="MySquadUnavailable" xml:space="preserve">
+    <value>Impossibile identificare la squadra allenata: {0}</value>
+  </data>
+  <data name="MySquadFirstHuman" xml:space="preserve">
+    <value>Rilevamento del primo allenatore umano del salvataggio. Nelle partite con più utenti gli altri allenatori non sono ancora supportati.</value>
+  </data>
+  <data name="MySquadCount" xml:space="preserve">
+    <value>{0} giocatori mostrati su {1} nella rosa selezionata</value>
+  </data>
+  <data name="MySquadRankingInfo" xml:space="preserve">
+    <value>{0} candidati per la posizione selezionata, su {1} giocatori nella rosa.</value>
+  </data>
+  <data name="MySquadMethod" xml:space="preserve">
+    <value>Ctrl/Shift+clic o i menu: fino a due posizioni/sottoruoli. Familiarità ≥12/20 in entrambe. Stelle stimate, non quelle del gioco. PA informativa; dati salvati.</value>
+  </data>
+  <data name="MySquadLoading" xml:space="preserve">
+    <value>Caricamento della mia squadra</value>
+  </data>
+  <data name="MySquadLoaded" xml:space="preserve">
+    <value>Rosa della squadra aggiornata</value>
+  </data>
+  <data name="MySquadLoadError" xml:space="preserve">
+    <value>Errore nel caricamento della squadra</value>
+  </data>
+  <data name="Backend_MySquadIdentification" xml:space="preserve">
+    <value>Identificazione della squadra allenata</value>
+  </data>
+  <data name="Backend_MySquadAttributes" xml:space="preserve">
+    <value>Lettura della rosa e degli attributi</value>
+  </data>
+  <data name="StaffTab" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="StaffSearch" xml:space="preserve">
+    <value>Cerca staff per nome, club o ID</value>
+  </data>
+  <data name="StaffReload" xml:space="preserve">
+    <value>Aggiorna staff</value>
+  </data>
+  <data name="StaffRole" xml:space="preserve">
+    <value>Ruolo</value>
+  </data>
+  <data name="StaffHuman" xml:space="preserve">
+    <value>Allenatore umano</value>
+  </data>
+  <data name="StaffUnknownRole" xml:space="preserve">
+    <value>Non identificato</value>
+  </data>
+  <data name="StaffClub" xml:space="preserve">
+    <value>Club del contratto / staff</value>
+  </data>
+  <data name="StaffListedClub" xml:space="preserve">
+    <value>Club che lo elenca</value>
+  </data>
+  <data name="StaffBirth" xml:space="preserve">
+    <value>Data di nascita</value>
+  </data>
+  <data name="StaffWage" xml:space="preserve">
+    <value>Paga sett. (valuta base)</value>
+  </data>
+  <data name="StaffContract" xml:space="preserve">
+    <value>Contratto</value>
+  </data>
+  <data name="StaffContractFound" xml:space="preserve">
+    <value>Rilevato</value>
+  </data>
+  <data name="StaffContractMissing" xml:space="preserve">
+    <value>Non rilevato</value>
+  </data>
+  <data name="StaffContractStart" xml:space="preserve">
+    <value>Inizio contratto</value>
+  </data>
+  <data name="StaffGroup" xml:space="preserve">
+    <value>Gruppo</value>
+  </data>
+  <data name="StaffValue" xml:space="preserve">
+    <value>Valore /20</value>
+  </data>
+  <data name="StaffPersonality" xml:space="preserve">
+    <value>Personalità</value>
+  </data>
+  <data name="StaffPreferences" xml:space="preserve">
+    <value>Preferenze</value>
+  </data>
+  <data name="StaffAttributes" xml:space="preserve">
+    <value>Attributi decodificati</value>
+  </data>
+  <data name="StaffSelectClub" xml:space="preserve">
+    <value>Identifica prima la squadra allenata per leggere il suo staff.</value>
+  </data>
+  <data name="StaffPending" xml:space="preserve">
+    <value>Apri il sotto-tab per caricare lo staff.</value>
+  </data>
+  <data name="StaffUnavailable" xml:space="preserve">
+    <value>Lettura dello staff non disponibile: {0}</value>
+  </data>
+  <data name="StaffReadOnlyNote" xml:space="preserve">
+    <value>Sola lettura: staff dell’intero club e delle affiliate controllate; il filtro delle rose riguarda solo i giocatori. Il ruolo preciso e gran parte degli attributi professionali non sono decodificati; l’allenatore umano è riconoscibile. Preferenze = stile desiderato, non capacità. Paga nella valuta base del salvataggio; — indica un dato non disponibile. La dirigenza non è inclusa.</value>
+  </data>
+  <data name="StaffCount" xml:space="preserve">
+    <value>{0} persone mostrate su {1}. Seleziona una riga per i dettagli disponibili.</value>
+  </data>
+  <data name="StaffLoading" xml:space="preserve">
+    <value>Caricamento dello staff</value>
+  </data>
+  <data name="StaffLoaded" xml:space="preserve">
+    <value>Elenco dello staff aggiornato</value>
+  </data>
+  <data name="StaffLoadError" xml:space="preserve">
+    <value>Errore nel caricamento dello staff</value>
+  </data>
+  <data name="Backend_StaffClub" xml:space="preserve">
+    <value>Identificazione del club dello staff</value>
+  </data>
+  <data name="Backend_StaffProfiles" xml:space="preserve">
+    <value>Lettura dei contratti e dei profili dello staff</value>
+  </data>
+  <data name="Backend_StaffRows" xml:space="preserve">
+    <value>Preparazione elenco dello staff</value>
+  </data>
+  <data name="Backend_StaffPeople" xml:space="preserve">
+    <value>persone</value>
+  </data>
+  <data name="StaffAttribute_adaptability" xml:space="preserve">
+    <value>Adattabilità (stesso valore della personalità)</value>
+  </data>
+  <data name="StaffPersonality_adaptability" xml:space="preserve">
+    <value>Adattabilità</value>
+  </data>
+  <data name="StaffPersonality_ambition" xml:space="preserve">
+    <value>Ambizione</value>
+  </data>
+  <data name="StaffPersonality_loyalty" xml:space="preserve">
+    <value>Lealtà</value>
+  </data>
+  <data name="StaffPersonality_pressure" xml:space="preserve">
+    <value>Gestione della pressione</value>
+  </data>
+  <data name="StaffPersonality_professionalism" xml:space="preserve">
+    <value>Professionalità</value>
+  </data>
+  <data name="StaffPersonality_sportsmanship" xml:space="preserve">
+    <value>Sportività</value>
+  </data>
+  <data name="StaffPersonality_temperament" xml:space="preserve">
+    <value>Temperamento</value>
+  </data>
+  <data name="StaffPersonality_controversy" xml:space="preserve">
+    <value>Controversia</value>
+  </data>
+  <data name="StaffPreference_attacking" xml:space="preserve">
+    <value>Propensione offensiva</value>
+  </data>
+  <data name="StaffPreference_business" xml:space="preserve">
+    <value>Orientamento commerciale</value>
+  </data>
+  <data name="StaffPreference_directness" xml:space="preserve">
+    <value>Passaggi diretti</value>
+  </data>
+  <data name="StaffPreference_interference" xml:space="preserve">
+    <value>Intromissione</value>
+  </data>
+  <data name="StaffPreference_patience" xml:space="preserve">
+    <value>Pazienza</value>
+  </data>
+  <data name="StaffPreference_trigger_press" xml:space="preserve">
+    <value>Propensione al pressing</value>
+  </data>
+  <data name="StaffPreference_resources" xml:space="preserve">
+    <value>Impiego delle risorse</value>
+  </data>
+  <data name="StaffPreference_buying_players" xml:space="preserve">
+    <value>Propensione agli acquisti</value>
+  </data>
+  <data name="StaffPreference_mind_games" xml:space="preserve">
+    <value>Giochi mentali</value>
+  </data>
+  <data name="StaffPreference_flexibility" xml:space="preserve">
+    <value>Flessibilità</value>
+  </data>
+  <data name="StaffPreference_hardness_of_training" xml:space="preserve">
+    <value>Durezza degli allenamenti</value>
+  </data>
+  <data name="StaffPreference_squad_rotation" xml:space="preserve">
+    <value>Rotazione della rosa</value>
+  </data>
+  <data name="StaffPreference_tempo" xml:space="preserve">
+    <value>Ritmo</value>
+  </data>
+  <data name="StaffPreference_width" xml:space="preserve">
+    <value>Ampiezza</value>
+  </data>
+  <data name="MySquadSecondNone" xml:space="preserve">
+    <value>Seconda posizione: nessuna</value>
+  </data>
+  <data name="MySquadStars" xml:space="preserve">
+    <value>Stelle (posizione)</value>
+  </data>
+  <data name="MySquadStarsValue" xml:space="preserve">
+    <value>{0:0.0}/5 · punteggio / 4, arrotondato a mezza stella</value>
+  </data>
+  <data name="MySquadTeamSlot" xml:space="preserve">
+    <value>Rosa · slot {0} · ID {1}</value>
+  </data>
+  <data name="MySquadTeamId" xml:space="preserve">
+    <value>Rosa · ID {0}</value>
+  </data>
+  <data name="MySquadTeamNamesHint" xml:space="preserve">
+    <value>Le sotto-squadre sono selezionabili singolarmente. Se il nome U20/U18/B non è leggibile, la rosa è identificata da slot e ID.</value>
+  </data>
+  <data name="TacticalPhaseIP" xml:space="preserve">
+    <value>In possesso</value>
+  </data>
+  <data name="TacticalPhaseOP" xml:space="preserve">
+    <value>Non in possesso</value>
+  </data>
+  <data name="TacticalGeneric" xml:space="preserve">
+    <value>Profilo generico della posizione</value>
+  </data>
+  <data name="TacticalCriteria" xml:space="preserve">
+    <value>Criteri e fonti</value>
+  </data>
+  <data name="TacticalTarget" xml:space="preserve">
+    <value>Posizione e sottoruolo</value>
+  </data>
+  <data name="TacticalWeight" xml:space="preserve">
+    <value>Peso</value>
+  </data>
+  <data name="TacticalEstimateShort" xml:space="preserve">
+    <value>Stima dell’editor: pesi consultabili in Criteri e fonti.</value>
+  </data>
+  <data name="TacticalSelectSecond" xml:space="preserve">
+    <value>Seleziona prima la seconda posizione.</value>
+  </data>
+  <data name="TacticalOfficialSource" xml:space="preserve">
+    <value>Principi ufficiali Sports Interactive</value>
+  </data>
+  <data name="TacticalCatalogueSource" xml:space="preserve">
+    <value>Catalogo FM26 verificato dalla community</value>
+  </data>
+  <data name="TacticalMethod" xml:space="preserve">
+    <value>Sports Interactive indica familiarità nella posizione e attributi del ruolo come fattori di idoneità; nelle fonti consultate non è pubblicata la formula numerica. Questi profili e pesi sono valutazioni dell’editor, non dati ufficiali di idoneità. Profilo generico: pesi 3/2/1 del report per posizione. Sottoruolo: attributi di enfasi ×3, supporto ×2 e restanti attributi della posizione ×1. Si usa la media ponderata dei valori visibili 1–20; occorrono tutti i dati e familiarità ≥12/20. Due selezioni: media dei due punteggi, con idoneità richiesta in entrambe. Stelle = punteggio/4, arrotondate a mezza stella; CA e PA non alterano il punteggio. Nomi inglesi e disponibilità derivano dal catalogo di riferimento FM26; le traduzioni italiane sono descrittive.</value>
+  </data>
+  <data name="QuickComparePair" xml:space="preserve"><value>Confronta i due giocatori selezionati</value></data>
+  <data name="TacticsTab" xml:space="preserve"><value>Migliori per tattica</value></data>
+  <data name="TacticsBoth" xml:space="preserve"><value>Entrambe le fasi</value></data>
+  <data name="TacticsUnknownRole" xml:space="preserve"><value>Sottoruolo non riconosciuto</value></data>
+  <data name="TacticsUnavailable" xml:space="preserve"><value>Tattiche non disponibili: {0}</value></data>
+  <data name="TacticsEmpty" xml:space="preserve"><value>Apri un salvataggio e seleziona una squadra gestita per leggere le tattiche.</value></data>
+  <data name="TacticsCannotRank" xml:space="preserve"><value>Posizione o sottoruolo non riconosciuto nella fase selezionata: suggerimenti non disponibili.</value></data>
+  <data name="TacticsMethod" xml:space="preserve"><value>Fino a {0} giocatori della rosa filtrata, con familiarità almeno 12/20 in ogni posizione richiesta. Per entrambe le fasi si usa la media dei due profili. Punteggio e stelle sono stime dell’editor, non la valutazione ufficiale del gioco.</value></data>
+  <data name="TacticsLoading" xml:space="preserve"><value>Lettura delle tattiche della squadra…</value></data>
+  <data name="TacticsLoaded" xml:space="preserve"><value>Tattiche caricate</value></data>
+  <data name="TacticsLoadError" xml:space="preserve"><value>Impossibile leggere le tattiche</value></data>
+  <data name="OptionsButton" xml:space="preserve"><value>Opzioni…</value></data>
+  <data name="OptionsTitle" xml:space="preserve"><value>Opzioni</value></data>
+  <data name="RecommendationCountLabel" xml:space="preserve"><value>Giocatori suggeriti per posizione</value></data>
+  <data name="RecommendationCountHint" xml:space="preserve"><value>Da 1 a 100, predefinito 10. Vale per Migliori per posizione e Migliori per tattica.</value></data>
+  <data name="OptionsCancel" xml:space="preserve"><value>Annulla</value></data>
+  <data name="OptionsSave" xml:space="preserve"><value>Salva</value></data>
+  <data name="IncludeOutgoingLoans" xml:space="preserve"><value>Includi giocatori dati in prestito</value></data>
+  <data name="IncludeOutgoingLoansHint" xml:space="preserve"><value>Include i giocatori di proprietà del club che giocano altrove, nella prima squadra o in tutte le squadre. Non assegna loro una sotto-squadra non verificata.</value></data>
 </root>

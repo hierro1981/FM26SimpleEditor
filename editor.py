@@ -14,6 +14,9 @@ from fmsave.readers.player_scan import window_end
 from archive_rewrite import rewrite
 from operation_progress import ProgressReporter, report, scaled
 from history_reader import embedded_history
+from my_squad import read_my_squad
+from staff_reader import read_my_staff
+from tactics_reader import read_my_tactics
 
 
 def integer(value, minimum, maximum, label):
@@ -46,7 +49,7 @@ def player_row(player, clock):
     positions = {key: getattr(player.positions, key.lower()) for key in POSITION_ORDER}
     main = primary_position(positions)
     return dict(uid=player.uid, id=player.unique_id, name=player.name or f"Giocatore {player.uid}",
-                team=team, ownerTeam=owner, birth=player.birth_date.isoformat() if player.birth_date else None,
+                team=team, ownerTeam=owner, ownerClubUid=getattr(player, "loan_parent_club_uid", None) if player.on_loan is True else player.club_uid, birth=player.birth_date.isoformat() if player.birth_date else None,
                 ca=player.ability.current, pa=player.ability.potential,
                 paRange=player.ability.potential_range_code, teamId=player.team_id, clubUid=player.club_uid,
                 age=player.age, height=player.height_cm if player.height_cm > 0 else None,
@@ -411,7 +414,7 @@ def serve():
             try:
                 request = json.loads(line)
                 command = request.get("command")
-                progress = ProgressReporter() if command in {"open", "save", "inspect"} else None
+                progress = ProgressReporter() if command in {"open", "save", "inspect", "my_squad", "my_staff", "my_tactics"} else None
                 if command == "open":
                     new_store = PlayerStore(request["source"], scaled(progress, 0, 95))
                     if store is not None:
@@ -426,6 +429,12 @@ def serve():
                     result = store.inspect(request.get("uid"), scaled(progress, 0, 95))
                 elif command == "search":
                     result = search_rows(store.rows, request, store.save.info.game_date)
+                elif command == "my_staff":
+                    result = read_my_staff(store, request.get("clubUid"), scaled(progress, 0, 95))
+                elif command == "my_tactics":
+                    result = read_my_tactics(store, request.get("clubUid"), scaled(progress, 0, 95))
+                elif command == "my_squad":
+                    result = read_my_squad(store, scaled(progress, 0, 95))
                 elif command == "history":
                     result = history(store, request)
                 elif command == "save":

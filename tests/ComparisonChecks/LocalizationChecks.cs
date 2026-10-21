@@ -26,7 +26,18 @@ internal static class LocalizationChecks
         try
         {
             check(AppSettings.Load(directory).Language == "it", "missing configuration defaults to Italian");
+            check(AppSettings.Load(directory).RecommendationCount == 10, "missing recommendation count defaults to ten");
+            AppSettings.Save(directory, new AppSettings("en", 23));
+            check(AppSettings.Load(directory) == new AppSettings("en", 23), "all options round trip together");
             AppSettings.Save(directory, "en");
+            check(AppSettings.Load(directory).RecommendationCount == 23, "language-only compatibility save retains recommendation count");
+            foreach (string invalidCount in new[] { "0", "101", "-2", "1.5", "null", "\"ten\"" })
+            {
+                File.WriteAllText(Path.Combine(directory, AppSettings.FileName), "{\"language\":\"en\",\"recommendationCount\":" + invalidCount + "}");
+                check(AppSettings.Load(directory) == new AppSettings("en", 10), "invalid stored count falls back without losing language: " + invalidCount);
+            }
+            File.WriteAllText(Path.Combine(directory, AppSettings.FileName), "{\"language\":\"en\"}");
+            check(AppSettings.Load(directory) == new AppSettings("en", 10), "old language-only configuration remains compatible");
             check(AppSettings.Load(directory).Language == "en" && JsonDocument.Parse(File.ReadAllText(Path.Combine(directory, AppSettings.FileName))).RootElement.GetProperty("language").GetString() == "en", "language preference round-trips through local JSON");
             File.WriteAllText(Path.Combine(directory, AppSettings.FileName), "{broken");
             check(AppSettings.Load(directory).Language == "it", "malformed configuration does not block startup");
@@ -45,10 +56,10 @@ internal static class LocalizationChecks
         }
         finally { L10n.SetLanguage("it"); Directory.Delete(directory, recursive: true); }
         check(UpdateChecker.TryVersion("v13", out var simple) && UpdateChecker.TryVersion("v13.0.0", out var full) && simple == full, "release version components normalize");
-        check(UpdateChecker.TryVersion("v9", out var older) && UpdateChecker.TryVersion("v13.2", out var newer) && older < AppInfo.Version && newer > AppInfo.Version, "release version comparison is numeric");
+        check(UpdateChecker.TryVersion("v9", out var older) && UpdateChecker.TryVersion("v99", out var newer) && older < AppInfo.Version && newer > AppInfo.Version, "release version comparison is numeric");
         check(!UpdateChecker.TryVersion("v14-beta", out _) && !UpdateChecker.TryVersion("latest", out _) && !UpdateChecker.TryVersion("v999999999999", out _), "invalid and prerelease versions are rejected");
         string Json(string tag, string url, bool draft = false, bool pre = false) => JsonSerializer.Serialize(new { tag_name = tag, html_url = url, draft, prerelease = pre });
-        check(UpdateChecker.Parse(Json("v14", AppInfo.RepositoryUrl + "/releases/tag/v14"))?.Version > AppInfo.Version, "valid newer GitHub release is recognized");
+        check(UpdateChecker.Parse(Json("v99", AppInfo.RepositoryUrl + "/releases/tag/v99"))?.Version > AppInfo.Version, "valid newer GitHub release is recognized");
         check(UpdateChecker.Parse(Json("v14", "https://example.org/releases/tag/v14")) is null && UpdateChecker.Parse(Json("v14", "http://github.com/hierro1981/FM26SimpleEditor/releases/tag/v14")) is null, "release links are restricted to this HTTPS GitHub repository");
         check(UpdateChecker.Parse(Json("v14", AppInfo.RepositoryUrl + "/releases/tag/v14", pre: true)) is null && UpdateChecker.Parse(Json("v14", AppInfo.RepositoryUrl + "/releases/tag/v14", draft: true)) is null && UpdateChecker.Parse("{}") is null, "draft, prerelease and incomplete release payloads are ignored");
         using (var about = new AboutForm(_ => Task.FromResult<ReleaseUpdate?>(new(new Version(99, 0, 0), "v99", new Uri(AppInfo.RepositoryUrl + "/releases/tag/v99")))))
@@ -72,7 +83,16 @@ internal static class LocalizationChecks
     {
         L10n.SetLanguage("it");
         using var main = new MainForm("python", directory); main.Show(); Application.DoEvents();
-        var language = All(main).OfType<ComboBox>().Single(c => c.Name == "LanguageSelector");
+        check(!All(main).OfType<ComboBox>().Any(c => c.Name == "LanguageSelector") && All(main).OfType<Button>().Any(b => b.Name == "OptionsButton"), "main toolbar exposes options instead of inline language selector");
+        void SetOptions(string language, int count = 10) => typeof(MainForm).GetMethod("ApplySettings", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.Invoke(main, [new AppSettings(language, count)]);
+        using (var dialog = new OptionsForm(new AppSettings("en", 23)))
+        {
+            var language = All(dialog).OfType<ComboBox>().Single(c => c.Name == "LanguageSelector");
+            var count = All(dialog).OfType<NumericUpDown>().Single();
+            check(language.SelectedIndex == 1 && count.Value == 23 && count.Minimum == 1 && count.Maximum == 100, "options dialog initializes both settings and bounds");
+            language.SelectedIndex = 0; count.Value = 10;
+            check(dialog.Settings == new AppSettings("it", 10) && AppSettings.Load(directory).Language == "it", "editing options alone does not write configuration");
+        }
         var filters = All(main).OfType<SearchOptions>().Single();
         var age = All(filters).OfType<OptionalRangeFilter>().Single(c => c.Text == "Età (anni)");
         age.Controls[0].Controls.OfType<CheckBox>().Single().Checked = true;
@@ -87,7 +107,8 @@ internal static class LocalizationChecks
         ((Dictionary<uint, PlayerRow>)typeof(MainForm).GetField("catalogByUid", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.GetValue(main)!).Add(99, player.Player);
         typeof(MainForm).GetMethod("SetDetail", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.Invoke(main, [player]);
         player.Attributes[0].Value = 80;
-        language.SelectedIndex = 1; Application.DoEvents();
+        SetOptions("en", 17); Application.DoEvents();
+        check(SquadSelection.ResultLimit == 17 && AppSettings.Load(directory).RecommendationCount == 17, "options apply one shared recommendation limit and persist it");
         check(L10n.Language == "en" && AppSettings.Load(directory).Language == "en" && All(main).OfType<Button>().Any(b => b.Text == "Open save") && All(main).OfType<TabPage>().Any(t => t.Text == "1  Player search"), "language select updates interface and persists preference immediately");
         check(All(main).OfType<TabPage>().Any(t => t.Text == "4  Comparison (1)"), "comparison pool count tab caption changes language");
         check(player.Attributes[0].Value == 80 && player.Attributes[0].Label == "Technique" && All(main).OfType<Label>().Any(l => l.Text == "Portiere") && All(main).OfType<Label>().Any(l => l.Text == "Contratto") && All(main).OfType<Label>().Any(l => l.Text.StartsWith("Public ID:")), "language switch preserves unsaved values and player/team names while translating identity labels");
@@ -95,7 +116,7 @@ internal static class LocalizationChecks
         check(All(filters).OfType<GroupBox>().Any(g => g.Text == "Age (years)") && All(filters).OfType<ComboBox>().SelectMany(c => c.Items.Cast<object>()).Any(i => i.ToString() == "Expires within 6 months"), "filter captions and dropdown choices are localized");
         check(All(main).OfType<DataGridView>().Any(g => g.Columns.Cast<DataGridViewColumn>().Any(c => c.HeaderText == "Main position")) && All(main).OfType<TextBox>().Any(t => t.PlaceholderText == "Filter teams, e.g. tri"), "column headers and search placeholders are localized");
         check(All(main).OfType<HistoryPanel>().SelectMany(All).OfType<Button>().Any(b => b.Text == "Add saves…") && All(main).OfType<ComparisonPanel>().SelectMany(All).OfType<CheckBox>().Any(c => c.Text == "Show pitches"), "history and comparison static controls update together");
-        language.SelectedIndex = 0; Application.DoEvents();
+        SetOptions("it"); Application.DoEvents();
         check(AppSettings.Load(directory).Language == "it" && All(main).OfType<Button>().Any(b => b.Text == "Apri salvataggio") && age.Text == "Età (anni)", "language switch back restores Italian without clearing filters");
         All(main).OfType<TabControl>().First().SelectedIndex = 1; Application.DoEvents();
         var copies = All(main).OfType<CopyValueButton>().ToDictionary(b => b.Name);

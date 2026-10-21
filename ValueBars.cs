@@ -72,3 +72,40 @@ public sealed class ValueMeter : Control
     }
 }
 
+
+// Numeric cell value remains available to accessibility tools; glyphs show half stars.
+public sealed class StarRatingCell : DataGridViewTextBoxCell
+{
+    protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex,
+        DataGridViewElementStates cellState, object? value, object? formattedValue, string? errorText,
+        DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
+    {
+        base.Paint(graphics, clipBounds, cellBounds, rowIndex, cellState, value, formattedValue, errorText, cellStyle, advancedBorderStyle,
+            paintParts & ~DataGridViewPaintParts.ContentForeground);
+        if (value is not double rating) return;
+        var saved = graphics.Save();
+        graphics.SetClip(Rectangle.Intersect(cellBounds, clipBounds));
+        graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+        float size = Math.Min(22, Math.Min(cellBounds.Height - 8, (cellBounds.Width - 12) / 5f - 2));
+        if (size <= 0) { graphics.Restore(saved); return; }
+        using var empty = new SolidBrush(Color.FromArgb(222, 222, 217));
+        using var gold = new SolidBrush(Color.FromArgb(230, 175, 48));
+        using var outline = new Pen(Color.FromArgb(155, 133, 78));
+        for (int star = 0; star < 5; star++)
+        {
+            float left = cellBounds.X + 6 + star * (size + 2), top = cellBounds.Y + (cellBounds.Height - size) / 2;
+            var points = Enumerable.Range(0, 10).Select(i =>
+            {
+                double angle = -Math.PI / 2 + i * Math.PI / 5;
+                double radius = i % 2 == 0 ? size * .48 : size * .21;
+                return new PointF(left + size / 2 + (float)(Math.Cos(angle) * radius), top + size / 2 + (float)(Math.Sin(angle) * radius));
+            }).ToArray();
+            graphics.FillPolygon(empty, points);
+            var clipping = graphics.Save();
+            graphics.IntersectClip(new RectangleF(left, top, size * (float)Math.Clamp(rating - star, 0, 1), size));
+            graphics.FillPolygon(gold, points); graphics.Restore(clipping);
+            graphics.DrawPolygon(outline, points);
+        }
+        graphics.Restore(saved);
+    }
+}

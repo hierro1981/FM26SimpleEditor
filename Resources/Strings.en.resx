@@ -1579,4 +1579,305 @@ Hover over a position for its rating.</value>
   <data name="Backend_Inspect_12" xml:space="preserve">
     <value>attributes</value>
   </data>
+  <data name="MySquadTab" xml:space="preserve">
+    <value>6  My squad</value>
+  </data>
+  <data name="MySquadClub" xml:space="preserve">
+    <value>Managed club</value>
+  </data>
+  <data name="MySquadSearch" xml:space="preserve">
+    <value>Search the squad by name or ID</value>
+  </data>
+  <data name="MySquadRoster" xml:space="preserve">
+    <value>Squad list</value>
+  </data>
+  <data name="MySquadBest" xml:space="preserve">
+    <value>Best players by position</value>
+  </data>
+  <data name="MySquadScore" xml:space="preserve">
+    <value>Score /20</value>
+  </data>
+  <data name="MySquadFamiliarity" xml:space="preserve">
+    <value>Familiarity /20</value>
+  </data>
+  <data name="MySquadFirst" xml:space="preserve">
+    <value>First team only</value>
+  </data>
+  <data name="MySquadOther" xml:space="preserve">
+    <value>Other squads</value>
+  </data>
+  <data name="MySquadAll" xml:space="preserve">
+    <value>All players</value>
+  </data>
+  <data name="MySquadReload" xml:space="preserve">
+    <value>Refresh squad</value>
+  </data>
+  <data name="MySquadOpen" xml:space="preserve">
+    <value>Open a save to identify the club you manage.</value>
+  </data>
+  <data name="MySquadNone" xml:space="preserve">
+    <value>No managed club identified: the first human manager may be between jobs.</value>
+  </data>
+  <data name="MySquadUnavailable" xml:space="preserve">
+    <value>Could not identify the managed club: {0}</value>
+  </data>
+  <data name="MySquadFirstHuman" xml:space="preserve">
+    <value>Detects the save’s first human manager. Other human managers in multiplayer saves are not yet supported.</value>
+  </data>
+  <data name="MySquadCount" xml:space="preserve">
+    <value>Showing {0} of {1} players in the selected squad</value>
+  </data>
+  <data name="MySquadRankingInfo" xml:space="preserve">
+    <value>{0} candidates for the selected position, from {1} squad members.</value>
+  </data>
+  <data name="MySquadMethod" xml:space="preserve">
+    <value>Ctrl/Shift+click or the menus: up to two positions/tactical roles. Familiarity ≥12/20 in both. Estimated stars, not the game’s stars. PA is informational; saved data.</value>
+  </data>
+  <data name="MySquadLoading" xml:space="preserve">
+    <value>Loading my squad</value>
+  </data>
+  <data name="MySquadLoaded" xml:space="preserve">
+    <value>Squad data refreshed</value>
+  </data>
+  <data name="MySquadLoadError" xml:space="preserve">
+    <value>Could not load squad data</value>
+  </data>
+  <data name="Backend_MySquadIdentification" xml:space="preserve">
+    <value>Identifying the managed club</value>
+  </data>
+  <data name="Backend_MySquadAttributes" xml:space="preserve">
+    <value>Reading squad members and attributes</value>
+  </data>
+  <data name="StaffTab" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="StaffSearch" xml:space="preserve">
+    <value>Search staff by name, club or ID</value>
+  </data>
+  <data name="StaffReload" xml:space="preserve">
+    <value>Refresh staff</value>
+  </data>
+  <data name="StaffRole" xml:space="preserve">
+    <value>Job title</value>
+  </data>
+  <data name="StaffHuman" xml:space="preserve">
+    <value>Human manager</value>
+  </data>
+  <data name="StaffUnknownRole" xml:space="preserve">
+    <value>Not identified</value>
+  </data>
+  <data name="StaffClub" xml:space="preserve">
+    <value>Contract / staff club</value>
+  </data>
+  <data name="StaffListedClub" xml:space="preserve">
+    <value>Listed at club</value>
+  </data>
+  <data name="StaffBirth" xml:space="preserve">
+    <value>Date of birth</value>
+  </data>
+  <data name="StaffWage" xml:space="preserve">
+    <value>Weekly pay (base currency)</value>
+  </data>
+  <data name="StaffContract" xml:space="preserve">
+    <value>Contract</value>
+  </data>
+  <data name="StaffContractFound" xml:space="preserve">
+    <value>Found</value>
+  </data>
+  <data name="StaffContractMissing" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="StaffContractStart" xml:space="preserve">
+    <value>Contract start</value>
+  </data>
+  <data name="StaffGroup" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="StaffValue" xml:space="preserve">
+    <value>Value /20</value>
+  </data>
+  <data name="StaffPersonality" xml:space="preserve">
+    <value>Personality</value>
+  </data>
+  <data name="StaffPreferences" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="StaffAttributes" xml:space="preserve">
+    <value>Decoded attributes</value>
+  </data>
+  <data name="StaffSelectClub" xml:space="preserve">
+    <value>Identify the managed club first to read its staff.</value>
+  </data>
+  <data name="StaffPending" xml:space="preserve">
+    <value>Open this sub-tab to load staff.</value>
+  </data>
+  <data name="StaffUnavailable" xml:space="preserve">
+    <value>Staff reading unavailable: {0}</value>
+  </data>
+  <data name="StaffReadOnlyNote" xml:space="preserve">
+    <value>Read-only: staff of the whole club and its controlled affiliates; the squad filter applies only to players. Exact job titles and most professional attributes are not decoded; the human manager is identifiable. Preferences describe desired style, not ability. Pay uses the save’s base currency; — means unavailable. The board is not included.</value>
+  </data>
+  <data name="StaffCount" xml:space="preserve">
+    <value>Showing {0} of {1} people. Select a row for available details.</value>
+  </data>
+  <data name="StaffLoading" xml:space="preserve">
+    <value>Loading staff</value>
+  </data>
+  <data name="StaffLoaded" xml:space="preserve">
+    <value>Staff list refreshed</value>
+  </data>
+  <data name="StaffLoadError" xml:space="preserve">
+    <value>Could not load staff</value>
+  </data>
+  <data name="Backend_StaffClub" xml:space="preserve">
+    <value>Identifying the staff club</value>
+  </data>
+  <data name="Backend_StaffProfiles" xml:space="preserve">
+    <value>Reading staff contracts and profiles</value>
+  </data>
+  <data name="Backend_StaffRows" xml:space="preserve">
+    <value>Preparing the staff list</value>
+  </data>
+  <data name="Backend_StaffPeople" xml:space="preserve">
+    <value>people</value>
+  </data>
+  <data name="StaffAttribute_adaptability" xml:space="preserve">
+    <value>Adaptability (same value as personality)</value>
+  </data>
+  <data name="StaffPersonality_adaptability" xml:space="preserve">
+    <value>Adaptability</value>
+  </data>
+  <data name="StaffPersonality_ambition" xml:space="preserve">
+    <value>Ambition</value>
+  </data>
+  <data name="StaffPersonality_loyalty" xml:space="preserve">
+    <value>Loyalty</value>
+  </data>
+  <data name="StaffPersonality_pressure" xml:space="preserve">
+    <value>Pressure</value>
+  </data>
+  <data name="StaffPersonality_professionalism" xml:space="preserve">
+    <value>Professionalism</value>
+  </data>
+  <data name="StaffPersonality_sportsmanship" xml:space="preserve">
+    <value>Sportsmanship</value>
+  </data>
+  <data name="StaffPersonality_temperament" xml:space="preserve">
+    <value>Temperament</value>
+  </data>
+  <data name="StaffPersonality_controversy" xml:space="preserve">
+    <value>Controversy</value>
+  </data>
+  <data name="StaffPreference_attacking" xml:space="preserve">
+    <value>Attacking</value>
+  </data>
+  <data name="StaffPreference_business" xml:space="preserve">
+    <value>Business</value>
+  </data>
+  <data name="StaffPreference_directness" xml:space="preserve">
+    <value>Directness</value>
+  </data>
+  <data name="StaffPreference_interference" xml:space="preserve">
+    <value>Interference</value>
+  </data>
+  <data name="StaffPreference_patience" xml:space="preserve">
+    <value>Patience</value>
+  </data>
+  <data name="StaffPreference_trigger_press" xml:space="preserve">
+    <value>Trigger press</value>
+  </data>
+  <data name="StaffPreference_resources" xml:space="preserve">
+    <value>Resources</value>
+  </data>
+  <data name="StaffPreference_buying_players" xml:space="preserve">
+    <value>Buying players</value>
+  </data>
+  <data name="StaffPreference_mind_games" xml:space="preserve">
+    <value>Mind games</value>
+  </data>
+  <data name="StaffPreference_flexibility" xml:space="preserve">
+    <value>Flexibility</value>
+  </data>
+  <data name="StaffPreference_hardness_of_training" xml:space="preserve">
+    <value>Hardness of training</value>
+  </data>
+  <data name="StaffPreference_squad_rotation" xml:space="preserve">
+    <value>Squad rotation</value>
+  </data>
+  <data name="StaffPreference_tempo" xml:space="preserve">
+    <value>Tempo</value>
+  </data>
+  <data name="StaffPreference_width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="MySquadSecondNone" xml:space="preserve">
+    <value>Second position: none</value>
+  </data>
+  <data name="MySquadStars" xml:space="preserve">
+    <value>Stars (position)</value>
+  </data>
+  <data name="MySquadStarsValue" xml:space="preserve">
+    <value>{0:0.0}/5 · score / 4, rounded to half a star</value>
+  </data>
+  <data name="MySquadTeamSlot" xml:space="preserve">
+    <value>Squad · slot {0} · ID {1}</value>
+  </data>
+  <data name="MySquadTeamId" xml:space="preserve">
+    <value>Squad · ID {0}</value>
+  </data>
+  <data name="MySquadTeamNamesHint" xml:space="preserve">
+    <value>Individual squads can be selected. Where a U20/U18/B name is not readable, the squad is identified by slot and ID.</value>
+  </data>
+  <data name="TacticalPhaseIP" xml:space="preserve">
+    <value>In possession</value>
+  </data>
+  <data name="TacticalPhaseOP" xml:space="preserve">
+    <value>Out of possession</value>
+  </data>
+  <data name="TacticalGeneric" xml:space="preserve">
+    <value>General position profile</value>
+  </data>
+  <data name="TacticalCriteria" xml:space="preserve">
+    <value>Criteria and sources</value>
+  </data>
+  <data name="TacticalTarget" xml:space="preserve">
+    <value>Position and tactical role</value>
+  </data>
+  <data name="TacticalWeight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="TacticalEstimateShort" xml:space="preserve">
+    <value>Editor estimate: weights are listed under Criteria and sources.</value>
+  </data>
+  <data name="TacticalSelectSecond" xml:space="preserve">
+    <value>Select the second position first.</value>
+  </data>
+  <data name="TacticalOfficialSource" xml:space="preserve">
+    <value>Official Sports Interactive principles</value>
+  </data>
+  <data name="TacticalCatalogueSource" xml:space="preserve">
+    <value>Community-verified FM26 catalogue</value>
+  </data>
+  <data name="TacticalMethod" xml:space="preserve">
+    <value>Sports Interactive identifies positional familiarity and role attributes as suitability factors; the consulted sources do not publish the numerical formula. These attribute profiles and weights are editor assessments, not official suitability data. General profile: the existing 3/2/1 position-report weights. Named role: focus attributes ×3, support ×2 and remaining position attributes ×1. Uses the weighted mean of visible 1–20 values; requires complete data and familiarity ≥12/20. Two selections: mean of both scores, with suitability required in both. Stars = score/4, rounded to half a star; CA and PA do not change scores. English names and availability follow the FM26 reference catalogue; Italian translations are descriptive.</value>
+  </data>
+  <data name="QuickComparePair" xml:space="preserve"><value>Compare the two selected players</value></data>
+  <data name="TacticsTab" xml:space="preserve"><value>Best by tactic</value></data>
+  <data name="TacticsBoth" xml:space="preserve"><value>Both phases</value></data>
+  <data name="TacticsUnknownRole" xml:space="preserve"><value>Unrecognised role</value></data>
+  <data name="TacticsUnavailable" xml:space="preserve"><value>Tactics unavailable: {0}</value></data>
+  <data name="TacticsEmpty" xml:space="preserve"><value>Open a save and select a managed club to read tactics.</value></data>
+  <data name="TacticsCannotRank" xml:space="preserve"><value>Unrecognised position or role in the selected phase: recommendations unavailable.</value></data>
+  <data name="TacticsMethod" xml:space="preserve"><value>Up to {0} players from the filtered squad, with familiarity of at least 12/20 in each required position. Both phases use the mean of the two profiles. Scores and stars are editor estimates, not the official game rating.</value></data>
+  <data name="TacticsLoading" xml:space="preserve"><value>Reading team tactics…</value></data>
+  <data name="TacticsLoaded" xml:space="preserve"><value>Tactics loaded</value></data>
+  <data name="TacticsLoadError" xml:space="preserve"><value>Unable to read tactics</value></data>
+  <data name="OptionsButton" xml:space="preserve"><value>Options…</value></data>
+  <data name="OptionsTitle" xml:space="preserve"><value>Options</value></data>
+  <data name="RecommendationCountLabel" xml:space="preserve"><value>Suggested players per position</value></data>
+  <data name="RecommendationCountHint" xml:space="preserve"><value>From 1 to 100; default 10. Applies to Best by position and Best by tactic.</value></data>
+  <data name="OptionsCancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="OptionsSave" xml:space="preserve"><value>Save</value></data>
+  <data name="IncludeOutgoingLoans" xml:space="preserve"><value>Include players loaned out</value></data>
+  <data name="IncludeOutgoingLoansHint" xml:space="preserve"><value>Include players owned by the club who are playing elsewhere, for first-team or all-squad views. No unverified youth or reserve assignment is assumed.</value></data>
 </root>

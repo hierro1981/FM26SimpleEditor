@@ -2,7 +2,7 @@ name: Validate comparison (DLL only)
 
 on:
   push:
-    branches: [main, v12, v13, v14]
+    branches: [main, v12, v13, v14, v14.6]
     paths: ["**/*.cs", "**/*.csproj", "**/*.resx", "**/*.py", "Data/*.json", ".github/workflows/validate.yml"]
   pull_request:
     branches: [main]

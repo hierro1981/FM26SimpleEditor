@@ -1715,7 +1715,7 @@ Hover over a position for its rating.</value>
     <value>Staff reading unavailable: {0}</value>
   </data>
   <data name="StaffReadOnlyNote" xml:space="preserve">
-    <value>Read-only: staff of the whole club and its controlled affiliates; the squad filter applies only to players. Exact job titles and most professional attributes are not decoded; the human manager is identifiable. Preferences describe desired style, not ability. Pay uses the save’s base currency; — means unavailable. The board is not included.</value>
+    <value>Read-only: staff of the whole club and its controlled affiliates; the squad filter applies only to players. Attributes use a 1–20 scale, where readable. Exact job titles remain unknown; the human manager is identifiable. Preferences describe desired style, not ability. Pay uses the save’s base currency; — means unavailable. The board is not included.</value>
   </data>
   <data name="StaffCount" xml:space="preserve">
     <value>Showing {0} of {1} people. Select a row for available details.</value>
@@ -1880,4 +1880,64 @@ Hover over a position for its rating.</value>
   <data name="OptionsSave" xml:space="preserve"><value>Save</value></data>
   <data name="IncludeOutgoingLoans" xml:space="preserve"><value>Include players loaned out</value></data>
   <data name="IncludeOutgoingLoansHint" xml:space="preserve"><value>Include players owned by the club who are playing elsewhere, for first-team or all-squad views. No unverified youth or reserve assignment is assumed.</value></data>
+  <data name="StaffAttribute_coaching" xml:space="preserve">
+    <value>General coaching</value>
+  </data>
+  <data name="StaffAttribute_coaching_goalkeeping" xml:space="preserve">
+    <value>Goalkeeping coaching</value>
+  </data>
+  <data name="StaffAttribute_judging_ability" xml:space="preserve">
+    <value>Judging player ability</value>
+  </data>
+  <data name="StaffAttribute_judging_potential" xml:space="preserve">
+    <value>Judging player potential</value>
+  </data>
+  <data name="StaffAttribute_motivating" xml:space="preserve">
+    <value>Motivating</value>
+  </data>
+  <data name="StaffAttribute_physiotherapy" xml:space="preserve">
+    <value>Physiotherapy</value>
+  </data>
+  <data name="StaffAttribute_tactical_knowledge" xml:space="preserve">
+    <value>Tactical knowledge</value>
+  </data>
+  <data name="StaffAttribute_coaching_attacking" xml:space="preserve">
+    <value>Attacking coaching</value>
+  </data>
+  <data name="StaffAttribute_coaching_defending" xml:space="preserve">
+    <value>Defending coaching</value>
+  </data>
+  <data name="StaffAttribute_coaching_fitness" xml:space="preserve">
+    <value>Fitness coaching</value>
+  </data>
+  <data name="StaffAttribute_coaching_possession" xml:space="preserve">
+    <value>Possession coaching</value>
+  </data>
+  <data name="StaffAttribute_coaching_technical" xml:space="preserve">
+    <value>Technical coaching</value>
+  </data>
+  <data name="StaffAttribute_coaching_tactical" xml:space="preserve">
+    <value>Tactical coaching</value>
+  </data>
+  <data name="StaffAttribute_goalkeeping_handling" xml:space="preserve">
+    <value>Goalkeeping: handling</value>
+  </data>
+  <data name="StaffAttribute_goalkeeping_distribution" xml:space="preserve">
+    <value>Goalkeeping: distribution</value>
+  </data>
+  <data name="StaffAttribute_analysing_data" xml:space="preserve">
+    <value>Analysing data</value>
+  </data>
+  <data name="StaffAttribute_sports_science" xml:space="preserve">
+    <value>Sports science</value>
+  </data>
+  <data name="StaffAttribute_eccentricity" xml:space="preserve">
+    <value>Eccentricity</value>
+  </data>
+  <data name="StaffAttribute_negotiating" xml:space="preserve">
+    <value>Negotiating</value>
+  </data>
+  <data name="StaffAttribute_judging_staff_ability" xml:space="preserve">
+    <value>Judging staff ability</value>
+  </data>
 </root>

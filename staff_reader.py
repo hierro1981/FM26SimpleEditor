@@ -1,11 +1,66 @@
 """Read-only staff at a verified human-managed club; no guessed job titles."""
 from operation_progress import report
+import struct
 
 PERSONALITY = ('adaptability', 'ambition', 'loyalty', 'pressure', 'professionalism',
                'sportsmanship', 'temperament', 'controversy')
 PREFERENCES = ('attacking', 'business', 'directness', 'interference', 'patience',
                'trigger_press', 'resources', 'buying_players', 'mind_games',
                'flexibility', 'hardness_of_training', 'squad_rotation', 'tempo', 'width')
+
+# Indices of the native generic non-player attribute enum, not the separate
+# job-dependent getter enum. See docs/StaffAttributes.md for the evidence.
+NATIVE_ATTRIBUTES = {
+    26: 'coaching', 27: 'coaching_goalkeeping', 28: 'judging_ability',
+    29: 'judging_potential', 31: 'motivating', 32: 'physiotherapy',
+    33: 'tactical_knowledge', 34: 'coaching_attacking', 35: 'coaching_defending',
+    36: 'coaching_fitness', 37: 'coaching_possession', 38: 'coaching_technical',
+    39: 'coaching_tactical', 41: 'goalkeeping_handling',
+    42: 'goalkeeping_distribution', 44: 'analysing_data', 47: 'sports_science',
+    48: 'eccentricity', 49: 'negotiating', 50: 'judging_staff_ability',
+}
+
+
+def native_staff_attributes(raw, person, layout):
+    """Read a uniquely identified, validated staff block; never modify it.
+
+    UID hits alone do not establish a record. Identity words, kind, complete
+    ability/preferences and all 26 further bytes must pass the pinned reader.
+    An ambiguous match yields no additional attributes.
+    """
+    from fmsave.readers.staff import _header_reader, _header_values, _read_ability_block
+
+    if person.is_human_manager or person.ability is None:
+        return {}
+    if (layout.preferences_offset, layout.preference_count, layout.block_40_offset,
+            layout.block_40_count, layout.sentinel_value) != (14, 26, 40, 26, 12):
+        return {}
+    if type(person.uid) is not int or not 0 < person.uid < 0xFFFFFFFF:
+        return {}
+    needle = struct.pack('<I', person.uid)
+    result = None
+    start = 0
+    reader = _header_reader(layout)
+    while (hit := raw.find(needle, start)) >= 0:
+        start = hit + 1
+        header = hit - layout.uid_offset
+        if _header_values(raw, header, reader, layout) != (person.uid, layout.staff_kind):
+            continue
+        block, preferences_ok, _, further_ok = _read_ability_block(raw, header, layout)
+        if (block is None or not preferences_ok or not further_ok
+                or block.ability != person.ability or block.preferences != person.preferences):
+            continue
+        if any(person.unknown.get(key) != value for key, value in block.unknown.items()):
+            continue
+        if result is not None:
+            return {}
+        ability_at = header + layout.ability_base_offset + layout.entry_bytes * raw[header + layout.entry_count_offset]
+        # The serializer copies native bytes +0x10..+0x43 after marker 12.
+        # Generic indices >= 26 use the native (raw + 2) / 5 conversion.
+        attributes_at = ability_at + layout.preferences_offset
+        result = {key: max(1, min(20, (raw[attributes_at + index] + 2) // 5))
+                  for index, key in NATIVE_ATTRIBUTES.items()}
+    return result or {}
 
 
 def values(record, keys):
@@ -28,12 +83,22 @@ def read_my_staff(store, club_uid, progress=None):
         associated = {club_uid} | {team.club_uid for team in club.teams}
         report(progress, 10, 'Lettura dei contratti e dei profili dello staff')
         decoded = list(store.save.staff())
+        native_layout = None
+        if getattr(store, 'raw', None) is not None:
+            try:
+                from fmsave.readers.staff import find_staff_layouts
+                native_layout = find_staff_layouts(store.save.info.section_schemas, store.save.info.build).staff
+            except (AttributeError, ValueError, LookupError):
+                pass  # Optional extension: keep the ordinary staff data available.
         result = []
         for index, person in enumerate(decoded):
             # fmsave assigns staff paid by a parent but listed at an affiliate to
             # the parent club. Include both parent and controlled team clubs.
             if person.club_uid in associated:
                 ability = person.ability
+                attributes = values(person.attributes, ('adaptability',))
+                if native_layout is not None:
+                    attributes.update(native_staff_attributes(store.raw, person, native_layout))
                 result.append(dict(
                     uid=person.uid, id=person.unique_id, name=person.name or str(person.uid),
                     clubUid=person.club_uid, clubName=person.club_name,
@@ -47,9 +112,9 @@ def read_my_staff(store, club_uid, progress=None):
                     ca=ability.current if ability else None,
                     pa=ability.potential if ability else None,
                     personality=values(person.personality, PERSONALITY),
-                    attributes=values(person.attributes, ('adaptability',)),
+                    attributes=attributes,
                     preferences=values(person.preferences, PREFERENCES)))
-            if (index + 1) % 1000 == 0 or index + 1 == len(decoded):
+            if person.club_uid in associated or (index + 1) % 1000 == 0 or index + 1 == len(decoded):
                 report(progress, 10 + 90 * (index + 1) / max(1, len(decoded)),
                        'Preparazione elenco dello staff', index + 1, len(decoded), 'persone')
         return dict(status='ready', clubUid=club_uid, staff=result)

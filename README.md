@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v14.5
+# FM26 Simple Editor · v14.6
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -10,7 +10,7 @@ Editor gratuito per **Football Manager 26** su Windows. Apri un salvataggio, cer
 
 ## Scarica e avvia
 
-Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione v14.5 include le novità descritte qui sotto.
+Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione pubblicata è la v14.5. Le novità della v14.6 sono in sviluppo nel relativo branch.
 
 - **Setup, quando presente nella release:** installazione guidata dell’editor, con opzioni per installare anche Python e il runtime .NET se necessari. Le installazioni aggiuntive richiedono il tuo consenso e una connessione Internet.
 - **ZIP portatile:** estrai tutto il contenuto in una cartella e avvia **FM26SimpleEditor.exe**. Conserva insieme tutti i file del pacchetto.
@@ -54,7 +54,7 @@ Puoi anche aggiungere giocatori all’elenco di confronto; ogni giocatore aperto
 - **Rosa:** elenco ordinato inizialmente per posizione e abilità attuale.
 - **Migliori per posizione:** seleziona posizione e sottoruolo per vedere un numero configurabile di candidati (10 predefiniti). Con **Ctrl/Shift+clic** sul campo puoi richiedere due posizioni; un secondo selettore permette anche due sottoruoli differenti nella stessa posizione.
 - **Migliori per tattica:** scegli una tattica della prima squadra e uno slot nei campi affiancati. Valuta i candidati per la fase in possesso, non in possesso o entrambe, con i sottoruoli effettivi della tattica. Il filtro della rosa si applica anche a questi suggerimenti.
-- **Staff:** consulta identità, contratti, abilità, personalità e preferenze leggibili. È una vista in sola lettura; incarichi e molti attributi professionali non sono ancora disponibili.
+- **Staff:** consulta identità, contratti, abilità, personalità, preferenze e 20 attributi professionali aggiuntivi su scala 1–20, dove leggibili. È una vista in sola lettura; gli incarichi precisi restano non identificati.
 
 I suggerimenti richiedono dati completi e una familiarità sufficiente nelle posizioni richieste. Quando scegli entrambe le fasi, un giocatore deve poter ricoprire entrambe. Un ruolo non riconosciuto non produce una raccomandazione generica al suo posto.
 
@@ -76,6 +76,11 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v14.6 · in sviluppo
+
+- Nel tab **Staff** sono disponibili 20 attributi aggiuntivi su scala 1–20, tra cui allenamento, valutazione di abilità e potenziale, motivazione, fisioterapia e scienze motorie.
+- Le informazioni dello staff restano in sola lettura; i campi non riconosciuti non vengono mostrati.
 
 ### v14.5
 

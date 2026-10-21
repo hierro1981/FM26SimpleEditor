@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v14.5
+# FM26 Simple Editor · v14.6
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -10,7 +10,7 @@ A free **Football Manager 26** editor for Windows. Open a save, find a player an
 
 ## Download and launch
 
-Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). Version v14.5 includes the features described below.
+Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The published version is v14.5. The v14.6 changes are in development on their branch.
 
 - **Setup, when available in the release:** guided installation, with options to install Python and the .NET runtime if needed. Additional installations require your consent and an Internet connection.
 - **Portable ZIP:** extract the complete package into a folder and run **FM26SimpleEditor.exe**. Keep all package files together.
@@ -54,7 +54,7 @@ Players can also be added to the comparison list; every opened player is added a
 - **Squad list:** initially sorted by position, then current ability.
 - **Best by position:** select a position and tactical role to see a configurable number of candidates (10 by default). **Ctrl/Shift+click** on the pitch requests two positions; a second selector also supports different roles in the same position.
 - **Best by tactic:** choose a first-team tactic and a slot on the paired pitches. Assess candidates for in possession, out of possession or both, using the tactic’s actual roles. The squad filter also applies to these recommendations.
-- **Staff:** view readable identity, contracts, ability, personality and preferences. This is read only; job titles and many professional attributes are not yet available.
+- **Staff:** view readable identity, contracts, ability, personality, preferences and 20 additional professional attributes on a 1–20 scale. This is read only; exact job titles remain unidentified.
 
 Recommendations require complete data and sufficient familiarity in every requested position. Selecting both phases requires players to cover both. An unrecognised role does not produce a generic recommendation in its place.
 
@@ -76,6 +76,11 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v14.6 · in development
+
+- The **Staff** tab displays 20 additional attributes on a 1–20 scale, including coaching, judging ability and potential, motivating, physiotherapy and sports science.
+- Staff information remains read-only; unidentified fields are not displayed.
 
 ### v14.5
 

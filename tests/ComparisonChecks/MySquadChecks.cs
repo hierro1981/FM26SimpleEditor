@@ -81,7 +81,7 @@ internal static class MySquadChecks
         var staff = All(panel).OfType<StaffPanel>().Single();
         var grid = All(staff).OfType<DataGridView>().Single(g => g.Name == "StaffList");
         var details = All(staff).OfType<DataGridView>().Single(g => g.Name == "StaffDetails");
-        var a = new StaffRow { Uid = 1, Id = 111, ClubUid = 1, Name = "Alice", ClubName = "Club", ListedClubName = "B team", Age = 40, Wage = 100, Ca = 140, Pa = 160, HasContract = true, Birth = "1980-01-02", Personality = new() { ["professionalism"] = 17 }, Preferences = new() { ["tempo"] = 18 } };
+        var a = new StaffRow { Uid = 1, Id = 111, ClubUid = 1, Name = "Alice", ClubName = "Club", ListedClubName = "B team", Age = 40, Wage = 100, Ca = 140, Pa = 160, HasContract = true, Birth = "1980-01-02", Personality = new() { ["professionalism"] = 17 }, Attributes = new() { ["physiotherapy"] = 20, ["judging_potential"] = 15 }, Preferences = new() { ["tempo"] = 18 } };
         var b = new StaffRow { Uid = 2, ClubUid = 1, Name = "Bob", ClubName = "Club", Wage = 0, IsHumanManager = true, HasContract = true };
         var c = new StaffRow { Uid = 3, ClubUid = 1, Name = "Carol", ClubName = "Club" };
         panel.SetStaffData(new StaffResult { Status = "ready", ClubUid = 1, Staff = [a, b, c] });
@@ -91,13 +91,15 @@ internal static class MySquadChecks
         check(a.RoleDisplay == "Not identified" && b.RoleDisplay == "Human manager" && b.Ca is null && c.ContractDisplay == "Not found", "only human manager gets a known job label; unavailable data stays absent");
         check(grid.Rows[1].Cells["Ca"].FormattedValue.ToString() == "—" && b.Wage == 0 && a.BirthDisplay == "02/01/1980", "staff nulls differ from real zero pay and dates are displayed correctly");
         grid.Rows[0].Selected = true; Application.DoEvents();
-        check(details.Rows.Count == 2 && details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[0].Value?.ToString() == "Preferences" && r.Cells[1].Value?.ToString() == "Tempo"), "staff selection separates personality from preferences");
+        check(details.Rows.Count == 4 && details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[0].Value?.ToString() == "Preferences" && r.Cells[1].Value?.ToString() == "Tempo"), "staff selection separates personality, attributes and preferences");
+        check(details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[1].Value?.ToString() == "Physiotherapy" && r.Cells[2].Value?.ToString() == "20"), "decoded staff attributes have translated labels and 1–20 values");
         staff.SortBy("Wage"); staff.SortBy("Wage");
         check(((StaffRow)grid.Rows[0].DataBoundItem).Uid == 1 && ((StaffRow)grid.Rows[2].DataBoundItem).Uid == 3, "salary sort is numeric with missing values last in descending order");
         var filter = All(staff).OfType<TextBox>().Single(t => t.Name == "StaffSearch"); filter.Text = "111";
         check(grid.Rows.Count == 1 && ((StaffRow)grid.Rows[0].DataBoundItem).Uid == 1, "staff search supports public IDs");
         L10n.SetLanguage("it"); panel.SetLanguage(); Application.DoEvents();
         check(filter.Text == "111" && grid.Columns["RoleDisplay"].HeaderText == "Ruolo" && a.RoleDisplay == "Non identificato" && details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[0].Value?.ToString() == "Preferenze"), "staff language changes preserve search and translate detail groups");
+        check(details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[1].Value?.ToString() == "Fisioterapia" && r.Cells[2].Value?.ToString() == "20"), "staff attribute labels switch language without changing values");
         panel.SetStaffData(new StaffResult { ClubUid = 99, Status = "ready" });
         check(grid.Rows.Count == 1, "stale staff response for another club is ignored");
         panel.SetStaffData(new StaffResult { ClubUid = 1, Status = "unavailable", Error = "Staff failure" });

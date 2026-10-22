@@ -1,8 +1,9 @@
 # Staff training stars: an explicit estimate
 
-In **Staff**, select a person and choose **Training stars (estimate)** from the
-detail selector. The nine categories show half stars, an index out of 300 and
-the attribute calculation. Missing or invalid required inputs show a dash.
+In **Staff**, select a person: attributes and **Training stars (estimate)**
+are always shown side by side, with independent scrollbars. The nine categories
+show half stars, an index out of 300 and the attribute calculation. Missing or
+invalid required inputs show a dash.
 This is a read-only assessment, not an edit of staff or training assignments.
 
 ## Model and provenance
@@ -71,3 +72,13 @@ distributed in the repository. Tests use synthetic profiles, cover the nine
 weighted calculations, distinguishing primary/secondary weighting, the tactical
 input to Set Pieces, each half-star boundary, missing/invalid attributes,
 unsupported human profiles, CA independence, and UI rendering/localisation.
+
+## Overall stars in the staff list
+
+The sortable **Overall stars (estimate)** column uses the same absolute CA
+scale as player previews: CA / 40 rounded to the nearest half star, with
+midpoints rounded away from zero, clamped to 0.5–5. Missing or non-positive CA
+shows a dash. PA does not affect current-ability stars. This estimate is neither
+an average of training-category stars nor the game's relative overall staff
+assessment, which has not been decoded. The column caption and tooltip make
+this distinction explicit; it is not calibrated to the supplied overall stars.

@@ -50,20 +50,37 @@ internal static class CoachingChecks
         person = Coach(); person.IsHumanManager = true;
         check(CoachingStars.Calculate(person).All(r => r.Stars is null), "human manager profiles are not treated as validated non-player layouts");
 
-        person = Coach(); L10n.SetLanguage("it");
+        person = Coach(); person.Ca = 140; L10n.SetLanguage("it");
         using var host = new Form { Size = new Size(950, 750) }; using var panel = new StaffPanel(); host.Controls.Add(panel);
         panel.ClearForClub(1); panel.SetData(new() { ClubUid = 1, Status = "ready", Staff = [person] });
         host.Show(); Application.DoEvents();
         var list = All(panel).OfType<DataGridView>().Single(g => g.Name == "StaffList"); list.Rows[0].Selected = true;
-        var choice = All(panel).OfType<ComboBox>().Single(c => c.Name == "StaffDetailView"); choice.SelectedIndex = 1; Application.DoEvents();
+        Application.DoEvents();
         var stars = All(panel).OfType<DataGridView>().Single(g => g.Name == "StaffCoachingStars");
         check(stars.Visible && stars.Rows.Count == 9 && stars.Rows[0].Cells[1] is StarRatingCell && (double)stars.Rows[0].Cells[1].Value! == 3,
             "staff training view displays estimated category stars with the shared half-star renderer");
         check(stars.ReadOnly && stars.ScrollBars == ScrollBars.Both && stars.Rows[0].Cells[3].Value!.ToString()!.Contains("Determinazione") &&
             All(panel).OfType<Label>().Any(l => l.Text.Contains("formula FM26 non è verificata")), "staff estimates expose inputs and limitations and remain read-only and scrollable");
+        var attributes = All(panel).OfType<DataGridView>().Single(g => g.Name == "StaffDetails");
+        var columns = All(panel).OfType<TableLayoutPanel>().Single(c => c.Name == "StaffDetailColumns");
+        foreach (int width in new[] { 950, 760 })
+        {
+            host.Width = width; Application.DoEvents();
+            var left = All(panel).OfType<GroupBox>().Single(c => c.Name == "StaffAttributeGroup");
+            var right = All(panel).OfType<GroupBox>().Single(c => c.Name == "StaffCoachingGroup");
+            check(attributes.Visible && stars.Visible && stars.ClientSize.Height >= 50 && left.Right <= right.Left && columns.ClientRectangle.Contains(left.Bounds) && columns.ClientRectangle.Contains(right.Bounds),
+                "staff attributes and training stars are simultaneously visible side by side at width " + width);
+        }
+        check(All(panel).OfType<ComboBox>().All(c => c.Name != "StaffDetailView") && person.OverallStars == 3.5 &&
+            list.Columns["OverallStars"].CellTemplate is StarRatingCell && list.Columns["OverallStars"].ToolTipText.Contains("CA / 40"),
+            "staff list shows labelled absolute CA stars without hiding either detail panel");
+        var unknown = new StaffRow { Uid = 2, ClubUid = 1, Name = "Unknown" };
+        panel.SetData(new() { ClubUid = 1, Status = "ready", Staff = [person, unknown] }); panel.SortBy("OverallStars"); panel.SortBy("OverallStars");
+        check(((StaffRow)list.Rows[0].DataBoundItem).Uid == 1 && list.Rows[1].Cells["OverallStars"].FormattedValue.ToString() == "—" && unknown.OverallStars is null,
+            "overall stars sort numerically with unavailable ability last and render an explicit dash");
         L10n.SetLanguage("en"); panel.SetLanguage(); Application.DoEvents();
-        check(choice.SelectedIndex == 1 && choice.Text == "Training stars (estimate)" && stars.Rows[0].Cells[0].Value!.ToString() == "Attacking · Tactical" &&
-            stars.Rows[0].Cells[3].Value!.ToString()!.Contains("Determination"), "coaching categories, selector and calculation follow language changes");
+        check(All(panel).OfType<GroupBox>().Any(g => g.Text == "Training stars (estimate)") && stars.Rows[0].Cells[0].Value!.ToString() == "Attacking · Tactical" &&
+            stars.Rows[0].Cells[3].Value!.ToString()!.Contains("Determination"), "coaching categories, group title and calculation follow language changes");
         person.Attributes.Clear(); panel.SetData(new() { ClubUid = 1, Status = "ready", Staff = [person] });
         check(stars.Rows.Cast<DataGridViewRow>().All(r => r.Cells[1].Value?.ToString() == "—"), "unavailable stars are explicit dashes, never empty golden ratings");
         using (var bitmap = new Bitmap(host.Width, host.Height)) host.DrawToBitmap(bitmap, host.ClientRectangle);

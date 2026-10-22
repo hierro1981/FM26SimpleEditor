@@ -2084,4 +2084,10 @@ Hover over a position for its rating.</value>
   <data name="CoachingCategory_SetPieces" xml:space="preserve">
     <value>Set pieces</value>
   </data>
+  <data name="StaffOverallStars" xml:space="preserve">
+    <value>Overall stars (estimate)</value>
+  </data>
+  <data name="StaffOverallStarsNote" xml:space="preserve">
+    <value>Absolute estimate from CA: CA / 40, rounded to half a star (0.5–5). It does not reproduce the game’s relative overall stars and is not an average of training categories.</value>
+  </data>
 </root>

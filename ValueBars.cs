@@ -80,9 +80,13 @@ public sealed class StarRatingCell : DataGridViewTextBoxCell
         DataGridViewElementStates cellState, object? value, object? formattedValue, string? errorText,
         DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
     {
+        if (value is not double rating)
+        {
+            base.Paint(graphics, clipBounds, cellBounds, rowIndex, cellState, value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
+            return;
+        }
         base.Paint(graphics, clipBounds, cellBounds, rowIndex, cellState, value, formattedValue, errorText, cellStyle, advancedBorderStyle,
             paintParts & ~DataGridViewPaintParts.ContentForeground);
-        if (value is not double rating) return;
         var saved = graphics.Save();
         graphics.SetClip(Rectangle.Intersect(cellBounds, clipBounds));
         graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;

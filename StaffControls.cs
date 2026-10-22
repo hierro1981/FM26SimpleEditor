@@ -11,7 +11,6 @@ public sealed class StaffPanel : UserControl
     private readonly DataGridView list = Grid("StaffList");
     private readonly DataGridView details = Grid("StaffDetails");
     private readonly DataGridView coaching = Grid("StaffCoachingStars");
-    private readonly ComboBox detailView = new() { Name = "StaffDetailView", DropDownStyle = ComboBoxStyle.DropDownList, Width = 245 };
     private StaffResult? data;
     private uint? clubUid;
     private string sortField = "Name";
@@ -30,25 +29,24 @@ public sealed class StaffPanel : UserControl
         tools.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); tools.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         var reload = new Button { Text = L10n.Get("StaffReload"), AutoSize = true };
         reload.Click += (_, _) => ReloadRequested?.Invoke(); tools.Controls.Add(search, 0, 0); tools.Controls.Add(reload, 1, 0);
-        var detailTools = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill };
-        detailView.Items.AddRange([L10n.Get("StaffAttributes"), L10n.Get("StaffCoachingStars")]); detailView.SelectedIndex = 0;
-        detailTools.Controls.AddRange([count, detailView]);
         var coachingNote = new Label { AutoSize = true, Dock = DockStyle.Fill, ForeColor = Color.DimGray, Text = L10n.Get("StaffCoachingEstimate") };
-        var coachingPanel = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2, Visible = false };
+        var coachingPanel = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2 };
         coachingPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         coachingPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize)); coachingPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         coachingPanel.Controls.Add(coachingNote, 0, 0); coachingPanel.Controls.Add(coaching, 0, 1);
-        var detailArea = new Panel { Dock = DockStyle.Fill }; detailArea.Controls.Add(details); detailArea.Controls.Add(coachingPanel);
-        detailView.SelectedIndexChanged += (_, _) =>
-        {
-            details.Visible = detailView.SelectedIndex == 0; coachingPanel.Visible = detailView.SelectedIndex == 1;
-            if (coachingPanel.Visible) coachingPanel.BringToFront(); else details.BringToFront();
-        };
+        var detailArea = new TableLayoutPanel { Name = "StaffDetailColumns", Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
+        detailArea.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); detailArea.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        detailArea.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        var attributeGroup = new GroupBox { Name = "StaffAttributeGroup", Text = L10n.Get("StaffAttributes"), Dock = DockStyle.Fill };
+        var coachingGroup = new GroupBox { Name = "StaffCoachingGroup", Text = L10n.Get("StaffCoachingStars"), Dock = DockStyle.Fill };
+        attributeGroup.Controls.Add(details); coachingGroup.Controls.Add(coachingPanel);
+        detailArea.Controls.Add(attributeGroup, 0, 0); detailArea.Controls.Add(coachingGroup, 1, 0);
         coachingPanel.SizeChanged += (_, _) => coachingNote.MaximumSize = new Size(Math.Max(100, coachingPanel.ClientSize.Width - 12), 0);
-        root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2); root.Controls.Add(detailTools, 0, 3); root.Controls.Add(detailArea, 0, 4);
+        root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2); root.Controls.Add(count, 0, 3); root.Controls.Add(detailArea, 0, 4);
         (string Field, string Header, int Width)[] columns =
         [
             ("Name", "Text_f537c6bd038e", 190), ("RoleDisplay", "StaffRole", 225),
+            ("OverallStars", "StaffOverallStars", 190),
             ("ClubName", "StaffClub", 180), ("ListedClubName", "StaffListedClub", 180),
             ("Age", "Text_9efdc62c88bf", 60), ("BirthDisplay", "StaffBirth", 105),
             ("Ca", "", 65), ("Pa", "", 65), ("Wage", "StaffWage", 160),
@@ -61,8 +59,15 @@ public sealed class StaffPanel : UserControl
             column.DefaultCellStyle.NullValue = "—";
             if (c.Field is "Age" or "Ca" or "Pa" or "Wage" or "Id" or "Uid" || c.Field.EndsWith("Display") && c.Field != "RoleDisplay" && c.Field != "ContractDisplay") column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             if (c.Field == "Wage") column.DefaultCellStyle.Format = "N0";
+            if (c.Field == "OverallStars")
+            {
+                column.CellTemplate = new StarRatingCell();
+                column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                column.ToolTipText = L10n.Get("StaffOverallStarsNote");
+            }
             list.Columns.Add(column);
         }
+        list.RowTemplate.Height = 38;
         details.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = L10n.Get("StaffGroup"), Width = 180 });
         details.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = L10n.Get("Text_51df0484073a"), Width = 245 });
         details.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = L10n.Get("StaffValue"), Width = 90, DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight } });
@@ -80,6 +85,8 @@ public sealed class StaffPanel : UserControl
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "RoleDisplay" &&
                 list.Rows[e.RowIndex].DataBoundItem is StaffRow person) e.ToolTipText = person.RoleTooltip;
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "OverallStars")
+                e.ToolTipText = L10n.Get("StaffOverallStarsNote");
         };
         list.SelectionChanged += (_, _) => ShowDetails(); search.TextChanged += (_, _) => RefreshRows();
         root.SizeChanged += (_, _) => status.MaximumSize = new Size(Math.Max(100, root.ClientSize.Width - 20), 0);
@@ -103,7 +110,7 @@ public sealed class StaffPanel : UserControl
         if (result.ClubUid != clubUid) return; // Ignore stale results from another club/save.
         data = result; RefreshRows();
     }
-    public void SetLanguage() { L10n.Apply(this); RefreshRows(); }
+    public void SetLanguage() { L10n.Apply(this); list.Columns["OverallStars"].ToolTipText = L10n.Get("StaffOverallStarsNote"); RefreshRows(); }
     public void SortBy(string field)
     {
         if (!list.Columns.Contains(field)) return;
@@ -122,6 +129,7 @@ public sealed class StaffPanel : UserControl
         {
             "RoleDisplay" => p.RoleDisplay, "ClubName" => p.ClubName, "ListedClubName" => p.ListedClubName,
             "Age" => p.Age, "BirthDisplay" => p.Birth, "Ca" => p.Ca, "Pa" => p.Pa, "Wage" => p.Wage,
+            "OverallStars" => p.OverallStars,
             "ContractDisplay" => p.ContractDisplay, "ContractStartDisplay" => p.ContractStart, "ContractEndDisplay" => p.ContractEnd,
             "Id" => p.Id, "Uid" => p.Uid, _ => p.Name
         };

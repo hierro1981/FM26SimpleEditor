@@ -193,6 +193,7 @@ public sealed class MySquadResult
 
 public sealed class StaffRow
 {
+    [JsonIgnore] public double? OverallStars => PreviewMath.AbsoluteStars(Ca);
     public uint Uid { get; set; }
     public uint? Id { get; set; }
     public string Name { get; set; } = "";

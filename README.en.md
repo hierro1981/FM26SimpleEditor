@@ -10,7 +10,7 @@ A free **Football Manager 26** editor for Windows. Open a save, find a player an
 
 ## Download and launch
 
-Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The published version is v14.5. The v14.6 changes are in development on their branch.
+Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v14.6**.
 
 - **Setup, when available in the release:** guided installation, with options to install Python and the .NET runtime if needed. Additional installations require your consent and an Internet connection.
 - **Portable ZIP:** extract the complete package into a folder and run **FM26SimpleEditor.exe**. Keep all package files together.
@@ -77,9 +77,11 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 ## Changes, newest first
 
-### v14.6 · in development
+### v14.6
 
-- **Training stars (estimate):** staff details include nine categories with stars, an index and the attributes used. Determination, Authority/Discipline, People management, Working with youngsters and Set Pieces are now readable too. Possession and Set Pieces weights refined against the available comparisons; stars remain indicative and may differ from the game.
+- **Clearer staff view:** attributes and training stars always side by side, with independent scrollbars. The staff list also includes sortable overall stars estimated from CA.
+
+- **Training stars (estimate):** staff attributes and nine training categories are always shown side by side with stars, an index and the attributes used. Determination, Authority/Discipline, People management, Working with youngsters and Set Pieces are now readable too. Possession and Set Pieces weights refined against the available comparisons; stars remain indicative and may differ from the game.
 
 - **Best XI per tactic:** a third pitch shows the lineup with the highest combined role scores, using each player once. It follows squad filters and the selected phase, and highlights slots that cannot be filled.
 

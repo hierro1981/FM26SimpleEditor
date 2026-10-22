@@ -10,7 +10,7 @@ Editor gratuito per **Football Manager 26** su Windows. Apri un salvataggio, cer
 
 ## Scarica e avvia
 
-Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione pubblicata è la v14.5. Le novità della v14.6 sono in sviluppo nel relativo branch.
+Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione corrente è la **v14.6**.
 
 - **Setup, quando presente nella release:** installazione guidata dell’editor, con opzioni per installare anche Python e il runtime .NET se necessari. Le installazioni aggiuntive richiedono il tuo consenso e una connessione Internet.
 - **ZIP portatile:** estrai tutto il contenuto in una cartella e avvia **FM26SimpleEditor.exe**. Conserva insieme tutti i file del pacchetto.
@@ -77,9 +77,11 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ## Novità, dalla versione più recente
 
-### v14.6 · in sviluppo
+### v14.6
 
-- **Stelle allenamento (stima):** nel dettaglio dello staff puoi consultare nove categorie, con stelle, indice e attributi usati. Sono ora leggibili anche Determinazione, Autorità/Disciplina, Gestione del personale, Lavoro con i giovani e Calci piazzati. Pesi di Possesso e Calci piazzati affinati con i confronti disponibili; le stelle restano indicative e possono differire dal gioco.
+- **Staff più leggibile:** attributi e stelle di allenamento sempre affiancati, con scrollbar indipendenti. Nell’elenco sono presenti anche le stelle complessive stimate dalla CA, ordinabili.
+
+- **Stelle allenamento (stima):** attributi e nove categorie di allenamento sono sempre affiancati, con stelle, indice e attributi usati. Sono ora leggibili anche Determinazione, Autorità/Disciplina, Gestione del personale, Lavoro con i giovani e Calci piazzati. Pesi di Possesso e Calci piazzati affinati con i confronti disponibili; le stelle restano indicative e possono differire dal gioco.
 
 - **Top 11 per tattica:** un terzo campo mostra la formazione con la migliore somma dei punteggi per sottoruolo, usando ciascun giocatore una sola volta. Rispetta i filtri della rosa e la fase selezionata; segnala gli slot che non è possibile coprire.
 

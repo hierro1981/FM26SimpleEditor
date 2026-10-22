@@ -2084,4 +2084,10 @@ Passa sul punto per il valore.</value>
   <data name="CoachingCategory_SetPieces" xml:space="preserve">
     <value>Calci piazzati</value>
   </data>
+  <data name="StaffOverallStars" xml:space="preserve">
+    <value>Stelle complessive (stima)</value>
+  </data>
+  <data name="StaffOverallStarsNote" xml:space="preserve">
+    <value>Stima assoluta dalla CA: CA / 40, arrotondata a mezza stella (0,5–5). Non riproduce le stelle generali relative del gioco e non è la media delle categorie di allenamento.</value>
+  </data>
 </root>

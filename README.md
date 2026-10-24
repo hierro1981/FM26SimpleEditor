@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.3 (in sviluppo)
+# FM26 Simple Editor · v15.4 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.4 · in sviluppo
+
+- In **Migliori per tattica**, alla classifica attuale è affiancata quella del potenziale stimato per lo slot e la fase selezionati, con gli stessi filtri di rosa e prestiti.
+- Punteggio e stelle futuri rappresentano uno scenario a PA raggiunta; sono visibili anche punteggio attuale, età e margine PA−CA. La PA sconosciuta non viene inventata.
+- Apertura e confronto rapido disponibili in entrambe le tabelle, sempre sui dati reali attuali. Il campo Top 11 resta basato sul rendimento odierno.
 
 ### v15.3 · in sviluppo
 

@@ -156,6 +156,8 @@ public sealed class TacticsPanel : UserControl
     private readonly Label status = new() { Name = "TacticsStatus", AutoSize = true, Dock = DockStyle.Fill };
     private readonly Label method = new() { AutoSize = true, Dock = DockStyle.Fill, ForeColor = Color.DimGray };
     private readonly DataGridView ranking = new() { Name = "TacticRanking", Dock = DockStyle.Fill, ReadOnly = true, MultiSelect = true, AllowUserToAddRows = false, AllowUserToDeleteRows = false, AllowUserToResizeRows = false, RowHeadersVisible = false, SelectionMode = DataGridViewSelectionMode.FullRowSelect, ScrollBars = ScrollBars.Both, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None };
+    private readonly DataGridView potential = new() { Name = "TacticPotentialRanking", Dock = DockStyle.Fill, ReadOnly = true, MultiSelect = true, AllowUserToAddRows = false, AllowUserToDeleteRows = false, AllowUserToResizeRows = false, RowHeadersVisible = false, SelectionMode = DataGridViewSelectionMode.FullRowSelect, ScrollBars = ScrollBars.Both, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None };
+    private DataGridView? activeRanking;
     private readonly ContextMenuStrip menu = new();
     private readonly Button open = new() { AutoSize = true, Text = L10n.Get("Text_9337b648a0e1") };
     private readonly Button criteria = new() { AutoSize = true, Text = L10n.Get("TacticalCriteria") };
@@ -196,7 +198,15 @@ public sealed class TacticsPanel : UserControl
         pitches.Controls.Add(ip, 0, 1); pitches.Controls.Add(op, 1, 1); pitches.Controls.Add(xi, 2, 1);
         var scroll = new ContentViewport(pitches, new Size(960, 350)) { Name = "TacticPitchesScroll" };
         root.Controls.Add(scroll, 0, 2);
-        root.Controls.Add(slotChoice, 0, 3); root.Controls.Add(ranking, 0, 4); root.Controls.Add(method, 0, 5);
+        root.Controls.Add(slotChoice, 0, 3);
+        var rankings = new TableLayoutPanel { Name = "TacticRankingColumns", Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
+        rankings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); rankings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        rankings.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        var currentGroup = new GroupBox { Name = "TacticCurrentGroup", Text = L10n.Get("TacticsCurrentRanking"), Dock = DockStyle.Fill };
+        var potentialGroup = new GroupBox { Name = "TacticPotentialGroup", Text = L10n.Get("TacticsPotentialRanking"), Dock = DockStyle.Fill };
+        currentGroup.Controls.Add(ranking); potentialGroup.Controls.Add(potential);
+        rankings.Controls.Add(currentGroup, 0, 0); rankings.Controls.Add(potentialGroup, 1, 0);
+        root.Controls.Add(rankings, 0, 4); root.Controls.Add(method, 0, 5);
         var actions = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; actions.Controls.AddRange([open, criteria]); root.Controls.Add(actions, 0, 6);
         root.Controls.Add(lineupSummary, 0, 7);
         string[] keys = ["#", "Text_f537c6bd038e", "Text_045cb480645d", "MySquadScore", "MySquadStars", "MySquadFamiliarity", "CA", "PA"];
@@ -204,24 +214,44 @@ public sealed class TacticsPanel : UserControl
         for (int i = 0; i < keys.Length; i++) ranking.Columns.Add(new DataGridViewTextBoxColumn { Name = "TacticColumn" + i, HeaderText = keys[i].Length <= 2 ? keys[i] : L10n.Get(keys[i]), Width = widths[i], SortMode = DataGridViewColumnSortMode.NotSortable, DefaultCellStyle = new DataGridViewCellStyle { Alignment = i is 0 or >= 3 ? DataGridViewContentAlignment.MiddleRight : DataGridViewContentAlignment.MiddleLeft, NullValue = "—" } });
         ranking.Columns[4].CellTemplate = new StarRatingCell(); ranking.RowTemplate.Height = 41;
         ranking.Columns[3].DefaultCellStyle.Format = "0.00";
+        ranking.Columns.Add(new DataGridViewTextBoxColumn { Name = "TacticAge", HeaderText = L10n.Get("Text_9efdc62c88bf"), Width = 60, SortMode = DataGridViewColumnSortMode.NotSortable,
+            DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight, NullValue = "—" } });
+        foreach (DataGridViewColumn column in ranking.Columns) potential.Columns.Add((DataGridViewColumn)column.Clone());
+        potential.Columns[3].HeaderText = L10n.Get("TacticsPotentialScore"); potential.Columns[4].HeaderText = L10n.Get("TacticsPotentialStars");
+        potential.Columns.Add(new DataGridViewTextBoxColumn { Name = "TacticCurrentScore", HeaderText = L10n.Get("TacticsCurrentScore"), Width = 105, SortMode = DataGridViewColumnSortMode.NotSortable,
+            DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight, Format = "0.00" } });
+        potential.Columns.Add(new DataGridViewTextBoxColumn { Name = "TacticHeadroom", HeaderText = L10n.Get("TacticsHeadroom"), Width = 100, SortMode = DataGridViewColumnSortMode.NotSortable,
+            DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight, NullValue = "—" } });
+        potential.RowTemplate.Height = 41;
+        potential.AccessibleDescription = L10n.Get("TacticsPotentialMethod");
+        lineupTips.SetToolTip(potentialGroup, potential.AccessibleDescription);
         phase.Items.AddRange([new PhaseChoice("both"), new PhaseChoice("ip"), new PhaseChoice("op")]); phase.SelectedIndex = 0;
         choice.SelectedIndexChanged += (_, _) => { if (!binding) FillSlots(); };
         phase.SelectedIndexChanged += (_, _) => { if (!binding) { RefreshLineup(); RefreshRanking(); } };
         slotChoice.SelectedIndexChanged += (_, _) => { if (!binding) RefreshRanking(); };
         ip.SlotSelected += SelectSlot; op.SlotSelected += SelectSlot; xi.SlotSelected += SelectSlot;
-        open.Click += (_, _) => Open(); ranking.SelectionChanged += (_, _) => open.Enabled = SelectedUid is not null;
-        ranking.CellDoubleClick += (_, e) => { if (e.RowIndex >= 0) Open(); };
+        activeRanking = ranking;
+        open.Click += (_, _) => Open(ActiveRanking);
         criteria.Click += (_, _) => { if (Targets.Length > 0) { using var dialog = new TacticalCriteriaForm(Targets); dialog.ShowDialog(this); } };
         var compare = new ToolStripMenuItem(L10n.Get("QuickComparePair")) { Name = "QuickComparePair" };
-        compare.Click += (_, _) => { if (QuickComparison.TryPair(ranking, out uint a, out uint b)) QuickComparisonRequested?.Invoke(a, b); };
-        var add = new ToolStripMenuItem(L10n.Get("Text_885725b27cce")); add.Click += (_, _) => { if (SelectedUid is uint uid) AddComparisonRequested?.Invoke(uid); };
-        menu.Items.AddRange([compare, add]); menu.Opening += (sender, e) => { e.Cancel = ranking.SelectedRows.Count == 0; compare.Enabled = QuickComparison.TryPair(ranking, out _, out _); add.Enabled = SelectedUid.HasValue; };
-        ranking.ContextMenuStrip = menu; ranking.CellMouseDown += (_, e) => { if (e.Button == MouseButtons.Right) QuickComparison.SelectContextRow(ranking, e.RowIndex, e.ColumnIndex); };
+        compare.Click += (_, _) => { if (QuickComparison.TryPair(MenuGrid, out uint a, out uint b)) QuickComparisonRequested?.Invoke(a, b); };
+        var add = new ToolStripMenuItem(L10n.Get("Text_885725b27cce")); add.Click += (_, _) => { if (SelectedUid(MenuGrid) is uint uid) AddComparisonRequested?.Invoke(uid); };
+        menu.Items.AddRange([compare, add]); menu.Opening += (sender, e) => { e.Cancel = MenuGrid.SelectedRows.Count == 0; compare.Enabled = QuickComparison.TryPair(MenuGrid, out _, out _); add.Enabled = SelectedUid(MenuGrid).HasValue; };
+        foreach (var grid in new[] { ranking, potential })
+        {
+            grid.Enter += (_, _) => { activeRanking = grid; open.Enabled = SelectedUid(grid).HasValue; };
+            grid.SelectionChanged += (_, _) => { if (grid.SelectedRows.Count > 0) activeRanking = grid; open.Enabled = SelectedUid(ActiveRanking).HasValue; };
+            grid.CellDoubleClick += (_, e) => { if (e.RowIndex >= 0) Open(grid); };
+            grid.ContextMenuStrip = menu;
+            grid.CellMouseDown += (_, e) => { if (e.Button == MouseButtons.Right) { activeRanking = grid; QuickComparison.SelectContextRow(grid, e.RowIndex, e.ColumnIndex); } };
+        }
         root.SizeChanged += (_, _) => { status.MaximumSize = new Size(Math.Max(100, root.ClientSize.Width - 16), 0); method.MaximumSize = status.MaximumSize; lineupSummary.MaximumSize = status.MaximumSize; };
         Controls.Add(new ContentViewport(root, new Size(620, 520)) { Name = "TacticsScroll" }); L10n.Capture(this); RefreshRanking();
     }
-    private uint? SelectedUid => ranking.SelectedRows.Count == 1 ? (ranking.SelectedRows[0].Tag as SquadRecommendation)?.Player.Uid : null;
-    private void Open() { if (SelectedUid is uint uid) PlayerOpenRequested?.Invoke(uid); }
+    private DataGridView ActiveRanking => activeRanking ?? ranking;
+    private DataGridView MenuGrid => menu.SourceControl as DataGridView ?? ActiveRanking;
+    private static uint? SelectedUid(DataGridView grid) => grid.SelectedRows.Count == 1 ? (grid.SelectedRows[0].Tag as SquadRecommendation)?.Player.Uid : null;
+    private void Open(DataGridView grid) { if (SelectedUid(grid) is uint uid) PlayerOpenRequested?.Invoke(uid); }
     public bool IsLoadedFor(uint uid) => clubUid == uid && loaded;
     public void ClearForClub(uint? uid) { clubUid = uid; loaded = false; data = new(); BindChoices(); }
     public void SetData(SavedTacticsResult result) { if (clubUid != result.ClubUid) return; data = result; loaded = true; BindChoices(); }
@@ -266,15 +296,32 @@ public sealed class TacticsPanel : UserControl
         for (int i = 0; i < best.Count; i++)
         {
             var r = best[i]; int at = ranking.Rows.Add(i + 1, r.Player.Name, PositionScheme.Compact(r.Player.Positions, L10n.IsItalian), r.Score, r.Stars,
-                string.Join(" · ", r.Familiarities.Select(f => Labels.PositionCode(f.Key, L10n.IsItalian) + ": " + f.Value)), r.Player.Ca, r.Player.Pa);
+                string.Join(" · ", r.Familiarities.Select(f => Labels.PositionCode(f.Key, L10n.IsItalian) + ": " + f.Value)), r.Player.Ca, r.Player.Pa, r.Player.Age);
             ranking.Rows[at].Tag = r;
             ranking.Rows[at].Cells[3].ToolTipText = string.Join("\n", r.PositionScores.Select(s => TacticalRoles.LabelKey(s.Key) + ": " + s.Value.ToString("0.00", L10n.Culture) + "/20"));
         }
+        potential.Rows.Clear();
+        var projected = targets.Length == 0 ? [] : PotentialSelection.BestForRoles(members, targets);
+        for (int i = 0; i < projected.Count; i++)
+        {
+            var p = projected[i]; var r = p.Current;
+            int at = potential.Rows.Add(i + 1, p.Player.Name, PositionScheme.Compact(p.Player.Positions, L10n.IsItalian), p.Score, p.Stars,
+                string.Join(" · ", r.Familiarities.Select(f => Labels.PositionCode(f.Key, L10n.IsItalian) + ": " + f.Value)), p.Player.Ca, p.Player.Pa, p.Player.Age, r.Score, p.Headroom);
+            // Actions must always inspect/compare the real current player, not fabricated future attributes.
+            potential.Rows[at].Tag = r;
+            string tooltip = p.Score is null ? L10n.Get("TacticsPotentialMissing") : L10n.Get("TacticsPotentialMethod") + "\n" +
+                string.Join("\n", p.PositionScores.Select(s => TacticalRoles.LabelKey(s.Key) + ": " + s.Value.ToString("0.00", L10n.Culture) + "/20"));
+            foreach (DataGridViewCell cell in potential.Rows[at].Cells) cell.ToolTipText = tooltip;
+        }
+        potential.Columns[3].DefaultCellStyle.FormatProvider = potential.Columns["TacticCurrentScore"].DefaultCellStyle.FormatProvider = L10n.Culture;
+        potential.AccessibleDescription = L10n.Get("TacticsPotentialMethod");
+        lineupTips.SetToolTip(potential.Parent, potential.AccessibleDescription);
+        potential.ClearSelection(); activeRanking = ranking;
         ranking.Columns[3].DefaultCellStyle.FormatProvider = L10n.Culture;
         ranking.ClearSelection(); open.Enabled = false; criteria.Enabled = targets.Length > 0;
         choice.Enabled = data.Status == "ready" && data.Tactics.Count > 0;
         slotChoice.Enabled = choice.Items.Count > 0; phase.Enabled = slotChoice.Items.Count > 0;
-        method.Text = slot is not null && targets.Length == 0 ? L10n.Get("TacticsCannotRank") : L10n.Format("TacticsMethod", SquadSelection.ResultLimit);
+        method.Text = slot is not null && targets.Length == 0 ? L10n.Get("TacticsCannotRank") : L10n.Format("TacticsMethod", SquadSelection.ResultLimit) + " " + L10n.Get("TacticsPotentialNote");
     }
     private void RefreshLineup()
     {

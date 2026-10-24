@@ -80,6 +80,7 @@ internal static class Checks
             TacticalRoleChecks.Run(Check);
             QuickComparisonChecks.Run(Check);
             TacticsChecks.Run(Check);
+            PotentialSelectionChecks.Run(Check);
             LineupChecks.Run(Check);
             CoachingChecks.Run(Check);
             StaffRecruitmentChecks.Run(Check);

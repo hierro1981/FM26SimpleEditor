@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.3 (in development)
+# FM26 Simple Editor · v15.4 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.4 · in development
+
+- **Best by tactic** now places a potential ranking alongside today’s best players for the selected slot and phase, using the same squad and loan filters.
+- Future score and stars show a conditional full-PA scenario, with current score, age and PA−CA headroom for comparison. Unknown PA remains unavailable.
+- Both tables support opening players and quick comparison; those actions always use real current data. The best-XI pitch remains based on current performance.
 
 ### v15.3 · in development
 

@@ -2261,4 +2261,13 @@ Hover over a position for its rating.</value>
   <data name="StaffPreference_use_substitutions" xml:space="preserve"><value>Use of substitutions</value></data>
   <data name="StaffPreference_intensity" xml:space="preserve"><value>Intensity</value></data>
   <data name="StaffPreference_tactical_flair" xml:space="preserve"><value>Flair</value></data>
+  <data name="TacticsCurrentRanking" xml:space="preserve"><value>Best today</value></data>
+  <data name="TacticsPotentialRanking" xml:space="preserve"><value>Estimated potential · at full PA</value></data>
+  <data name="TacticsPotentialScore" xml:space="preserve"><value>PA estimate /20</value></data>
+  <data name="TacticsPotentialStars" xml:space="preserve"><value>Estimated PA stars</value></data>
+  <data name="TacticsCurrentScore" xml:space="preserve"><value>Today /20</value></data>
+  <data name="TacticsHeadroom" xml:space="preserve"><value>PA−CA headroom</value></data>
+  <data name="TacticsPotentialNote" xml:space="preserve"><value>Right: a full-PA scenario, not a certain forecast. Growth and timing are not guaranteed; hover over results for details.</value></data>
+  <data name="TacticsPotentialMethod" xml:space="preserve"><value>Hypothetical scenario: each current 1–20 attribute is multiplied by max(1, PA/CA) and capped at 20, then the same role weights are applied. Familiarity and positions stay as they are today. This is not FM’s development formula: it does not predict actual growth distribution, peak age, injuries, training or the likelihood of reaching PA. Missing or out-of-range CA/PA: estimate unavailable. PA ≤ CA: no assumed growth. Open and Compare always show real current data.</value></data>
+  <data name="TacticsPotentialMissing" xml:space="preserve"><value>Estimate unavailable: known CA and PA on a 1–200 scale are required. The maximum of a PA range is not substituted. The player remains available with current data.</value></data>
 </root>

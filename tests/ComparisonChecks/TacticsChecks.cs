@@ -40,6 +40,10 @@ internal static class TacticsChecks
         var phase = All(squad).OfType<ComboBox>().Single(c => c.Name == "SavedTacticPhase");
         var slots = All(squad).OfType<ComboBox>().Single(c => c.Name == "SavedTacticSlot");
         var grid = All(squad).OfType<DataGridView>().Single(g => g.Name == "TacticRanking");
+        var future = All(squad).OfType<DataGridView>().Single(g => g.Name == "TacticPotentialRanking");
+        check(future.Rows.Count == 6 && future.ReadOnly && future.ScrollBars == ScrollBars.Both && future.Columns[4].CellTemplate is StarRatingCell &&
+              future.Rows[future.Rows.Count-1].Cells[3].FormattedValue.ToString() == "—" && ((SquadRecommendation)future.Rows[future.Rows.Count-1].Tag!).Player.Uid == 2,
+            "side-by-side potential table retains eligible players and marks unknown PA explicitly");
         check(choice.Items.Count == 3 && slots.Items.Count == 11 && All(squad).OfType<SavedTacticPitch>().Count() == 3, "tactics UI exposes three choices, eleven slots, IP/OOP and best-XI pitches immediately");
         check(grid.Rows.Count == 6 && grid.Rows.Cast<DataGridViewRow>().All(r => ((SquadRecommendation)r.Tag!).Player.Uid != 1 && ((SquadRecommendation)r.Tag!).Player.TeamId == 10), "both-phase ranking respects first-team scope and both familiarity thresholds");
         check(grid.Rows[0].Cells[7].FormattedValue.ToString() == "—" && grid.ReadOnly && grid.ScrollBars == ScrollBars.Both, "tactic ranking keeps missing PA, read-only data and both scrollbars");
@@ -51,19 +55,37 @@ internal static class TacticsChecks
         var opening = typeof(ContextMenuStrip).GetMethod("OnOpening", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!;
         opening.Invoke(grid.ContextMenuStrip, [new System.ComponentModel.CancelEventArgs()]);
         var compare = grid.ContextMenuStrip!.Items.OfType<ToolStripMenuItem>().Single(i => i.Name == "QuickComparePair");
+        future.ClearSelection(); future.Rows[0].Selected=true; future.Rows[1].Selected=true;
+        opening.Invoke(future.ContextMenuStrip, [new System.ComponentModel.CancelEventArgs()]);
+        compare.PerformClick();
+        check(comparedA==1 && comparedB==3, "potential ranking quick comparison forwards real player identities in projected display order");
+        uint? openedFuture=null; squad.PlayerOpenRequested += uid => openedFuture=uid;
+        future.ClearSelection(); future.Rows[0].Selected=true;
+        var futureOpen=All(All(squad).OfType<TacticsPanel>().Single()).OfType<Button>().Single(b=>b.Text==L10n.Get("Text_9337b648a0e1"));
+        futureOpen.PerformClick();
+        check(openedFuture==1 && ((SquadRecommendation)future.Rows[0].Tag!).Score==15 && (double)future.Rows[0].Cells[3].Value! == 20,
+            "opening a potential candidate uses the current player rather than projected attributes");
+        grid.ClearSelection(); grid.Rows[0].Selected=true; grid.Rows[1].Selected=true;
+        opening.Invoke(grid.ContextMenuStrip, [new System.ComponentModel.CancelEventArgs()]);
         compare.PerformClick();
         check(compare.Enabled && comparedA == 1 && comparedB == 2, "tactic ranking forwards a two-player quick comparison in display order");
         phase.SelectedIndex = 0;
         var scope = All(squad).OfType<ComboBox>().Single(c => c.Name == "MySquadScope"); scope.SelectedIndex = 2;
-        check(((SquadRecommendation)grid.Rows[0].Tag!).Player.Uid == 8, "tactic recommendations refresh when squad scope changes");
+        check(((SquadRecommendation)grid.Rows[0].Tag!).Player.Uid == 8 && ((SquadRecommendation)future.Rows[0].Tag!).Player.Uid == 8, "tactic recommendations refresh when squad scope changes");
         choice.SelectedIndex = 1;
         L10n.SetLanguage("en"); squad.SetLanguage(); Application.DoEvents();
         check(choice.SelectedIndex == 1 && phase.SelectedItem!.ToString() == "Both phases" && slots.SelectedItem!.ToString()!.Contains("Midfield Playmaker"), "language change preserves selected tactic and phase and translates dynamic roles");
         var panel = All(squad).OfType<TacticsPanel>().Single(); panel.SelectSlot(1); Application.DoEvents();
-        check(slots.SelectedIndex == 1 && grid.Rows.Count == 0, "pitch slot selection changes ranking without retaining stale candidates");
+        check(slots.SelectedIndex == 1 && grid.Rows.Count == 0 && future.Rows.Count == 0, "pitch slot selection changes ranking without retaining stale candidates");
         using (var image = new Bitmap(host.Width, host.Height)) host.DrawToBitmap(image, host.ClientRectangle);
         host.Size = new Size(760, 650); Application.DoEvents();
         using (var image = new Bitmap(host.Width, host.Height)) host.DrawToBitmap(image, host.ClientRectangle);
+        var rankingColumns = All(panel).OfType<TableLayoutPanel>().Single(c=>c.Name=="TacticRankingColumns");
+        var currentGroup = All(panel).OfType<GroupBox>().Single(c=>c.Name=="TacticCurrentGroup");
+        var futureGroup = All(panel).OfType<GroupBox>().Single(c=>c.Name=="TacticPotentialGroup");
+        check(currentGroup.Right <= futureGroup.Left && rankingColumns.ClientRectangle.Contains(currentGroup.Bounds) && rankingColumns.ClientRectangle.Contains(futureGroup.Bounds) &&
+              grid.Height>30 && future.Height>30, "current and potential tables stay side by side with usable scrolling space at narrow width");
+        check(future.Columns[3].HeaderText=="PA estimate /20" && future.AccessibleDescription.Contains("not FM"), "projected headings and scenario explanation follow language changes");
         var pitchesViewport = All(panel).OfType<ContentViewport>().Single(p => p.Name == "TacticPitchesScroll");
         var outerViewport = All(panel).OfType<ContentViewport>().Single(p => p.Name == "TacticsScroll");
         check(pitchesViewport.VerticalScroll.Visible && pitchesViewport.DisplayRectangle.Height >= pitchesViewport.Controls[0].Height,
@@ -89,7 +111,7 @@ internal static class TacticsChecks
               pitchesViewport.VerticalScroll.Visible == (pitchesViewport.ClientSize.Height < pitchesViewport.Controls[0].MinimumSize.Height),
             "growing the window removes outer scrollbars and retains pitch scrolling only when needed");
         squad.ClearForSave(true);
-        check(choice.Items.Count == 0 && slots.Items.Count == 0 && grid.Rows.Count == 0, "new save clears tactics and all previous recommendations");
+        check(choice.Items.Count == 0 && slots.Items.Count == 0 && grid.Rows.Count == 0 && future.Rows.Count == 0, "new save clears tactics and all previous recommendations");
         host.Close(); L10n.SetLanguage("it");
     }
 }

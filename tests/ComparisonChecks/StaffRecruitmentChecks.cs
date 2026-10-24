@@ -87,6 +87,13 @@ internal static class StaffRecruitmentChecks
             check(row.RoleStars==CoachingStars.Calculate(good).Single(c=>c.Category.Key==category.CategoryKey).Stars, "recruitment and staff share training stars " + category.Key);
         }
         check(StaffRecruitment.Roles.Select(r=>r.Key).Distinct().Count()==StaffRecruitment.Roles.Count && StaffRecruitment.Roles.All(r=>L10n.Keys.Contains("StaffJob_"+r.Key)), "every job profile has a unique translated supported label");
+        var recoveryProfile=StaffRecruitment.Roles.Single(r=>r.Key=="sports_scientist");
+        var recovery=Person(20);recovery.JobKey="sports_scientist";recovery.JobCode=48;
+        var headRecovery=Person(21);headRecovery.JobKey="head_sports_science";headRecovery.JobCode=40;
+        data.Staff=[recovery,headRecovery,coach];
+        check(StaffRecruitment.Rank(data,recoveryProfile,search:"recupero infortunati").Select(c=>c.Uid).OrderBy(x=>x).SequenceEqual(new uint[]{20,21}) &&
+            StaffRecruitment.Rank(data,recoveryProfile,currentJob:"sports_scientist").Single().Uid==20,
+            "Italian recovery terminology finds the existing sports-science roles without merging different current jobs");
         var doctor=StaffRecruitment.Roles.Single(r=>r.Key=="doctor"); var med=Person(10); med.JobKey="doctor"; data.Staff=[good,med];
         check(StaffRecruitment.Rank(data,doctor).Single().RoleStars is null, "doctor category never borrows physiotherapy to invent suitability stars");
         good.ContractEnd="2028-01-01";
@@ -130,6 +137,16 @@ internal static class StaffRecruitmentChecks
         check(jobs.SelectedItem!.ToString() == "Coach" && grid.Rows.Count == 1 && jobs.Items[0].ToString() == "Any", "language changes preserve the current-job filter key");
         jobs.SelectedIndex = 0; Application.DoEvents();
         check(grid.Rows.Count == 3, "any-current-job option restores candidates from other and unidentified jobs");
+        L10n.SetLanguage("it");panel.SetLanguage();mode.SelectedIndex=0;panel.SetData(new StaffRecruitmentResult
+            {Status="ready",ClubUid=1,ClubReputation=5000,GameDate="2028-03-04",Staff=[recovery,headRecovery]});
+        choice.SelectedIndex=choice.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p=>p.Key=="sports_scientist");
+        jobs.SelectedIndex=jobs.Items.Cast<object>().ToList().FindIndex(c=>c.ToString()=="Preparatore recupero infortunati");
+        check(choice.SelectedItem!.ToString()=="Preparatore recupero infortunati" && grid.Rows.Count==1 &&
+            ((StaffCandidate)grid.Rows[0].DataBoundItem).Uid==20,"recovery staff can be selected by the game's Italian name in both recruitment selectors");
+        L10n.SetLanguage("en");panel.SetLanguage();
+        check(((StaffSearchProfile)choice.SelectedItem!).Key=="sports_scientist" && jobs.SelectedItem!.ToString()=="Sports Scientist" && grid.Rows.Count==1,
+            "Italian recovery labels retain the same decoded job and selected profile after switching to English");
+        jobs.SelectedIndex=0;mode.SelectedIndex=1;
         good.Reputation = new() { ["home"] = 6461, ["current"] = 6461, ["world"] = 3365 };
         good.JobPreferences = new() { ["coach"] = 15 };
         data.Staff = [good]; panel.SetData(data); Application.DoEvents();

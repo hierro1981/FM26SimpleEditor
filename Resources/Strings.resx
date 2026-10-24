@@ -1971,13 +1971,13 @@ Passa sul punto per il valore.</value>
     <value>Medico</value>
   </data>
   <data name="StaffJob_head_sports_science" xml:space="preserve">
-    <value>Responsabile scienze motorie</value>
+    <value>Responsabile recupero infortunati</value>
   </data>
   <data name="StaffJob_chief_scout" xml:space="preserve">
     <value>Capo osservatore</value>
   </data>
   <data name="StaffJob_sports_scientist" xml:space="preserve">
-    <value>Esperto di scienze motorie</value>
+    <value>Preparatore recupero infortunati</value>
   </data>
   <data name="StaffJob_head_physio" xml:space="preserve">
     <value>Responsabile fisioterapisti</value>

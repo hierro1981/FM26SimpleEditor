@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.5 (in sviluppo)
+# FM26 Simple Editor · v15.5.1 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,10 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.5.1 · in sviluppo
+
+- Nella ricerca e negli elenchi dello staff, **Preparatore recupero infortunati** e **Responsabile recupero infortunati** sostituiscono le precedenti etichette relative alle scienze motorie, per riconoscere più facilmente gli incarichi del gioco.
 
 ### v15.5 · in sviluppo
 

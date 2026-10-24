@@ -93,3 +93,18 @@ contract, wrong selectors, duplicate candidates, wage/date/signature mismatch,
 missing tails, bounds, unreadable records and future/expired employment.
 The Windows UI checks cover localisation, unknown keys, search and sorting.
 No game binaries or original save data are distributed with the project.
+
+## Italian medical job labels · v15.5.1
+
+`sports_scientist` is displayed as **Preparatore recupero infortunati** and
+`head_sports_science` as **Responsabile recupero infortunati**, replacing the
+previous generic sports-science translations. They retain native codes 48
+and 40, the existing sports-science attribute profiles, and English names.
+This corrects labels throughout staff lists, desired-job/current-job selectors,
+assessment text and textual job search; it does not create a new job category
+or change contract decoding or recommendation weights.
+
+The [Italian SI player manual](https://community.sports-interactive.com/sigames-manual/football-manager-2022/giocatori-r4608/)
+uses the recupero-infortunati terminology in its medical-centre section;
+the [English SI manual](https://community.sports-interactive.com/sigames-manual/football-manager-2024/players-r4958/)
+describes the corresponding sports-science medical-centre reporting role.

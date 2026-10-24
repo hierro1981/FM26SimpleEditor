@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.5 (in development)
+# FM26 Simple Editor · v15.5.1 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,10 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.5.1 · in development
+
+- Italian staff labels now use the game’s terminology for **Sports Scientist** and **Head of Sports Science**, making those jobs easier to find in recruitment and staff lists.
 
 ### v15.5 · in development
 

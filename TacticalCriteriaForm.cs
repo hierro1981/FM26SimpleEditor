@@ -4,7 +4,7 @@ namespace FM26SimpleEditor;
 
 public sealed class TacticalCriteriaForm : Form
 {
-    public TacticalCriteriaForm(IReadOnlyList<SquadTarget> targets)
+    public TacticalCriteriaForm(IReadOnlyList<SquadTarget> targets, string? selectionNotes = null)
     {
         Text = L10n.Get("TacticalCriteria"); Width = 900; Height = 650; MinimumSize = new Size(700, 450);
         StartPosition = FormStartPosition.CenterParent;
@@ -33,7 +33,17 @@ public sealed class TacticalCriteriaForm : Form
             links.Controls.Add(link);
         }
         AddLink("TacticalOfficialSource", TacticalRoles.OfficialSource); AddLink("TacticalCatalogueSource", TacticalRoles.CatalogueSource);
-        root.Controls.Add(note, 0, 0); root.Controls.Add(table, 0, 1); root.Controls.Add(links, 0, 2); Controls.Add(root);
+        Control body = table;
+        if (!string.IsNullOrWhiteSpace(selectionNotes))
+        {
+            var tabs = new TabControl { Name = "TacticalCriteriaTabs", Dock = DockStyle.Fill };
+            var notesPage = new TabPage(L10n.Get("TacticsSelectionCriteria"));
+            notesPage.Controls.Add(new TextBox { Name = "TacticsSelectionNotes", Text = selectionNotes, Multiline = true,
+                ReadOnly = true, ScrollBars = ScrollBars.Vertical, WordWrap = true, Dock = DockStyle.Fill });
+            var weightsPage = new TabPage(L10n.Get("TacticsAttributeWeights")); weightsPage.Controls.Add(table);
+            tabs.TabPages.AddRange([notesPage, weightsPage]); body = tabs;
+        }
+        root.Controls.Add(note, 0, 0); root.Controls.Add(body, 0, 1); root.Controls.Add(links, 0, 2); Controls.Add(root);
         root.SizeChanged += (_, _) => note.MaximumSize = new Size(Math.Max(100, root.ClientSize.Width - 30), 0);
     }
 }

@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.4.2 (in sviluppo)
+# FM26 Simple Editor · v15.5 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.5 · in sviluppo
+
+- Nella **Top 11** puoi passare dal rendimento attuale al potenziale futuro con lo switch **Futura**. Anche lo scenario futuro cerca la combinazione migliore per tutta la tattica, usando ogni giocatore una sola volta.
+- Più spazio per gli elenchi in **Migliori per tattica**: tabella futura più larga, colonna familiarità compatta e spiegazioni spostate in **Criteri e fonti**, con una scheda dedicata.
+- La Top 11 futura usa la stessa stima sperimentale della classifica: confronta picchi individuali che possono arrivare in stagioni diverse. I dati mancanti non vengono sostituiti con valori inventati.
 
 ### v15.4.2 · in sviluppo
 

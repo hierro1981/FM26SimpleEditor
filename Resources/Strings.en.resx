@@ -2275,4 +2275,11 @@ Hover over a position for its rating.</value>
   <data name="TacticsGrowthDetail" xml:space="preserve"><value>Age: {0} · curve: {1}. CA {2} → estimate {3}; scenarios {4}–{5}; theoretical PA {6}.</value></data>
   <data name="TacticsGrowthKeeper" xml:space="preserve"><value>goalkeeper</value></data>
   <data name="TacticsGrowthOutfield" xml:space="preserve"><value>outfield</value></data>
+  <data name="LineupFutureToggle" xml:space="preserve"><value>Future</value></data>
+  <data name="LineupFutureTitle" xml:space="preserve"><value>Future best XI · {0}</value></data>
+  <data name="LineupFutureSummary" xml:space="preserve"><value>Future best XI: {0}/{1} slots filled · Total {2} · Average {3}/20.</value></data>
+  <data name="LineupFutureMethod" xml:space="preserve"><value>The future XI uses the same scores as the future ranking and assigns each player to one slot only, maximising coverage and total quality across the entire filtered squad. Missing age, CA/PA or readable attributes never produce invented estimates. This is an experimental scenario of individual peaks, which may occur in different seasons, not a lineup forecast for one date. The curve assumes favourable conditions and may overestimate growth; it is not a reliable individual forecast or a guarantee of reaching PA.</value></data>
+  <data name="LineupFutureNoCandidate" xml:space="preserve"><value>No eligible player has an available future estimate: age, CA/PA, attributes and sufficient familiarity are required.</value></data>
+  <data name="TacticsSelectionCriteria" xml:space="preserve"><value>Selection criteria</value></data>
+  <data name="TacticsAttributeWeights" xml:space="preserve"><value>Attributes and weights</value></data>
 </root>

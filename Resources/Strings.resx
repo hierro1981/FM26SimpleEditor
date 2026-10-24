@@ -2275,4 +2275,11 @@ Passa sul punto per il valore.</value>
   <data name="TacticsGrowthDetail" xml:space="preserve"><value>Età: {0} · curva: {1}. CA {2} → stima {3}; scenari {4}–{5}; PA teorica {6}.</value></data>
   <data name="TacticsGrowthKeeper" xml:space="preserve"><value>portiere</value></data>
   <data name="TacticsGrowthOutfield" xml:space="preserve"><value>movimento</value></data>
+  <data name="LineupFutureToggle" xml:space="preserve"><value>Futura</value></data>
+  <data name="LineupFutureTitle" xml:space="preserve"><value>Top 11 futura · {0}</value></data>
+  <data name="LineupFutureSummary" xml:space="preserve"><value>Top 11 futura: {0}/{1} slot coperti · Totale {2} · Media {3}/20.</value></data>
+  <data name="LineupFutureMethod" xml:space="preserve"><value>La Top 11 futura usa gli stessi punteggi della classifica futura e assegna ogni giocatore a un solo slot, massimizzando copertura e punteggio globale dell’intera rosa filtrata. Senza età, CA/PA o attributi leggibili non viene inventata una stima. È uno scenario sperimentale dei picchi individuali, che possono arrivare in stagioni diverse, non una formazione prevista per una stessa data. La curva assume condizioni favorevoli e può sovrastimare la crescita: non è una previsione individuale affidabile né una garanzia di raggiungere la PA.</value></data>
+  <data name="LineupFutureNoCandidate" xml:space="preserve"><value>Nessun giocatore idoneo ha una stima futura disponibile: servono età, CA/PA, attributi e familiarità sufficienti.</value></data>
+  <data name="TacticsSelectionCriteria" xml:space="preserve"><value>Criteri di selezione</value></data>
+  <data name="TacticsAttributeWeights" xml:space="preserve"><value>Attributi e pesi</value></data>
 </root>

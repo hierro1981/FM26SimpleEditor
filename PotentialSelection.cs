@@ -63,6 +63,10 @@ public static class PotentialSelection
     }
 
     public static IReadOnlyList<PotentialRecommendation> BestForRoles(IEnumerable<PlayerDetail> members, params SquadTarget[] targets)
+        => CandidatesForRoles(members, targets).Take(Math.Clamp(SquadSelection.ResultLimit, 1, 100)).ToArray();
+
+    // The globally optimal future XI needs every eligible player, not only the visible shortlist.
+    public static IReadOnlyList<PotentialRecommendation> CandidatesForRoles(IEnumerable<PlayerDetail> members, params SquadTarget[] targets)
     {
         var players = members.GroupBy(p => p.Player.Uid).Select(g => g.First()).ToDictionary(p => p.Player.Uid);
         var keys = targets.Distinct().ToArray();
@@ -77,6 +81,6 @@ public static class PotentialSelection
                 known ? scores.ToDictionary(s => s.Key, s => s.Score!.Value) : new Dictionary<string, double>(), growth);
         }).OrderByDescending(p => p.Score.HasValue).ThenByDescending(p => p.Score).ThenByDescending(p => p.Current.Score)
             .ThenByDescending(p => p.Current.Familiarity).ThenBy(p => p.Player.Name, StringComparer.OrdinalIgnoreCase).ThenBy(p => p.Player.Uid)
-            .Take(Math.Clamp(SquadSelection.ResultLimit, 1, 100)).ToArray();
+            .ToArray();
     }
 }

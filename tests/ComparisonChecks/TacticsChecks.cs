@@ -41,6 +41,17 @@ internal static class TacticsChecks
         var slots = All(squad).OfType<ComboBox>().Single(c => c.Name == "SavedTacticSlot");
         var grid = All(squad).OfType<DataGridView>().Single(g => g.Name == "TacticRanking");
         var future = All(squad).OfType<DataGridView>().Single(g => g.Name == "TacticPotentialRanking");
+        var criteria=All(squad).OfType<Button>().Single(b=>b.Text==L10n.Get("TacticalCriteria"));
+        check(!All(squad).OfType<Label>().Single(l=>l.Name=="TacticsRankingWarning").Visible &&
+            criteria.AccessibleDescription.Contains(L10n.Format("TacticsMethod",SquadSelection.ResultLimit)),
+            "normal shortlist explanation moves into Criteria without reserving a row above the actions");
+        using(var dialog=new TacticalCriteriaForm(TacticSuggestions.Targets(slot,"both"),criteria.AccessibleDescription))
+        {
+            check(All(dialog).OfType<TextBox>().Single(t=>t.Name=="TacticsSelectionNotes").Text.Contains(L10n.Format("TacticsMethod",SquadSelection.ResultLimit)) &&
+                All(dialog).OfType<DataGridView>().Single().Rows.Count>0,
+                "Criteria provides scrollable selection notes alongside the existing attribute weights");
+        }
+        check(grid.Columns[5].Width==90 && future.Columns[5].Width==90,"both familiarity columns are compact");
         check(future.Rows.Count == 6 && future.ReadOnly && future.ScrollBars == ScrollBars.Both && future.Columns[4].CellTemplate is StarRatingCell &&
               future.Rows[future.Rows.Count-1].Cells[3].FormattedValue.ToString() == "—" && ((SquadRecommendation)future.Rows[future.Rows.Count-1].Tag!).Player.Uid == 2,
             "side-by-side potential table retains eligible players and marks unknown PA explicitly");
@@ -90,7 +101,7 @@ internal static class TacticsChecks
         var currentGroup = All(panel).OfType<GroupBox>().Single(c=>c.Name=="TacticCurrentGroup");
         var futureGroup = All(panel).OfType<GroupBox>().Single(c=>c.Name=="TacticPotentialGroup");
         check(currentGroup.Right <= futureGroup.Left && rankingColumns.ClientRectangle.Contains(currentGroup.Bounds) && rankingColumns.ClientRectangle.Contains(futureGroup.Bounds) &&
-              grid.Height>30 && future.Height>30, "current and potential tables stay side by side with usable scrolling space at narrow width");
+              grid.Height>30 && future.Height>30 && futureGroup.Width>currentGroup.Width, "future table receives more width while both tables remain usable at narrow width");
         check(future.Columns[3].HeaderText=="Future estimate /20" && future.AccessibleDescription.Contains("not FM") &&
               future.Columns["TacticFutureCa"].HeaderText=="Estimated future CA", "projected headings and scenario explanation follow language changes");
         var pitchesViewport = All(panel).OfType<ContentViewport>().Single(p => p.Name == "TacticPitchesScroll");

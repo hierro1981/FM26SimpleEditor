@@ -2,7 +2,7 @@ namespace FM26SimpleEditor;
 
 public enum LineupGap { None, UnknownRole, NoCandidate, UsedElsewhere }
 public sealed record LineupSlot(SavedTacticSlot Slot, SquadRecommendation? Recommendation, LineupGap Gap);
-public sealed record LineupResult(IReadOnlyList<LineupSlot> Slots)
+public sealed record LineupResult(IReadOnlyList<LineupSlot> Slots, bool Future = false)
 {
     public int Filled => Slots.Count(s => s.Recommendation is not null);
     public double Total => Slots.Sum(s => s.Recommendation?.Score ?? 0);
@@ -16,9 +16,9 @@ public static class LineupSelection
     /// possible, then maximise the sum of the existing tactical-role scores.
     /// Dummy columns leave gaps explicit; players are never reused or guessed.
     /// </summary>
-    public static LineupResult ForTactic(IEnumerable<PlayerDetail> members, SavedTactic? tactic, string phase)
+    public static LineupResult ForTactic(IEnumerable<PlayerDetail> members, SavedTactic? tactic, string phase, bool future = false)
     {
-        if (tactic is null) return new([]);
+        if (tactic is null) return new([], future);
         var slots = tactic.Slots.OrderBy(s => s.Number).ToArray();
         if (slots.Length > 11 || slots.Select(s => s.Number).Distinct().Count() != slots.Length)
             throw new ArgumentException("A tactic must have at most eleven distinct slots.", nameof(tactic));
@@ -26,11 +26,14 @@ public static class LineupSelection
         var candidates = slots.Select(slot =>
         {
             var targets = TacticSuggestions.Targets(slot, phase);
-            return targets.Length == 0 ? new Dictionary<uint, SquadRecommendation>() :
-                SquadSelection.CandidatesForRoles(players, targets).ToDictionary(r => r.Player.Uid);
+            if (targets.Length == 0) return new Dictionary<uint, SquadRecommendation>();
+            return future
+                ? PotentialSelection.CandidatesForRoles(players, targets).Where(p => p.Score.HasValue)
+                    .ToDictionary(p => p.Player.Uid, p => p.Current with { Score = p.Score!.Value, PositionScores = p.PositionScores })
+                : SquadSelection.CandidatesForRoles(players, targets).ToDictionary(r => r.Player.Uid);
         }).ToArray();
         int rows = slots.Length, columns = players.Length + rows;
-        if (rows == 0) return new([]);
+        if (rows == 0) return new([], future);
         // Scores are 1..20, with at most eleven slots. A 1000 bonus therefore
         // prioritises coverage without changing the optimum at equal coverage.
         double Cost(int row, int column) => column >= players.Length ? 0 :
@@ -67,6 +70,6 @@ public static class LineupSelection
                 assigned[matchedRow[j] - 1] = r;
         return new(slots.Select((slot, i) => new LineupSlot(slot, assigned[i], assigned[i] is not null ? LineupGap.None :
             TacticSuggestions.Targets(slot, phase).Length == 0 ? LineupGap.UnknownRole :
-            candidates[i].Count == 0 ? LineupGap.NoCandidate : LineupGap.UsedElsewhere)).ToArray());
+            candidates[i].Count == 0 ? LineupGap.NoCandidate : LineupGap.UsedElsewhere)).ToArray(), future);
     }
 }

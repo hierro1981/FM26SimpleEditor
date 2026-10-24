@@ -66,12 +66,14 @@ public sealed class SavedTacticPitch : Control
     private string phase = "ip";
     private int selected = -1;
     private IReadOnlyDictionary<int, LineupSlot>? lineup;
+    private bool future;
     public event Action<int>? SlotSelected;
     public SavedTacticPitch() { DoubleBuffered = true; Dock = DockStyle.Fill; MinimumSize = new Size(260, 310); }
     public void SetTactic(IReadOnlyList<SavedTacticSlot> value, string selectedPhase, int selectedSlot, LineupResult? bestXI = null)
     {
         slots = value; phase = selectedPhase; selected = selectedSlot;
         lineup = bestXI?.Slots.ToDictionary(s => s.Slot.Number);
+        future = bestXI?.Future is true;
         AccessibleDescription = lineup is null ? "" : string.Join("; ", lineup.Values.Select(s =>
             Phase(s.Slot).PositionLabel + ": " + (s.Recommendation?.Player.Name ?? L10n.Get("LineupUnfilled"))));
         hits.Clear(); tip.SetToolTip(this, ""); Invalidate();
@@ -130,7 +132,8 @@ public sealed class SavedTacticPitch : Control
         {
             text += "\n" + (entry.Recommendation is { } r ? r.Player.Name + " · " + r.Score.ToString("0.00", L10n.Culture) + "/20\n" +
                 string.Join("\n", r.PositionScores.Select(s => TacticalRoles.LabelKey(s.Key) + ": " + s.Value.ToString("0.00", L10n.Culture) + "/20")) :
-                L10n.Get(entry.Gap == LineupGap.UnknownRole ? "LineupUnknownRole" : entry.Gap == LineupGap.NoCandidate ? "LineupNoCandidate" : "LineupUsedElsewhere"));
+                L10n.Get(entry.Gap == LineupGap.UnknownRole ? "LineupUnknownRole" : entry.Gap == LineupGap.NoCandidate ? future ? "LineupFutureNoCandidate" : "LineupNoCandidate" : "LineupUsedElsewhere"));
+            if (future) text += "\n" + L10n.Get("LineupFutureMethod");
         }
         if (tip.GetToolTip(this) != text) tip.SetToolTip(this, text);
     }
@@ -150,11 +153,12 @@ public sealed class TacticsPanel : UserControl
     private readonly SavedTacticPitch ip = new() { Name = "SavedTacticIP" }, op = new() { Name = "SavedTacticOP" };
     private readonly SavedTacticPitch xi = new() { Name = "SavedTacticXI" };
     private readonly Label lineupTitle = new() { Name = "LineupTitle", AutoSize = true };
+    private readonly CheckBox futureXI = new() { Name = "LineupFuture", AutoSize = true, Text = L10n.Get("LineupFutureToggle") };
     private readonly Label lineupSummary = new() { Name = "LineupSummary", AutoSize = true, Dock = DockStyle.Fill, ForeColor = Color.DimGray };
     private readonly ToolTip lineupTips = new() { AutoPopDelay = 25000 };
     private LineupResult lineup = new([]);
     private readonly Label status = new() { Name = "TacticsStatus", AutoSize = true, Dock = DockStyle.Fill };
-    private readonly Label method = new() { AutoSize = true, Dock = DockStyle.Fill, ForeColor = Color.DimGray };
+    private readonly Label method = new() { Name = "TacticsRankingWarning", AutoSize = true, Dock = DockStyle.Fill, ForeColor = Color.DimGray };
     private readonly DataGridView ranking = new() { Name = "TacticRanking", Dock = DockStyle.Fill, ReadOnly = true, MultiSelect = true, AllowUserToAddRows = false, AllowUserToDeleteRows = false, AllowUserToResizeRows = false, RowHeadersVisible = false, SelectionMode = DataGridViewSelectionMode.FullRowSelect, ScrollBars = ScrollBars.Both, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None };
     private readonly DataGridView potential = new() { Name = "TacticPotentialRanking", Dock = DockStyle.Fill, ReadOnly = true, MultiSelect = true, AllowUserToAddRows = false, AllowUserToDeleteRows = false, AllowUserToResizeRows = false, RowHeadersVisible = false, SelectionMode = DataGridViewSelectionMode.FullRowSelect, ScrollBars = ScrollBars.Both, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None };
     private DataGridView? activeRanking;
@@ -182,8 +186,8 @@ public sealed class TacticsPanel : UserControl
         var root = new TableLayoutPanel { Name = "TacticsContent", ColumnCount = 1, RowCount = 8, Padding = new Padding(6) };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        root.RowStyles.Add(new RowStyle(SizeType.Percent, 65)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        root.RowStyles.Add(new RowStyle(SizeType.Percent, 35)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        root.RowStyles.Add(new RowStyle(SizeType.Percent, 60)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        root.RowStyles.Add(new RowStyle(SizeType.Percent, 40)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         var selectors = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, ColumnCount = 3 };
         selectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65)); selectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35)); selectors.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         var reload = new Button { Name = "TacticsReload", Text = L10n.Get("MySquadReload"), AutoSize = true };
@@ -194,13 +198,14 @@ public sealed class TacticsPanel : UserControl
         for (int i = 0; i < 3; i++) pitches.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / 3));
         pitches.RowStyles.Add(new RowStyle(SizeType.AutoSize)); pitches.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         pitches.Controls.Add(new Label { AutoSize = true, Text = L10n.Get("TacticalPhaseIP") }, 0, 0); pitches.Controls.Add(new Label { AutoSize = true, Text = L10n.Get("TacticalPhaseOP") }, 1, 0);
-        pitches.Controls.Add(lineupTitle, 2, 0);
+        var lineupHeader = new FlowLayoutPanel { Name = "LineupHeader", Dock = DockStyle.Fill, AutoSize = true, WrapContents = true };
+        lineupHeader.Controls.AddRange([lineupTitle, futureXI]); pitches.Controls.Add(lineupHeader, 2, 0);
         pitches.Controls.Add(ip, 0, 1); pitches.Controls.Add(op, 1, 1); pitches.Controls.Add(xi, 2, 1);
         var scroll = new ContentViewport(pitches, new Size(960, 350)) { Name = "TacticPitchesScroll" };
         root.Controls.Add(scroll, 0, 2);
         root.Controls.Add(slotChoice, 0, 3);
         var rankings = new TableLayoutPanel { Name = "TacticRankingColumns", Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
-        rankings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); rankings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        rankings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40)); rankings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
         rankings.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         var currentGroup = new GroupBox { Name = "TacticCurrentGroup", Text = L10n.Get("TacticsCurrentRanking"), Dock = DockStyle.Fill };
         var potentialGroup = new GroupBox { Name = "TacticPotentialGroup", Text = L10n.Get("TacticsPotentialRanking"), Dock = DockStyle.Fill };
@@ -210,7 +215,7 @@ public sealed class TacticsPanel : UserControl
         var actions = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill }; actions.Controls.AddRange([open, criteria]); root.Controls.Add(actions, 0, 6);
         root.Controls.Add(lineupSummary, 0, 7);
         string[] keys = ["#", "Text_f537c6bd038e", "Text_045cb480645d", "MySquadScore", "MySquadStars", "MySquadFamiliarity", "CA", "PA"];
-        int[] widths = [40, 200, 125, 85, 110, 140, 60, 60];
+        int[] widths = [40, 200, 125, 85, 110, 90, 60, 60];
         for (int i = 0; i < keys.Length; i++) ranking.Columns.Add(new DataGridViewTextBoxColumn { Name = "TacticColumn" + i, HeaderText = keys[i].Length <= 2 ? keys[i] : L10n.Get(keys[i]), Width = widths[i], SortMode = DataGridViewColumnSortMode.NotSortable, DefaultCellStyle = new DataGridViewCellStyle { Alignment = i is 0 or >= 3 ? DataGridViewContentAlignment.MiddleRight : DataGridViewContentAlignment.MiddleLeft, NullValue = "—" } });
         ranking.Columns[4].CellTemplate = new StarRatingCell(); ranking.RowTemplate.Height = 41;
         ranking.Columns[3].DefaultCellStyle.Format = "0.00";
@@ -234,11 +239,12 @@ public sealed class TacticsPanel : UserControl
         phase.Items.AddRange([new PhaseChoice("both"), new PhaseChoice("ip"), new PhaseChoice("op")]); phase.SelectedIndex = 0;
         choice.SelectedIndexChanged += (_, _) => { if (!binding) FillSlots(); };
         phase.SelectedIndexChanged += (_, _) => { if (!binding) { RefreshLineup(); RefreshRanking(); } };
+        futureXI.CheckedChanged += (_, _) => { if (!binding) { RefreshLineup(); RefreshRanking(); } };
         slotChoice.SelectedIndexChanged += (_, _) => { if (!binding) RefreshRanking(); };
         ip.SlotSelected += SelectSlot; op.SlotSelected += SelectSlot; xi.SlotSelected += SelectSlot;
         activeRanking = ranking;
         open.Click += (_, _) => Open(ActiveRanking);
-        criteria.Click += (_, _) => { if (Targets.Length > 0) { using var dialog = new TacticalCriteriaForm(Targets); dialog.ShowDialog(this); } };
+        criteria.Click += (_, _) => { if (slotChoice.SelectedItem is not null) { using var dialog = new TacticalCriteriaForm(Targets, criteria.AccessibleDescription); dialog.ShowDialog(this); } };
         var compare = new ToolStripMenuItem(L10n.Get("QuickComparePair")) { Name = "QuickComparePair" };
         compare.Click += (_, _) => { if (QuickComparison.TryPair(MenuGrid, out uint a, out uint b)) QuickComparisonRequested?.Invoke(a, b); };
         var add = new ToolStripMenuItem(L10n.Get("Text_885725b27cce")); add.Click += (_, _) => { if (SelectedUid(MenuGrid) is uint uid) AddComparisonRequested?.Invoke(uid); };
@@ -259,7 +265,11 @@ public sealed class TacticsPanel : UserControl
     private static uint? SelectedUid(DataGridView grid) => grid.SelectedRows.Count == 1 ? (grid.SelectedRows[0].Tag as SquadRecommendation)?.Player.Uid : null;
     private void Open(DataGridView grid) { if (SelectedUid(grid) is uint uid) PlayerOpenRequested?.Invoke(uid); }
     public bool IsLoadedFor(uint uid) => clubUid == uid && loaded;
-    public void ClearForClub(uint? uid) { clubUid = uid; loaded = false; data = new(); BindChoices(); }
+    public void ClearForClub(uint? uid)
+    {
+        if (clubUid != uid) { binding = true; futureXI.Checked = false; binding = false; }
+        clubUid = uid; loaded = false; data = new(); BindChoices();
+    }
     public void SetData(SavedTacticsResult result) { if (clubUid != result.ClubUid) return; data = result; loaded = true; BindChoices(); }
     public void SetMembers(IReadOnlyList<PlayerDetail> value) { members = value; RefreshLineup(); RefreshRanking(); }
     public void SetLanguage()
@@ -294,7 +304,7 @@ public sealed class TacticsPanel : UserControl
         ip.SetTactic(SelectedTactic?.Slots ?? [], "ip", slot?.Number ?? -1); op.SetTactic(SelectedTactic?.Slots ?? [], "op", slot?.Number ?? -1);
         string phaseKey = (phase.SelectedItem as PhaseChoice)?.Key ?? "both";
         xi.SetTactic(SelectedTactic?.Slots ?? [], phaseKey == "op" ? "op" : "ip", slot?.Number ?? -1, lineup);
-        lineupTitle.Text = L10n.Format("LineupTitle", phase.SelectedItem?.ToString() ?? L10n.Get("TacticsBoth"));
+        lineupTitle.Text = L10n.Format(futureXI.Checked ? "LineupFutureTitle" : "LineupTitle", phase.SelectedItem?.ToString() ?? L10n.Get("TacticsBoth"));
         status.Text = data.Status == "unavailable" ? L10n.Format("TacticsUnavailable", data.Error ?? "—") : data.Status == "ready" ? "" : L10n.Get("TacticsEmpty");
         status.Visible = status.Text.Length > 0;
         var targets = Targets; IReadOnlyList<SquadRecommendation> best = targets.Length == 0 ? [] : SquadSelection.BestForRoles(members, targets);
@@ -305,6 +315,7 @@ public sealed class TacticsPanel : UserControl
                 string.Join(" · ", r.Familiarities.Select(f => Labels.PositionCode(f.Key, L10n.IsItalian) + ": " + f.Value)), r.Player.Ca, r.Player.Pa, r.Player.Age);
             ranking.Rows[at].Tag = r;
             ranking.Rows[at].Cells[3].ToolTipText = string.Join("\n", r.PositionScores.Select(s => TacticalRoles.LabelKey(s.Key) + ": " + s.Value.ToString("0.00", L10n.Culture) + "/20"));
+            ranking.Rows[at].Cells[5].ToolTipText = ranking.Rows[at].Cells[5].Value?.ToString() ?? "";
         }
         potential.Rows.Clear();
         var projected = targets.Length == 0 ? [] : PotentialSelection.BestForRoles(members, targets);
@@ -327,20 +338,27 @@ public sealed class TacticsPanel : UserControl
         lineupTips.SetToolTip(potential.Parent, potential.AccessibleDescription);
         potential.ClearSelection(); activeRanking = ranking;
         ranking.Columns[3].DefaultCellStyle.FormatProvider = L10n.Culture;
-        ranking.ClearSelection(); open.Enabled = false; criteria.Enabled = targets.Length > 0;
+        ranking.ClearSelection(); open.Enabled = false; criteria.Enabled = slot is not null;
+        futureXI.Enabled = SelectedTactic is not null;
         choice.Enabled = data.Status == "ready" && data.Tactics.Count > 0;
         slotChoice.Enabled = choice.Items.Count > 0; phase.Enabled = slotChoice.Items.Count > 0;
-        method.Text = slot is not null && targets.Length == 0 ? L10n.Get("TacticsCannotRank") : L10n.Format("TacticsMethod", SquadSelection.ResultLimit) + " " + L10n.Get("TacticsPotentialNote");
+        method.Text = slot is not null && targets.Length == 0 ? L10n.Get("TacticsCannotRank") : "";
+        method.Visible = method.Text.Length > 0;
+        criteria.AccessibleDescription = string.Join("\n\n", new[] { method.Text,
+            L10n.Format("TacticsMethod", SquadSelection.ResultLimit), L10n.Get("TacticsPotentialNote"),
+            L10n.Get("TacticsPotentialMethod"), L10n.Get("LineupMethod"), L10n.Get("LineupFutureMethod") }.Where(s => s.Length > 0));
     }
     private void RefreshLineup()
     {
-        lineup = LineupSelection.ForTactic(members, SelectedTactic, (phase.SelectedItem as PhaseChoice)?.Key ?? "both");
+        lineup = LineupSelection.ForTactic(members, SelectedTactic, (phase.SelectedItem as PhaseChoice)?.Key ?? "both", futureXI.Checked);
         lineupSummary.Visible = lineup.Slots.Count > 0;
-        lineupSummary.Text = lineup.Slots.Count == 0 ? "" : L10n.Format("LineupSummary", lineup.Filled, lineup.Slots.Count,
+        lineupSummary.Text = lineup.Slots.Count == 0 ? "" : L10n.Format(futureXI.Checked ? "LineupFutureSummary" : "LineupSummary", lineup.Filled, lineup.Slots.Count,
             lineup.Total.ToString("0.00", L10n.Culture), lineup.Average?.ToString("0.00", L10n.Culture) ?? "—");
-        lineupSummary.AccessibleDescription = L10n.Get("LineupMethod");
+        lineupSummary.AccessibleDescription = L10n.Get("LineupMethod") + (futureXI.Checked ? "\n" + L10n.Get("LineupFutureMethod") : "");
         lineupTips.SetToolTip(lineupSummary, lineupSummary.AccessibleDescription);
         lineupTips.SetToolTip(lineupTitle, lineupSummary.AccessibleDescription);
+        futureXI.AccessibleDescription = L10n.Get("LineupFutureMethod");
+        lineupTips.SetToolTip(futureXI, futureXI.AccessibleDescription);
     }
     protected override void Dispose(bool disposing) { if (disposing) { menu.Dispose(); lineupTips.Dispose(); } base.Dispose(disposing); }
 }

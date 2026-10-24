@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.4.2 (in development)
+# FM26 Simple Editor · v15.5 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.5 · in development
+
+- Switch the **Best XI** between current performance and future potential with **Future**. Both modes find the best combination for the entire tactic, using each player once.
+- More list space in **Best by tactic**: a wider future table, compact familiarity columns, and explanations moved into a dedicated tab in **Criteria and sources**.
+- The future XI uses the ranking’s experimental growth estimate: individual peaks may occur in different seasons. Missing data never produce invented values.
 
 ### v15.4.2 · in development
 

@@ -1,11 +1,11 @@
-# Tactical growth estimate · v15.4.2
+# Tactical growth estimate and future XI · v15.5
 
 `Best by tactic` shows current recommendations alongside an experimental estimate
 of reachable future performance, replacing v15.4's unconditional full-PA scenario.
 The v15.4.2 correction also removes multiplicative CA-ratio attribute inflation.
 Both tables use the same full eligible squad/loan pool, selected phase(s), role
-weights, current familiarity and central result limit. The best-XI pitch remains
-based on current scores. Open/Compare always use real player data; no save data
+weights, current familiarity and central result limit. The best-XI pitch defaults to current scores; v15.5 adds a switch to
+optimise it using these projected scores instead. Open/Compare always use real player data; no save data
 or attributes are changed.
 
 ## Evidence and provenance
@@ -169,3 +169,28 @@ caps, both phases, complete-pool sorting, and source
 immutability. Windows UI checks cover future-CA/scenario columns, explanatory
 localised tooltips, current-data Open/Compare, scope refresh, scrolling and
 clearing when a new save is opened.
+
+## Future XI and layout · v15.5
+
+The pitch defaults to current performance. The Future checkbox selects the
+same central estimate as the future table and reruns maximum-weight global
+assignment across every eligible filtered player. It never applies the visible
+shortlist limit before assignment. It prioritises filling eligible slots, then
+maximises their total score, with no repeated player IDs. Unknown projections
+are excluded from the future assignment rather than replaced with current scores.
+Their absence may leave a visible gap. Input rows and attributes remain real;
+only recommendation score records are copied for the future solver.
+
+Selection follows the chosen tactic/phase and squad/loan scope. Mode survives
+language and phase changes, resets to current on a different managed club/save,
+and is explicit in the pitch title, summary and future hover explanation.
+This compares estimated individual peaks, not one shared future season. The
+known optimistic age-curve limitation remains: do not treat this as a calibrated
+individual growth forecast or proof that the player will reach PA.
+
+The future table receives 60% of the ranking width and the current table 40%.
+The ranking area receives 40% of the available flexible height instead of 35%.
+Both familiarity columns are 90 logical pixels and retain full text in tooltips.
+Normal explanatory text is removed from the main surface and appears under
+Criteria and sources, in scrollable Selection criteria notes beside the existing
+Attributes and weights tab. Unknown-role warnings remain visible when needed.

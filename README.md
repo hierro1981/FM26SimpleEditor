@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.1 (in sviluppo)
+# FM26 Simple Editor · v15.2 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.2 · in sviluppo
+
+- Filtro per incarico attuale con **Qualsiasi**, incarichi riconosciuti e **Non identificato**; combinabile con ruolo o categoria di allenamento cercati.
+- Avviso più chiaro per i candidati al limite con maggior rischio di rifiuto, che restano visibili per raccogliere feedback.
+- Riepilogo copiato arricchito con incarico, contratto e stipendio attuali; punteggi più leggibili.
 
 ### v15.1 · in sviluppo
 

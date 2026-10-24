@@ -30,6 +30,24 @@ internal static class StaffRecruitmentChecks
         check(StaffRecruitment.Quality(unknown,scout) is null && StaffRecruitment.Rank(data,scout).Last().Uid==6, "missing primary attributes are not substituted by CA or ranked ahead of complete candidates");
         var duplicate=Person(1,10000); data.Staff=[good,duplicate];
         check(StaffRecruitment.Rank(data,scout).Count==0 && StaffRecruitment.Rank(data,scout,ignoreInterest:true).Count==1, "multiple employments use conservative prestige and produce only one shortlist row per person");
+        var coach = Person(7); coach.JobKey = "coach"; coach.JobCode = 2;
+        var unidentified = Person(8); unidentified.JobKey = null; unidentified.JobCode = null;
+        data.Staff = [good, coach, unidentified, tooHigh];
+        check(StaffRecruitment.Rank(data, scout, currentJob: "scout").Select(c => c.Uid).SequenceEqual(new uint[] {1}),
+            "current-job filter uses decoded employment independently from the desired profile and interest");
+        check(StaffRecruitment.Rank(data, scout, ignoreInterest:true, currentJob: "coach").Single().Uid == 7 &&
+            StaffRecruitment.Rank(data, scout, currentJob:"__unknown").Single().Uid == 8,
+            "ignore-interest preserves current-job filtering and unidentified jobs remain explicitly selectable");
+        check(StaffRecruitment.Rank(data, scout, currentJob: "").Count == StaffRecruitment.Rank(data, scout).Count,
+            "any-current-job default retains the full eligible candidate pool");
+        var feedbackDestination = new StaffRecruitmentResult { ClubReputation = 6302, GameDate = "2028-03-08" };
+        foreach (var sample in new[] { (Rep:7957, Ambition:16, Loyalty:17), (Rep:8582, Ambition:11, Loyalty:8) })
+        {
+            var target = Person(9, sample.Rep); target.Personality = new() { ["ambition"] = sample.Ambition, ["loyalty"] = sample.Loyalty };
+            var estimate = StaffRecruitment.Estimate(target, scout, feedbackDestination);
+            check(estimate.Score == -17 && estimate.Band == StaffInterest.Borderline && estimate.Label.Contains("rischio rifiuto elevato") && estimate.Reasons.Any(r => r.Contains("meno prestigioso")),
+                "reported refusal context is cautioned without per-person exceptions or changing the uncalibrated score " + sample.Rep);
+        }
         data.Staff=[good,poor];
         check(StaffRecruitment.Rank(data,scout,search:"Person 2").Single().Uid==2, "recruitment search uses actual candidate identity");
         foreach(var category in StaffRecruitment.Training)
@@ -72,6 +90,15 @@ internal static class StaffRecruitmentChecks
         check(ignore.Checked && ignore.Text.Contains("Ignora interesse") && grid.Rows.Count == 3, "ignore-interest choice survives language changes");
         ignore.Checked = false; Application.DoEvents();
         check(grid.Rows.Count == 2, "unchecking ignore-interest restores the plausible and borderline pool");
+        data.Staff = [good, coach, unidentified]; panel.SetData(data); Application.DoEvents();
+        var jobs = All(panel).OfType<ComboBox>().Single(c => c.Name == "RecruitCurrentJob");
+        check(jobs.SelectedIndex == 0 && jobs.Items[0].ToString() == "Qualsiasi", "current-job selector defaults to any");
+        jobs.SelectedIndex = jobs.Items.Cast<object>().ToList().FindIndex(c => c.ToString() == L10n.Get("StaffJob_coach")); Application.DoEvents();
+        check(grid.Rows.Count == 1 && ((StaffCandidate)grid.Rows[0].DataBoundItem).Uid == 7, "current-job dropdown filters the displayed shortlist");
+        L10n.SetLanguage("en"); panel.SetLanguage(); Application.DoEvents();
+        check(jobs.SelectedItem!.ToString() == "Coach" && grid.Rows.Count == 1 && jobs.Items[0].ToString() == "Any", "language changes preserve the current-job filter key");
+        jobs.SelectedIndex = 0; Application.DoEvents();
+        check(grid.Rows.Count == 3, "any-current-job option restores candidates from other and unidentified jobs");
         panel.ClearForClub(9);panel.SetData(data);
         check(grid.Rows.Count==0, "stale recruitment responses from another club are ignored");
         host.Close();L10n.SetLanguage("it");

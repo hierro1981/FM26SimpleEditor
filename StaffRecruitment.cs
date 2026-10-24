@@ -10,7 +10,7 @@ public sealed record StaffSearchProfile(string Key, IReadOnlyDictionary<string, 
 public enum StaffInterest { Likely, Borderline, Uncertain, Unlikely }
 public sealed record StaffInterestEstimate(StaffInterest Band, int Score, IReadOnlyList<string> Reasons)
 {
-    public string Label => L10n.Get("RecruitInterest_" + Band);
+    public string Label => L10n.Get(Band == StaffInterest.Borderline && Score <= -10 ? "RecruitInterest_BorderlineRisk" : "RecruitInterest_" + Band);
 }
 public sealed record StaffCandidate(StaffRow Person, StaffSearchProfile Profile, double? Quality,
     StaffInterestEstimate Interest, CoachingRating? BestTraining)
@@ -108,18 +108,23 @@ public static class StaffRecruitment
         if (person.JobKey == "manager" && profile.Key != "manager")
         { score -= 15; reasons.Add(L10n.Get("RecruitManagerChange")); }
         if (person.EmploymentCount > 1) reasons.Add(L10n.Get("RecruitMultipleJobs"));
+        if (repKnown && destination.ClubReputation!.Value <= person.ClubReputation!.Value - 1500 && offeredWage == 0)
+            reasons.Add(L10n.Get("RecruitPrestigeRisk"));
         score = Math.Clamp(score, -100, 100);
         StaffInterest band = !repKnown && !expired ? StaffInterest.Uncertain : score >= 10 ? StaffInterest.Likely : score >= -20 ? StaffInterest.Borderline : StaffInterest.Unlikely;
         reasons.Add(L10n.Get("RecruitMissingFactors"));
         return new(band, score, reasons);
     }
-    public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "")
+    public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "", string? currentJob = null)
     {
         if (data.Status != "ready") return [];
         // Avoid treating the easiest of two concurrent employers as the only job to leave.
         return data.Staff.Where(p => !p.IsHumanManager && p.ClubUid != data.ClubUid)
             .GroupBy(p => p.Uid).Select(g => g.OrderByDescending(p => p.ClubReputation ?? int.MaxValue).ThenByDescending(p => p.Wage).First())
             .Where(p => profile.Key != "doctor" || p.JobKey == "doctor")
+            .Where(p => string.IsNullOrEmpty(currentJob) || (currentJob == "__unknown"
+                ? !p.JobCode.HasValue || !Roles.Any(r => r.Key == p.JobKey)
+                : p.JobCode.HasValue && p.JobKey == currentJob))
             .Select(p => new StaffCandidate(p, profile, Quality(p, profile), Estimate(p, profile, data, offeredWage),
                 CoachingStars.Calculate(p).Where(c => c.Score.HasValue).OrderByDescending(c => c.Score).FirstOrDefault()))
             .Where(c => (ignoreInterest || c.Interest.Band != StaffInterest.Unlikely) &&

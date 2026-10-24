@@ -1,4 +1,4 @@
-# Staff recruitment estimates · v15.1
+# Staff recruitment estimates · v15.2
 
 `La mia squadra → Trova staff` / `My squad → Find staff` is read-only.
 No offer is sent and no save is changed. It shortlists readable club-linked staff
@@ -27,6 +27,17 @@ See [CoachingStars](CoachingStars.md) for formulas and limits. Best-training
 stars mean the person's strongest readable category, not the category selected
 in the search. Both labels are explicit. Absolute overall stars remain CA/40.
 
+## Current-job filter
+
+The separate dropdown defaults to **Any** and offers every supported current job,
+plus **Not identified**. It filters the decoded job of the displayed employment
+row, independently of the desired suitability profile or training category.
+Unknown jobs are not classified as unemployed. For multiple jobs the conservative
+representative employment is selected before this filter: a lower-prestige second
+job cannot bypass the interest calculation. **Ignore interest** does not bypass
+this job filter, search or the own-staff exclusions. Selection survives language
+changes by job key, not by translated label.
+
 ## Interest model v1
 
 This is an uncalibrated, limited-confidence index, not a probability, not a
@@ -51,6 +62,16 @@ below −20 **unlikely**. These thresholds are editor choices for later
 calibration. Missing wages or an unspecified offer do not imply affordability.
 Missing personality values add no invented adjustment. Future contracts and
 multiple jobs are disclosed as uncertainty.
+
+v15.2 keeps these scores and cutoffs unchanged. Borderline scores ≤−10 carry
+an explicit **high refusal risk** label while staying in the default pool.
+A current-employer prestige gap of at least 1500 with no wage scenario also
+adds a cautionary reason. Two user-reported refusals in that context motivated
+clearer wording; they are insufficient to calibrate probabilities or justify
+person-specific rules. No player/staff names or ID exceptions are used.
+Copied feedback now includes current job, club, contract end and wage to make
+future comparisons less ambiguous; a zero offer is written as unspecified,
+not as an actual zero-wage offer. Scores are formatted to two decimals.
 
 Own-club and controlled-affiliate staff are excluded by person UID across all
 employment rows. Human managers are excluded. Multiple employers produce one

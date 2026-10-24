@@ -6,6 +6,11 @@ public sealed class StaffRecruitmentPanel : UserControl
 {
     private readonly ComboBox mode = new() { Name = "RecruitMode", DropDownStyle = ComboBoxStyle.DropDownList, Width = 180 };
     private readonly ComboBox profile = new() { Name = "RecruitProfile", DropDownStyle = ComboBoxStyle.DropDownList, Width = 300, DropDownWidth = 450 };
+    private readonly ComboBox currentJob = new() { Name = "RecruitCurrentJob", DropDownStyle = ComboBoxStyle.DropDownList, Width = 245, DropDownWidth = 360 };
+    private sealed record JobChoice(string Key)
+    {
+        public override string ToString() => L10n.Get(Key.Length == 0 ? "RecruitAnyJob" : Key == "__unknown" ? "StaffUnknownRole" : "StaffJob_" + Key);
+    }
     private readonly NumericUpDown offer = new() { Name = "RecruitWage", Minimum = 0, Maximum = 10000000, Increment = 100, ThousandsSeparator = true, Width = 125 };
     private readonly NumericUpDown limit = new() { Name = "RecruitLimit", Minimum = 10, Maximum = 500, Value = 50, Increment = 10, Width = 65 };
     private readonly CheckBox ignoreInterest = new() { Name = "RecruitIgnoreInterest", Text = L10n.Get("RecruitIgnoreInterest"), AutoSize = true };
@@ -40,10 +45,15 @@ public sealed class StaffRecruitmentPanel : UserControl
             if (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem is not StaffCandidate c || data is null) return;
             Clipboard.SetText($"FM26 Simple Editor {typeof(StaffRecruitmentPanel).Assembly.GetName().Version} | {data.GameDate}\n" +
                 $"{data.ClubName} ({data.ClubUid}) | {c.Name} ({c.Person.Id} / {c.Person.Uid}) | {c.Profile.Label}\n" +
-                $"{c.RoleStars} ★ | {c.Quality}/20 | {c.Interest.Label} ({c.Interest.Score}) | {offer.Value}/week\n" + c.MainAttributes + "\n" + string.Join("\n", c.Interest.Reasons));
+                $"{c.RoleStars} ★ | {c.Quality?.ToString("0.00", L10n.Culture) ?? "—"}/20 | {c.Interest.Label} ({c.Interest.Score})\n" +
+                L10n.Format("RecruitFeedbackContext", c.CurrentRole, c.Club, c.Person.ContractEndDisplay, c.Wage?.ToString("N0", L10n.Culture) ?? "—") + "\n" +
+                (offer.Value == 0 ? L10n.Get("RecruitNoOffer") : L10n.Get("RecruitOffer") + ": " + offer.Value.ToString("N0", L10n.Culture)) + "\n" +
+                c.MainAttributes + "\n" + string.Join("\n", c.Interest.Reasons));
             tips.Show(L10n.Get("RecruitCopied"), copy, 0, copy.Height, 4000);
         };
-        tools.Controls.AddRange([mode, profile, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer,
+        var currentJobTools = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, WrapContents = false, Margin = Padding.Empty };
+        currentJobTools.Controls.AddRange([new Label { Text = L10n.Get("RecruitCurrentRole"), AutoSize = true, Margin = new Padding(6,8,0,0) }, currentJob]);
+        tools.Controls.AddRange([mode, profile, currentJobTools, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer,
             new Label { Text = L10n.Get("RecruitLimit"), AutoSize = true, Margin = new Padding(6,8,0,0) }, limit, ignoreInterest, search, reload, copy]);
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var lower = new TableLayoutPanel { Name = "RecruitDetailColumns", Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
@@ -94,6 +104,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         };
         mode.SelectedIndexChanged += (_, _) => { if (!binding) { Profiles(); RefreshRows(); } };
         profile.SelectedIndexChanged += (_, _) => { if (!binding) { sort = "Quality"; descending = true; RefreshRows(); } };
+        currentJob.SelectedIndexChanged += (_, _) => { if (!binding) RefreshRows(); };
         offer.ValueChanged += (_, _) => RefreshRows(); limit.ValueChanged += (_, _) => RefreshRows(); ignoreInterest.CheckedChanged += (_, _) => { sort = "Quality"; descending = true; RefreshRows(); }; search.TextChanged += (_, _) => RefreshRows();
         root.SizeChanged += (_, _) => status.MaximumSize = new Size(Math.Max(100, root.ClientSize.Width - 16), 0);
         SetLanguage(); L10n.Capture(this);
@@ -118,7 +129,11 @@ public sealed class StaffRecruitmentPanel : UserControl
     }
     public void SetLanguage()
     {
-        L10n.Apply(this); int selected = Math.Max(0, mode.SelectedIndex); binding = true;
+        L10n.Apply(this); int selected = Math.Max(0, mode.SelectedIndex); string job = (currentJob.SelectedItem as JobChoice)?.Key ?? ""; binding = true;
+        currentJob.Items.Clear(); currentJob.Items.Add(new JobChoice(""));
+        currentJob.Items.AddRange(StaffRecruitment.Roles.OrderBy(r => r.Label, StringComparer.CurrentCultureIgnoreCase).Select(r => (object)new JobChoice(r.Key)).ToArray());
+        currentJob.Items.Add(new JobChoice("__unknown"));
+        currentJob.SelectedIndex = Math.Max(0, currentJob.Items.Cast<JobChoice>().ToList().FindIndex(c => c.Key == job));
         mode.Items.Clear(); mode.Items.AddRange([L10n.Get("RecruitRoles"), L10n.Get("RecruitTraining")]); mode.SelectedIndex = selected; binding = false;
         Profiles(); tips.SetToolTip(offer, L10n.Get("RecruitOfferHint")); tips.SetToolTip(profile, L10n.Get("RecruitQualityHint"));
         list.Columns["RoleStars"].ToolTipText = list.Columns["Quality"].ToolTipText = L10n.Get("RecruitQualityHint");
@@ -131,7 +146,7 @@ public sealed class StaffRecruitmentPanel : UserControl
     {
         if (binding) return;
         uint? uid = (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem as StaffCandidate)?.Person.Uid;
-        var ranked = data is null || Profile is null ? [] : StaffRecruitment.Rank(data, Profile, (long)offer.Value, ignoreInterest.Checked, search.Text.Trim());
+        var ranked = data is null || Profile is null ? [] : StaffRecruitment.Rank(data, Profile, (long)offer.Value, ignoreInterest.Checked, search.Text.Trim(), (currentJob.SelectedItem as JobChoice)?.Key);
         object? Value(StaffCandidate c) => sort switch { "ClubReputation" => c.ClubReputation, "PublicId" => c.PublicId, "Uid" => c.Uid, "InterestLabel" => c.Interest.Band == StaffInterest.Likely ? 3 : c.Interest.Band == StaffInterest.Borderline ? 2 : c.Interest.Band == StaffInterest.Uncertain ? 1 : 0,
             "RoleStars" => c.RoleStars, "OverallStars" => c.OverallStars, "TrainingStars" => c.TrainingStars, "Wage" => c.Wage, "Age" => c.Age, "Ca" => c.Ca,
             "Name" => c.Name, "CurrentRole" => c.CurrentRole, "Club" => c.Club, "TrainingCategory" => c.TrainingCategory, "MainAttributes" => c.MainAttributes, _ => c.Quality };

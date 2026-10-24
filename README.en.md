@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.1 (in development)
+# FM26 Simple Editor · v15.2 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.2 · in development
+
+- Current-job filter with **Any**, recognised jobs and **Not identified**. Works alongside the desired job or training category.
+- Clearer warning for borderline candidates at higher refusal risk; they remain visible for feedback.
+- Copied assessments now include current job, contract and wage, with shorter score formatting.
 
 ### v15.1 · in development
 

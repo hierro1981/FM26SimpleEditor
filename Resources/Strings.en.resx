@@ -2234,4 +2234,9 @@ Hover over a position for its rating.</value>
   <data name="RecruitInterestOff" xml:space="preserve"><value>Interest filter disabled: ranked by quality.</value></data>
   <data name="RecruitCopyName" xml:space="preserve"><value>Copy name</value></data>
   <data name="RecruitClubReputation" xml:space="preserve"><value>Current club reputation</value></data>
+  <data name="RecruitAnyJob" xml:space="preserve"><value>Any</value></data>
+  <data name="RecruitInterest_BorderlineRisk" xml:space="preserve"><value>Borderline · high refusal risk</value></data>
+  <data name="RecruitPrestigeRisk" xml:space="preserve"><value>Move to a substantially less prestigious club without a specified wage offer: elevated refusal risk, verify in game.</value></data>
+  <data name="RecruitFeedbackContext" xml:space="preserve"><value>Current job: {0} · Current club: {1} · Contract ends: {2} · Current wage: {3}/week (base currency)</value></data>
+  <data name="RecruitNoOffer" xml:space="preserve"><value>No wage offer specified (0 in the selector).</value></data>
 </root>

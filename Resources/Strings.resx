@@ -2234,4 +2234,9 @@ Passa sul punto per il valore.</value>
   <data name="RecruitInterestOff" xml:space="preserve"><value>Filtro interesse disattivato: classifica per qualità.</value></data>
   <data name="RecruitCopyName" xml:space="preserve"><value>Copia nome</value></data>
   <data name="RecruitClubReputation" xml:space="preserve"><value>Reputazione club attuale</value></data>
+  <data name="RecruitAnyJob" xml:space="preserve"><value>Qualsiasi</value></data>
+  <data name="RecruitInterest_BorderlineRisk" xml:space="preserve"><value>Al limite · rischio rifiuto elevato</value></data>
+  <data name="RecruitPrestigeRisk" xml:space="preserve"><value>Passaggio a un club sensibilmente meno prestigioso senza offerta salariale specificata: rischio di rifiuto elevato, da verificare nel gioco.</value></data>
+  <data name="RecruitFeedbackContext" xml:space="preserve"><value>Incarico attuale: {0} · Club attuale: {1} · Contratto fino al: {2} · Stipendio attuale: {3}/settimana (valuta base)</value></data>
+  <data name="RecruitNoOffer" xml:space="preserve"><value>Offerta salariale non specificata (0 nel selettore).</value></data>
 </root>

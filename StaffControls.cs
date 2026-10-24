@@ -46,7 +46,7 @@ public sealed class StaffPanel : UserControl
         (string Field, string Header, int Width)[] columns =
         [
             ("Name", "Text_f537c6bd038e", 190), ("RoleDisplay", "StaffRole", 225),
-            ("OverallStars", "StaffOverallStars", 190),
+            ("CurrentRoleStars", "StaffCurrentRoleStars", 225),
             ("ClubName", "StaffClub", 180), ("ListedClubName", "StaffListedClub", 180),
             ("Age", "Text_9efdc62c88bf", 60), ("BirthDisplay", "StaffBirth", 105),
             ("Ca", "", 65), ("Pa", "", 65), ("CurrentReputation", "StaffPersonalReputation", 180), ("Wage", "StaffWage", 160),
@@ -59,11 +59,11 @@ public sealed class StaffPanel : UserControl
             column.DefaultCellStyle.NullValue = "—";
             if (c.Field is "Age" or "Ca" or "Pa" or "Wage" or "CurrentReputation" or "Id" or "Uid" || c.Field.EndsWith("Display") && c.Field != "RoleDisplay" && c.Field != "ContractDisplay") column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             if (c.Field == "Wage") column.DefaultCellStyle.Format = "N0";
-            if (c.Field == "OverallStars")
+            if (c.Field == "CurrentRoleStars")
             {
                 column.CellTemplate = new StarRatingCell();
                 column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                column.ToolTipText = L10n.Get("StaffOverallStarsNote");
+                column.ToolTipText = L10n.Get("StaffCurrentRoleStarsNote");
             }
             list.Columns.Add(column);
         }
@@ -85,8 +85,8 @@ public sealed class StaffPanel : UserControl
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "RoleDisplay" &&
                 list.Rows[e.RowIndex].DataBoundItem is StaffRow person) e.ToolTipText = person.RoleTooltip;
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "OverallStars")
-                e.ToolTipText = L10n.Get("StaffOverallStarsNote");
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "CurrentRoleStars")
+                e.ToolTipText = list.Rows[e.RowIndex].DataBoundItem is StaffRow rated ? StaffRecruitment.CurrentStarsTooltip(rated) : L10n.Get("StaffCurrentRoleStarsNote");
         };
         list.SelectionChanged += (_, _) => ShowDetails(); search.TextChanged += (_, _) => RefreshRows();
         root.SizeChanged += (_, _) => status.MaximumSize = new Size(Math.Max(100, root.ClientSize.Width - 20), 0);
@@ -110,7 +110,7 @@ public sealed class StaffPanel : UserControl
         if (result.ClubUid != clubUid) return; // Ignore stale results from another club/save.
         data = result; RefreshRows();
     }
-    public void SetLanguage() { L10n.Apply(this); list.Columns["OverallStars"].ToolTipText = L10n.Get("StaffOverallStarsNote"); RefreshRows(); }
+    public void SetLanguage() { L10n.Apply(this); list.Columns["CurrentRoleStars"].ToolTipText = L10n.Get("StaffCurrentRoleStarsNote"); RefreshRows(); }
     public void SortBy(string field)
     {
         if (!list.Columns.Contains(field)) return;
@@ -129,7 +129,7 @@ public sealed class StaffPanel : UserControl
         {
             "RoleDisplay" => p.RoleDisplay, "ClubName" => p.ClubName, "ListedClubName" => p.ListedClubName,
             "Age" => p.Age, "BirthDisplay" => p.Birth, "Ca" => p.Ca, "Pa" => p.Pa, "Wage" => p.Wage,
-            "OverallStars" => p.OverallStars, "CurrentReputation" => p.CurrentReputation,
+            "CurrentRoleStars" => p.CurrentRoleStars, "CurrentReputation" => p.CurrentReputation,
             "ContractDisplay" => p.ContractDisplay, "ContractStartDisplay" => p.ContractStart, "ContractEndDisplay" => p.ContractEnd,
             "Id" => p.Id, "Uid" => p.Uid, _ => p.Name
         };

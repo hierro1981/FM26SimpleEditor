@@ -27,9 +27,8 @@ public sealed record StaffCandidate(StaffRow Person, StaffSearchProfile Profile,
     public int? JobPreference => StaffRecruitment.JobPreference(Person, Profile);
     public int? Age => Person.Age;
     public long? Wage => Person.Wage;
-    public double? OverallStars => Person.OverallStars;
-    public double? RoleStars => Profile.CategoryKey is string key ? CoachingStars.Calculate(Person).Single(c => c.Category.Key == key).Stars :
-        Quality is double q ? Math.Clamp(Math.Round(q / 4 * 2, MidpointRounding.AwayFromZero) / 2, .5, 5) : null;
+    public double? CurrentRoleStars => Person.CurrentRoleStars;
+    public double? RoleStars => StaffRecruitment.Stars(Person, Profile);
     public double? TrainingStars => BestTraining?.Stars;
     public string TrainingCategory => BestTraining is null ? "—" : L10n.Get("CoachingCategory_" + BestTraining.Category.Key);
     public string InterestLabel => Interest.Label;
@@ -63,6 +62,28 @@ public static class StaffRecruitment
         Role("doctor")
     ]);
     public static IReadOnlyList<StaffSearchProfile> Training { get; } = CoachingStars.Categories.Select(c => new StaffSearchProfile(c.Key, c.Weights, c.Key)).ToArray();
+    public static IReadOnlyList<StaffSearchProfile> CurrentProfiles(StaffRow person)
+    {
+        if (person.IsHumanManager || !person.JobCode.HasValue || person.JobFamilyOnly) return [];
+        var job = Roles.SingleOrDefault(p => p.Key == person.JobKey);
+        return job is null ? [] : new[] { job }.Concat(Training.Where(p => DesiredJob(p) == person.JobKey)).ToArray();
+    }
+    public static StaffSearchProfile? CurrentProfile(StaffRow person)
+    {
+        var profiles = CurrentProfiles(person);
+        // Only categories belonging to the decoded job: a physio's coaching talent
+        // must not inflate their rating, nor an outfield coach's goalkeeping talent.
+        return profiles.Where(p => p.CategoryKey is not null).OrderByDescending(p => Quality(person, p))
+            .FirstOrDefault() ?? profiles.FirstOrDefault();
+    }
+    public static double? Stars(StaffRow person, StaffSearchProfile profile)
+    {
+        if (profile.CategoryKey is string key) return CoachingStars.Calculate(person).Single(c => c.Category.Key == key).Stars;
+        return Quality(person, profile) is double q ? Math.Clamp(Math.Round(q / 4 * 2, MidpointRounding.AwayFromZero) / 2, .5, 5) : null;
+    }
+    public static double? CurrentStars(StaffRow person) => CurrentProfile(person) is StaffSearchProfile profile ? Stars(person, profile) : null;
+    public static string CurrentStarsTooltip(StaffRow person) =>
+        (CurrentProfile(person) is StaffSearchProfile profile ? profile.Label + "\n" : "") + L10n.Get("StaffCurrentRoleStarsNote");
     public static int? Attribute(StaffRow person, string key) => person.Attributes.TryGetValue(key, out int n) && n is >= 1 and <= 20 ? n : null;
     public static double? Quality(StaffRow person, StaffSearchProfile profile)
     {

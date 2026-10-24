@@ -26,19 +26,8 @@ public static class StaffPlanning
     public const double MeaningfulGain = .75;
     public static DateTime? Date(string? value) => DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture,
         DateTimeStyles.None, out var date) ? date : null;
-    public static IReadOnlyList<StaffSearchProfile> Profiles(StaffRow person)
-    {
-        if (!person.JobCode.HasValue || person.JobFamilyOnly) return [];
-        var job = StaffRecruitment.Roles.SingleOrDefault(p => p.Key == person.JobKey);
-        if (job is null) return [];
-        return new[] { job }.Concat(StaffRecruitment.Training.Where(p => StaffRecruitment.DesiredJob(p) == person.JobKey)).ToArray();
-    }
-    public static StaffSearchProfile? DefaultProfile(StaffRow person)
-    {
-        var profiles = Profiles(person);
-        return profiles.Where(p => p.CategoryKey is not null).OrderByDescending(p => StaffRecruitment.Quality(person, p))
-            .FirstOrDefault(p => StaffRecruitment.Quality(person, p).HasValue) ?? profiles.FirstOrDefault();
-    }
+    public static IReadOnlyList<StaffSearchProfile> Profiles(StaffRow person) => StaffRecruitment.CurrentProfiles(person);
+    public static StaffSearchProfile? DefaultProfile(StaffRow person) => StaffRecruitment.CurrentProfile(person);
     public static IReadOnlyList<StaffRenewal> Build(StaffResult own, StaffRecruitmentResult? market, long offer = 0,
         IReadOnlyDictionary<uint, string>? choices = null)
     {

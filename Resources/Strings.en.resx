@@ -2084,11 +2084,11 @@ Hover over a position for its rating.</value>
   <data name="CoachingCategory_SetPieces" xml:space="preserve">
     <value>Set pieces</value>
   </data>
-  <data name="StaffOverallStars" xml:space="preserve">
-    <value>Overall stars (estimate)</value>
+  <data name="StaffCurrentRoleStars" xml:space="preserve">
+    <value>Current job stars (estimate)</value>
   </data>
-  <data name="StaffOverallStarsNote" xml:space="preserve">
-    <value>Absolute estimate from CA: CA / 40, rounded to half a star (0.5–5). It does not reproduce the game’s relative overall stars and is not an average of training categories.</value>
+  <data name="StaffCurrentRoleStarsNote" xml:space="preserve">
+    <value>Estimated suitability for the current job, based on relevant attributes. Goalkeeping, fitness and set-piece coaches use the corresponding training category; general coaches use their strongest outfield category. Other jobs use the staff-search weights. It is not based on CA or an average of all training categories. — means insufficient job or attribute data. It does not reproduce the game’s official stars.</value>
   </data>
   <data name="RecruitTab" xml:space="preserve">
     <value>Find staff</value>

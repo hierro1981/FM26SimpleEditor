@@ -2084,11 +2084,11 @@ Passa sul punto per il valore.</value>
   <data name="CoachingCategory_SetPieces" xml:space="preserve">
     <value>Calci piazzati</value>
   </data>
-  <data name="StaffOverallStars" xml:space="preserve">
-    <value>Stelle complessive (stima)</value>
+  <data name="StaffCurrentRoleStars" xml:space="preserve">
+    <value>Stelle incarico attuale (stima)</value>
   </data>
-  <data name="StaffOverallStarsNote" xml:space="preserve">
-    <value>Stima assoluta dalla CA: CA / 40, arrotondata a mezza stella (0,5–5). Non riproduce le stelle generali relative del gioco e non è la media delle categorie di allenamento.</value>
+  <data name="StaffCurrentRoleStarsNote" xml:space="preserve">
+    <value>Idoneità stimata per l’incarico attuale, basata sugli attributi pertinenti. Per portieri, atletico e calci piazzati usa la categoria di allenamento corrispondente; per i preparatori generici la migliore categoria di movimento. Per gli altri incarichi usa i pesi della ricerca staff. Non deriva dalla CA e non è la media di tutti gli allenamenti. — indica incarico o dati insufficienti. Non riproduce le stelle ufficiali del gioco.</value>
   </data>
   <data name="RecruitTab" xml:space="preserve">
     <value>Trova staff</value>

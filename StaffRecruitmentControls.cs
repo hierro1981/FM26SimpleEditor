@@ -83,10 +83,10 @@ public sealed class StaffRecruitmentPanel : UserControl
         Add(list, "CurrentReputation", "StaffPersonalReputation", 180, true);
         Add(list, "Wage", "StaffWage", 140, true); Add(list, "Age", "Text_9efdc62c88bf", 60, true); Add(list, "Ca", "", 60, true);
         Add(list, "PublicId", "Text_358796f71be1", 110, true); Add(list, "Uid", "Text_e1e8b54d45e2", 110, true);
-        Add(list, "OverallStars", "StaffOverallStars", 180, true, true); Add(list, "TrainingStars", "RecruitBestTraining", 170, true, true);
+        Add(list, "CurrentRoleStars", "StaffCurrentRoleStars", 225, true, true); Add(list, "TrainingStars", "RecruitBestTraining", 170, true, true);
         list.Columns["JobPreference"].ToolTipText = L10n.Get("StaffJobPreferencesNote");
         list.Columns["Quality"].DefaultCellStyle.Format = "0.00"; list.Columns["Wage"].DefaultCellStyle.Format = "N0";
-        list.Columns["OverallStars"].ToolTipText = L10n.Get("StaffOverallStarsNote");
+        list.Columns["CurrentRoleStars"].ToolTipText = L10n.Get("StaffCurrentRoleStarsNote");
         foreach (var grid in new[] { attributes, coaching })
         { Add(grid, "Label", grid == attributes ? "Text_51df0484073a" : "StaffCoachingCategory", 235); Add(grid, "Value", grid == attributes ? "StaffValue" : "StaffCoachingStars", 175, true, grid == coaching); }
         list.RowTemplate.Height = coaching.RowTemplate.Height = 38;
@@ -99,7 +99,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         };
         list.CellToolTipTextNeeded += (_, e) =>
         { if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Rows[e.RowIndex].DataBoundItem is StaffCandidate c)
-            e.ToolTipText = list.Columns[e.ColumnIndex].Name == "CopyName" ? L10n.Get("RecruitCopyName") : string.Join("\n", c.Interest.Reasons); };
+            e.ToolTipText = list.Columns[e.ColumnIndex].Name == "CopyName" ? L10n.Get("RecruitCopyName") : list.Columns[e.ColumnIndex].Name == "CurrentRoleStars" ? StaffRecruitment.CurrentStarsTooltip(c.Person) : string.Join("\n", c.Interest.Reasons); };
         list.CellFormatting += (_, e) =>
         {
             if (e.RowIndex >= 0 && list.Rows[e.RowIndex].DataBoundItem is StaffCandidate c && list.Columns[e.ColumnIndex].Name == "InterestLabel")
@@ -142,7 +142,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         list.Columns["JobPreference"].ToolTipText = L10n.Get("StaffJobPreferencesNote");
         list.Columns["RoleStars"].ToolTipText = list.Columns["Quality"].ToolTipText = L10n.Get("RecruitQualityHint");
         ((DataGridViewButtonColumn)list.Columns["CopyName"]).Text = list.Columns["CopyName"].ToolTipText = L10n.Get("RecruitCopyName");
-        list.Columns["OverallStars"].ToolTipText = L10n.Get("StaffOverallStarsNote"); tips.SetToolTip(ignoreInterest, L10n.Get("RecruitIgnoreInterestHint")); RefreshRows();
+        list.Columns["CurrentRoleStars"].ToolTipText = L10n.Get("StaffCurrentRoleStarsNote"); tips.SetToolTip(ignoreInterest, L10n.Get("RecruitIgnoreInterestHint")); RefreshRows();
     }
     public void ClearForClub(uint? uid) { clubUid = uid; data = null; search.Clear(); RefreshRows(); }
     public void SetData(StaffRecruitmentResult result) { if (result.ClubUid == clubUid) { data = result; RefreshRows(); } }
@@ -152,7 +152,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         uint? uid = (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem as StaffCandidate)?.Person.Uid;
         var ranked = data is null || Profile is null ? [] : StaffRecruitment.Rank(data, Profile, (long)offer.Value, ignoreInterest.Checked, search.Text.Trim(), (currentJob.SelectedItem as JobChoice)?.Key);
         object? Value(StaffCandidate c) => sort switch { "CurrentReputation" => c.CurrentReputation, "JobPreference" => c.JobPreference, "ClubReputation" => c.ClubReputation, "PublicId" => c.PublicId, "Uid" => c.Uid, "InterestLabel" => c.Interest.Band == StaffInterest.Likely ? 3 : c.Interest.Band == StaffInterest.Borderline ? 2 : c.Interest.Band == StaffInterest.Uncertain ? 1 : 0,
-            "RoleStars" => c.RoleStars, "OverallStars" => c.OverallStars, "TrainingStars" => c.TrainingStars, "Wage" => c.Wage, "Age" => c.Age, "Ca" => c.Ca,
+            "RoleStars" => c.RoleStars, "CurrentRoleStars" => c.CurrentRoleStars, "TrainingStars" => c.TrainingStars, "Wage" => c.Wage, "Age" => c.Age, "Ca" => c.Ca,
             "Name" => c.Name, "CurrentRole" => c.CurrentRole, "Club" => c.Club, "TrainingCategory" => c.TrainingCategory, "MainAttributes" => c.MainAttributes, _ => c.Quality };
         var known = ranked.Where(c => Value(c) is not null);
         var rows = (descending ? known.OrderByDescending(Value) : known.OrderBy(Value)).ThenBy(c => c.Name).ThenBy(c => c.Person.Uid)

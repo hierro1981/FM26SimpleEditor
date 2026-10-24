@@ -50,7 +50,39 @@ internal static class CoachingChecks
         person = Coach(); person.IsHumanManager = true;
         check(CoachingStars.Calculate(person).All(r => r.Stars is null), "human manager profiles are not treated as validated non-player layouts");
 
-        person = Coach(); person.Ca = 140; L10n.SetLanguage("it");
+        var stam = Coach(); stam.JobKey = "goalkeeping_coach"; stam.JobCode = 34; stam.Ca = 125;
+        stam.Attributes["coaching_goalkeeping"] = 20; stam.Attributes["determination"] = 10;
+        stam.Attributes["discipline"] = 14; stam.Attributes["motivating"] = 14;
+        check(CoachingStars.Calculate(stam).Single(r=>r.Category.Key=="Goalkeeping").Score == 256 && stam.CurrentRoleStars == 4.5,
+            "Stam-like goalkeeper specialist uses his 256-point coaching category rather than CA 125 stars");
+        stam.Ca = 1; stam.Pa = 200;
+        check(stam.CurrentRoleStars == 4.5, "CA and PA do not change current-job suitability stars");
+        stam.Attributes["coaching_goalkeeping"] = 1; stam.Attributes["coaching_fitness"] = 20;
+        check(stam.CurrentRoleStars == CoachingStars.Calculate(stam).Single(r=>r.Category.Key=="Goalkeeping").Stars && stam.CurrentRoleStars < 4.5,
+            "unrelated fitness talent cannot inflate a goalkeeping coach rating");
+        stam.Attributes.Remove("coaching_goalkeeping"); stam.Ca = 200;
+        check(stam.CurrentRoleStars is null, "missing job-specific input cannot fall back to CA or an unrelated category");
+        foreach (var job in StaffRecruitment.Roles)
+        {
+            var staff = Coach(); staff.JobKey=job.Key; staff.JobCode=2;
+            foreach(var key in job.Weights.Keys) staff.Attributes[key]=16;
+            var currentProfile=StaffRecruitment.CurrentProfile(staff)!;
+            check(staff.CurrentRoleStars == new StaffCandidate(staff,currentProfile,StaffRecruitment.Quality(staff,currentProfile),new(StaffInterest.Uncertain,0,[]),null).RoleStars,
+                "current-job and recruitment stars share the same calculation " + job.Key);
+        }
+        var bareCoach = new StaffRow { JobCode=2, JobKey="coach", Ca=200, Attributes=new()
+            { ["coaching"]=20, ["determination"]=20, ["discipline"]=20, ["motivating"]=20 } };
+        check(bareCoach.CurrentRoleStars is null, "unreadable outfield categories do not fall back to generic coaching or CA stars");
+        var medic = Coach(); medic.JobCode=12; medic.JobKey="physio"; medic.Attributes["physiotherapy"]=20; medic.Attributes["man_management"]=10;
+        check(medic.CurrentRoleStars==4.5 && StaffRecruitment.CurrentProfile(medic)?.Key=="physio",
+            "medical staff rating uses medical job weights rather than training or CA");
+        medic.JobKey="doctor";
+        check(medic.CurrentRoleStars is null, "doctor stars stay unavailable without an established quality formula");
+        medic.JobKey="physio"; medic.JobFamilyOnly=true;
+        check(medic.CurrentRoleStars is null, "imprecise job family does not invent exact-job stars");
+        medic.JobFamilyOnly=false; medic.IsHumanManager=true;
+        check(medic.CurrentRoleStars is null, "human manager profiles do not receive staff suitability stars");
+        person = Coach(); person.Ca = 140; person.JobKey = "coach"; person.JobCode = 2; L10n.SetLanguage("it");
         using var host = new Form { Size = new Size(950, 750) }; using var panel = new StaffPanel(); host.Controls.Add(panel);
         panel.ClearForClub(1); panel.SetData(new() { ClubUid = 1, Status = "ready", Staff = [person] });
         host.Show(); Application.DoEvents();
@@ -71,13 +103,13 @@ internal static class CoachingChecks
             check(attributes.Visible && stars.Visible && stars.ClientSize.Height >= 50 && left.Right <= right.Left && columns.ClientRectangle.Contains(left.Bounds) && columns.ClientRectangle.Contains(right.Bounds),
                 "staff attributes and training stars are simultaneously visible side by side at width " + width);
         }
-        check(All(panel).OfType<ComboBox>().All(c => c.Name != "StaffDetailView") && person.OverallStars == 3.5 &&
-            list.Columns["OverallStars"].CellTemplate is StarRatingCell && list.Columns["OverallStars"].ToolTipText.Contains("CA / 40"),
-            "staff list shows labelled absolute CA stars without hiding either detail panel");
+        check(All(panel).OfType<ComboBox>().All(c => c.Name != "StaffDetailView") && person.CurrentRoleStars == 4 &&
+            list.Columns["CurrentRoleStars"].CellTemplate is StarRatingCell && list.Columns["CurrentRoleStars"].ToolTipText.Contains("Non deriva dalla CA"),
+            "staff list shows relevant current-job stars without hiding either detail panel");
         var unknown = new StaffRow { Uid = 2, ClubUid = 1, Name = "Unknown" };
-        panel.SetData(new() { ClubUid = 1, Status = "ready", Staff = [person, unknown] }); panel.SortBy("OverallStars"); panel.SortBy("OverallStars");
-        check(((StaffRow)list.Rows[0].DataBoundItem).Uid == 1 && list.Rows[1].Cells["OverallStars"].FormattedValue.ToString() == "—" && unknown.OverallStars is null,
-            "overall stars sort numerically with unavailable ability last and render an explicit dash");
+        panel.SetData(new() { ClubUid = 1, Status = "ready", Staff = [person, unknown] }); panel.SortBy("CurrentRoleStars"); panel.SortBy("CurrentRoleStars");
+        check(((StaffRow)list.Rows[0].DataBoundItem).Uid == 1 && list.Rows[1].Cells["CurrentRoleStars"].FormattedValue.ToString() == "—" && unknown.CurrentRoleStars is null,
+            "current-job stars sort numerically with unknown jobs last and render an explicit dash");
         L10n.SetLanguage("en"); panel.SetLanguage(); Application.DoEvents();
         check(All(panel).OfType<GroupBox>().Any(g => g.Text == "Training stars (estimate)") && stars.Rows[0].Cells[0].Value!.ToString() == "Attacking · Tactical" &&
             stars.Rows[0].Cells[3].Value!.ToString()!.Contains("Determination"), "coaching categories, group title and calculation follow language changes");

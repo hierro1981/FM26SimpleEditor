@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.6 (in development)
+# FM26 Simple Editor · v15.6.1 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.6.1 · in development
+
+- **Current job stars** replace the former CA-based overall stars: specialists are assessed for the job they perform.
+- Coaches use the relevant training category; other jobs use job-specific attributes. Tooltips identify the criterion and insufficient data remains unrated.
+- Shared calculation across the staff list, search and planning default. Numeric CA remains visible.
 
 ### v15.6 · in development
 

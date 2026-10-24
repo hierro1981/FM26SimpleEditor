@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.6 (in sviluppo)
+# FM26 Simple Editor · v15.6.1 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.6.1 · in sviluppo
+
+- Le **Stelle incarico attuale** sostituiscono le precedenti stelle complessive basate sulla CA: uno specialista viene valutato per il lavoro che svolge.
+- Per i preparatori usa la categoria di allenamento pertinente; per gli altri incarichi gli attributi specifici del ruolo. Il tooltip indica il criterio e i dati insufficienti rimangono non valutati.
+- Calcolo condiviso tra elenco staff, ricerca e criterio predefinito della pianificazione. La CA numerica rimane visibile.
 
 ### v15.6 · in sviluppo
 

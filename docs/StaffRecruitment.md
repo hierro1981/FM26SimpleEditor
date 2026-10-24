@@ -25,7 +25,7 @@ half-star thresholds. Training suitability stars therefore match the existing
 staff view exactly. The /20 score is the weighted /300 score divided by 15.
 See [CoachingStars](CoachingStars.md) for formulas and limits. Best-training
 stars mean the person's strongest readable category, not the category selected
-in the search. Both labels are explicit. Absolute overall stars remain CA/40.
+in the search. Both labels are explicit. Since v15.6.1 the former overall CA stars are replaced by current-job suitability stars, using the relevant training category for coaches or the current job weights for other staff. The selected target-job stars remain a separate measure. See [CoachingStars](CoachingStars.md).
 
 ## Current-job filter
 

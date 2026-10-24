@@ -73,12 +73,28 @@ weighted calculations, distinguishing primary/secondary weighting, the tactical
 input to Set Pieces, each half-star boundary, missing/invalid attributes,
 unsupported human profiles, CA independence, and UI rendering/localisation.
 
-## Overall stars in the staff list
+## Current job stars in the staff list (v15.6.1)
 
-The sortable **Overall stars (estimate)** column uses the same absolute CA
-scale as player previews: CA / 40 rounded to the nearest half star, with
-midpoints rounded away from zero, clamped to 0.5–5. Missing or non-positive CA
-shows a dash. PA does not affect current-ability stars. This estimate is neither
-an average of training-category stars nor the game's relative overall staff
-assessment, which has not been decoded. The column caption and tooltip make
-this distinction explicit; it is not calibrated to the supplied overall stars.
+The former overall column used CA / 40, which understated specialists such as a
+CA-125 goalkeeper coach with a 256/300 training score. It is replaced by
+**Current job stars (estimate)**, derived from the decoded job and relevant
+attributes, not CA, PA, reputation or an average across all training categories.
+
+- Goalkeeping, fitness and set-piece coaches use their corresponding shared
+  `CoachingStars` category.
+- General coaches use the highest-scoring complete outfield training category;
+  goalkeeping, fitness and set pieces cannot inflate that rating.
+- Other exact supported jobs use the same job weights and half-star conversion
+  as recruitment. Youth development heads are assessed for that job, not as
+  generic coaches.
+- Unknown jobs, family-only jobs, human managers, doctors without a quality
+  formula and incomplete required inputs yield a dash. No CA fallback is used.
+
+The tooltip identifies the criterion. `StaffRecruitment.CurrentProfile/Stars`
+provide the shared implementation for the staff list, recruitment current-job
+column and planning default. Recruitment still separately shows suitability
+for the **selected** target job/category: that can legitimately differ from the
+current-job rating. A different planning criterion can also give different stars.
+The underlying training formulas and player CA-star previews are unchanged.
+CA remains visible in its numeric column. These are editor estimates, not a
+recovered official overall rating or actual assigned workload.

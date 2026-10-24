@@ -1,4 +1,4 @@
-# Staff recruitment estimates · v15.2
+# Staff recruitment estimates · v15.2.1
 
 `La mia squadra → Trova staff` / `My squad → Find staff` is read-only.
 No offer is sent and no save is changed. It shortlists readable club-linked staff
@@ -38,7 +38,7 @@ job cannot bypass the interest calculation. **Ignore interest** does not bypass
 this job filter, search or the own-staff exclusions. Selection survives language
 changes by job key, not by translated label.
 
-## Interest model v1
+## Interest model v1.1
 
 This is an uncalibrated, limited-confidence index, not a probability, not a
 decoded acceptance function, and not a date prediction. It has no personal
@@ -52,7 +52,7 @@ staff reputation input. Start at zero, then apply:
 | Decoded contract expired before save date | +12, without current-employer reputation comparison |
 | Current contract expires in at most 180 days | +8 |
 | Explicit assumed wage / current positive wage | below .75: −30; below 1: −12; at least 1.5: +15; at least 1.1: +6; otherwise 0 |
-| Different known nationality from destination country and adaptability ≤5 | −5; nationality is only a weak proxy, not knowledge of residence or languages |
+| Current employer and destination in different known league countries, with adaptability ≤5 | −5; club country is a proxy, not proof of residence or willingness to move |
 | Current manager considered for another job | −15 |
 
 Clamp the index to −100…100. With no current-employer reputation comparison
@@ -63,7 +63,7 @@ calibration. Missing wages or an unspecified offer do not imply affordability.
 Missing personality values add no invented adjustment. Future contracts and
 multiple jobs are disclosed as uncertainty.
 
-v15.2 keeps these scores and cutoffs unchanged. Borderline scores ≤−10 carry
+v15.2 kept these scores and cutoffs unchanged. Borderline scores ≤−10 carry
 an explicit **high refusal risk** label while staying in the default pool.
 A current-employer prestige gap of at least 1500 with no wage scenario also
 adds a cautionary reason. Two user-reported refusals in that context motivated
@@ -90,6 +90,31 @@ limits apply after filtering and sorting. The copy action puts only the selected
 assessment on the clipboard, with IDs, save date, destination, profile and wage
 scenario for reproducible manual feedback; it sends nothing externally and does
 not automatically train the model.
+
+## Lateral moves and relocation (v15.2.1)
+
+Additional feedback reported refusals even when employer and destination club
+reputations are almost equal. A separate refusal explicitly concerned leaving
+where the person lives and works, despite high decoded adaptability. These are
+observations, not a recovered native acceptance formula.
+
+For current employment with known reputations, a destination below 110% of the
+current employer reputation is conservatively marked **no clear improvement**.
+This 10% margin is a tool choice, not an official or statistically calibrated
+FM threshold. Borderline cases below the existing high-risk threshold keep that
+label; other borderline lateral moves gain a specific label. They remain in the
+default pool. The numeric index is unchanged by this flag, but a would-be
+**plausibly interested** result is capped to **borderline** when there is no clear
+improvement, so an assumed pay rise alone cannot establish willingness to talk.
+A confirmed expired contract is not gated as current employment.
+
+Known different employer and destination league countries always add an explicit
+relocation-uncertainty note, even with high adaptability. Club country does not
+prove actual residence, and adaptability is not a decoded willingness-to-move
+flag. The prior −5 low-adaptability adjustment now uses employer country rather
+than nationality: a foreign national already working in the destination country
+must not be penalised solely for that nationality. Unknown countries are not
+assumed to differ. There are no person-name or UID exceptions.
 
 ## Reading and validation
 

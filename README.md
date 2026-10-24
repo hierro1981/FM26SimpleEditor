@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.2 (in sviluppo)
+# FM26 Simple Editor · v15.2.1 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,11 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.2.1 · in sviluppo
+
+- Segnalati i passaggi laterali senza un miglioramento reputazionale netto; uno stipendio ipotizzato più alto non basta a prevedere disponibilità alla trattativa.
+- Avviso sui cambi di paese basato sul club attuale. Un’adattabilità alta non implica volontà di trasferirsi e la sola nazionalità diversa non comporta più una penalità.
 
 ### v15.2 · in sviluppo
 

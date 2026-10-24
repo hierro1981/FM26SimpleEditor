@@ -8,9 +8,10 @@ public sealed record StaffSearchProfile(string Key, IReadOnlyDictionary<string, 
     public override string ToString() => Label;
 }
 public enum StaffInterest { Likely, Borderline, Uncertain, Unlikely }
-public sealed record StaffInterestEstimate(StaffInterest Band, int Score, IReadOnlyList<string> Reasons)
+public sealed record StaffInterestEstimate(StaffInterest Band, int Score, IReadOnlyList<string> Reasons, bool NoClearUpgrade = false)
 {
-    public string Label => L10n.Get(Band == StaffInterest.Borderline && Score <= -10 ? "RecruitInterest_BorderlineRisk" : "RecruitInterest_" + Band);
+    public string Label => L10n.Get(Band == StaffInterest.Borderline && Score <= -10 ? "RecruitInterest_BorderlineRisk" :
+        Band == StaffInterest.Borderline && NoClearUpgrade ? "RecruitInterest_Lateral" : "RecruitInterest_" + Band);
 }
 public sealed record StaffCandidate(StaffRow Person, StaffSearchProfile Profile, double? Quality,
     StaffInterestEstimate Interest, CoachingRating? BestTraining)
@@ -100,8 +101,14 @@ public static class StaffRecruitment
             reasons.Add(L10n.Format("RecruitWageComparison", offeredWage, person.Wage));
         }
         else reasons.Add(L10n.Get("RecruitWageUnknown"));
-        if (person.NationId.HasValue && destination.ClubNationId.HasValue && person.NationId != destination.ClubNationId && Attribute(person, "adaptability") is int adapt && adapt <= 5)
-        { score -= 5; reasons.Add(L10n.Get("RecruitAdaptability")); }
+        // Current employer country is a relocation proxy, not nationality or proof of residence.
+        bool international = current && person.ClubNationId.HasValue && destination.ClubNationId.HasValue && person.ClubNationId != destination.ClubNationId;
+        if (international)
+        {
+            reasons.Add(L10n.Get("RecruitRelocationUnknown"));
+            if (Attribute(person, "adaptability") is int adapt && adapt <= 5)
+            { score -= 5; reasons.Add(L10n.Get("RecruitAdaptability")); }
+        }
         bool differentRole = profile.CategoryKey is null && person.JobKey != profile.Key;
         if (differentRole || person.JobKey is null || person.JobFamilyOnly)
             reasons.Add(L10n.Get("RecruitRoleUnknown"));
@@ -110,10 +117,15 @@ public static class StaffRecruitment
         if (person.EmploymentCount > 1) reasons.Add(L10n.Get("RecruitMultipleJobs"));
         if (repKnown && destination.ClubReputation!.Value <= person.ClubReputation!.Value - 1500 && offeredWage == 0)
             reasons.Add(L10n.Get("RecruitPrestigeRisk"));
+        // A small club-reputation gain is not evidence of a career improvement.
+        // The 10% margin is a conservative tool rule, not an FM acceptance threshold.
+        bool noClearUpgrade = repKnown && destination.ClubReputation!.Value < person.ClubReputation!.Value * 1.10;
+        if (noClearUpgrade) reasons.Add(L10n.Get("RecruitNoClearUpgrade"));
         score = Math.Clamp(score, -100, 100);
         StaffInterest band = !repKnown && !expired ? StaffInterest.Uncertain : score >= 10 ? StaffInterest.Likely : score >= -20 ? StaffInterest.Borderline : StaffInterest.Unlikely;
+        if (noClearUpgrade && band == StaffInterest.Likely) band = StaffInterest.Borderline;
         reasons.Add(L10n.Get("RecruitMissingFactors"));
-        return new(band, score, reasons);
+        return new(band, score, reasons, noClearUpgrade);
     }
     public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "", string? currentJob = null)
     {

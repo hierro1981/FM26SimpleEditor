@@ -48,6 +48,25 @@ internal static class StaffRecruitmentChecks
             check(estimate.Score == -17 && estimate.Band == StaffInterest.Borderline && estimate.Label.Contains("rischio rifiuto elevato") && estimate.Reasons.Any(r => r.Contains("meno prestigioso")),
                 "reported refusal context is cautioned without per-person exceptions or changing the uncalibrated score " + sample.Rep);
         }
+        feedbackDestination.ClubNationId = 150;
+        foreach (var sample in new[] { (Rep:6259, Loyalty:10, Country:139, Score:-2), (Rep:6317, Loyalty:12, Country:150, Score:-2), (Rep:5950, Loyalty:5, Country:120, Score:1) })
+        {
+            var target = Person(10, sample.Rep); target.ClubNationId = sample.Country;
+            target.Personality = new() { ["loyalty"] = sample.Loyalty }; target.Attributes["adaptability"] = 16;
+            var estimate = StaffRecruitment.Estimate(target, scout, feedbackDestination);
+            check(estimate.Score == sample.Score && estimate.Band == StaffInterest.Borderline && estimate.NoClearUpgrade && estimate.Label.Contains("miglioramento non evidente"),
+                "near-equal club reputation does not imply a career improvement " + sample.Rep);
+            check(estimate.Reasons.Any(r => r.Contains("paesi diversi")) == (sample.Country != 150),
+                "relocation uncertainty uses current employer country even with high adaptability " + sample.Country);
+        }
+        var lateral = Person(11,6259);
+        check(StaffRecruitment.Estimate(lateral,scout,feedbackDestination,2000).Band == StaffInterest.Borderline,
+            "a higher wage cannot alone promote a lateral move to plausibly interested");
+        var resident = Person(12); resident.NationId = 120; resident.ClubNationId = 150; resident.Attributes["adaptability"] = 1;
+        var residentEstimate = StaffRecruitment.Estimate(resident,scout,feedbackDestination);
+        resident.NationId = 150;
+        check(residentEstimate.Score == StaffRecruitment.Estimate(resident,scout,feedbackDestination).Score && !residentEstimate.Reasons.Any(r=>r.Contains("paesi diversi")),
+            "foreign nationality alone does not invent a relocation penalty when current club country is unchanged");
         data.Staff=[good,poor];
         check(StaffRecruitment.Rank(data,scout,search:"Person 2").Single().Uid==2, "recruitment search uses actual candidate identity");
         foreach(var category in StaffRecruitment.Training)

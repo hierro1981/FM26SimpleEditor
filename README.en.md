@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.2 (in development)
+# FM26 Simple Editor · v15.2.1 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,11 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.2.1 · in development
+
+- Lateral moves with no clear club-reputation improvement carry a specific warning; higher assumed wages alone do not establish interest in negotiations.
+- International relocation is flagged using current employer country. High adaptability does not imply willingness to relocate, and nationality alone no longer adds a relocation penalty.
 
 ### v15.2 · in development
 

@@ -2196,7 +2196,7 @@ Hover over a position for its rating.</value>
     <value>Wage compatibility not assessed: no offer specified or no comparable current wage.</value>
   </data>
   <data name="RecruitAdaptability" xml:space="preserve">
-    <value>Different nationality and low adaptability: a cautious penalty, without language or residence information.</value>
+    <value>Different employer country and low adaptability: a cautious penalty, without proof of actual residence or willingness to move.</value>
   </data>
   <data name="RecruitRoleUnknown" xml:space="preserve">
     <value>Availability for this job or a job change is not verified.</value>
@@ -2239,4 +2239,7 @@ Hover over a position for its rating.</value>
   <data name="RecruitPrestigeRisk" xml:space="preserve"><value>Move to a substantially less prestigious club without a specified wage offer: elevated refusal risk, verify in game.</value></data>
   <data name="RecruitFeedbackContext" xml:space="preserve"><value>Current job: {0} · Current club: {1} · Contract ends: {2} · Current wage: {3}/week (base currency)</value></data>
   <data name="RecruitNoOffer" xml:space="preserve"><value>No wage offer specified (0 in the selector).</value></data>
+  <data name="RecruitInterest_Lateral" xml:space="preserve"><value>Borderline · no clear improvement</value></data>
+  <data name="RecruitNoClearUpgrade" xml:space="preserve"><value>Club comparison shows no clear reputation improvement. This model conservatively treats a gain below 10% as insufficient: it is not an official game threshold. Job, league and personal reputation may change the response. Higher wages do not guarantee negotiations.</value></data>
+  <data name="RecruitRelocationUnknown" xml:space="preserve"><value>Current club and destination are in different countries: relocation willingness is unverified. Club country does not prove residence; even high adaptability does not establish a willingness to move.</value></data>
 </root>

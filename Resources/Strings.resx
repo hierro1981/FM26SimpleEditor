@@ -2196,7 +2196,7 @@ Passa sul punto per il valore.</value>
     <value>Compatibilità salariale non valutata: offerta non specificata o stipendio attuale non confrontabile.</value>
   </data>
   <data name="RecruitAdaptability" xml:space="preserve">
-    <value>Nazionalità diversa e adattabilità bassa: prudente penalità, senza informazioni su lingue o residenza.</value>
+    <value>Paese del club attuale diverso e adattabilità bassa: prudente penalità, senza prova della residenza effettiva o della disponibilità a spostarsi.</value>
   </data>
   <data name="RecruitRoleUnknown" xml:space="preserve">
     <value>La disponibilità per questo incarico o un cambio di ruolo non è verificata.</value>
@@ -2239,4 +2239,7 @@ Passa sul punto per il valore.</value>
   <data name="RecruitPrestigeRisk" xml:space="preserve"><value>Passaggio a un club sensibilmente meno prestigioso senza offerta salariale specificata: rischio di rifiuto elevato, da verificare nel gioco.</value></data>
   <data name="RecruitFeedbackContext" xml:space="preserve"><value>Incarico attuale: {0} · Club attuale: {1} · Contratto fino al: {2} · Stipendio attuale: {3}/settimana (valuta base)</value></data>
   <data name="RecruitNoOffer" xml:space="preserve"><value>Offerta salariale non specificata (0 nel selettore).</value></data>
+  <data name="RecruitInterest_Lateral" xml:space="preserve"><value>Al limite · miglioramento non evidente</value></data>
+  <data name="RecruitNoClearUpgrade" xml:space="preserve"><value>Il confronto tra club non mostra un miglioramento reputazionale netto. Il modello considera prudenzialmente insufficiente un vantaggio inferiore al 10%: non è una soglia ufficiale del gioco. Ruolo, campionato e reputazione personale possono cambiare la risposta. Uno stipendio più alto non garantisce l’avvio della trattativa.</value></data>
+  <data name="RecruitRelocationUnknown" xml:space="preserve"><value>Il club attuale e la destinazione sono in paesi diversi: disponibilità al trasferimento non verificata. Il paese del club non prova la residenza; anche un’adattabilità alta non dimostra che la persona voglia spostarsi.</value></data>
 </root>

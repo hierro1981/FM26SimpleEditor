@@ -28,6 +28,18 @@ class StaffTeamTests(unittest.TestCase):
         clubs=self.clubs();clubs[10].teams[1].name=' U20 '
         self.assertEqual(team_fields(self.person(101),team_index(clubs))['teamName'],'U20')
 
+    def test_upstream_contract_slot_is_preserved_when_catalogue_has_no_match(self):
+        person=self.person(999);person.team_slot=1
+        self.assertEqual(team_fields(person,team_index(self.clubs())),dict(teamSlot=1))
+        person.team_name='U20'
+        self.assertEqual(team_fields(person,{}),dict(teamSlot=1,teamName='U20'))
+        person.has_contract=False
+        self.assertEqual(team_fields(person,{}),{})
+
+    def test_explicit_conflict_does_not_get_overridden_by_fallback(self):
+        person=self.person(101);person.team_slot=1
+        self.assertEqual(team_fields(person,{101:None}),{})
+
     def test_no_contract_missing_team_or_unlinked_team_is_unknown(self):
         teams=team_index(self.clubs())
         for person in [self.person(contract=False),self.person(None),self.person(999),self.person(True)]:

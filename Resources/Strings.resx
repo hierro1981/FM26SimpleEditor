@@ -2322,4 +2322,24 @@ Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre st
   <data name="StaffTeamNote" xml:space="preserve"><value>Riferimento alla squadra nel contratto letto, non all’assegnazione degli allenamenti. Slot 0 = prima squadra; gli altri slot identificano sottosquadre ma non ne provano l’età (U20, U18) o il tipo. Un eventuale nome viene mostrato solo se leggibile. Senza un contratto associabile la squadra resta non identificata.</value></data>
   <data name="PlanReplacementTeam" xml:space="preserve"><value>Squadra alternativa proposta</value></data>
   <data name="StaffFirstTeam" xml:space="preserve"><value>Prima squadra</value></data>
+  <data name="StaffSquad_any" xml:space="preserve"><value>Qualsiasi</value></data>
+  <data name="StaffSquad_first" xml:space="preserve"><value>Prima squadra</value></data>
+  <data name="StaffSquad_subteam" xml:space="preserve"><value>Sottosquadre</value></data>
+  <data name="StaffSquad_reserves" xml:space="preserve"><value>Riserve / B</value></data>
+  <data name="StaffSquad_youth" xml:space="preserve"><value>Giovanili</value></data>
+  <data name="StaffSquad_unknown" xml:space="preserve"><value>Non identificata</value></data>
+  <data name="RecruitTargetSquad" xml:space="preserve"><value>Squadra destinazione</value></data>
+  <data name="RecruitCurrentSquad" xml:space="preserve"><value>Squadra attuale</value></data>
+  <data name="RecruitYouthMinimum" xml:space="preserve"><value>Giovani ≥</value></data>
+  <data name="RecruitSquadHelp" xml:space="preserve"><value>La destinazione indica l’incarico che cerchi: scegli per esempio Allenatore + U20 o Preparatore + U18. Il filtro squadra attuale usa soltanto l’associazione leggibile nel contratto: uno slot senza nome non prova che si tratti di U20/U18.</value></data>
+  <data name="RecruitYouthHelp" xml:space="preserve"><value>Per allenatori e preparatori delle giovanili richiede il valore minimo di Lavoro con i giovani (predefinito 12/20). Non cambia le stelle di allenamento e non garantisce interesse. Non viene applicato a incarichi medici o amministrativi.</value></data>
+  <data name="RecruitTargetContext" xml:space="preserve"><value>Destinazione: {0}.</value></data>
+  <data name="RecruitYouthContext" xml:space="preserve"><value>Lavoro con i giovani minimo: {0}/20.</value></data>
+  <data name="RecruitSquadInterestNote" xml:space="preserve"><value>Ricerca per {0}: disponibilità per questa sottosquadra non letta dal salvataggio. La capacità di lavorare con i giovani è distinta dall’interesse a trattare.</value></data>
+  <data name="RecruitFirstToSubteam" xml:space="preserve"><value>Incarico attuale in prima squadra: il passaggio a una sottosquadra non viene considerato automaticamente un avanzamento; interesse al massimo al limite.</value></data>
+  <data name="StaffSquad_u18" xml:space="preserve"><value>U18</value></data>
+  <data name="StaffSquad_u19" xml:space="preserve"><value>U19</value></data>
+  <data name="StaffSquad_u20" xml:space="preserve"><value>U20</value></data>
+  <data name="StaffSquad_u21" xml:space="preserve"><value>U21</value></data>
+  <data name="StaffSquad_u23" xml:space="preserve"><value>U23</value></data>
 </root>

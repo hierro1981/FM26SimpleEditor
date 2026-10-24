@@ -27,6 +27,7 @@ public sealed record StaffCandidate(StaffRow Person, StaffSearchProfile Profile,
     public int? CurrentReputation => Person.CurrentReputation;
     public int? JobPreference => StaffRecruitment.JobPreference(Person, Profile);
     public int? Age => Person.Age;
+    public int? YouthWork => StaffRecruitment.Attribute(Person, "working_with_youngsters");
     public long? Wage => Person.Wage;
     public double? CurrentRoleStars => Person.CurrentRoleStars;
     public double? RoleStars => StaffRecruitment.Stars(Person, Profile);
@@ -169,7 +170,7 @@ public static class StaffRecruitment
         }
         return new(band, score, reasons, noClearUpgrade);
     }
-    public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "", string? currentJob = null)
+    public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "", string? currentJob = null, string targetSquad = "any", string currentSquad = "any", int minimumYouthWork = 12)
     {
         if (data.Status != "ready") return [];
         // Avoid treating the easiest of two concurrent employers as the only job to leave.
@@ -179,7 +180,10 @@ public static class StaffRecruitment
             .Where(p => string.IsNullOrEmpty(currentJob) || (currentJob == "__unknown"
                 ? !p.JobCode.HasValue || !Roles.Any(r => r.Key == p.JobKey)
                 : p.JobCode.HasValue && p.JobKey == currentJob))
-            .Select(p => new StaffCandidate(p, profile, Quality(p, profile), Estimate(p, profile, data, offeredWage),
+            .Where(p => StaffSquads.Matches(p, currentSquad))
+            .Where(p => !StaffSquads.Youth(targetSquad) || !StaffSquads.UsesYouthWork(profile) ||
+                Attribute(p, "working_with_youngsters") is int youth && youth >= Math.Clamp(minimumYouthWork, 1, 20))
+            .Select(p => new StaffCandidate(p, profile, Quality(p, profile), StaffSquads.ForTarget(Estimate(p, profile, data, offeredWage), p, targetSquad),
                 CoachingStars.Calculate(p).Where(c => c.Score.HasValue).OrderByDescending(c => c.Score).FirstOrDefault()))
             .Where(c => (ignoreInterest || c.Interest.Band != StaffInterest.Unlikely) &&
                 (string.IsNullOrWhiteSpace(search) || c.Name.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Club.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.CurrentRole.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Team.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Person.TeamId?.ToString().Contains(search) == true || c.Person.Uid.ToString().Contains(search) || c.Person.Id?.ToString().Contains(search) == true))

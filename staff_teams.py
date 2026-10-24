@@ -27,4 +27,13 @@ def team_fields(person, teams):
     if not person.has_contract or type(tid) is not int:
         return {}
     # No inference from job title, listed club, department lists or nationality.
-    return teams.get(tid) or {}
+    if tid in teams:
+        return teams[tid] or {}  # Keep explicit conflicting mappings unknown.
+    slot = getattr(person, 'team_slot', None)
+    name = getattr(person, 'team_name', None)
+    fallback = {}
+    if type(slot) is int and 0 <= slot <= 255:
+        fallback['teamSlot'] = slot
+    if isinstance(name, str) and name.strip():
+        fallback['teamName'] = name.strip()
+    return fallback

@@ -86,6 +86,7 @@ internal static class Checks
             StaffRecruitmentChecks.Run(Check);
             StaffPlanningChecks.Run(Check);
             StaffTeamChecks.Run(Check);
+            StaffSquadSearchChecks.Run(Check);
             LayoutChecks.Run(Check);
             Console.WriteLine($"{count} C# checks passed"); return 0;
         }

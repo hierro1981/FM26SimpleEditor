@@ -227,3 +227,41 @@ The context is visible in own staff, global recruitment, renewal rows, proposed
 replacement context and alternative rows, plus copied assessments and detail
 headers/tooltips. Text search can use names and readable squad labels, and the
 own-staff/recruitment searches also accept the contract team ID.
+
+## Youth and subteam recruitment (v15.7)
+
+The desired destination squad and a candidate's current contract assignment are
+separate selectors. Destination defaults to Any, preserving previous results.
+Select the desired job and U20/U18/etc. to assess that vacancy; these labels do
+not introduce unverified native job codes. For youth managerial/coaching jobs,
+require a readable Working with youngsters value at or above an adjustable
+minimum (default 12/20). This is an editor eligibility rule, not an FM threshold.
+It applies to manager, assistant, coach, goalkeeping, fitness, set pieces and
+youth-development profiles, plus training categories. It does not apply to
+medical/administrative jobs. Quality and training-star formulas are unchanged;
+the youth attribute is shown separately rather than silently changing stars.
+
+For any subteam destination, include a specific uncertainty reason. Candidates
+currently in a first-team job have Likely interest capped at Borderline: a
+hypothetical wage rise does not establish willingness to take that vacancy.
+Existing prestige-drop exclusions still apply. Ignore interest bypasses only
+interest, retaining squad and youth-adequacy filters.
+
+Current-squad filtering uses contract fields, not the desired destination. U20
+etc. require a readable complete U/Under age token in a squad name; an unnamed
+slot alone does not establish an age group. Subteam filtering includes known
+nonzero slots and controlled affiliates. Reserves/B requires a readable matching
+team label or a separate affiliate owner's name. Unknown remains selectable.
+Language changes preserve keys, salary, minimum and profile. Planning's shortcut
+carries a readable target age group, otherwise first/subteam/Any, and clears the
+current-squad filter for a broader search.
+
+### Regression boundary
+
+v15.6.3 discarded upstream `Staff.team_slot` whenever the extra club-catalogue
+join failed. Restore it for unmatched team IDs (and a readable upstream team
+name if available), without overriding an explicit conflicting mapping or
+inventing an owner. This is covered by synthetic regression fixtures. The player
+roster selector's `my_squad.py` code was not changed in v15.6.3; a reported loss
+of labels there still needs the affected save for reproduction. No recovered
+U20/U18 byte mapping is claimed by this change.

@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.6.3 (in development)
+# FM26 Simple Editor · v15.7 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,14 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.7 · in development
+
+- **Find staff:** choose the destination squad, for example Manager + U20, Assistant manager + U20 or Coach + U18.
+- Adjustable **Working with youngsters** requirement for youth managers and coaches (default at least 12/20), also visible in the list. Training star formulas are unchanged.
+- Separate **current squad** filter where identifiable: first team, subteams, youth groups and reserves/B.
+- Moving from a first-team job to a subteam is not automatically considered a promotion: estimated interest is capped at borderline.
+- Restored the contract reader’s squad-slot fallback when no team can be matched in the club catalogue. Conflicting records remain unidentified.
 
 ### v15.6.3 · in development
 

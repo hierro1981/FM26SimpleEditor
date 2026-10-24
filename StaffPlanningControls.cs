@@ -23,7 +23,7 @@ public sealed class StaffPlanningPanel : UserControl
     private string sort = "ContractEnd";
     private bool descending;
     public event Action? ReloadRequested;
-    public event Action<StaffSearchProfile, string?, long>? FindStaffRequested;
+    public event Action<StaffSearchProfile, string?, long, string>? FindStaffRequested;
     public StaffPlanningPanel()
     {
         Dock = DockStyle.Fill;
@@ -40,7 +40,7 @@ public sealed class StaffPlanningPanel : UserControl
         findStaff.Click += (_, _) =>
         {
             if (Selected is StaffRenewal row && row.Profile is StaffSearchProfile profile)
-                FindStaffRequested?.Invoke(profile, row.Person.JobKey, (long)offer.Value);
+                FindStaffRequested?.Invoke(profile, row.Person.JobKey, (long)offer.Value, StaffSquads.TargetFor(row.Person));
         };
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var detail = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3 };

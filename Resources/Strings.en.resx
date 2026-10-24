@@ -2322,4 +2322,24 @@ Training stars use the same calculation as the Staff page. Other stars describe 
   <data name="StaffTeamNote" xml:space="preserve"><value>Team reference in the readable contract, not training assignment. Slot 0 denotes the first team; other slots identify subteams but do not establish age group (U20, U18) or type. A name is displayed only when readable. Without a linked contract the squad remains unidentified.</value></data>
   <data name="PlanReplacementTeam" xml:space="preserve"><value>Proposed alternative squad</value></data>
   <data name="StaffFirstTeam" xml:space="preserve"><value>First team</value></data>
+  <data name="StaffSquad_any" xml:space="preserve"><value>Any</value></data>
+  <data name="StaffSquad_first" xml:space="preserve"><value>First team</value></data>
+  <data name="StaffSquad_subteam" xml:space="preserve"><value>Subteams</value></data>
+  <data name="StaffSquad_reserves" xml:space="preserve"><value>Reserves / B</value></data>
+  <data name="StaffSquad_youth" xml:space="preserve"><value>Youth teams</value></data>
+  <data name="StaffSquad_unknown" xml:space="preserve"><value>Not identified</value></data>
+  <data name="RecruitTargetSquad" xml:space="preserve"><value>Destination squad</value></data>
+  <data name="RecruitCurrentSquad" xml:space="preserve"><value>Current squad</value></data>
+  <data name="RecruitYouthMinimum" xml:space="preserve"><value>Youth work ≥</value></data>
+  <data name="RecruitSquadHelp" xml:space="preserve"><value>Destination describes the vacancy: for example Manager + U20 or Coach + U18. Current squad filters only readable contract assignments: an unnamed slot does not prove an U20/U18 age group.</value></data>
+  <data name="RecruitYouthHelp" xml:space="preserve"><value>For youth managers and coaches, require at least this Working with youngsters value (default 12/20). Does not change training stars or guarantee interest. Does not apply to medical or administrative jobs.</value></data>
+  <data name="RecruitTargetContext" xml:space="preserve"><value>Destination: {0}.</value></data>
+  <data name="RecruitYouthContext" xml:space="preserve"><value>Minimum Working with youngsters: {0}/20.</value></data>
+  <data name="RecruitSquadInterestNote" xml:space="preserve"><value>Searching for {0}: willingness to join this subteam is not read from the save. Ability to work with youngsters is separate from willingness to negotiate.</value></data>
+  <data name="RecruitFirstToSubteam" xml:space="preserve"><value>Currently employed in a first team: a move to a subteam is not automatically a career advancement; estimated interest is capped at borderline.</value></data>
+  <data name="StaffSquad_u18" xml:space="preserve"><value>U18</value></data>
+  <data name="StaffSquad_u19" xml:space="preserve"><value>U19</value></data>
+  <data name="StaffSquad_u20" xml:space="preserve"><value>U20</value></data>
+  <data name="StaffSquad_u21" xml:space="preserve"><value>U21</value></data>
+  <data name="StaffSquad_u23" xml:space="preserve"><value>U23</value></data>
 </root>

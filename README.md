@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.6.3 (in sviluppo)
+# FM26 Simple Editor · v15.7 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,14 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.7 · in sviluppo
+
+- **Trova staff:** scegli la squadra di destinazione, per esempio Allenatore + U20, Allenatore in seconda + U20 o Preparatore + U18.
+- Per allenatori e preparatori delle giovanili, filtro regolabile su **Lavoro con i giovani** (predefinito almeno 12/20), visibile anche nell’elenco. Le stelle di allenamento mantengono lo stesso calcolo.
+- Filtro separato sulla **squadra attuale**, dove identificabile: prima squadra, sottosquadre, giovanili, gruppi U e riserve/B.
+- Il passaggio dalla prima squadra a una sottosquadra non viene considerato automaticamente un avanzamento: stima dell’interesse al massimo al limite.
+- Ripristinato il recupero dello slot letto dal contratto quando non si trova la squadra nel catalogo dei club. I casi con dati contraddittori restano non identificati.
 
 ### v15.6.3 · in sviluppo
 

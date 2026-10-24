@@ -202,6 +202,10 @@ public sealed class StaffRow
     public uint? ListedClubUid { get; set; }
     public string? ListedClubName { get; set; }
     public uint? TeamId { get; set; }
+    public int? NationId { get; set; }
+    public int? ClubNationId { get; set; }
+    public int? ClubReputation { get; set; }
+    public int EmploymentCount { get; set; }
     public int? Age { get; set; }
     public string? Birth { get; set; }
     public bool IsHumanManager { get; set; }
@@ -242,6 +246,21 @@ public sealed class StaffResult
 {
     public string Status { get; set; } = "none";
     public uint? ClubUid { get; set; }
+    public List<StaffRow> Staff { get; set; } = [];
+    public string? Error { get; set; }
+}
+
+public sealed class StaffRecruitmentResult
+{
+    public string Status { get; set; } = "none";
+    public uint? ClubUid { get; set; }
+    public string ClubName { get; set; } = "";
+    public int? ClubReputation { get; set; }
+    public int? ClubNationId { get; set; }
+    public string? GameDate { get; set; }
+    public int PoolPeople { get; set; }
+    public int OwnExcluded { get; set; }
+    public List<string> ReaderWarnings { get; set; } = [];
     public List<StaffRow> Staff { get; set; } = [];
     public string? Error { get; set; }
 }

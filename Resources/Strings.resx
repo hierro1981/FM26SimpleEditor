@@ -2090,4 +2090,143 @@ Passa sul punto per il valore.</value>
   <data name="StaffOverallStarsNote" xml:space="preserve">
     <value>Stima assoluta dalla CA: CA / 40, arrotondata a mezza stella (0,5–5). Non riproduce le stelle generali relative del gioco e non è la media delle categorie di allenamento.</value>
   </data>
+  <data name="RecruitTab" xml:space="preserve">
+    <value>Trova staff</value>
+  </data>
+  <data name="RecruitLoad" xml:space="preserve">
+    <value>Carica / aggiorna candidati</value>
+  </data>
+  <data name="RecruitRoles" xml:space="preserve">
+    <value>Incarichi</value>
+  </data>
+  <data name="RecruitTraining" xml:space="preserve">
+    <value>Allenamento</value>
+  </data>
+  <data name="RecruitOffer" xml:space="preserve">
+    <value>Stipendio ipotizzato / settimana</value>
+  </data>
+  <data name="RecruitOfferHint" xml:space="preserve">
+    <value>0 = offerta non specificata. Importo settimanale nella valuta base del salvataggio, come lo stipendio letto. È uno scenario per la stima, non un’offerta al gioco.</value>
+  </data>
+  <data name="RecruitLimit" xml:space="preserve">
+    <value>Risultati</value>
+  </data>
+  <data name="RecruitUnlikely" xml:space="preserve">
+    <value>Includi anche i poco interessati</value>
+  </data>
+  <data name="RecruitCurrentRole" xml:space="preserve">
+    <value>Incarico attuale</value>
+  </data>
+  <data name="RecruitRoleStars" xml:space="preserve">
+    <value>Idoneità stimata ★</value>
+  </data>
+  <data name="RecruitQuality" xml:space="preserve">
+    <value>Punteggio /20</value>
+  </data>
+  <data name="RecruitInterest" xml:space="preserve">
+    <value>Interesse stimato</value>
+  </data>
+  <data name="RecruitBestTraining" xml:space="preserve">
+    <value>Miglior allenamento ★</value>
+  </data>
+  <data name="RecruitAttributes" xml:space="preserve">
+    <value>Attributi principali</value>
+  </data>
+  <data name="RecruitDetail" xml:space="preserve">
+    <value>Candidato: motivi e attributi</value>
+  </data>
+  <data name="RecruitPending" xml:space="preserve">
+    <value>Apri questa scheda per leggere i candidati dello staff. La prima lettura può richiedere tempo.</value>
+  </data>
+  <data name="RecruitLoading" xml:space="preserve">
+    <value>Ricerca dei candidati dello staff…</value>
+  </data>
+  <data name="RecruitLoaded" xml:space="preserve">
+    <value>Candidati dello staff caricati</value>
+  </data>
+  <data name="RecruitStatus" xml:space="preserve">
+    <value>{0} · mostrati {1} di {2} candidati · {3} persone leggibili nel database.</value>
+  </data>
+  <data name="RecruitCoverage" xml:space="preserve">
+    <value>Include sempre i casi al limite e incerti; esclude il tuo staff. Copertura limitata allo staff collegato ai club: non è un elenco completo dei disoccupati. Interesse euristico, non probabilità né garanzia di trattativa.</value>
+  </data>
+  <data name="RecruitQualityHint" xml:space="preserve">
+    <value>Incarichi: media ponderata degli attributi indicati; stelle = punteggio / 4, arrotondato a mezza stella. Pesi del tool, non formula ufficiale. Allenamento: stessa formula delle stelle già usata nello staff. Dati mancanti = —, senza sostituzioni con CA.</value>
+  </data>
+  <data name="RecruitInterest_Likely" xml:space="preserve">
+    <value>Plausibilmente interessato</value>
+  </data>
+  <data name="RecruitInterest_Borderline" xml:space="preserve">
+    <value>Al limite / da verificare</value>
+  </data>
+  <data name="RecruitInterest_Uncertain" xml:space="preserve">
+    <value>Informazioni insufficienti</value>
+  </data>
+  <data name="RecruitInterest_Unlikely" xml:space="preserve">
+    <value>Poco plausibile</value>
+  </data>
+  <data name="RecruitRepComparison" xml:space="preserve">
+    <value>Reputazione club destinazione: {0}/10000; club attuale: {1}/10000. Non è la reputazione personale dello staff.</value>
+  </data>
+  <data name="RecruitRepUnknown" xml:space="preserve">
+    <value>Confronto di reputazione non disponibile per un impiego attuale verificabile.</value>
+  </data>
+  <data name="RecruitAmbition" xml:space="preserve">
+    <value>Ambizione {0}/20: amplifica prudentemente il salto o il calo di prestigio.</value>
+  </data>
+  <data name="RecruitLoyalty" xml:space="preserve">
+    <value>Lealtà {0}/20: piccola penalità al cambio di club nella stima.</value>
+  </data>
+  <data name="RecruitExpired" xml:space="preserve">
+    <value>Il contratto letto è scaduto: possibile maggiore disponibilità, da confermare nel gioco.</value>
+  </data>
+  <data name="RecruitExpiring" xml:space="preserve">
+    <value>Contratto in scadenza entro sei mesi.</value>
+  </data>
+  <data name="RecruitContractUnknown" xml:space="preserve">
+    <value>Contratto non letto: non equivale a essere disoccupato o disponibile gratuitamente.</value>
+  </data>
+  <data name="RecruitFutureContract" xml:space="preserve">
+    <value>Il contratto letto inizia nel futuro: situazione da verificare.</value>
+  </data>
+  <data name="RecruitWageComparison" xml:space="preserve">
+    <value>Stipendio ipotizzato {0:N0}/settimana; attuale {1:N0}/settimana, nella valuta base del salvataggio.</value>
+  </data>
+  <data name="RecruitWageUnknown" xml:space="preserve">
+    <value>Compatibilità salariale non valutata: offerta non specificata o stipendio attuale non confrontabile.</value>
+  </data>
+  <data name="RecruitAdaptability" xml:space="preserve">
+    <value>Nazionalità diversa e adattabilità bassa: prudente penalità, senza informazioni su lingue o residenza.</value>
+  </data>
+  <data name="RecruitRoleUnknown" xml:space="preserve">
+    <value>La disponibilità per questo incarico o un cambio di ruolo non è verificata.</value>
+  </data>
+  <data name="RecruitManagerChange" xml:space="preserve">
+    <value>Attualmente allenatore: accettare un incarico diverso è più incerto.</value>
+  </data>
+  <data name="RecruitMultipleJobs" xml:space="preserve">
+    <value>Più impieghi letti per la stessa persona: il confronto considera il club più prestigioso; impegni ulteriori da verificare.</value>
+  </data>
+  <data name="RecruitMissingFactors" xml:space="preserve">
+    <value>Affidabilità limitata: reputazione personale, richieste effettive, preferenze d’incarico, relazioni, offerte concorrenti e decisione del gioco non sono ricostruite.</value>
+  </data>
+  <data name="RecruitDoctorMissing" xml:space="preserve">
+    <value>Medico: categoria riconosciuta, ma nessuna formula di idoneità verificata; le stelle di ruolo restano mancanti.</value>
+  </data>
+  <data name="RecruitCopy" xml:space="preserve">
+    <value>Copia valutazione per feedback</value>
+  </data>
+  <data name="RecruitCopied" xml:space="preserve">
+    <value>Valutazione copiata: aggiungi la risposta ottenuta nel gioco.</value>
+  </data>
+  <data name="Backend_RecruitReadPool" xml:space="preserve">
+    <value>Lettura dello staff dei club</value>
+  </data>
+  <data name="Backend_RecruitIndex" xml:space="preserve">
+    <value>Indicizzazione degli attributi dello staff</value>
+  </data>
+  <data name="Backend_RecruitPrepare" xml:space="preserve">
+    <value>Preparazione candidati staff</value>
+  </data>
+  <data name="RecruitReaderWarning" xml:space="preserve"><value>Il lettore ha segnalato record incompleti o non associabili: l’elenco dei candidati potrebbe essere incompleto.</value></data>
 </root>

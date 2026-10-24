@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v14.6
+# FM26 Simple Editor · v15.0 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -58,6 +58,14 @@ Players can also be added to the comparison list; every opened player is added a
 
 Recommendations require complete data and sufficient familiarity in every requested position. Selecting both phases requires players to cover both. An unrecognised role does not produce a generic recommendation in its place.
 
+### Find new staff
+
+In **My squad → Find staff**, choose a job or one of nine training categories. Rankings show estimated suitability stars, absolute CA stars, best training category and key attributes. Select a candidate to see the reasons behind estimated interest alongside all training stars.
+
+Borderline and insufficient-information candidates remain included; you can also show unlikely targets. Search by name, club, job or ID, choose the number of results and optionally simulate a weekly wage. **Copy assessment for feedback** prepares a summary to accompany the response received in game.
+
+Interest is an experimental estimate, not a probability or a guarantee of acceptance. The assumed wage sends no offer to the game. Search covers readable staff linked to clubs, excludes your own staff and does not necessarily include all unemployed staff. An unread contract does not mean the person is free. Job stars are tool estimates; no suitability stars are invented for doctors.
+
 ### Track progress
 
 **History** displays several attributes together, with position presets, colours, hover details and changes between observations.
@@ -76,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.0 · in development
+
+- New **Find staff** section, by job or training category, with rankings, estimated stars and key attributes.
+- Estimated interest in the human-managed club, with explanations, borderline cases and an optional wage scenario.
+- Text search, sortable columns, side-by-side details and assessment copying for feedback from the game.
 
 ### v14.6
 

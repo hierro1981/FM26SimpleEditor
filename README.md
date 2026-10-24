@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v14.6
+# FM26 Simple Editor · v15.0 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -58,6 +58,14 @@ Puoi anche aggiungere giocatori all’elenco di confronto; ogni giocatore aperto
 
 I suggerimenti richiedono dati completi e una familiarità sufficiente nelle posizioni richieste. Quando scegli entrambe le fasi, un giocatore deve poter ricoprire entrambe. Un ruolo non riconosciuto non produce una raccomandazione generica al suo posto.
 
+### Trovare nuovo staff
+
+In **La mia squadra → Trova staff**, scegli un incarico oppure una delle nove categorie di allenamento. La classifica mostra stelle di idoneità stimate, stelle assolute dalla CA, miglior categoria di allenamento e attributi principali. Seleziona un candidato per leggere i motivi dell’interesse previsto e tutte le stelle di allenamento, affiancati.
+
+I candidati al limite e quelli con informazioni insufficienti restano inclusi; puoi mostrare anche i meno plausibili. Cerca per nome, club, incarico o ID, scegli quanti risultati vedere e, facoltativamente, simula uno stipendio settimanale. **Copia valutazione per feedback** prepara un riepilogo da accompagnare alla risposta ottenuta nel gioco.
+
+L’interesse è una stima sperimentale, non una probabilità o una garanzia di accettazione. Lo stipendio ipotizzato non invia offerte al gioco. La ricerca copre lo staff leggibile collegato ai club, esclude il tuo staff e non include necessariamente tutti i disoccupati. Un contratto non letto non significa che la persona sia libera. Le stelle per incarico sono valutazioni del tool; per i medici non vengono inventate stelle di idoneità.
+
 ### Seguire i progressi
 
 La scheda **Storico** permette di visualizzare più attributi insieme, con preset per posizione, colori, dettagli al passaggio del mouse e variazioni tra i punti.
@@ -76,6 +84,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.0 · in sviluppo
+
+- Nuova sezione **Trova staff**, per incarico o categoria di allenamento, con classifiche, stelle stimate e attributi principali.
+- Interesse stimato verso il club umano con motivazioni, casi al limite inclusi e scenario salariale facoltativo.
+- Ricerca testuale, colonne ordinabili, dettagli affiancati e copia della valutazione per raccogliere feedback dal gioco.
 
 ### v14.6
 

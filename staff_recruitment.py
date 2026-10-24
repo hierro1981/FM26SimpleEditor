@@ -2,7 +2,8 @@
 from collections import Counter
 import warnings
 from operation_progress import report
-from staff_reader import PERSONALITY, PREFERENCES, values, attributes_at_block
+from staff_reader import (PERSONALITY, PREFERENCES, values, attributes_at_block,
+                          reputation_at_block, preferences_at_block)
 
 
 def indexed_blocks(store):
@@ -81,7 +82,8 @@ def recruitment_pool(store, progress=None):
             contractEnd=person.contract_end.isoformat() if person.contract_end else None,
             ca=ability.current if ability else None, pa=ability.potential if ability else None,
             personality=values(person.personality, PERSONALITY), attributes=attributes,
-            preferences=values(person.preferences, PREFERENCES),
+            preferences={**values(person.preferences, PREFERENCES), **preferences_at_block(store.raw, block, layout)},
+            reputation=reputation_at_block(store.raw, block, layout),
             **(jobs.read(person, block[0]) if block is not None else {})))
         if (i+1) % 500 == 0 or i+1 == len(people):
             report(progress, 40+50*(i+1)/max(1,len(people)), 'Preparazione candidati staff', i+1, len(people), 'persone')

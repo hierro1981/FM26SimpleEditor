@@ -1,4 +1,4 @@
-# Staff recruitment estimates · v15.2.1
+# Staff recruitment estimates · v15.3
 
 `La mia squadra → Trova staff` / `My squad → Find staff` is read-only.
 No offer is sent and no save is changed. It shortlists readable club-linked staff
@@ -41,8 +41,10 @@ changes by job key, not by translated label.
 ## Interest model v1.1
 
 This is an uncalibrated, limited-confidence index, not a probability, not a
-decoded acceptance function, and not a date prediction. It has no personal
-staff reputation input. Start at zero, then apply:
+decoded acceptance function, and not a date prediction. v15.3 reads personal
+staff reputation and five saved job affinities; they are displayed in the
+assessment but do not change the numeric index or invent a native threshold.
+See [StaffProfileFields](StaffProfileFields.md) for evidence and boundaries. Start at zero, then apply:
 
 | Input | Contribution |
 |---|---|
@@ -79,7 +81,7 @@ candidate, using the largest employer reputation (unknown first, conservatively)
 and then the highest wage. The rules do not add concurrent wages or reconstruct
 release clauses. They cannot guarantee availability or permitted appointments.
 
-Personal reputation, languages, job preferences, relationships, actual demands,
+Languages, unmapped job preferences, relationships, actual demands,
 licences, promises, competing offers and the game decision remain unavailable.
 There is no claim of a fixed reputation threshold that guarantees acceptance.
 

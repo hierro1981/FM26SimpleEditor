@@ -35,6 +35,32 @@ JOBS = {
 }
 
 
+def job_preferences(raw, tag, end):
+    """Five independently matched saved 'Roles' fields, not Genie percentages.
+
+    The variable list between contract ownership and the role vector must be
+    bounded, followed by its zero word, marker 1, fifteen 1..20 bytes and a
+    structurally valid trailer. No searching for a convenient run of bytes.
+    Other slots remain unnamed pending discriminating profile samples.
+    """
+    if tag < 0 or tag + 35 > min(end, len(raw)):
+        return {}
+    count = raw[tag + 29]
+    if count > 64:
+        return {}
+    at = tag + 35 + count * 9
+    if at + 28 > min(end, len(raw)) or raw[at-5:at] != b'\0\0\0\0\1':
+        return {}
+    ratings = raw[at:at+15]
+    if not all(1 <= value <= 20 for value in ratings) or raw[at+15:at+19] != bytes(4):
+        return {}
+    day, year = struct.unpack_from('<HH', raw, at+19)
+    if not (0 <= day <= 366 and 1900 <= year <= 2200 and raw[at+23] in (0, 1)
+            and raw[at+24:at+28] == bytes.fromhex('01006c07')):
+        return {}
+    return dict(zip(('manager', 'assistant_manager', 'coach', 'physio', 'scout'), ratings[:5]))
+
+
 def job_fields(code):
     if type(code) is not int or not 0 <= code <= 255:
         return {}
@@ -114,5 +140,12 @@ class StaffJobReader:
                 continue
             if locate_contracted_header(raw, person_id, tag, self.layout) != header:
                 continue
-            matches.append(raw[tag + 21])
-        return job_fields(matches[0]) if len(matches) == 1 else {}
+            matches.append((raw[tag + 21], tag))
+        if len(matches) != 1:
+            return {}
+        code, tag = matches[0]
+        fields = job_fields(code)
+        preferences = job_preferences(raw, tag, end)
+        if preferences:
+            fields['jobPreferences'] = preferences
+        return fields

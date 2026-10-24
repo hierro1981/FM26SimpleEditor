@@ -5,7 +5,8 @@ from types import SimpleNamespace as NS
 
 from fmsave._layouts.fm26_26_3_2 import STAFF
 from fmsave.readers.staff import _read_ability_block
-from staff_reader import NATIVE_ATTRIBUTES, native_staff_attributes
+from staff_reader import (NATIVE_ATTRIBUTES, native_staff_attributes, native_staff_block,
+                          reputation_at_block, preferences_at_block)
 
 
 class NativeStaffAttributeTests(unittest.TestCase):
@@ -85,6 +86,29 @@ class NativeStaffAttributeTests(unittest.TestCase):
         original = bytes(before + shifted)
         self.assertEqual(native_staff_attributes(original, person, STAFF)['judging_potential'], 10)
         self.assertEqual(original, bytes(before + shifted))
+
+    def test_reputation_and_added_preferences_use_validated_variable_length_block(self):
+        raw, person = self.fixture({5: 10, 7: 9, 8: 6, 16: 10, 17: 9, 18: 18, 19: 3, 20: 13})
+        struct.pack_into('<3H', raw, 15, 7445, 7445, 3993)
+        block = native_staff_block(raw, person, STAFF)
+        self.assertEqual(reputation_at_block(raw, block, STAFF), dict(home=7445,current=7445,world=3993))
+        self.assertEqual(preferences_at_block(raw, block, STAFF), dict(free_roles=10,marking=9,offside=6,relaxation=10,use_playmaker=9,use_substitutions=18,intensity=3,tactical_flair=13))
+        shifted = raw[:14] + bytes(14) + raw[14:]
+        shifted[13] = 2; person.unknown = dict(person.unknown, entry_count=2)
+        struct.pack_into('<3H', shifted, 29, 6461,6461,3365)
+        prefixed = bytes(37) + shifted
+        self.assertEqual(reputation_at_block(prefixed,native_staff_block(prefixed,person,STAFF),STAFF), dict(home=6461,current=6461,world=3365))
+
+    def test_reputation_missing_invalid_truncated_ambiguous_and_wrong_layout_are_not_guessed(self):
+        raw, person = self.fixture()
+        block = native_staff_block(raw,person,STAFF)
+        for values in [(0,100,100),(10001,100,100),(100,65535,100)]:
+            struct.pack_into('<3H',raw,15,*values)
+            self.assertEqual(reputation_at_block(raw,block,STAFF),{})
+        self.assertEqual(reputation_at_block(raw,None,STAFF),{})
+        self.assertEqual(reputation_at_block(raw,block,replace(STAFF,entry_bytes=8)),{})
+        self.assertEqual(reputation_at_block(raw[:15],block,STAFF),{})
+        self.assertEqual(reputation_at_block(raw,native_staff_block(raw+raw,person,STAFF),STAFF),{})
 
 
 if __name__ == '__main__':

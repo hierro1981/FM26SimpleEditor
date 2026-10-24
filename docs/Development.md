@@ -74,3 +74,8 @@ Language preference lives in `FM26SimpleEditor.config.json` beside the executabl
 Attribute scale conversion, ability/star estimates and reconstructed monthly history are documented above. Role weights and stars are editor heuristics, not an official FM formula. See [TacticalRoles](TacticalRoles.md) and [SavedTactics](SavedTactics.md) for the implemented methods and compatibility boundaries.
 
 The research identifies all active role codes, but the 13 OOP attribute IDs remain unresolved. Team-picking, match-rating and training weights cannot be substituted for role-suitability weights. Native analysis now links the staff serializer, its 52-byte payload and the indexed getter; the editor extends pinned `fmsave 0.5.11` with 20 additional staff attributes on a 1–20 scale. See [StaffAttributes.md](StaffAttributes.md) for evidence, validation and limits. Jobs are read from validated contract records through native `Cjob`, with category-only labels where the detailed title remains unknown. See [StaffJobs.md](StaffJobs.md); raw `r4` is still not a job code.
+
+
+## v15.3 staff profile extension
+
+Saved personal reputation, five job affinities and eight more tactical preferences are documented in [StaffProfileFields](StaffProfileFields.md), including structural gates, independent screen comparisons and unresolved percentage-rating formulas. They are profile facts, not a recovered transfer-acceptance formula.

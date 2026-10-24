@@ -219,6 +219,9 @@ public sealed class StaffRow
     public string? ContractEnd { get; set; }
     public int? Ca { get; set; }
     public int? Pa { get; set; }
+    public Dictionary<string, int> Reputation { get; set; } = new();
+    public Dictionary<string, int> JobPreferences { get; set; } = new();
+    [JsonIgnore] public int? CurrentReputation => Reputation.TryGetValue("current", out int value) && value is >= 1 and <= 10000 ? value : null;
     public Dictionary<string, int> Personality { get; set; } = new();
     public Dictionary<string, int> Attributes { get; set; } = new();
     public Dictionary<string, int> Preferences { get; set; } = new();

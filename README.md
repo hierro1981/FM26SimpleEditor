@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.2.1 (in sviluppo)
+# FM26 Simple Editor · v15.3 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.3 · in sviluppo
+
+- Lettura della reputazione personale dello staff: nazionale, attuale e mondiale, distinta dalla reputazione del club e dalle stelle dalla CA.
+- Cinque predisposizioni d’incarico salvate: allenatore, vice, preparatore, fisioterapista e osservatore. Visibili nei dettagli, nelle colonne della ricerca e nel feedback copiato; non garantiscono disponibilità a un’offerta.
+- Otto preferenze tattiche aggiuntive, tra cui marcatura, fuorigioco e utilizzo delle sostituzioni. Gli incarichi ancora da mappare e le formule delle percentuali di valutazione restano indicati come non disponibili.
 
 ### v15.2.1 · in sviluppo
 

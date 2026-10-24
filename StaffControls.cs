@@ -49,7 +49,7 @@ public sealed class StaffPanel : UserControl
             ("OverallStars", "StaffOverallStars", 190),
             ("ClubName", "StaffClub", 180), ("ListedClubName", "StaffListedClub", 180),
             ("Age", "Text_9efdc62c88bf", 60), ("BirthDisplay", "StaffBirth", 105),
-            ("Ca", "", 65), ("Pa", "", 65), ("Wage", "StaffWage", 160),
+            ("Ca", "", 65), ("Pa", "", 65), ("CurrentReputation", "StaffPersonalReputation", 180), ("Wage", "StaffWage", 160),
             ("ContractDisplay", "StaffContract", 155), ("ContractStartDisplay", "StaffContractStart", 110),
             ("ContractEndDisplay", "Text_51bf843f1751", 110), ("Id", "Text_358796f71be1", 110), ("Uid", "Text_e1e8b54d45e2", 110)
         ];
@@ -57,7 +57,7 @@ public sealed class StaffPanel : UserControl
         {
             var column = new DataGridViewTextBoxColumn { Name = c.Field, DataPropertyName = c.Field, HeaderText = c.Header.Length == 0 ? c.Field.ToUpperInvariant() : L10n.Get(c.Header), Width = c.Width, MinimumWidth = 50, SortMode = DataGridViewColumnSortMode.Programmatic };
             column.DefaultCellStyle.NullValue = "—";
-            if (c.Field is "Age" or "Ca" or "Pa" or "Wage" or "Id" or "Uid" || c.Field.EndsWith("Display") && c.Field != "RoleDisplay" && c.Field != "ContractDisplay") column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            if (c.Field is "Age" or "Ca" or "Pa" or "Wage" or "CurrentReputation" or "Id" or "Uid" || c.Field.EndsWith("Display") && c.Field != "RoleDisplay" && c.Field != "ContractDisplay") column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             if (c.Field == "Wage") column.DefaultCellStyle.Format = "N0";
             if (c.Field == "OverallStars")
             {
@@ -129,7 +129,7 @@ public sealed class StaffPanel : UserControl
         {
             "RoleDisplay" => p.RoleDisplay, "ClubName" => p.ClubName, "ListedClubName" => p.ListedClubName,
             "Age" => p.Age, "BirthDisplay" => p.Birth, "Ca" => p.Ca, "Pa" => p.Pa, "Wage" => p.Wage,
-            "OverallStars" => p.OverallStars,
+            "OverallStars" => p.OverallStars, "CurrentReputation" => p.CurrentReputation,
             "ContractDisplay" => p.ContractDisplay, "ContractStartDisplay" => p.ContractStart, "ContractEndDisplay" => p.ContractEnd,
             "Id" => p.Id, "Uid" => p.Uid, _ => p.Name
         };
@@ -172,6 +172,10 @@ public sealed class StaffPanel : UserControl
             foreach (var pair in values.OrderBy(x => L10n.Get(prefix + x.Key), Labels.Comparer(L10n.IsItalian)))
                 details.Rows.Add(L10n.Get(group), L10n.Get(prefix + pair.Key), pair.Value is >= 1 and <= 20 ? pair.Value : "—");
         }
+        foreach (var pair in person.Reputation.Where(p => p.Value is >= 1 and <= 10000))
+            details.Rows.Add(L10n.Get("StaffReputation"), L10n.Get("StaffReputation_" + pair.Key), pair.Value);
+        foreach (var pair in person.JobPreferences.Where(p => p.Value is >= 1 and <= 20 && L10n.Keys.Contains("StaffJob_" + p.Key)))
+            details.Rows.Add(L10n.Get("StaffJobPreferences"), L10n.Get("StaffJob_" + pair.Key), pair.Value);
         Add("StaffPersonality", "StaffPersonality_", person.Personality);
         Add("StaffAttributes", "StaffAttribute_", person.Attributes);
         Add("StaffPreferences", "StaffPreference_", person.Preferences);

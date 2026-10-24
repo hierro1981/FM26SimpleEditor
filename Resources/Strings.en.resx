@@ -2208,7 +2208,7 @@ Hover over a position for its rating.</value>
     <value>Multiple employments decoded for this person: comparison uses the most prestigious club; verify additional commitments.</value>
   </data>
   <data name="RecruitMissingFactors" xml:space="preserve">
-    <value>Limited confidence: personal reputation, actual demands, job preferences, relationships, competing offers and the game’s decision have not been reconstructed.</value>
+    <value>Limited confidence: actual demands, relocation willingness, relationships, competing offers and the game’s decision have not been reconstructed. Not all job affinities are mapped.</value>
   </data>
   <data name="RecruitDoctorMissing" xml:space="preserve">
     <value>Doctor: recognised category, but no verified suitability formula; job stars remain unavailable.</value>
@@ -2242,4 +2242,23 @@ Hover over a position for its rating.</value>
   <data name="RecruitInterest_Lateral" xml:space="preserve"><value>Borderline · no clear improvement</value></data>
   <data name="RecruitNoClearUpgrade" xml:space="preserve"><value>Club comparison shows no clear reputation improvement. This model conservatively treats a gain below 10% as insufficient: it is not an official game threshold. Job, league and personal reputation may change the response. Higher wages do not guarantee negotiations.</value></data>
   <data name="RecruitRelocationUnknown" xml:space="preserve"><value>Current club and destination are in different countries: relocation willingness is unverified. Club country does not prove residence; even high adaptability does not establish a willingness to move.</value></data>
+  <data name="StaffReputation" xml:space="preserve"><value>Personal reputation /10000</value></data>
+  <data name="StaffReputation_home" xml:space="preserve"><value>Home</value></data>
+  <data name="StaffReputation_current" xml:space="preserve"><value>Current</value></data>
+  <data name="StaffReputation_world" xml:space="preserve"><value>World</value></data>
+  <data name="StaffPersonalReputation" xml:space="preserve"><value>Current personal reputation</value></data>
+  <data name="StaffJobPreferences" xml:space="preserve"><value>Job affinities /20</value></data>
+  <data name="StaffJobPreferenceScore" xml:space="preserve"><value>Job affinity /20</value></data>
+  <data name="StaffJobPreferencesNote" xml:space="preserve"><value>Saved values matching Roles on independent profiles: currently verified for manager, assistant, coach, physio and scout. Separate from ability, current employment, percentage ratings and willingness to negotiate. Technical/tactical training categories use Coach as the target job. — = unavailable or unmapped job.</value></data>
+  <data name="RecruitPersonalReputation" xml:space="preserve"><value>Decoded personal reputation: home {0}, current {1}, world {2} (scale /10000). It is not converted into an acceptance threshold.</value></data>
+  <data name="RecruitPersonalReputationMissing" xml:space="preserve"><value>Personal reputation unavailable for this profile.</value></data>
+  <data name="RecruitJobPreference" xml:space="preserve"><value>Saved affinity for {0}: {1}/20. It is not an ability score and does not guarantee availability for this job or club.</value></data>
+  <data name="StaffPreference_free_roles" xml:space="preserve"><value>Free roles</value></data>
+  <data name="StaffPreference_marking" xml:space="preserve"><value>Marking</value></data>
+  <data name="StaffPreference_offside" xml:space="preserve"><value>Offside</value></data>
+  <data name="StaffPreference_relaxation" xml:space="preserve"><value>Relaxation</value></data>
+  <data name="StaffPreference_use_playmaker" xml:space="preserve"><value>Use of playmaker</value></data>
+  <data name="StaffPreference_use_substitutions" xml:space="preserve"><value>Use of substitutions</value></data>
+  <data name="StaffPreference_intensity" xml:space="preserve"><value>Intensity</value></data>
+  <data name="StaffPreference_tactical_flair" xml:space="preserve"><value>Flair</value></data>
 </root>

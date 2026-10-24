@@ -74,14 +74,17 @@ public sealed class StaffRecruitmentPanel : UserControl
             SortMode = DataGridViewColumnSortMode.NotSortable, ToolTipText = L10n.Get("RecruitCopyName")
         });
         Add(list, "CurrentRole", "RecruitCurrentRole", 200);
+        Add(list, "JobPreference", "StaffJobPreferenceScore", 185, true);
         Add(list, "RoleStars", "RecruitRoleStars", 180, true, true); Add(list, "Quality", "RecruitQuality", 90, true);
         Add(list, "InterestLabel", "RecruitInterest", 170);
         Add(list, "TrainingCategory", "StaffCoachingCategory", 190);
         Add(list, "MainAttributes", "RecruitAttributes", 650); Add(list, "Club", "StaffClub", 190);
         Add(list, "ClubReputation", "RecruitClubReputation", 165, true);
+        Add(list, "CurrentReputation", "StaffPersonalReputation", 180, true);
         Add(list, "Wage", "StaffWage", 140, true); Add(list, "Age", "Text_9efdc62c88bf", 60, true); Add(list, "Ca", "", 60, true);
         Add(list, "PublicId", "Text_358796f71be1", 110, true); Add(list, "Uid", "Text_e1e8b54d45e2", 110, true);
         Add(list, "OverallStars", "StaffOverallStars", 180, true, true); Add(list, "TrainingStars", "RecruitBestTraining", 170, true, true);
+        list.Columns["JobPreference"].ToolTipText = L10n.Get("StaffJobPreferencesNote");
         list.Columns["Quality"].DefaultCellStyle.Format = "0.00"; list.Columns["Wage"].DefaultCellStyle.Format = "N0";
         list.Columns["OverallStars"].ToolTipText = L10n.Get("StaffOverallStarsNote");
         foreach (var grid in new[] { attributes, coaching })
@@ -136,6 +139,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         currentJob.SelectedIndex = Math.Max(0, currentJob.Items.Cast<JobChoice>().ToList().FindIndex(c => c.Key == job));
         mode.Items.Clear(); mode.Items.AddRange([L10n.Get("RecruitRoles"), L10n.Get("RecruitTraining")]); mode.SelectedIndex = selected; binding = false;
         Profiles(); tips.SetToolTip(offer, L10n.Get("RecruitOfferHint")); tips.SetToolTip(profile, L10n.Get("RecruitQualityHint"));
+        list.Columns["JobPreference"].ToolTipText = L10n.Get("StaffJobPreferencesNote");
         list.Columns["RoleStars"].ToolTipText = list.Columns["Quality"].ToolTipText = L10n.Get("RecruitQualityHint");
         ((DataGridViewButtonColumn)list.Columns["CopyName"]).Text = list.Columns["CopyName"].ToolTipText = L10n.Get("RecruitCopyName");
         list.Columns["OverallStars"].ToolTipText = L10n.Get("StaffOverallStarsNote"); tips.SetToolTip(ignoreInterest, L10n.Get("RecruitIgnoreInterestHint")); RefreshRows();
@@ -147,7 +151,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         if (binding) return;
         uint? uid = (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem as StaffCandidate)?.Person.Uid;
         var ranked = data is null || Profile is null ? [] : StaffRecruitment.Rank(data, Profile, (long)offer.Value, ignoreInterest.Checked, search.Text.Trim(), (currentJob.SelectedItem as JobChoice)?.Key);
-        object? Value(StaffCandidate c) => sort switch { "ClubReputation" => c.ClubReputation, "PublicId" => c.PublicId, "Uid" => c.Uid, "InterestLabel" => c.Interest.Band == StaffInterest.Likely ? 3 : c.Interest.Band == StaffInterest.Borderline ? 2 : c.Interest.Band == StaffInterest.Uncertain ? 1 : 0,
+        object? Value(StaffCandidate c) => sort switch { "CurrentReputation" => c.CurrentReputation, "JobPreference" => c.JobPreference, "ClubReputation" => c.ClubReputation, "PublicId" => c.PublicId, "Uid" => c.Uid, "InterestLabel" => c.Interest.Band == StaffInterest.Likely ? 3 : c.Interest.Band == StaffInterest.Borderline ? 2 : c.Interest.Band == StaffInterest.Uncertain ? 1 : 0,
             "RoleStars" => c.RoleStars, "OverallStars" => c.OverallStars, "TrainingStars" => c.TrainingStars, "Wage" => c.Wage, "Age" => c.Age, "Ca" => c.Ca,
             "Name" => c.Name, "CurrentRole" => c.CurrentRole, "Club" => c.Club, "TrainingCategory" => c.TrainingCategory, "MainAttributes" => c.MainAttributes, _ => c.Quality };
         var known = ranked.Where(c => Value(c) is not null);
@@ -169,6 +173,10 @@ public sealed class StaffRecruitmentPanel : UserControl
         if (c.Profile.Key == "doctor") reason.Text += "\n" + L10n.Get("RecruitDoctorMissing");
         foreach (var w in c.Profile.Weights.OrderByDescending(w => w.Value))
             attributes.Rows.Add(L10n.Get("StaffAttribute_" + w.Key), StaffRecruitment.Attribute(c.Person, w.Key)?.ToString(L10n.Culture) ?? "—");
+        foreach (var pair in c.Person.Reputation.Where(p => p.Value is >= 1 and <= 10000))
+            attributes.Rows.Add(L10n.Get("StaffReputation") + " · " + L10n.Get("StaffReputation_" + pair.Key), pair.Value);
+        foreach (var pair in c.Person.JobPreferences.Where(p => p.Value is >= 1 and <= 20 && L10n.Keys.Contains("StaffJob_" + p.Key)))
+            attributes.Rows.Add(L10n.Get("StaffJobPreferences") + " · " + L10n.Get("StaffJob_" + pair.Key), pair.Value);
         foreach (var r in CoachingStars.Calculate(c.Person)) coaching.Rows.Add(L10n.Get("CoachingCategory_" + r.Category.Key), (object?)r.Stars);
         foreach (DataGridViewRow row in coaching.Rows) foreach (DataGridViewCell cell in row.Cells) cell.ToolTipText = L10n.Get("StaffCoachingEstimate");
         attributes.ClearSelection(); coaching.ClearSelection();

@@ -2208,7 +2208,7 @@ Passa sul punto per il valore.</value>
     <value>Più impieghi letti per la stessa persona: il confronto considera il club più prestigioso; impegni ulteriori da verificare.</value>
   </data>
   <data name="RecruitMissingFactors" xml:space="preserve">
-    <value>Affidabilità limitata: reputazione personale, richieste effettive, preferenze d’incarico, relazioni, offerte concorrenti e decisione del gioco non sono ricostruite.</value>
+    <value>Affidabilità limitata: richieste effettive, volontà di trasferirsi, relazioni, offerte concorrenti e decisione del gioco non sono ricostruite. Non tutte le predisposizioni d’incarico sono mappate.</value>
   </data>
   <data name="RecruitDoctorMissing" xml:space="preserve">
     <value>Medico: categoria riconosciuta, ma nessuna formula di idoneità verificata; le stelle di ruolo restano mancanti.</value>
@@ -2242,4 +2242,23 @@ Passa sul punto per il valore.</value>
   <data name="RecruitInterest_Lateral" xml:space="preserve"><value>Al limite · miglioramento non evidente</value></data>
   <data name="RecruitNoClearUpgrade" xml:space="preserve"><value>Il confronto tra club non mostra un miglioramento reputazionale netto. Il modello considera prudenzialmente insufficiente un vantaggio inferiore al 10%: non è una soglia ufficiale del gioco. Ruolo, campionato e reputazione personale possono cambiare la risposta. Uno stipendio più alto non garantisce l’avvio della trattativa.</value></data>
   <data name="RecruitRelocationUnknown" xml:space="preserve"><value>Il club attuale e la destinazione sono in paesi diversi: disponibilità al trasferimento non verificata. Il paese del club non prova la residenza; anche un’adattabilità alta non dimostra che la persona voglia spostarsi.</value></data>
+  <data name="StaffReputation" xml:space="preserve"><value>Reputazione personale /10000</value></data>
+  <data name="StaffReputation_home" xml:space="preserve"><value>Nazionale</value></data>
+  <data name="StaffReputation_current" xml:space="preserve"><value>Attuale</value></data>
+  <data name="StaffReputation_world" xml:space="preserve"><value>Mondiale</value></data>
+  <data name="StaffPersonalReputation" xml:space="preserve"><value>Reputazione personale attuale</value></data>
+  <data name="StaffJobPreferences" xml:space="preserve"><value>Predisposizioni incarico /20</value></data>
+  <data name="StaffJobPreferenceScore" xml:space="preserve"><value>Predisposizione incarico /20</value></data>
+  <data name="StaffJobPreferencesNote" xml:space="preserve"><value>Valori salvati corrispondenti ai Roles dei profili indipendenti: al momento verificati allenatore, vice, preparatore, fisioterapista e osservatore. Distinti da abilità, incarico attuale, percentuali di valutazione e disponibilità a trattare. Nelle categorie tecniche/tattiche il confronto usa l’incarico Preparatore. — = dato non disponibile o incarico non ancora mappato.</value></data>
+  <data name="RecruitPersonalReputation" xml:space="preserve"><value>Reputazione personale letta: nazionale {0}, attuale {1}, mondiale {2} (scala /10000). Non viene convertita in una soglia di accettazione.</value></data>
+  <data name="RecruitPersonalReputationMissing" xml:space="preserve"><value>Reputazione personale non disponibile per questo profilo.</value></data>
+  <data name="RecruitJobPreference" xml:space="preserve"><value>Predisposizione salvata per {0}: {1}/20. Non equivale al punteggio di abilità né garantisce disponibilità per questo incarico o club.</value></data>
+  <data name="StaffPreference_free_roles" xml:space="preserve"><value>Ruoli liberi</value></data>
+  <data name="StaffPreference_marking" xml:space="preserve"><value>Marcatura</value></data>
+  <data name="StaffPreference_offside" xml:space="preserve"><value>Fuorigioco</value></data>
+  <data name="StaffPreference_relaxation" xml:space="preserve"><value>Rilassamento</value></data>
+  <data name="StaffPreference_use_playmaker" xml:space="preserve"><value>Utilizzo del regista</value></data>
+  <data name="StaffPreference_use_substitutions" xml:space="preserve"><value>Utilizzo delle sostituzioni</value></data>
+  <data name="StaffPreference_intensity" xml:space="preserve"><value>Intensità</value></data>
+  <data name="StaffPreference_tactical_flair" xml:space="preserve"><value>Brillantezza</value></data>
 </root>

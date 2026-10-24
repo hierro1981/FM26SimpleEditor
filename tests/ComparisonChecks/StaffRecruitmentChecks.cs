@@ -67,6 +67,18 @@ internal static class StaffRecruitmentChecks
         resident.NationId = 150;
         check(residentEstimate.Score == StaffRecruitment.Estimate(resident,scout,feedbackDestination).Score && !residentEstimate.Reasons.Any(r=>r.Contains("paesi diversi")),
             "foreign nationality alone does not invent a relocation penalty when current club country is unchanged");
+        var enriched = Person(13);
+        enriched.Reputation = new() { ["home"] = 7445, ["current"] = 7445, ["world"] = 3993 };
+        enriched.JobPreferences = new() { ["manager"] = 11, ["assistant_manager"] = 13, ["coach"] = 20, ["physio"] = 1, ["scout"] = 1 };
+        var technical = StaffRecruitment.Training.Single(p => p.CategoryKey == "PossessionTechnical");
+        check(enriched.CurrentReputation == 7445 && StaffRecruitment.JobPreference(enriched, technical) == 20 && StaffRecruitment.JobPreference(enriched, scout) == 1,
+            "personal reputation and saved job affinity stay separate from current club prestige and coaching suitability");
+        int baseline = StaffRecruitment.Estimate(enriched,technical,data).Score;
+        check(StaffRecruitment.Estimate(enriched,technical,data).Reasons.Any(r=>r.Contains("7445")) && StaffRecruitment.Estimate(enriched,technical,data).Reasons.Any(r=>r.Contains("20/20")),
+            "assessment exposes decoded personal reputation and the affinity for the implied coach job");
+        enriched.Reputation.Clear(); enriched.JobPreferences.Clear();
+        check(StaffRecruitment.Estimate(enriched,technical,data).Score == baseline && enriched.CurrentReputation is null && StaffRecruitment.JobPreference(enriched, technical) is null,
+            "newly read profile facts do not invent an acceptance formula or missing affinity values");
         data.Staff=[good,poor];
         check(StaffRecruitment.Rank(data,scout,search:"Person 2").Single().Uid==2, "recruitment search uses actual candidate identity");
         foreach(var category in StaffRecruitment.Training)
@@ -118,6 +130,13 @@ internal static class StaffRecruitmentChecks
         check(jobs.SelectedItem!.ToString() == "Coach" && grid.Rows.Count == 1 && jobs.Items[0].ToString() == "Any", "language changes preserve the current-job filter key");
         jobs.SelectedIndex = 0; Application.DoEvents();
         check(grid.Rows.Count == 3, "any-current-job option restores candidates from other and unidentified jobs");
+        good.Reputation = new() { ["home"] = 6461, ["current"] = 6461, ["world"] = 3365 };
+        good.JobPreferences = new() { ["coach"] = 15 };
+        data.Staff = [good]; panel.SetData(data); Application.DoEvents();
+        check(grid.Rows[0].Cells["CurrentReputation"].Value?.ToString() == "6461" && grid.Rows[0].Cells["JobPreference"].Value?.ToString() == "15",
+            "shortlist displays personal reputation and the category's saved coach affinity");
+        check(All(panel).OfType<DataGridView>().Single(g=>g.Name=="RecruitAttributes").Rows.Cast<DataGridViewRow>().Any(r=>r.Cells[1].Value?.ToString()=="3365"),
+            "recruitment details expose all decoded reputation figures rather than only club reputation");
         panel.ClearForClub(9);panel.SetData(data);
         check(grid.Rows.Count==0, "stale recruitment responses from another club are ignored");
         host.Close();L10n.SetLanguage("it");

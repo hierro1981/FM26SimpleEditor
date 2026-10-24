@@ -23,6 +23,8 @@ public sealed record StaffCandidate(StaffRow Person, StaffSearchProfile Profile,
     public int? ClubReputation => Person.ClubReputation is >= 1 and <= 10000 ? Person.ClubReputation : null;
     public string CurrentRole => Person.RoleDisplay;
     public int? Ca => Person.Ca;
+    public int? CurrentReputation => Person.CurrentReputation;
+    public int? JobPreference => StaffRecruitment.JobPreference(Person, Profile);
     public int? Age => Person.Age;
     public long? Wage => Person.Wage;
     public double? OverallStars => Person.OverallStars;
@@ -69,6 +71,11 @@ public static class StaffRecruitment
         if (profile.Weights.Keys.Any(k => Attribute(person, k) is null)) return null;
         return profile.Weights.Sum(w => Attribute(person, w.Key)!.Value * w.Value) / (double)profile.Weights.Values.Sum();
     }
+    public static string DesiredJob(StaffSearchProfile profile) => profile.CategoryKey switch
+    {
+        null => profile.Key, "Goalkeeping" => "goalkeeping_coach", "Fitness" => "fitness_coach", "SetPieces" => "set_piece_coach", _ => "coach"
+    };
+    public static int? JobPreference(StaffRow person, StaffSearchProfile profile) => person.JobPreferences.TryGetValue(DesiredJob(profile), out int value) && value is >= 1 and <= 20 ? value : null;
     private static DateTime? Date(string? value) => DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date) ? date : null;
     private static bool Reputation(int? value) => value is >= 1 and <= 10000;
     public static StaffInterestEstimate Estimate(StaffRow person, StaffSearchProfile profile, StaffRecruitmentResult destination, long offeredWage = 0)
@@ -87,6 +94,11 @@ public static class StaffRecruitment
             { score += Math.Sign(delta) * (ambition - 1) / 4; reasons.Add(L10n.Format("RecruitAmbition", ambition)); }
         }
         else reasons.Add(L10n.Get("RecruitRepUnknown"));
+        if (new[] { "home", "current", "world" }.All(k => person.Reputation.TryGetValue(k, out int value) && value is >= 1 and <= 10000))
+            reasons.Add(L10n.Format("RecruitPersonalReputation", person.Reputation.GetValueOrDefault("home"), person.CurrentReputation, person.Reputation.GetValueOrDefault("world")));
+        else reasons.Add(L10n.Get("RecruitPersonalReputationMissing"));
+        if (JobPreference(person, profile) is int preference)
+            reasons.Add(L10n.Format("RecruitJobPreference", L10n.Get("StaffJob_" + DesiredJob(profile)), preference));
         if (expired) { score += 12; reasons.Add(L10n.Get("RecruitExpired")); }
         else if (current && end.HasValue && clock.HasValue && (end.Value-clock.Value).TotalDays <= 180)
         { score += 8; reasons.Add(L10n.Get("RecruitExpiring")); }

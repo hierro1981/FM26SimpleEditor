@@ -5,7 +5,7 @@ from types import SimpleNamespace as NS
 
 from fmsave._errors import CorruptSaveError
 from fmsave._layouts.fm26_26_3_2 import STAFF
-from staff_jobs import StaffJobReader, job_fields
+from staff_jobs import StaffJobReader, job_fields, job_preferences
 
 
 class StaffJobTests(unittest.TestCase):
@@ -92,6 +92,23 @@ class StaffJobTests(unittest.TestCase):
         person.contract_start = dt.date(2020, 1, 1)
         person.contract_end = dt.date(2025, 1, 1)
         self.assertEqual(reader.read(person, 0), {})
+
+    def test_saved_job_affinities_follow_variable_list_and_do_not_replace_current_job(self):
+        for count, ratings in [(0,[11,13,20,1,1]+[1]*10),(2,[12,15,15,10,9,1,1,1,4,20,10,4,1,1,1])]:
+            reader,person,_,tag=self.fixture(64)
+            raw=reader.store.raw;raw[tag+29]=count;at=tag+35+9*count
+            raw[at-5:at]=bytes(4)+b'\1';raw[at:at+15]=bytes(ratings)
+            struct.pack_into('<HH',raw,at+19,171,2026);raw[at+24:at+28]=bytes.fromhex('01006c07')
+            result=reader.read(person,0)
+            self.assertEqual(result['jobKey'],'head_youth_development')
+            self.assertEqual(result['jobPreferences'],dict(zip(('manager','assistant_manager','coach','physio','scout'),ratings[:5])))
+            original=bytes(raw)
+            for offset,value in [(at-1,0),(at,0),(at,21),(at+15,1),(at+24,0),(tag+29,255)]:
+                raw[:]=original;raw[offset]=value
+                self.assertNotIn('jobPreferences',reader.read(person,0))
+                self.assertEqual(reader.read(person,0)['jobKey'],'head_youth_development')
+            raw[:]=original
+            self.assertEqual(job_preferences(raw,tag,at+27),{})
 
 
 if __name__ == '__main__':

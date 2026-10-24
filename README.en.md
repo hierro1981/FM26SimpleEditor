@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.2.1 (in development)
+# FM26 Simple Editor · v15.3 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.3 · in development
+
+- Read personal staff reputation (home, current and world), separately from club reputation and CA stars.
+- Show five saved job affinities: manager, assistant, coach, physio and scout. Available in staff details, recruitment columns and copied assessments; they do not guarantee interest in an offer.
+- Eight additional tactical preferences, including marking, offside and use of substitutions. Unmapped jobs and the independent tool’s percentage-rating formula remain explicitly unavailable.
 
 ### v15.2.1 · in development
 

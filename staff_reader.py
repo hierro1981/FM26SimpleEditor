@@ -8,6 +8,35 @@ PREFERENCES = ('attacking', 'business', 'directness', 'interference', 'patience'
                'trigger_press', 'resources', 'buying_players', 'mind_games',
                'flexibility', 'hardness_of_training', 'squad_rotation', 'tempo', 'width')
 
+# These preferences (not coaching ability) match both supplied independent
+# profile screenshots. Unresolved slots 2, 4, 12 and 13 are not relabelled.
+EXTRA_PREFERENCES = {5: 'free_roles', 7: 'marking', 8: 'offside',
+                     16: 'relaxation', 17: 'use_playmaker',
+                     18: 'use_substitutions', 19: 'intensity', 20: 'tactical_flair'}
+
+
+def reputation_at_block(raw, block, layout):
+    if block is None or (layout.ability_base_offset, layout.entry_bytes, layout.entry_count_offset) != (21, 7, 13):
+        return {}
+    header, ability = block[:2]
+    if header < 0 or header + layout.entry_count_offset >= len(raw):
+        return {}
+    expected = header + 21 + 7 * raw[header + layout.entry_count_offset]
+    if ability != expected or ability - 6 < header or ability > len(raw):
+        return {}
+    ratings = struct.unpack_from('<3H', raw, ability - 6)
+    return dict(zip(('home', 'current', 'world'), ratings)) if all(1 <= n <= 10000 for n in ratings) else {}
+
+
+def preferences_at_block(raw, block, layout):
+    if block is None or layout.preferences_offset != 14 or layout.preference_count != 26:
+        return {}
+    at = block[1] + layout.preferences_offset
+    if at < 0 or at + 26 > len(raw):
+        return {}
+    return {key: raw[at + index] for index, key in EXTRA_PREFERENCES.items()
+            if 1 <= raw[at + index] <= 20}
+
 # Indices of the native generic non-player attribute enum, not the separate
 # job-dependent getter enum. See docs/StaffAttributes.md for the evidence.
 NATIVE_ATTRIBUTES = {
@@ -121,10 +150,14 @@ def read_my_staff(store, club_uid, progress=None):
             if person.club_uid in associated:
                 ability = person.ability
                 attributes = values(person.attributes, ('adaptability',))
+                preferences = values(person.preferences, PREFERENCES)
+                reputation = {}
                 job = {}
                 if native_layout is not None:
                     block = native_staff_block(store.raw, person, native_layout)
                     attributes.update(attributes_at_block(store.raw, block, native_layout))
+                    reputation = reputation_at_block(store.raw, block, native_layout)
+                    preferences.update(preferences_at_block(store.raw, block, native_layout))
                     if block is not None and job_reader is not None:
                         job = job_reader.read(person, block[0])
                 result.append(dict(
@@ -141,7 +174,7 @@ def read_my_staff(store, club_uid, progress=None):
                     pa=ability.potential if ability else None,
                     personality=values(person.personality, PERSONALITY),
                     attributes=attributes,
-                    preferences=values(person.preferences, PREFERENCES), **job))
+                    preferences=preferences, reputation=reputation, **job))
             if person.club_uid in associated or (index + 1) % 1000 == 0 or index + 1 == len(decoded):
                 report(progress, 10 + 90 * (index + 1) / max(1, len(decoded)),
                        'Preparazione elenco dello staff', index + 1, len(decoded), 'persone')

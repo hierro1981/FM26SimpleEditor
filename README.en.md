@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.5.1 (in development)
+# FM26 Simple Editor · v15.6 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,14 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.6 · in development
+
+- New **My squad → Staff planning** tab: lists contracts expiring within six months and suggests renewal or assessing a replacement.
+- Compares your staff with stronger alternatives for the same job or training category, showing stars, attributes and estimated interest. Change the comparison criterion or try an assumed salary offer.
+- Borderline alternatives still need verification: check a replacement’s availability before giving up a renewal.
+- More conservative interest estimates for staff still contracted to a more prestigious club: imminent expiry and an assumed pay rise cannot override the refusal risk.
+- Removed the generic closing warning from staff assessments.
 
 ### v15.5.1 · in development
 

@@ -100,7 +100,7 @@ public static class StaffRecruitment
         if (JobPreference(person, profile) is int preference)
             reasons.Add(L10n.Format("RecruitJobPreference", L10n.Get("StaffJob_" + DesiredJob(profile)), preference));
         if (expired) { score += 12; reasons.Add(L10n.Get("RecruitExpired")); }
-        else if (current && end.HasValue && clock.HasValue && (end.Value-clock.Value).TotalDays <= 180)
+        else if (current && end.HasValue && clock.HasValue && end.Value <= clock.Value.AddMonths(6))
         { score += 8; reasons.Add(L10n.Get("RecruitExpiring")); }
         if (!person.HasContract) reasons.Add(L10n.Get("RecruitContractUnknown"));
         if (start > clock) reasons.Add(L10n.Get("RecruitFutureContract"));
@@ -136,7 +136,15 @@ public static class StaffRecruitment
         score = Math.Clamp(score, -100, 100);
         StaffInterest band = !repKnown && !expired ? StaffInterest.Uncertain : score >= 10 ? StaffInterest.Likely : score >= -20 ? StaffInterest.Borderline : StaffInterest.Unlikely;
         if (noClearUpgrade && band == StaffInterest.Likely) band = StaffInterest.Borderline;
-        reasons.Add(L10n.Get("RecruitMissingFactors"));
+        // Active contracts at a more prestigious club are conservatively excluded.
+        // Expiry and a hypothetical pay rise cannot establish willingness to talk.
+        bool prestigeDrop = repKnown && destination.ClubReputation!.Value < person.ClubReputation!.Value;
+        if (prestigeDrop)
+        {
+            score = Math.Min(score, -21);
+            band = StaffInterest.Unlikely;
+            reasons.Add(L10n.Get("RecruitPrestigeBarrier"));
+        }
         return new(band, score, reasons, noClearUpgrade);
     }
     public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "", string? currentJob = null)

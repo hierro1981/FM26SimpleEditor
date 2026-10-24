@@ -2207,9 +2207,6 @@ Hover over a position for its rating.</value>
   <data name="RecruitMultipleJobs" xml:space="preserve">
     <value>Multiple employments decoded for this person: comparison uses the most prestigious club; verify additional commitments.</value>
   </data>
-  <data name="RecruitMissingFactors" xml:space="preserve">
-    <value>Limited confidence: actual demands, relocation willingness, relationships, competing offers and the game’s decision have not been reconstructed. Not all job affinities are mapped.</value>
-  </data>
   <data name="RecruitDoctorMissing" xml:space="preserve">
     <value>Doctor: recognised category, but no verified suitability formula; job stars remain unavailable.</value>
   </data>
@@ -2282,4 +2279,38 @@ Hover over a position for its rating.</value>
   <data name="LineupFutureNoCandidate" xml:space="preserve"><value>No eligible player has an available future estimate: age, CA/PA, attributes and sufficient familiarity are required.</value></data>
   <data name="TacticsSelectionCriteria" xml:space="preserve"><value>Selection criteria</value></data>
   <data name="TacticsAttributeWeights" xml:space="preserve"><value>Attributes and weights</value></data>
+  <data name="RecruitPrestigeBarrier" xml:space="preserve"><value>The current club is more prestigious than the destination: likely refusal because this is not a step forward. With an active contract, the conservative model does not let imminent expiry or an assumed pay rise offset this barrier; this is not an official game rule.</value></data>
+  <data name="PlanTab" xml:space="preserve"><value>Staff planning</value></data>
+  <data name="PlanDays" xml:space="preserve"><value>Days left</value></data>
+  <data name="PlanCriterion" xml:space="preserve"><value>Comparison criterion</value></data>
+  <data name="PlanRecommendation" xml:space="preserve"><value>Renewal advice</value></data>
+  <data name="PlanBestAlternative" xml:space="preserve"><value>Alternative to assess</value></data>
+  <data name="PlanBetterCount" xml:space="preserve"><value>Better alternatives</value></data>
+  <data name="PlanAlternatives" xml:space="preserve"><value>Better alternatives · up to 50 · plausible interest first</value></data>
+  <data name="PlanAttributeComparison" xml:space="preserve"><value>Attribute comparison · select an alternative</value></data>
+  <data name="PlanCurrent" xml:space="preserve"><value>Current staff</value></data>
+  <data name="PlanAlternative" xml:space="preserve"><value>Alternative</value></data>
+  <data name="PlanGain" xml:space="preserve"><value>Difference</value></data>
+  <data name="PlanAdvice_Renew" xml:space="preserve"><value>Renewal recommended</value></data>
+  <data name="PlanAdvice_CompareReplacement" xml:space="preserve"><value>Consider a replacement</value></data>
+  <data name="PlanAdvice_VerifyAlternatives" xml:space="preserve"><value>Renew / verify alternatives</value></data>
+  <data name="PlanAdvice_Review" xml:space="preserve"><value>Review required</value></data>
+  <data name="PlanReason_Renew" xml:space="preserve"><value>The readable pool contains no significantly better, potentially interested alternatives for the selected criterion. Renewal is recommended on technical quality; salary demands and team needs still need assessment.</value></data>
+  <data name="PlanReason_CompareReplacement" xml:space="preserve"><value>At least one alternative has plausible estimated interest and an advantage of at least 0.75/20 for the selected criterion. Explore negotiations before giving up the renewal: acceptance is not guaranteed.</value></data>
+  <data name="PlanReason_VerifyAlternatives" xml:space="preserve"><value>Better alternatives have borderline or uncertain interest. Keep renewal open and first check willingness in the game.</value></data>
+  <data name="PlanReason_Review" xml:space="preserve"><value>A complete job assessment or market data from the same date is missing: no advice to give up the renewal is made.</value></data>
+  <data name="PlanPendingStaff" xml:space="preserve"><value>Loading your club’s staff…</value></data>
+  <data name="PlanPendingMarket" xml:space="preserve"><value>Waiting for external candidates: advice still needs review.</value></data>
+  <data name="PlanMissingDate" xml:space="preserve"><value>Save date unavailable: contract expiries cannot be calculated.</value></data>
+  <data name="PlanDateMismatch" xml:space="preserve"><value>Staff and market dates differ: reload the data.</value></data>
+  <data name="PlanStatus" xml:space="preserve"><value>Save: {0} · {1}/{2} active contracts expiring within six months.</value></data>
+  <data name="PlanCoverage" xml:space="preserve"><value>Comparison covers readable club-linked staff; not all unemployed staff are included.</value></data>
+  <data name="PlanAlternativeCount" xml:space="preserve"><value>Showing {0} of {1} better alternatives.</value></data>
+  <data name="PlanMethod" xml:space="preserve"><value>Read-only analysis: includes active contracts ending between the save date and six calendar months later, inclusive; excludes human managers and expired, future or unreadable contracts.
+
+Compares the same identified job using the same attributes and weights as staff search. For coaches it starts with their strongest relevant training category: this is not their training assignment read from the game. You can change the criterion for the selected person.
+
+An alternative must improve the score by at least 0.75/20: an editor choice, not an official threshold. Likely refusals are excluded; borderline or uncertain candidates are shown for verification but alone do not justify replacement. Your own staff, unidentified jobs and imprecise job categories are excluded.
+
+Training stars use the same calculation as the Staff page. Other stars describe job suitability, not overall CA. Comparisons concern the selected criterion: they do not optimise the whole training allocation, allocate candidates or verify salary demands and available posts. No contract is modified.</value></data>
 </root>

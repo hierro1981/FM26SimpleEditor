@@ -178,6 +178,7 @@ def read_my_staff(store, club_uid, progress=None):
             if person.club_uid in associated or (index + 1) % 1000 == 0 or index + 1 == len(decoded):
                 report(progress, 10 + 90 * (index + 1) / max(1, len(decoded)),
                        'Preparazione elenco dello staff', index + 1, len(decoded), 'persone')
-        return dict(status='ready', clubUid=club_uid, staff=result)
+        return dict(status='ready', clubUid=club_uid, staff=result,
+                    gameDate=store.save.info.game_date.isoformat())
     except Exception as exc:
         return dict(status='unavailable', clubUid=club_uid, staff=[], error=str(exc))

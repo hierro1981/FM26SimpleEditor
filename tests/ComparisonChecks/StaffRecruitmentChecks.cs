@@ -20,8 +20,8 @@ internal static class StaffRecruitmentChecks
         var ranking = StaffRecruitment.Rank(data,scout);
         check(ranking.Select(c => c.Uid).SequenceEqual(new uint[] {1,2}) && ranking.All(c => c.Interest.Band == StaffInterest.Borderline), "recruitment ranks quality among plausible and borderline candidates without own staff or human managers");
         check(StaffRecruitment.Rank(data,scout,ignoreInterest:true).First().Uid == 3, "unlikely toggle exposes top-quality hard targets without changing quality scores");
-        check(StaffRecruitment.Estimate(tooHigh,scout,data).Band == StaffInterest.Unlikely && StaffRecruitment.Estimate(tooHigh,scout,data,2000).Band == StaffInterest.Borderline,
-            "explicit salary scenario can move a marginal rejection into borderline without claiming acceptance");
+        check(StaffRecruitment.Estimate(tooHigh,scout,data).Band == StaffInterest.Unlikely && StaffRecruitment.Estimate(tooHigh,scout,data,2000).Band == StaffInterest.Unlikely,
+            "assumed pay rise cannot override an active contract at a more prestigious club");
         var unknown=Person(6); unknown.ClubReputation=null; unknown.HasContract=false;
         check(StaffRecruitment.Estimate(unknown,scout,data).Band == StaffInterest.Uncertain && StaffRecruitment.Estimate(unknown,scout,data).Reasons.Any(r => r.Contains("non equivale")), "missing contract never means unemployed and missing reputation is uncertainty");
         data.Staff=[good,unknown];
@@ -45,8 +45,8 @@ internal static class StaffRecruitmentChecks
         {
             var target = Person(9, sample.Rep); target.Personality = new() { ["ambition"] = sample.Ambition, ["loyalty"] = sample.Loyalty };
             var estimate = StaffRecruitment.Estimate(target, scout, feedbackDestination);
-            check(estimate.Score == -17 && estimate.Band == StaffInterest.Borderline && estimate.Label.Contains("rischio rifiuto elevato") && estimate.Reasons.Any(r => r.Contains("meno prestigioso")),
-                "reported refusal context is cautioned without per-person exceptions or changing the uncalibrated score " + sample.Rep);
+            check(estimate.Score <= -21 && estimate.Band == StaffInterest.Unlikely && estimate.Reasons.Any(r => r.Contains("meno prestigioso")),
+                "reported prestige-drop refusals are conservatively excluded without per-person exceptions " + sample.Rep);
         }
         feedbackDestination.ClubNationId = 150;
         foreach (var sample in new[] { (Rep:6259, Loyalty:10, Country:139, Score:-2), (Rep:6317, Loyalty:12, Country:150, Score:-2), (Rep:5950, Loyalty:5, Country:120, Score:1) })
@@ -54,7 +54,7 @@ internal static class StaffRecruitmentChecks
             var target = Person(10, sample.Rep); target.ClubNationId = sample.Country;
             target.Personality = new() { ["loyalty"] = sample.Loyalty }; target.Attributes["adaptability"] = 16;
             var estimate = StaffRecruitment.Estimate(target, scout, feedbackDestination);
-            check(estimate.Score == sample.Score && estimate.Band == StaffInterest.Borderline && estimate.NoClearUpgrade && estimate.Label.Contains("miglioramento non evidente"),
+            check(estimate.Score == (sample.Rep > 6302 ? -21 : sample.Score) && estimate.Band == (sample.Rep > 6302 ? StaffInterest.Unlikely : StaffInterest.Borderline) && estimate.NoClearUpgrade,
                 "near-equal club reputation does not imply a career improvement " + sample.Rep);
             check(estimate.Reasons.Any(r => r.Contains("paesi diversi")) == (sample.Country != 150),
                 "relocation uncertainty uses current employer country even with high adaptability " + sample.Country);

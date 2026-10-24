@@ -131,3 +131,59 @@ and affiliate exclusions, human exclusion, multiple employment and cache
 isolation. Windows C# checks cover ranking, salary scenarios, uncertainty,
 missing inputs, shared training-star equality, localisation and narrow layouts.
 Real saves used for local validation are not distributed with the repository.
+
+## Prestige barrier and renewals (v15.6)
+
+Further user feedback reports refusals to move from employers at reputation
+6552 and 6695 to a destination at 6308, including a contract expiring in June.
+The model now treats **any known reputation decrease during an active contract**
+as **unlikely**. It caps the index at −21 after other adjustments, including
+expiry and a hypothetical salary increase. This is a conservative shortlist
+policy informed by feedback, not a recovered FM formula or a probability.
+The former 10% no-clear-upgrade flag still caps small positive gains to
+borderline. Equal reputation remains borderline unless other penalties make it
+unlikely. Confirmed expired contracts do not use a current-employer barrier.
+The near-expiry bonus now uses six calendar months rather than 180 days.
+Ignore interest still exposes all these people for manual checking.
+The generic closing missing-factors paragraph has been removed from both
+languages; specific explanations remain.
+
+### Staff planning
+
+`My squad → Staff planning` reuses the local staff reader and global recruitment
+pool. The own-staff response now supplies the save date; the PC date is never
+used. It includes identified active contracts ending from the save date through
+`AddMonths(6)`, inclusive, and excludes human managers, expired/future contracts,
+unreadable dates and missing contracts. Local staff may include controlled
+subteams; their UIDs are all excluded from external alternatives.
+
+For a known exact job, start with its shared recruitment profile. For coaches,
+choose the highest readable relevant training-category score; this is not a
+read training assignment. The user can switch to the job profile or another
+relevant training category for the selected employee. Family-only jobs and
+doctors without a quality formula get **Review required**, not fabricated
+quality. All job and training stars reuse recruitment/CoachingStars unchanged.
+
+Replacement candidates must have the same decoded current job and an exact
+category, pass the revised interest filter, and exceed the incumbent by at least
+**0.75/20** on the same criterion. This is an editor noise margin, not an official
+threshold. Do not use CA or personal reputation as substitutes for missing inputs.
+Rank each criterion once across the complete pool; no visible-row limit is used
+in deciding advice. Search and column sorts reuse the cached analysis.
+
+- **Consider a replacement**: at least one meaningfully better candidate has
+  **Likely** interest. Negotiate before abandoning renewal; this is not a signed
+  offer or a guarantee of acceptance.
+- **Renew / verify alternatives**: better candidates are only borderline or
+  uncertain. They do not alone justify giving up renewal.
+- **Renewal recommended**: no qualifying upgrade in the readable pool.
+- **Review required**: missing incumbent quality, market loading/failure, or
+  mismatched market club/save date. Never temporarily recommend renewal just
+  because the market has not finished loading.
+
+Details show up to 50 better candidates, plausible interest first, then quality,
+with attribute comparison and signed differences. Each renewal is independent:
+the same candidate can appear for several contracts, and these are not simultaneous
+hires or a global training allocation. The market does not enumerate all free
+agents, and there is no inferred staff budget, salary demand or board slot cap.
+No renewal, dismissal, offer or save edit is performed.

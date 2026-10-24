@@ -23,7 +23,7 @@ class StaffReaderTests(unittest.TestCase):
     def store(self):
         people=[self.person(1),self.person(2,20),self.person(3,99),self.person(4,human=True)]
         club=NS(uid=10,teams=[NS(club_uid=10),NS(club_uid=20)])
-        return NS(save=NS(managed_clubs=lambda:[NS(club_uid=10)],clubs=lambda:[club],staff=lambda:people))
+        return NS(save=NS(info=NS(game_date=dt.date(2028,3,28)),managed_clubs=lambda:[NS(club_uid=10)],clubs=lambda:[club],staff=lambda:people))
 
     def test_parent_and_affiliate_only_not_other_clubs(self):
         result=read_my_staff(self.store(),10)
@@ -69,7 +69,7 @@ class StaffReaderTests(unittest.TestCase):
 
     def test_empty_staff_is_a_success_and_progress_is_monotonic(self):
         store=self.store();store.save.staff=lambda:[]
-        self.assertEqual(read_my_staff(store,10),dict(status='ready',clubUid=10,staff=[]))
+        self.assertEqual(read_my_staff(store,10),dict(status='ready',clubUid=10,staff=[],gameDate='2028-03-28'))
         output=io.StringIO();read_my_staff(self.store(),10,ProgressReporter(output))
         events=[json.loads(line) for line in output.getvalue().splitlines()]
         self.assertEqual([e['percent'] for e in events],sorted(e['percent'] for e in events))

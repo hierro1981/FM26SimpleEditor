@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.5.1 (in sviluppo)
+# FM26 Simple Editor · v15.6 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,14 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.6 · in sviluppo
+
+- Nuova scheda **La mia squadra → Pianificazione staff**: mostra i contratti in scadenza entro sei mesi e suggerisce se rinnovare o valutare una sostituzione.
+- Confronta il tuo staff con alternative migliori per lo stesso incarico o categoria di allenamento, indicando stelle, attributi e interesse stimato. Puoi cambiare il criterio di confronto e ipotizzare un’offerta salariale.
+- Le alternative al limite restano da verificare: prima di rinunciare a un rinnovo, controlla che il sostituto sia disponibile.
+- Stima dell’interesse più prudente per chi ha ancora un contratto con un club più prestigioso: scadenza vicina e aumento salariale ipotizzato non bastano a superare il rischio di rifiuto.
+- Rimossa la nota generica finale dalle valutazioni dello staff.
 
 ### v15.5.1 · in sviluppo
 

@@ -556,8 +556,12 @@ public sealed class MainForm : Form
             progress.Value = 100; progressText.Text = "100%";
             state.Text = L10n.Get("StaffLoaded");
         }
-        catch (Exception exc) { Error(L10n.Get("StaffLoadError"), exc); }
-        finally { SetBusy(false); }
+        catch (Exception exc)
+        {
+            mySquad.SetStaffData(new() { ClubUid = clubUid, Status = "unavailable", Error = exc.Message });
+            Error(L10n.Get("StaffLoadError"), exc);
+        }
+        finally { SetBusy(false); mySquad.EnsureRecruitmentLoaded(); }
     }
 
     private async Task RefreshTactics(uint clubUid)

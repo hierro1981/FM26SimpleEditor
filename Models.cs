@@ -247,6 +247,7 @@ public sealed class StaffRow
 
 public sealed class StaffResult
 {
+    public string? GameDate { get; set; }
     public string Status { get; set; } = "none";
     public uint? ClubUid { get; set; }
     public List<StaffRow> Staff { get; set; } = [];

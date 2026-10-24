@@ -2207,9 +2207,6 @@ Passa sul punto per il valore.</value>
   <data name="RecruitMultipleJobs" xml:space="preserve">
     <value>Più impieghi letti per la stessa persona: il confronto considera il club più prestigioso; impegni ulteriori da verificare.</value>
   </data>
-  <data name="RecruitMissingFactors" xml:space="preserve">
-    <value>Affidabilità limitata: richieste effettive, volontà di trasferirsi, relazioni, offerte concorrenti e decisione del gioco non sono ricostruite. Non tutte le predisposizioni d’incarico sono mappate.</value>
-  </data>
   <data name="RecruitDoctorMissing" xml:space="preserve">
     <value>Medico: categoria riconosciuta, ma nessuna formula di idoneità verificata; le stelle di ruolo restano mancanti.</value>
   </data>
@@ -2282,4 +2279,38 @@ Passa sul punto per il valore.</value>
   <data name="LineupFutureNoCandidate" xml:space="preserve"><value>Nessun giocatore idoneo ha una stima futura disponibile: servono età, CA/PA, attributi e familiarità sufficienti.</value></data>
   <data name="TacticsSelectionCriteria" xml:space="preserve"><value>Criteri di selezione</value></data>
   <data name="TacticsAttributeWeights" xml:space="preserve"><value>Attributi e pesi</value></data>
+  <data name="RecruitPrestigeBarrier" xml:space="preserve"><value>Il club attuale è più prestigioso della destinazione: probabile rifiuto per mancato passo avanti. Con contratto attivo, il modello prudenziale non lascia che scadenza vicina o aumento salariale compensino questo ostacolo; non è una regola ufficiale del gioco.</value></data>
+  <data name="PlanTab" xml:space="preserve"><value>Pianificazione staff</value></data>
+  <data name="PlanDays" xml:space="preserve"><value>Giorni rimasti</value></data>
+  <data name="PlanCriterion" xml:space="preserve"><value>Criterio di confronto</value></data>
+  <data name="PlanRecommendation" xml:space="preserve"><value>Consiglio rinnovo</value></data>
+  <data name="PlanBestAlternative" xml:space="preserve"><value>Alternativa da valutare</value></data>
+  <data name="PlanBetterCount" xml:space="preserve"><value>Alternative migliori</value></data>
+  <data name="PlanAlternatives" xml:space="preserve"><value>Alternative migliori · massimo 50 · interesse plausibile prima</value></data>
+  <data name="PlanAttributeComparison" xml:space="preserve"><value>Confronto attributi · seleziona un’alternativa</value></data>
+  <data name="PlanCurrent" xml:space="preserve"><value>In rosa</value></data>
+  <data name="PlanAlternative" xml:space="preserve"><value>Alternativa</value></data>
+  <data name="PlanGain" xml:space="preserve"><value>Differenza</value></data>
+  <data name="PlanAdvice_Renew" xml:space="preserve"><value>Rinnovo consigliato</value></data>
+  <data name="PlanAdvice_CompareReplacement" xml:space="preserve"><value>Valuta una sostituzione</value></data>
+  <data name="PlanAdvice_VerifyAlternatives" xml:space="preserve"><value>Rinnova / verifica alternative</value></data>
+  <data name="PlanAdvice_Review" xml:space="preserve"><value>Da verificare</value></data>
+  <data name="PlanReason_Renew" xml:space="preserve"><value>Nel bacino letto non emergono alternative significativamente migliori e potenzialmente interessate per il criterio selezionato. Il rinnovo è consigliato in base alla qualità tecnica; richieste salariali e necessità della squadra restano da valutare.</value></data>
+  <data name="PlanReason_CompareReplacement" xml:space="preserve"><value>Esiste almeno un’alternativa con interesse stimato plausibile e un vantaggio di almeno 0,75/20 nel criterio selezionato. Valuta la trattativa prima di rinunciare al rinnovo: l’accettazione non è garantita.</value></data>
+  <data name="PlanReason_VerifyAlternatives" xml:space="preserve"><value>Le alternative migliori hanno interesse al limite o non verificabile. Mantieni aperta l’opzione rinnovo e controlla prima la disponibilità nel gioco.</value></data>
+  <data name="PlanReason_Review" xml:space="preserve"><value>Mancano una valutazione completa dell’incarico o dati del mercato della stessa data: non viene suggerito di rinunciare al rinnovo.</value></data>
+  <data name="PlanPendingStaff" xml:space="preserve"><value>Caricamento dello staff della squadra…</value></data>
+  <data name="PlanPendingMarket" xml:space="preserve"><value>In attesa dei candidati esterni: consigli ancora da verificare.</value></data>
+  <data name="PlanMissingDate" xml:space="preserve"><value>Data del salvataggio non disponibile: impossibile calcolare le scadenze.</value></data>
+  <data name="PlanDateMismatch" xml:space="preserve"><value>Le date dello staff e del mercato non coincidono: ricarica i dati.</value></data>
+  <data name="PlanStatus" xml:space="preserve"><value>Salvataggio: {0} · {1}/{2} contratti attivi in scadenza entro sei mesi.</value></data>
+  <data name="PlanCoverage" xml:space="preserve"><value>Confronto sullo staff leggibile dei club; non comprende tutti gli svincolati.</value></data>
+  <data name="PlanAlternativeCount" xml:space="preserve"><value>Mostrate {0} di {1} alternative migliori.</value></data>
+  <data name="PlanMethod" xml:space="preserve"><value>Analisi in sola lettura: include contratti attivi con scadenza tra la data del salvataggio e sei mesi di calendario dopo, estremi compresi; esclude allenatori umani, contratti già scaduti, futuri o non leggibili.
+
+Confronta lo stesso incarico riconosciuto, con gli stessi attributi e pesi della ricerca staff. Per i preparatori parte dalla categoria di allenamento migliore tra quelle pertinenti: non è l’assegnazione agli allenamenti letta dal gioco. Puoi cambiare criterio per la persona selezionata.
+
+Un’alternativa deve migliorare il punteggio di almeno 0,75/20: è una scelta dell’editor, non una soglia ufficiale. I candidati con probabile rifiuto sono esclusi; quelli al limite o incerti sono mostrati per verifica, ma da soli non giustificano una sostituzione. Vengono esclusi il tuo staff, gli incarichi non identificati e le categorie non precise.
+
+Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre stelle descrivono l’idoneità all’incarico, non la CA complessiva. Il confronto riguarda il criterio selezionato: non ottimizza tutta la distribuzione degli allenamenti; uno stesso candidato può essere suggerito per più rinnovi. Richieste economiche e posti disponibili non sono verificati. Nessun contratto viene modificato.</value></data>
 </root>

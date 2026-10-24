@@ -95,7 +95,7 @@ internal static class MySquadChecks
         check(new StaffRow { JobCode = 144, JobKey = "unsupported" }.RoleDisplay == "Not identified", "unknown job keys never leak untranslated identifiers");
         check(grid.Rows[1].Cells["Ca"].FormattedValue.ToString() == "—" && b.Wage == 0 && a.BirthDisplay == "02/01/1980", "staff nulls differ from real zero pay and dates are displayed correctly");
         grid.Rows[0].Selected = true; Application.DoEvents();
-        check(details.Rows.Count == 4 && details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[0].Value?.ToString() == "Preferences" && r.Cells[1].Value?.ToString() == "Tempo"), "staff selection separates personality, attributes and preferences");
+        check(details.Rows.Count == 5 && details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[1].Value?.ToString() == "Job squad") && details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[0].Value?.ToString() == "Preferences" && r.Cells[1].Value?.ToString() == "Tempo"), "staff selection separates personality, attributes and preferences");
         check(details.Rows.Cast<DataGridViewRow>().Any(r => r.Cells[1].Value?.ToString() == "Physiotherapy" && r.Cells[2].Value?.ToString() == "20"), "decoded staff attributes have translated labels and 1–20 values");
         staff.SortBy("Wage"); staff.SortBy("Wage");
         check(((StaffRow)grid.Rows[0].DataBoundItem).Uid == 1 && ((StaffRow)grid.Rows[2].DataBoundItem).Uid == 3, "salary sort is numeric with missing values last in descending order");

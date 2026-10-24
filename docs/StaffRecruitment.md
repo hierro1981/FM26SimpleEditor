@@ -187,3 +187,18 @@ the same candidate can appear for several contracts, and these are not simultane
 hires or a global training allocation. The market does not enumerate all free
 agents, and there is no inferred staff budget, salary demand or board slot cap.
 No renewal, dismissal, offer or save edit is performed.
+
+### Planning search shortcut (v15.6.2)
+
+The renewal list omits its redundant own-club column and displays suitability
+stars for the exact candidate named as the proposed alternative: first plausible
+interest, otherwise the strongest borderline/uncertain alternative. Missing
+alternatives display dashes. Stars use the planning criterion, not the candidate's
+current-job summary or their best unrelated training category.
+
+The selected renewal's search button switches to Find staff and applies the
+selected job/training profile, decoded current-job filter and assumed wage.
+It restores interest filtering, clears stale text search and sorts quality
+descending. It opens the broader position search, not only the upgrades above
+the incumbent's 0.75/20 margin. Existing recruitment data is reused; if missing,
+the usual loader runs. No backend write or new save scan is introduced.

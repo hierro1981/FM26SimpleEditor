@@ -9,13 +9,14 @@ public sealed record StaffRenewal(StaffRow Person, DateTime End, int Days, Staff
     public uint Uid => Person.Uid;
     public string Name => Person.Name;
     public string Role => Person.RoleDisplay;
-    public string Club => Person.ListedClubName ?? Person.ClubName;
     public string ContractEnd => End.ToString("dd/MM/yyyy", L10n.Culture);
     public long? Wage => Person.Wage;
     public string Criterion => Profile?.Label ?? "—";
     public string Recommendation => L10n.Get("PlanAdvice_" + Advice);
     public StaffCandidate? BestPlausible => Alternatives.FirstOrDefault(c => c.Interest.Band == StaffInterest.Likely);
-    public string Replacement => (BestPlausible ?? Alternatives.FirstOrDefault())?.Name ?? "—";
+    public StaffCandidate? Proposed => BestPlausible ?? Alternatives.FirstOrDefault();
+    public string Replacement => Proposed?.Name ?? "—";
+    public double? ReplacementStars => Proposed?.RoleStars;
     public int BetterCount => Alternatives.Count;
     public string Explanation => L10n.Get("PlanReason_" + Advice);
 }

@@ -36,6 +36,12 @@ internal static class StaffPlanningChecks
         var row = StaffPlanning.Build(own, market).Single();
         check(row.Advice == StaffRenewalAdvice.CompareReplacement && row.Quality == 10 && row.Alternatives.Single().Quality == 12 && row.BestPlausible?.Uid == 2,
             "renewal advice compares same-job quality with a stronger plausible recruit");
+        var borderlineTop = Person(30,20,club:2); borderlineTop.ClubReputation=6308;
+        market.Staff=[borderlineTop,better]; var proposed = StaffPlanning.Build(own,market).Single();
+        check(proposed.Proposed?.Uid==better.Uid && proposed.Replacement==better.Name && proposed.ReplacementStars==proposed.Proposed.RoleStars &&
+            proposed.ReplacementStars < proposed.Alternatives.First().RoleStars,
+            "proposed stars belong to the named plausible alternative rather than a stronger borderline candidate");
+        market.Staff=[better];
         better.ClubReputation = 6308;
         row = StaffPlanning.Build(own, market).Single();
         check(row.Advice == StaffRenewalAdvice.VerifyAlternatives && row.BestPlausible is null && row.Alternatives.Count == 1,
@@ -108,6 +114,9 @@ internal static class StaffPlanningChecks
         check(grid.Rows.Count==1 && alts.Rows.Count==1 && attrs.Rows.Count==2 && grid.Columns["Stars"].CellTemplate is StarRatingCell &&
             grid.ReadOnly && grid.ScrollBars==ScrollBars.Both && alts.ScrollBars==ScrollBars.Both,
             "planning shows renewal advice, stronger alternatives and attribute comparison with scrolling and stars");
+        check(!grid.Columns.Contains("Club") && grid.Columns["ReplacementStars"].CellTemplate is StarRatingCell &&
+            grid.Rows[0].Cells["ReplacementStars"].Value is double replacementStars && replacementStars==((StaffRenewal)grid.Rows[0].DataBoundItem).Proposed?.RoleStars,
+            "renewal grid removes own-club column and shows the proposed candidate stars");
         check(!All(panel).OfType<ComboBox>().Single(c=>c.Name=="MySquadScope").Enabled, "player squad scope is disabled for staff planning");
         foreach(int width in new[]{1100,760})
         {
@@ -127,7 +136,28 @@ internal static class StaffPlanningChecks
         L10n.SetLanguage("it"); panel.SetLanguage(); Application.DoEvents();
         check(((StaffSearchProfile)criteria.SelectedItem!).Key=="coach" && ((StaffRenewal)grid.Rows[0].DataBoundItem).Profile?.Key=="coach",
             "changing renewal criterion updates advice and survives language changes");
+        var button=All(panel).OfType<Button>().Single(b=>b.Name=="PlanFindStaff");
+        var recruitProfile=All(panel).OfType<ComboBox>().Single(c=>c.Name=="RecruitProfile");
+        var recruitMode=All(panel).OfType<ComboBox>().Single(c=>c.Name=="RecruitMode");
+        var recruitJob=All(panel).OfType<ComboBox>().Single(c=>c.Name=="RecruitCurrentJob");
+        var ignore=All(panel).OfType<CheckBox>().Single(c=>c.Name=="RecruitIgnoreInterest");
+        var recruitSearch=All(panel).OfType<TextBox>().Single(c=>c.Name=="RecruitSearch");
+        var planOffer=All(panel).OfType<NumericUpDown>().Single(c=>c.Name=="PlanOffer");
+        var recruitOffer=All(panel).OfType<NumericUpDown>().Single(c=>c.Name=="RecruitWage");
+        ignore.Checked=true; recruitSearch.Text="previous unrelated search"; planOffer.Value=4321;
+        criteria.SelectedIndex=criteria.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p=>p.CategoryKey is not null);
+        var selectedTraining=((StaffSearchProfile)criteria.SelectedItem!).Key;
+        button.PerformClick(); Application.DoEvents();
+        check(tabs.SelectedIndex==4 && recruitMode.SelectedIndex==1 && ((StaffSearchProfile)recruitProfile.SelectedItem!).Key==selectedTraining &&
+            recruitJob.SelectedItem!.ToString()==L10n.Get("StaffJob_coach") && recruitOffer.Value==4321 && !ignore.Checked && recruitSearch.Text.Length==0,
+            "planning opens recruitment with its training criterion, current job, salary and active interest filtering, clearing stale text");
+        tabs.SelectedIndex=5; criteria.SelectedIndex=criteria.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p=>p.Key=="coach");
+        button.PerformClick(); Application.DoEvents();
+        check(tabs.SelectedIndex==4 && recruitMode.SelectedIndex==0 && ((StaffSearchProfile)recruitProfile.SelectedItem!).Key=="coach",
+            "planning job criterion switches recruitment back from training to job search");
+        tabs.SelectedIndex=5;
         panel.ClearForSave(false); Application.DoEvents();
+        check(!button.Enabled, "planning search shortcut is disabled without a selected renewal");
         check(grid.Rows.Count==0 && alts.Rows.Count==0 && attrs.Rows.Count==0, "opening another save clears staff planning and alternatives");
         host.Close(); L10n.SetLanguage("it");
     }

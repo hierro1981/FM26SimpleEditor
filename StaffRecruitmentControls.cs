@@ -130,6 +130,19 @@ public sealed class StaffRecruitmentPanel : UserControl
         profile.Items.AddRange((mode.SelectedIndex == 1 ? StaffRecruitment.Training : StaffRecruitment.Roles).Cast<object>().ToArray());
         profile.SelectedIndex = Math.Max(0, profile.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p => p.Key == previous)); binding = false;
     }
+    // Set all linked filters together so stale search settings cannot hide the requested job.
+    public void ApplyPlanningSearch(StaffSearchProfile selected, string? job, long wage)
+    {
+        binding = true;
+        mode.SelectedIndex = selected.CategoryKey is null ? 0 : 1;
+        profile.Items.Clear();
+        profile.Items.AddRange((selected.CategoryKey is null ? StaffRecruitment.Roles : StaffRecruitment.Training).Cast<object>().ToArray());
+        profile.SelectedIndex = Math.Max(0, profile.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p => p.Key == selected.Key));
+        currentJob.SelectedIndex = Math.Max(0, currentJob.Items.Cast<JobChoice>().ToList().FindIndex(c => c.Key == job));
+        offer.Value = Math.Clamp((decimal)wage, offer.Minimum, offer.Maximum);
+        ignoreInterest.Checked = false; search.Clear(); sort = "Quality"; descending = true;
+        binding = false; RefreshRows();
+    }
     public void SetLanguage()
     {
         L10n.Apply(this); int selected = Math.Max(0, mode.SelectedIndex); string job = (currentJob.SelectedItem as JobChoice)?.Key ?? ""; binding = true;

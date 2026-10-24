@@ -2313,4 +2313,6 @@ Confronta lo stesso incarico riconosciuto, con gli stessi attributi e pesi della
 Un’alternativa deve migliorare il punteggio di almeno 0,75/20: è una scelta dell’editor, non una soglia ufficiale. I candidati con probabile rifiuto sono esclusi; quelli al limite o incerti sono mostrati per verifica, ma da soli non giustificano una sostituzione. Vengono esclusi il tuo staff, gli incarichi non identificati e le categorie non precise.
 
 Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre stelle descrivono l’idoneità all’incarico, non la CA complessiva. Il confronto riguarda il criterio selezionato: non ottimizza tutta la distribuzione degli allenamenti; uno stesso candidato può essere suggerito per più rinnovi. Richieste economiche e posti disponibili non sono verificati. Nessun contratto viene modificato.</value></data>
+  <data name="PlanFindStaff" xml:space="preserve"><value>Trova staff per questo criterio</value></data>
+  <data name="PlanReplacementStars" xml:space="preserve"><value>Stelle alternativa proposta</value></data>
 </root>

@@ -86,6 +86,12 @@ public sealed class MySquadPanel : UserControl
         tactics.QuickComparisonRequested += (a, b) => QuickComparisonRequested?.Invoke(a, b);
         tactics.ReloadRequested += () => { tactics.ClearForClub(SelectedClub?.ClubUid); EnsureTacticsLoaded(); };
         staff.ReloadRequested += () => { staff.ClearForClub(SelectedClub?.ClubUid); planning.ClearStaff(); EnsureStaffLoaded(); };
+        planning.FindStaffRequested += (profile, job, wage) =>
+        {
+            recruitment.ApplyPlanningSearch(profile, job, wage);
+            views.SelectedTab = recruitmentTab;
+            EnsureRecruitmentLoaded();
+        };
         planning.ReloadRequested += () =>
         {
             staff.ClearForClub(SelectedClub?.ClubUid); recruitment.ClearForClub(SelectedClub?.ClubUid);

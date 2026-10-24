@@ -7,6 +7,7 @@ public sealed class StaffPlanningPanel : UserControl
     private readonly TextBox search = new() { Name = "PlanSearch", Width = 230, PlaceholderText = L10n.Get("StaffSearch") };
     private readonly NumericUpDown offer = new() { Name = "PlanOffer", Minimum = 0, Maximum = 10000000, Increment = 100, ThousandsSeparator = true, Width = 125 };
     private readonly ComboBox criterion = new() { Name = "PlanCriterion", DropDownStyle = ComboBoxStyle.DropDownList, Width = 300, DropDownWidth = 450 };
+    private readonly Button findStaff = new() { Name = "PlanFindStaff", Text = L10n.Get("PlanFindStaff"), AutoSize = true };
     private readonly Label status = new() { Name = "PlanStatus", Dock = DockStyle.Fill, AutoSize = true, ForeColor = Color.DimGray };
     private readonly Label explanation = new() { Name = "PlanExplanation", Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(4) };
     private readonly DataGridView list = Grid("PlanList");
@@ -22,6 +23,7 @@ public sealed class StaffPlanningPanel : UserControl
     private string sort = "ContractEnd";
     private bool descending;
     public event Action? ReloadRequested;
+    public event Action<StaffSearchProfile, string?, long>? FindStaffRequested;
     public StaffPlanningPanel()
     {
         Dock = DockStyle.Fill;
@@ -35,12 +37,17 @@ public sealed class StaffPlanningPanel : UserControl
         var method = new Button { Name = "PlanMethod", Text = L10n.Get("TacticalCriteria"), AutoSize = true };
         method.Click += (_, _) => MessageBox.Show(this, L10n.Get("PlanMethod"), L10n.Get("PlanTab"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         tools.Controls.AddRange([search, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer, reload, method]);
+        findStaff.Click += (_, _) =>
+        {
+            if (Selected is StaffRenewal row && row.Profile is StaffSearchProfile profile)
+                FindStaffRequested?.Invoke(profile, row.Person.JobKey, (long)offer.Value);
+        };
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var detail = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3 };
         detail.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         detail.RowStyles.Add(new RowStyle(SizeType.AutoSize)); detail.RowStyles.Add(new RowStyle(SizeType.Percent, 25)); detail.RowStyles.Add(new RowStyle(SizeType.Percent, 75));
         var profileTools = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, WrapContents = true };
-        profileTools.Controls.AddRange([new Label { Text = L10n.Get("PlanCriterion"), AutoSize = true, Margin = new Padding(6,8,0,0) }, criterion]);
+        profileTools.Controls.AddRange([new Label { Text = L10n.Get("PlanCriterion"), AutoSize = true, Margin = new Padding(6,8,0,0) }, criterion, findStaff]);
         detail.Controls.Add(profileTools, 0, 0);
         var reasonScroll = new Panel { Name = "PlanReasonScroll", Dock = DockStyle.Fill, AutoScroll = true };
         reasonScroll.Controls.Add(explanation); detail.Controls.Add(reasonScroll, 0, 1);
@@ -51,11 +58,11 @@ public sealed class StaffPlanningPanel : UserControl
         columns.Controls.Add(altGroup, 0, 0); columns.Controls.Add(attrGroup, 1, 0); detail.Controls.Add(columns, 0, 2);
         root.Controls.Add(detail, 0, 3); Controls.Add(root);
         Add(list, "Name", "Text_f537c6bd038e", 190); CopyColumn(list);
-        Add(list, "Role", "StaffRole", 230); Add(list, "Club", "StaffListedClub", 170);
+        Add(list, "Role", "StaffRole", 230);
         Add(list, "ContractEnd", "Text_51bf843f1751", 110, true); Add(list, "Days", "PlanDays", 85, true);
         Add(list, "Recommendation", "PlanRecommendation", 240); Add(list, "Criterion", "PlanCriterion", 210);
         Add(list, "Quality", "RecruitQuality", 95, true); Add(list, "Stars", "RecruitRoleStars", 170, true, true);
-        Add(list, "Wage", "StaffWage", 145, true); Add(list, "Replacement", "PlanBestAlternative", 190); Add(list, "BetterCount", "PlanBetterCount", 100, true);
+        Add(list, "Wage", "StaffWage", 145, true); Add(list, "Replacement", "PlanBestAlternative", 190); Add(list, "ReplacementStars", "PlanReplacementStars", 180, true, true); Add(list, "BetterCount", "PlanBetterCount", 100, true);
         Add(alternatives, "Name", "Text_f537c6bd038e", 180); CopyColumn(alternatives);
         Add(alternatives, "Club", "StaffClub", 170); Add(alternatives, "CurrentRole", "StaffRole", 220);
         Add(alternatives, "Quality", "RecruitQuality", 95, true); Add(alternatives, "RoleStars", "RecruitRoleStars", 170, true, true);
@@ -133,9 +140,9 @@ public sealed class StaffPlanningPanel : UserControl
         uint? selected = Selected?.Uid;
         var rows = cached ??= own is null ? [] : StaffPlanning.Build(own, market, (long)offer.Value, choices);
         var filtered = rows.Where(p => string.IsNullOrWhiteSpace(search.Text) || p.Name.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Role.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Uid.ToString().Contains(search.Text.Trim()));
-        object? Value(StaffRenewal p) => sort switch { "Name" => p.Name, "Role" => p.Role, "Club" => p.Club, "Days" => p.Days,
+        object? Value(StaffRenewal p) => sort switch { "Name" => p.Name, "Role" => p.Role, "Days" => p.Days,
             "Recommendation" => p.Advice, "Criterion" => p.Criterion, "Quality" => p.Quality, "Stars" => p.Stars, "Wage" => p.Wage,
-            "Replacement" => p.Replacement, "BetterCount" => p.BetterCount, _ => p.End };
+            "Replacement" => p.Replacement, "ReplacementStars" => p.ReplacementStars, "BetterCount" => p.BetterCount, _ => p.End };
         var known = filtered.Where(p => Value(p) is not null);
         var sorted = (descending ? known.OrderByDescending(Value) : known.OrderBy(Value)).ThenBy(p => p.Name).ThenBy(p => p.Uid).Concat(filtered.Where(p => Value(p) is null)).ToList();
         binding = true; list.DataSource = new BindingList<StaffRenewal>(sorted); list.ClearSelection();
@@ -151,7 +158,7 @@ public sealed class StaffPlanningPanel : UserControl
     {
         var row = Selected; binding = true; criterion.Items.Clear();
         if (row is not null) { criterion.Items.AddRange(StaffPlanning.Profiles(row.Person).Cast<object>().ToArray()); criterion.SelectedIndex = criterion.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p => p.Key == row.Profile?.Key); }
-        criterion.Enabled = criterion.Items.Count > 1;
+        criterion.Enabled = criterion.Items.Count > 1; findStaff.Enabled = row?.Profile is not null;
         var candidates = row?.Alternatives.OrderByDescending(c => c.Interest.Band == StaffInterest.Likely).ThenByDescending(c => c.Quality).ThenBy(c => c.Name).Take(50).ToList() ?? [];
         alternatives.DataSource = new BindingList<StaffCandidate>(candidates); alternatives.ClearSelection();
         if (candidates.Count > 0) alternatives.Rows[0].Selected = true;

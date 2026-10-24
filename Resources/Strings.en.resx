@@ -2313,4 +2313,6 @@ Compares the same identified job using the same attributes and weights as staff 
 An alternative must improve the score by at least 0.75/20: an editor choice, not an official threshold. Likely refusals are excluded; borderline or uncertain candidates are shown for verification but alone do not justify replacement. Your own staff, unidentified jobs and imprecise job categories are excluded.
 
 Training stars use the same calculation as the Staff page. Other stars describe job suitability, not overall CA. Comparisons concern the selected criterion: they do not optimise the whole training allocation, allocate candidates or verify salary demands and available posts. No contract is modified.</value></data>
+  <data name="PlanFindStaff" xml:space="preserve"><value>Find staff using this criterion</value></data>
+  <data name="PlanReplacementStars" xml:space="preserve"><value>Proposed alternative stars</value></data>
 </root>

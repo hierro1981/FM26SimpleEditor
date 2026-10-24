@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.6.1 (in development)
+# FM26 Simple Editor · v15.6.2 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,11 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.6.2 · in development
+
+- **Staff planning:** removed the club column from the renewal list and added stars beside the proposed alternative’s name.
+- **Find staff using this criterion** opens search with the same job or training category, current-job filter and assumed salary offer. Interest filtering stays active and previous search text is cleared.
 
 ### v15.6.1 · in development
 

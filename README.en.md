@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.4.1 (in development)
+# FM26 Simple Editor · v15.4.2 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.4.2 · in development
+
+- Corrected future tactic projections: low starting CA no longer artificially multiplies every attribute. Growth is added from the estimated CA gain, retaining the age and position model.
+- Reduced inflated future ratings; traits such as flair and determination no longer increase automatically because of spare PA.
+- Clarified the difference between the selected tactical-role score and FM Genie Scout’s best-position percentage. Future table headings wrap to distinguish estimated CA from alternative scenarios.
 
 ### v15.4.1 · in development
 

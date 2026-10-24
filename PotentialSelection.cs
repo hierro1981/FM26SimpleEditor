@@ -13,6 +13,11 @@ public sealed record GrowthForecast(int Ability, int Conservative, int Favourabl
 // Editor assumptions, NOT recovered FM rates or statistically calibrated forecasts.
 public static class PotentialSelection
 {
+    // Provisional attribute-point gain per additional CA, not an official CA cost.
+    // An additive delta avoids the low-CA denominator bias of futureCA/currentCA.
+    public const double AttributeIncrementPerCa = .065;
+    private static readonly HashSet<string> FixedAttributes = ["aggression", "determination", "flair", "natural_fitness", "left_foot", "right_foot"];
+    private static readonly HashSet<string> FixedKeeperAttributes = ["free_kick_taking", "penalty_taking", "eccentricity", "punching", "rushing_out"];
     private static readonly (double Age, double Rate)[] OutfieldCurve = [(15,16), (18,14), (21,10), (24,6), (27,2.5), (30,.8), (33,0)];
     private static readonly (double Age, double Rate)[] KeeperCurve = [(15,14), (18,13), (21,10), (24,7), (27,4), (30,2), (33,.6), (36,0)];
 
@@ -43,17 +48,18 @@ public static class PotentialSelection
         return new(Project(1), Project(.7), Project(1.3), keeper);
     }
 
-    public static double? Factor(PlayerDetail player) => Forecast(player) is { } growth ? growth.Ability / (double)player.Player.Ca : null;
+    public static double? Score(PlayerDetail player, SquadTarget target) => Score(player, target, Forecast(player));
 
-    public static double? Score(PlayerDetail player, SquadTarget target)
+    private static double? Score(PlayerDetail player, SquadTarget target, GrowthForecast? growth)
     {
-        double? factor = Factor(player);
-        if (factor is null) return null;
+        if (growth is null) return null;
         var weights = TacticalRoles.Weights(target);
         var values = player.Attributes.GroupBy(a => a.Key).Where(g => g.Count() == 1 && g.First().Value is >= 1 and <= 125)
             .ToDictionary(g => g.Key, g => g.First().Value);
         if (weights.Count == 0 || weights.Keys.Any(key => !values.ContainsKey(key))) return null;
-        return weights.Sum(w => Math.Min(20, PreviewMath.Attribute20(values[w.Key]) * factor.Value) * w.Value) / weights.Values.Sum();
+        double increment = Math.Max(0, growth.Ability - player.Player.Ca) * AttributeIncrementPerCa;
+        return weights.Sum(w => Math.Min(20, PreviewMath.Attribute20(values[w.Key]) +
+            (FixedAttributes.Contains(w.Key) || growth.Goalkeeper && FixedKeeperAttributes.Contains(w.Key) ? 0 : increment)) * w.Value) / weights.Values.Sum();
     }
 
     public static IReadOnlyList<PotentialRecommendation> BestForRoles(IEnumerable<PlayerDetail> members, params SquadTarget[] targets)
@@ -63,10 +69,12 @@ public static class PotentialSelection
         // Use the full eligible pool; projecting only today's top ten would miss young prospects.
         return SquadSelection.CandidatesForRoles(players.Values, targets).Select(current =>
         {
-            var scores = keys.Select(t => (t.Key, Score: Score(players[current.Player.Uid], t))).ToArray();
+            var player = players[current.Player.Uid];
+            var growth = Forecast(player);
+            var scores = keys.Select(t => (t.Key, Score: Score(player, t, growth))).ToArray();
             bool known = scores.All(s => s.Score.HasValue);
             return new PotentialRecommendation(current, known ? scores.Average(s => s.Score!.Value) : null,
-                known ? scores.ToDictionary(s => s.Key, s => s.Score!.Value) : new Dictionary<string, double>(), Forecast(players[current.Player.Uid]));
+                known ? scores.ToDictionary(s => s.Key, s => s.Score!.Value) : new Dictionary<string, double>(), growth);
         }).OrderByDescending(p => p.Score.HasValue).ThenByDescending(p => p.Score).ThenByDescending(p => p.Current.Score)
             .ThenByDescending(p => p.Current.Familiarity).ThenBy(p => p.Player.Name, StringComparer.OrdinalIgnoreCase).ThenBy(p => p.Player.Uid)
             .Take(Math.Clamp(SquadSelection.ResultLimit, 1, 100)).ToArray();

@@ -1,7 +1,8 @@
-# Tactical growth estimate · v15.4.1
+# Tactical growth estimate · v15.4.2
 
 `Best by tactic` shows current recommendations alongside an experimental estimate
 of reachable future performance, replacing v15.4's unconditional full-PA scenario.
+The v15.4.2 correction also removes multiplicative CA-ratio attribute inflation.
 Both tables use the same full eligible squad/loan pool, selected phase(s), role
 weights, current familiarity and central result limit. The best-XI pitch remains
 based on current scores. Open/Compare always use real player data; no save data
@@ -78,14 +79,65 @@ calibrated prediction or a guarantee that reality lies within them. Poor
 conditions can produce no growth or decline; exceptional late bloomers can
 outgrow this deliberately tapered estimate.
 
-## Role score and stars
+## Role score and stars: v15.4.2 correction
 
-Use `estimated CA / current CA` in place of `PA / CA`. Convert each role
-attribute to the existing 1–20 scale, multiply by this factor, cap each at 20,
-then apply existing role weights. Average selected phases as for today's score.
-Stars retain the same absolute score-to-half-star conversion. The theoretical
-PA, estimated future CA, scenario CA range, age, current score and estimated CA
-gain are separate columns/tooltip values.
+Multiplying attributes by `future CA / current CA` was incorrect as a projection
+model: two players with identical current attributes and identical possible CA
+gains received different increases merely because one had lower starting CA.
+It inflated lower-CA players and saturated too many prospects at 20. CA is a
+budget, not an attribute multiplier; this correction leaves the age model above
+unchanged and replaces only the allocation of its additional CA.
+
+For each attribute entering the existing role score:
+
+```
+gain = max(0, estimated future CA - current CA)
+future attribute = min(20, current displayed attribute + 0.065 * gain)
+```
+
+Aggression, determination, flair, natural fitness and both feet are instead
+held at their current values. For a player using the goalkeeper growth curve,
+free-kick/penalty taking, eccentricity, punching and rushing-out are also held.
+These are conservative projection exclusions informed by older CA-budget
+research; they do NOT mean these traits can never change through training,
+mentoring or age. No spare PA is used to invent gains in them.
+
+Each attribute is capped separately, **without reallocating** unused gain
+from capped/fixed attributes. Apply the same role weights and equal phase
+averaging as today's ranking. Stars retain the existing absolute conversion.
+Theoretical PA, estimated future CA, scenario CA range, age, current role score
+and estimated CA gain remain separate values.
+
+### Provisional coefficient and comparison evidence
+
+The additive form is supported by the CA-budget distinction, including the
+[original IGE experiments by CAE](https://www.fmscout.com/a-guide-to-current-ability-in-football-manager.html?pg=3)
+and [the author's position-weight observations](https://www.fmscout.com/a-guide-to-current-ability-in-football-manager.html?pg=1).
+Those experiments concern FM21, not a decoded FM26 formula. Their affine CA
+relationship also shows why CA 200 does not imply every attribute is 20.
+
+`0.065` is an **editor calibration choice**, not a published FM or Genie formula.
+In four goalkeeper rows of the supplied Genie screenshots, the difference
+between current and full-PA best-position ratings, converted from percent to
+a 1–20 score and divided by PA−CA, lies approximately between 0.0640 and 0.0663.
+The rounded central coefficient 0.065 gives a useful initial magnitude check.
+This small sample does not establish universal slopes, position costs, future
+attribute allocation or accuracy; no player-name-specific rules are used.
+Its applicability outside that sample remains unvalidated. Future evidence
+may justify position-specific rates and nonlinear costs at high attributes.
+
+[FM Scout's own guide](https://www.fmscout.com/a-genie-scout-guide.html?e=page)
+describes Genie ratings as weighted positional attribute evaluations, not
+probabilities of reaching PA. Our selected IP/OOP tactic-role scores do not
+use the same weights as Genie's best-position percentages. Do not compare
+them as though they were the same metric, or multiply Genie percentages by PA.
+The supplied screenshots show a later in-game date than the available save;
+small current CA/attribute differences must not be forced to match by fitting.
+
+A private read-only check on the available save reverses the incorrect ordering
+of the two young goalkeeper profiles that exposed the denominator bias. It
+validates that correction, not equality with every Genie rating or ordering.
+No uploaded saves, screenshots or real profile fixtures are shipped.
 
 Sort the entire eligible pool by known future score first, score descending,
 current score, familiarity, name and UID, then apply the shared result limit.
@@ -101,7 +153,7 @@ attribute-history graphs are not a verified time series of CA and are not used
 to manufacture one. Age is in completed years, so estimates can change at a
 birthday. Exact peak dates and probability of reaching the forecast are unknown.
 
-CA is a weighted budget, not an attribute average. Proportional redistribution
+CA is a weighted budget, not an attribute average. Uniform additive allocation
 is still a simplification: it does not model different physical/mental/technical
 trajectories, future training allocation, footedness or position changes. Do not
 read the resulting stars as exact future game attributes or native scout stars.
@@ -112,7 +164,8 @@ and uncertainty. The source code isolates the curves for future calibration.
 
 Synthetic C# checks cover the 18/34 contrast, monotonic age taper, goalkeeper
 classification, scenario ordering and PA bounds, missing age/position/PA,
-PA <= CA, per-attribute caps, both phases, complete-pool sorting, and source
+PA <= CA, additive-growth invariance to starting CA, fixed traits, per-attribute
+caps, both phases, complete-pool sorting, and source
 immutability. Windows UI checks cover future-CA/scenario columns, explanatory
 localised tooltips, current-data Open/Compare, scope refresh, scrolling and
 clearing when a new save is opened.

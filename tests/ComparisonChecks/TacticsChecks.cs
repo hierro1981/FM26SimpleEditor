@@ -63,11 +63,14 @@ internal static class TacticsChecks
         future.ClearSelection(); future.Rows[0].Selected=true;
         var futureOpen=All(All(squad).OfType<TacticsPanel>().Single()).OfType<Button>().Single(b=>b.Text==L10n.Get("Text_9337b648a0e1"));
         futureOpen.PerformClick();
-        check(openedFuture==1 && ((SquadRecommendation)future.Rows[0].Tag!).Score==15 && (double)future.Rows[0].Cells[3].Value! == 20,
+        check(openedFuture==1 && ((SquadRecommendation)future.Rows[0].Tag!).Score==15 && (double)future.Rows[0].Cells[3].Value! > 15 && (double)future.Rows[0].Cells[3].Value! < 20,
             "opening a potential candidate uses the current player rather than projected attributes");
         check((int)future.Rows[0].Cells["TacticFutureCa"].Value! > 100 && future.Rows[0].Cells["TacticFutureRange"].Value is string &&
               future.Rows[0].Cells[3].ToolTipText.Contains("Età: 17") && future.Rows[0].Cells[3].ToolTipText.Contains("PA teorica 160"),
             "future table exposes age-based CA, scenario range and theoretical PA separately");
+        check(future.ColumnHeadersHeightSizeMode==DataGridViewColumnHeadersHeightSizeMode.AutoSize &&
+              future.ColumnHeadersDefaultCellStyle.WrapMode==DataGridViewTriState.True,
+            "future CA and scenario headings can wrap instead of displaying identical truncated CA labels");
         grid.ClearSelection(); grid.Rows[0].Selected=true; grid.Rows[1].Selected=true;
         opening.Invoke(grid.ContextMenuStrip, [new System.ComponentModel.CancelEventArgs()]);
         compare.PerformClick();

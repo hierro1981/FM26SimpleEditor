@@ -227,6 +227,8 @@ public sealed class TacticsPanel : UserControl
         potential.Columns.Add(new DataGridViewTextBoxColumn { Name = "TacticFutureRange", HeaderText = L10n.Get("TacticsFutureRange"), Width = 150, SortMode = DataGridViewColumnSortMode.NotSortable,
             DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight, NullValue = "—" } });
         potential.RowTemplate.Height = 41;
+        potential.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
+        potential.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
         potential.AccessibleDescription = L10n.Get("TacticsPotentialMethod");
         lineupTips.SetToolTip(potentialGroup, potential.AccessibleDescription);
         phase.Items.AddRange([new PhaseChoice("both"), new PhaseChoice("ip"), new PhaseChoice("op")]); phase.SelectedIndex = 0;

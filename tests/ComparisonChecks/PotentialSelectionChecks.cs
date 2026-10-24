@@ -13,7 +13,7 @@ internal static class PotentialSelectionChecks
     {
         var ip = new SquadTarget("MC", "ip_midfield-playmaker");
         var op = new SquadTarget("DM", "op_defensive-midfielder");
-        var veteran = Player(1,140,140,85); var youngster = Player(2,80,160,50); var unknown = Player(3,100,null,75);
+        var veteran = Player(1,140,140,65); var youngster = Player(2,80,160,50); var unknown = Player(3,100,null,65);
         int previous = SquadSelection.ResultLimit;
         try
         {
@@ -22,8 +22,8 @@ internal static class PotentialSelectionChecks
                 "future ranking finds a low-CA high-PA prospect outside today's limited shortlist");
             SquadSelection.ResultLimit = 10;
             var rows = PotentialSelection.BestForRoles([veteran,youngster,unknown],ip,op);
-            check(rows[0].Player.Uid == 2 && rows[0].Score == 20 && rows[0].Stars == 5 && rows[0].Headroom == 80 && rows[0].PositionScores.Count == 2,
-                "potential scenario applies both real tactic profiles and shared absolute role stars");
+            check(rows[0].Player.Uid == 2 && Math.Abs(rows[0].Score!.Value - 15.2) < 1e-9 && rows[0].Stars == 4 && rows[0].Headroom == 80 && rows[0].PositionScores.Count == 2,
+                "doubling CA adds growth points rather than doubling every attribute to perfect five-star quality");
             check(rows.Last().Player.Uid == 3 && rows.Last().Score is null && rows.Last().Stars is null && rows.Last().Headroom is null,
                 "unknown PA remains visible with missing projections rather than an invented ceiling");
             check(rows.Single(r=>r.Player.Uid==1).Score == rows.Single(r=>r.Player.Uid==1).Current.Score,
@@ -33,9 +33,9 @@ internal static class PotentialSelectionChecks
                 "PA below CA neither invents growth nor predicts decline");
             var uneven = Player(5,100,200,25); var weights = TacticalRoles.Weights(ip); string high = weights.Keys.First();
             uneven.Attributes.Single(a=>a.Key==high).Value=100;
-            double factor = PotentialSelection.Factor(uneven)!.Value;
-            double expected = weights.Sum(w=>(w.Key==high ? 20.0 : 5.0*factor)*w.Value)/weights.Values.Sum();
-            check(Math.Abs(PotentialSelection.Score(uneven,ip)!.Value - expected)<1e-9 && PotentialSelection.Score(uneven,ip) < Math.Min(20,TacticalRoles.Score(uneven,ip)!.Value*factor),
+            double increment = (PotentialSelection.Forecast(uneven)!.Ability - uneven.Player.Ca) * PotentialSelection.AttributeIncrementPerCa;
+            double expected = weights.Sum(w=>(w.Key==high ? 20.0 : 5.0+increment)*w.Value)/weights.Values.Sum();
+            check(Math.Abs(PotentialSelection.Score(uneven,ip)!.Value - expected)<1e-9 && PotentialSelection.Score(uneven,ip) < Math.Min(20,TacticalRoles.Score(uneven,ip)!.Value+increment),
                 "each projected attribute is capped before role weighting rather than capping the aggregate score");
             var original = string.Join(",",youngster.Attributes.Select(a=>a.Value));
             PotentialSelection.BestForRoles([youngster,youngster],ip,op);
@@ -82,6 +82,26 @@ internal static class PotentialSelectionChecks
             var ageMissing=Player(12,100,200,75);ageMissing.Player.Age=null;
             check(PotentialSelection.BestForRoles([ageMissing],ip).Single() is {Score:null,Growth:null,Headroom:null},
                 "eligible current player with missing age remains visible without fabricated future values");
+            var lowerCa=Player(13,50,110,50); var higherCa=Player(14,100,160,50);
+            check(PotentialSelection.Forecast(lowerCa)!.Ability-lowerCa.Player.Ca==PotentialSelection.Forecast(higherCa)!.Ability-higherCa.Player.Ca &&
+                PotentialSelection.Score(lowerCa,ip)==PotentialSelection.Score(higherCa,ip),
+                "identical current attributes and CA gain have identical future scores regardless of starting CA");
+            var stronger=Player(15,100,180,55);var weaker=Player(16,70,150,50);
+            stronger.Positions=[new(){Key="GK",Value=20}];weaker.Positions=[new(){Key="GK",Value=20}];
+            var keeperTarget=new SquadTarget("GK","ip_goalkeeper");
+            check(PotentialSelection.Score(stronger,keeperTarget)>PotentialSelection.Score(weaker,keeperTarget) &&
+                PotentialSelection.BestForRoles([weaker,stronger],keeperTarget).First().Player.Uid==15,
+                "lower starting CA cannot reverse two goalkeeper profiles with the same available growth");
+            var creative=new SquadTarget("AMC"); var flairPlayer=Player(17,80,160,50);
+            var cw=TacticalRoles.Weights(creative);
+            double projected=(cw.Values.Sum()*15.2-cw["flair"]*5.2)/cw.Values.Sum();
+            check(Math.Abs(PotentialSelection.Score(flairPlayer,creative)!.Value-projected)<1e-9,
+                "PA-driven projection does not invent extra flair or other CA-independent traits");
+            var keeperWeights=TacticalRoles.Weights(new("GK","op_sweeper-keeper"));
+            double keeperIncrement=(PotentialSelection.Forecast(stronger)!.Ability-100)*PotentialSelection.AttributeIncrementPerCa;
+            double keeperExpected=11+keeperIncrement*(keeperWeights.Values.Sum()-keeperWeights["rushing_out"])/keeperWeights.Values.Sum();
+            check(Math.Abs(PotentialSelection.Score(stronger,new("GK","op_sweeper-keeper"))!.Value-keeperExpected)<1e-9,
+                "goalkeeper rushing-out style is not inflated automatically by spare PA");
         }
         finally { SquadSelection.ResultLimit=previous; }
     }

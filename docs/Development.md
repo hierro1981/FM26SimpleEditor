@@ -83,3 +83,5 @@ Saved personal reputation, five job affinities and eight more tactical preferenc
 ## Stima di crescita / Growth estimate
 
 La classifica futura per tattica usa dalla v15.4.1 una curva per età e posizione. Metodo, coefficienti sperimentali, fonti e limiti: [PotentialSelection.md](PotentialSelection.md). / Since v15.4.1 the future tactic ranking uses age and position curves; see the linked method for assumptions, sources and limitations.
+
+Dalla v15.4.2 la proiezione degli attributi usa un incremento dai punti di CA stimati, evitando la moltiplicazione CA futura/CA attuale. / Since v15.4.2 attribute projection adds an increment from estimated CA gain, avoiding the future/current CA multiplier. See the method above for calibration limits.

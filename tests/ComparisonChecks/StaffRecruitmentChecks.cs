@@ -144,7 +144,7 @@ internal static class StaffRecruitmentChecks
         check(choice.SelectedItem!.ToString()=="Preparatore recupero infortunati" && grid.Rows.Count==1 &&
             ((StaffCandidate)grid.Rows[0].DataBoundItem).Uid==20,"recovery staff can be selected by the game's Italian name in both recruitment selectors");
         L10n.SetLanguage("en");panel.SetLanguage();
-        check(((StaffSearchProfile)choice.SelectedItem!).Key=="sports_scientist" && jobs.SelectedItem!.ToString()=="Sports Scientist" && grid.Rows.Count==1,
+        check(((StaffSearchProfile)choice.SelectedItem!).Key=="sports_scientist" && jobs.SelectedItem!.ToString()=="Sports scientist" && grid.Rows.Count==1,
             "Italian recovery labels retain the same decoded job and selected profile after switching to English");
         jobs.SelectedIndex=0;mode.SelectedIndex=1;
         good.Reputation = new() { ["home"] = 6461, ["current"] = 6461, ["world"] = 3365 };

@@ -1,4 +1,4 @@
-# Staff recruitment estimates · v15.0
+# Staff recruitment estimates · v15.1
 
 `La mia squadra → Trova staff` / `My squad → Find staff` is read-only.
 No offer is sent and no save is changed. It shortlists readable club-linked staff
@@ -64,7 +64,7 @@ There is no claim of a fixed reputation threshold that guarantees acceptance.
 
 Default ordering is complete quality, quality descending, then interest index,
 name and UID. Borderline and uncertain candidates are included by default.
-The user can include unlikely targets and sort any displayed column. Output
+The **Ignore interest (best overall)** checkbox disables all interest filtering and removes interest from quality tie-breaking; switching it restores quality-descending order. Interest estimates stay visible, and own staff / human exclusions remain. Uncheck to restore the plausible, borderline and uncertain pool. The user can sort any displayed column. Output
 limits apply after filtering and sorting. The copy action puts only the selected
 assessment on the clipboard, with IDs, save date, destination, profile and wage
 scenario for reproducible manual feedback; it sends nothing externally and does

@@ -112,7 +112,7 @@ public static class StaffRecruitment
         reasons.Add(L10n.Get("RecruitMissingFactors"));
         return new(band, score, reasons);
     }
-    public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool includeUnlikely = false, string search = "")
+    public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "")
     {
         if (data.Status != "ready") return [];
         // Avoid treating the easiest of two concurrent employers as the only job to leave.
@@ -121,8 +121,8 @@ public static class StaffRecruitment
             .Where(p => profile.Key != "doctor" || p.JobKey == "doctor")
             .Select(p => new StaffCandidate(p, profile, Quality(p, profile), Estimate(p, profile, data, offeredWage),
                 CoachingStars.Calculate(p).Where(c => c.Score.HasValue).OrderByDescending(c => c.Score).FirstOrDefault()))
-            .Where(c => (includeUnlikely || c.Interest.Band != StaffInterest.Unlikely) &&
+            .Where(c => (ignoreInterest || c.Interest.Band != StaffInterest.Unlikely) &&
                 (string.IsNullOrWhiteSpace(search) || c.Name.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Club.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.CurrentRole.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Person.Uid.ToString().Contains(search) || c.Person.Id?.ToString().Contains(search) == true))
-            .OrderByDescending(c => c.Quality.HasValue).ThenByDescending(c => c.Quality).ThenByDescending(c => c.Interest.Score).ThenBy(c => c.Name).ThenBy(c => c.Person.Uid).ToArray();
+            .OrderByDescending(c => c.Quality.HasValue).ThenByDescending(c => c.Quality).ThenByDescending(c => ignoreInterest ? 0 : c.Interest.Score).ThenBy(c => c.Name).ThenBy(c => c.Person.Uid).ToArray();
     }
 }

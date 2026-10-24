@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.0 (in sviluppo)
+# FM26 Simple Editor · v15.1 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,10 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.1 · in sviluppo
+
+- **Ignora interesse (migliori in assoluto)** disattiva il filtro dell’interesse e ordina lo staff per qualità, includendo chi probabilmente rifiuterebbe. La stima dell’interesse resta visibile.
 
 ### v15.0 · in sviluppo
 

@@ -8,7 +8,7 @@ public sealed class StaffRecruitmentPanel : UserControl
     private readonly ComboBox profile = new() { Name = "RecruitProfile", DropDownStyle = ComboBoxStyle.DropDownList, Width = 300, DropDownWidth = 450 };
     private readonly NumericUpDown offer = new() { Name = "RecruitWage", Minimum = 0, Maximum = 10000000, Increment = 100, ThousandsSeparator = true, Width = 125 };
     private readonly NumericUpDown limit = new() { Name = "RecruitLimit", Minimum = 10, Maximum = 500, Value = 50, Increment = 10, Width = 65 };
-    private readonly CheckBox unlikely = new() { Name = "RecruitUnlikely", Text = L10n.Get("RecruitUnlikely"), AutoSize = true };
+    private readonly CheckBox ignoreInterest = new() { Name = "RecruitIgnoreInterest", Text = L10n.Get("RecruitIgnoreInterest"), AutoSize = true };
     private readonly TextBox search = new() { Name = "RecruitSearch", Width = 230, PlaceholderText = L10n.Get("StaffSearch") };
     private readonly Label status = new() { AutoSize = true, ForeColor = Color.DimGray, Dock = DockStyle.Fill };
     private readonly Label reason = new() { Name = "RecruitReasons", AutoSize = true, Dock = DockStyle.Top, Padding = new Padding(6) };
@@ -44,7 +44,7 @@ public sealed class StaffRecruitmentPanel : UserControl
             tips.Show(L10n.Get("RecruitCopied"), copy, 0, copy.Height, 4000);
         };
         tools.Controls.AddRange([mode, profile, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer,
-            new Label { Text = L10n.Get("RecruitLimit"), AutoSize = true, Margin = new Padding(6,8,0,0) }, limit, unlikely, search, reload, copy]);
+            new Label { Text = L10n.Get("RecruitLimit"), AutoSize = true, Margin = new Padding(6,8,0,0) }, limit, ignoreInterest, search, reload, copy]);
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var lower = new TableLayoutPanel { Name = "RecruitDetailColumns", Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
         lower.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); lower.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); lower.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
@@ -79,7 +79,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         };
         mode.SelectedIndexChanged += (_, _) => { if (!binding) { Profiles(); RefreshRows(); } };
         profile.SelectedIndexChanged += (_, _) => { if (!binding) { sort = "Quality"; descending = true; RefreshRows(); } };
-        offer.ValueChanged += (_, _) => RefreshRows(); limit.ValueChanged += (_, _) => RefreshRows(); unlikely.CheckedChanged += (_, _) => RefreshRows(); search.TextChanged += (_, _) => RefreshRows();
+        offer.ValueChanged += (_, _) => RefreshRows(); limit.ValueChanged += (_, _) => RefreshRows(); ignoreInterest.CheckedChanged += (_, _) => { sort = "Quality"; descending = true; RefreshRows(); }; search.TextChanged += (_, _) => RefreshRows();
         root.SizeChanged += (_, _) => status.MaximumSize = new Size(Math.Max(100, root.ClientSize.Width - 16), 0);
         SetLanguage(); L10n.Capture(this);
     }
@@ -107,7 +107,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         mode.Items.Clear(); mode.Items.AddRange([L10n.Get("RecruitRoles"), L10n.Get("RecruitTraining")]); mode.SelectedIndex = selected; binding = false;
         Profiles(); tips.SetToolTip(offer, L10n.Get("RecruitOfferHint")); tips.SetToolTip(profile, L10n.Get("RecruitQualityHint"));
         list.Columns["RoleStars"].ToolTipText = list.Columns["Quality"].ToolTipText = L10n.Get("RecruitQualityHint");
-        list.Columns["OverallStars"].ToolTipText = L10n.Get("StaffOverallStarsNote"); RefreshRows();
+        list.Columns["OverallStars"].ToolTipText = L10n.Get("StaffOverallStarsNote"); tips.SetToolTip(ignoreInterest, L10n.Get("RecruitIgnoreInterestHint")); RefreshRows();
     }
     public void ClearForClub(uint? uid) { clubUid = uid; data = null; search.Clear(); RefreshRows(); }
     public void SetData(StaffRecruitmentResult result) { if (result.ClubUid == clubUid) { data = result; RefreshRows(); } }
@@ -115,7 +115,7 @@ public sealed class StaffRecruitmentPanel : UserControl
     {
         if (binding) return;
         uint? uid = (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem as StaffCandidate)?.Person.Uid;
-        var ranked = data is null || Profile is null ? [] : StaffRecruitment.Rank(data, Profile, (long)offer.Value, unlikely.Checked, search.Text.Trim());
+        var ranked = data is null || Profile is null ? [] : StaffRecruitment.Rank(data, Profile, (long)offer.Value, ignoreInterest.Checked, search.Text.Trim());
         object? Value(StaffCandidate c) => sort switch { "PublicId" => c.PublicId, "Uid" => c.Uid, "InterestLabel" => c.Interest.Band == StaffInterest.Likely ? 3 : c.Interest.Band == StaffInterest.Borderline ? 2 : c.Interest.Band == StaffInterest.Uncertain ? 1 : 0,
             "RoleStars" => c.RoleStars, "OverallStars" => c.OverallStars, "TrainingStars" => c.TrainingStars, "Wage" => c.Wage, "Age" => c.Age, "Ca" => c.Ca,
             "Name" => c.Name, "CurrentRole" => c.CurrentRole, "Club" => c.Club, "TrainingCategory" => c.TrainingCategory, "MainAttributes" => c.MainAttributes, _ => c.Quality };
@@ -126,7 +126,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         foreach (DataGridViewColumn column in list.Columns) column.HeaderCell.SortGlyphDirection = column.Name == sort ? descending ? SortOrder.Descending : SortOrder.Ascending : SortOrder.None;
         if (rows.Count > 0) list.Rows[Math.Max(0, rows.FindIndex(c => c.Person.Uid == uid))].Selected = true;
         status.Text = clubUid is null ? L10n.Get("StaffSelectClub") : data is null ? L10n.Get("RecruitPending") : data.Status != "ready" ? L10n.Format("StaffUnavailable", data.Error ?? "—") :
-            L10n.Format("RecruitStatus", data.ClubName, rows.Count, ranked.Count, data.PoolPeople) + " " + L10n.Get("RecruitCoverage") +
+            L10n.Format("RecruitStatus", data.ClubName, rows.Count, ranked.Count, data.PoolPeople) + " " + (ignoreInterest.Checked ? L10n.Get("RecruitInterestOff") + " " : "") + L10n.Get("RecruitCoverage") +
             (data.ReaderWarnings.Count > 0 ? " " + L10n.Get("RecruitReaderWarning") : "");
         Details();
     }

@@ -19,6 +19,7 @@ public sealed record StaffCandidate(StaffRow Person, StaffSearchProfile Profile,
     public uint Uid => Person.Uid;
     public uint? PublicId => Person.Id;
     public string Club => Person.ClubName;
+    public int? ClubReputation => Person.ClubReputation is >= 1 and <= 10000 ? Person.ClubReputation : null;
     public string CurrentRole => Person.RoleDisplay;
     public int? Ca => Person.Ca;
     public int? Age => Person.Age;

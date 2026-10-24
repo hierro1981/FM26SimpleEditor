@@ -2232,4 +2232,6 @@ Hover over a position for its rating.</value>
   <data name="RecruitIgnoreInterest" xml:space="preserve"><value>Ignore interest (best overall)</value></data>
   <data name="RecruitIgnoreInterestHint" xml:space="preserve"><value>Disables the filter and initially orders by quality, including likely rejections. Estimated interest remains visible but does not decide the ranking. Your staff and the human manager are still excluded.</value></data>
   <data name="RecruitInterestOff" xml:space="preserve"><value>Interest filter disabled: ranked by quality.</value></data>
+  <data name="RecruitCopyName" xml:space="preserve"><value>Copy name</value></data>
+  <data name="RecruitClubReputation" xml:space="preserve"><value>Current club reputation</value></data>
 </root>

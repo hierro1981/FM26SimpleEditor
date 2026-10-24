@@ -2232,4 +2232,6 @@ Passa sul punto per il valore.</value>
   <data name="RecruitIgnoreInterest" xml:space="preserve"><value>Ignora interesse (migliori in assoluto)</value></data>
   <data name="RecruitIgnoreInterestHint" xml:space="preserve"><value>Disattiva il filtro e usa la qualità come ordinamento iniziale, includendo anche chi probabilmente rifiuterebbe. La stima resta visibile ma non decide la classifica. Sono sempre esclusi il tuo staff e l’allenatore umano.</value></data>
   <data name="RecruitInterestOff" xml:space="preserve"><value>Filtro interesse disattivato: classifica per qualità.</value></data>
+  <data name="RecruitCopyName" xml:space="preserve"><value>Copia nome</value></data>
+  <data name="RecruitClubReputation" xml:space="preserve"><value>Reputazione club attuale</value></data>
 </root>

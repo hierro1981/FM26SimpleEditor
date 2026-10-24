@@ -87,7 +87,7 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ### v15.1 · in sviluppo
 
-- Colonna reputazione del club attuale e pulsante per copiare il nome del candidato; stelle complessive e miglior allenamento spostati in coda.
+- Colonna reputazione del club attuale e icona copia accanto al nome di ogni candidato; stelle complessive e miglior allenamento spostati in coda.
 
 - **Ignora interesse (migliori in assoluto)** disattiva il filtro dell’interesse e ordina lo staff per qualità, includendo chi probabilmente rifiuterebbe. La stima dell’interesse resta visibile.
 

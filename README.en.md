@@ -87,7 +87,7 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 ### v15.1 · in development
 
-- Current club reputation column and a button to copy the selected candidate’s name; overall and best-training stars moved to the end.
+- Current club reputation column and a copy icon beside each candidate’s name; overall and best-training stars moved to the end.
 
 - **Ignore interest (best overall)** disables the interest filter and orders staff by quality, including candidates likely to refuse. Estimated interest remains visible.
 

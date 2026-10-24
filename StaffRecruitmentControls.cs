@@ -15,7 +15,6 @@ public sealed class StaffRecruitmentPanel : UserControl
     private readonly DataGridView list = Grid("RecruitList");
     private readonly DataGridView attributes = Grid("RecruitAttributes");
     private readonly DataGridView coaching = Grid("RecruitCoaching");
-    private readonly Button copyName = new() { Name = "RecruitCopyName", Text = L10n.Get("RecruitCopyName"), AutoSize = true, Enabled = false };
     private readonly ToolTip tips = new() { AutoPopDelay = 30000 };
     private StaffRecruitmentResult? data;
     private uint? clubUid;
@@ -44,12 +43,8 @@ public sealed class StaffRecruitmentPanel : UserControl
                 $"{c.RoleStars} ★ | {c.Quality}/20 | {c.Interest.Label} ({c.Interest.Score}) | {offer.Value}/week\n" + c.MainAttributes + "\n" + string.Join("\n", c.Interest.Reasons));
             tips.Show(L10n.Get("RecruitCopied"), copy, 0, copy.Height, 4000);
         };
-        copyName.Click += (_, _) =>
-        {
-            if (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem is StaffCandidate c && !string.IsNullOrEmpty(c.Name)) Clipboard.SetText(c.Name);
-        };
         tools.Controls.AddRange([mode, profile, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer,
-            new Label { Text = L10n.Get("RecruitLimit"), AutoSize = true, Margin = new Padding(6,8,0,0) }, limit, ignoreInterest, search, reload, copyName, copy]);
+            new Label { Text = L10n.Get("RecruitLimit"), AutoSize = true, Margin = new Padding(6,8,0,0) }, limit, ignoreInterest, search, reload, copy]);
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var lower = new TableLayoutPanel { Name = "RecruitDetailColumns", Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
         lower.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); lower.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); lower.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
@@ -61,7 +56,14 @@ public sealed class StaffRecruitmentPanel : UserControl
         reasons.SizeChanged += (_, _) => reason.MaximumSize = new Size(Math.Max(80, reasons.ClientSize.Width - 24), 0);
         var right = new GroupBox { Dock = DockStyle.Fill, Text = L10n.Get("StaffCoachingStars") }; right.Controls.Add(coaching);
         lower.Controls.Add(left, 0, 0); lower.Controls.Add(right, 1, 0); root.Controls.Add(lower, 0, 3); Controls.Add(root);
-        Add(list, "Name", "Text_f537c6bd038e", 190); Add(list, "CurrentRole", "RecruitCurrentRole", 200);
+        Add(list, "Name", "Text_f537c6bd038e", 190);
+        list.Columns.Add(new DataGridViewButtonColumn
+        {
+            Name = "CopyName", HeaderText = "", Text = L10n.Get("RecruitCopyName"),
+            CellTemplate = new CopyNameCell(), UseColumnTextForButtonValue = true, Width = 34, MinimumWidth = 28, Resizable = DataGridViewTriState.False,
+            SortMode = DataGridViewColumnSortMode.NotSortable, ToolTipText = L10n.Get("RecruitCopyName")
+        });
+        Add(list, "CurrentRole", "RecruitCurrentRole", 200);
         Add(list, "RoleStars", "RecruitRoleStars", 180, true, true); Add(list, "Quality", "RecruitQuality", 90, true);
         Add(list, "InterestLabel", "RecruitInterest", 170);
         Add(list, "TrainingCategory", "StaffCoachingCategory", 190);
@@ -76,9 +78,15 @@ public sealed class StaffRecruitmentPanel : UserControl
         { Add(grid, "Label", grid == attributes ? "Text_51df0484073a" : "StaffCoachingCategory", 235); Add(grid, "Value", grid == attributes ? "StaffValue" : "StaffCoachingStars", 175, true, grid == coaching); }
         list.RowTemplate.Height = coaching.RowTemplate.Height = 38;
         list.SelectionChanged += (_, _) => Details();
-        list.ColumnHeaderMouseClick += (_, e) => { string field = list.Columns[e.ColumnIndex].Name; descending = sort == field && !descending; sort = field; RefreshRows(); };
+        list.ColumnHeaderMouseClick += (_, e) => { if (list.Columns[e.ColumnIndex].SortMode == DataGridViewColumnSortMode.NotSortable) return; string field = list.Columns[e.ColumnIndex].Name; descending = sort == field && !descending; sort = field; RefreshRows(); };
+        list.CellContentClick += (_, e) =>
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "CopyName" &&
+                list.Rows[e.RowIndex].DataBoundItem is StaffCandidate c && !string.IsNullOrEmpty(c.Name)) Clipboard.SetText(c.Name);
+        };
         list.CellToolTipTextNeeded += (_, e) =>
-        { if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Rows[e.RowIndex].DataBoundItem is StaffCandidate c) e.ToolTipText = string.Join("\n", c.Interest.Reasons); };
+        { if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Rows[e.RowIndex].DataBoundItem is StaffCandidate c)
+            e.ToolTipText = list.Columns[e.ColumnIndex].Name == "CopyName" ? L10n.Get("RecruitCopyName") : string.Join("\n", c.Interest.Reasons); };
         list.CellFormatting += (_, e) =>
         {
             if (e.RowIndex >= 0 && list.Rows[e.RowIndex].DataBoundItem is StaffCandidate c && list.Columns[e.ColumnIndex].Name == "InterestLabel")
@@ -114,6 +122,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         mode.Items.Clear(); mode.Items.AddRange([L10n.Get("RecruitRoles"), L10n.Get("RecruitTraining")]); mode.SelectedIndex = selected; binding = false;
         Profiles(); tips.SetToolTip(offer, L10n.Get("RecruitOfferHint")); tips.SetToolTip(profile, L10n.Get("RecruitQualityHint"));
         list.Columns["RoleStars"].ToolTipText = list.Columns["Quality"].ToolTipText = L10n.Get("RecruitQualityHint");
+        ((DataGridViewButtonColumn)list.Columns["CopyName"]).Text = list.Columns["CopyName"].ToolTipText = L10n.Get("RecruitCopyName");
         list.Columns["OverallStars"].ToolTipText = L10n.Get("StaffOverallStarsNote"); tips.SetToolTip(ignoreInterest, L10n.Get("RecruitIgnoreInterestHint")); RefreshRows();
     }
     public void ClearForClub(uint? uid) { clubUid = uid; data = null; search.Clear(); RefreshRows(); }
@@ -139,9 +148,8 @@ public sealed class StaffRecruitmentPanel : UserControl
     }
     private void Details()
     {
-        attributes.Rows.Clear(); coaching.Rows.Clear(); reason.Text = ""; copyName.Enabled = false;
+        attributes.Rows.Clear(); coaching.Rows.Clear(); reason.Text = "";
         if (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem is not StaffCandidate c) return;
-        copyName.Enabled = !string.IsNullOrEmpty(c.Name);
         reason.Text = c.Name + " · " + c.Interest.Label + "\n" + string.Join("\n", c.Interest.Reasons);
         if (c.Profile.Key == "doctor") reason.Text += "\n" + L10n.Get("RecruitDoctorMissing");
         foreach (var w in c.Profile.Weights.OrderByDescending(w => w.Value))

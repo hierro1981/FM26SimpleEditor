@@ -2262,12 +2262,17 @@ Passa sul punto per il valore.</value>
   <data name="StaffPreference_intensity" xml:space="preserve"><value>Intensità</value></data>
   <data name="StaffPreference_tactical_flair" xml:space="preserve"><value>Brillantezza</value></data>
   <data name="TacticsCurrentRanking" xml:space="preserve"><value>Migliori oggi</value></data>
-  <data name="TacticsPotentialRanking" xml:space="preserve"><value>Potenziale stimato · a PA raggiunta</value></data>
-  <data name="TacticsPotentialScore" xml:space="preserve"><value>Stima PA /20</value></data>
-  <data name="TacticsPotentialStars" xml:space="preserve"><value>Stelle stimate PA</value></data>
+  <data name="TacticsPotentialRanking" xml:space="preserve"><value>Crescita raggiungibile · stima per età</value></data>
+  <data name="TacticsPotentialScore" xml:space="preserve"><value>Stima futura /20</value></data>
+  <data name="TacticsPotentialStars" xml:space="preserve"><value>Stelle future stimate</value></data>
   <data name="TacticsCurrentScore" xml:space="preserve"><value>Oggi /20</value></data>
-  <data name="TacticsHeadroom" xml:space="preserve"><value>Margine PA−CA</value></data>
-  <data name="TacticsPotentialNote" xml:space="preserve"><value>A destra: scenario a PA raggiunta, non previsione certa. Crescita e tempi non sono garantiti; dettagli passando sui risultati.</value></data>
-  <data name="TacticsPotentialMethod" xml:space="preserve"><value>Scenario ipotetico: ogni attributo attuale su scala 1–20 viene moltiplicato per max(1, PA/CA) e limitato a 20, poi si applicano gli stessi pesi dei sottoruoli. Familiarità e posizioni restano quelle attuali. Non è la formula di sviluppo di FM: non prevede distribuzione reale della crescita, età al picco, infortuni, allenamento o probabilità di raggiungere la PA. CA/PA mancanti o fuori scala: stima non disponibile. PA ≤ CA: nessuna crescita ipotizzata. Apri e Confronta mostrano sempre i dati reali attuali.</value></data>
-  <data name="TacticsPotentialMissing" xml:space="preserve"><value>Stima non disponibile: servono CA e PA note su scala 1–200. Non viene usato il massimo di un intervallo PA. Il giocatore resta consultabile con i valori attuali.</value></data>
+  <data name="TacticsHeadroom" xml:space="preserve"><value>Crescita CA stimata</value></data>
+  <data name="TacticsPotentialNote" xml:space="preserve"><value>A destra: stima di crescita per età e posizione, non PA piena. CA futura e scenari indicativi nei dettagli; non sono garanzie.</value></data>
+  <data name="TacticsPotentialMethod" xml:space="preserve"><value>Stima sperimentale dell’editor, non formula di FM: curva di crescita residua per età, distinta per portieri e giocatori di movimento, con rallentamento vicino alla PA. Il punteggio usa CA futura stimata/CA attuale, mantenendo il profilo degli attributi e limitando ogni valore a 20. Gli scenari prudente e favorevole variano il ritmo del 30%: non sono intervalli statistici. Si ipotizzano allenamento e minuti adeguati; personalità, infortuni, strutture e storico non sono valutati. Familiarità e posizioni restano attuali. Dopo la finestra di crescita non si ipotizzano incrementi di CA; non si prevede il declino. Apri e Confronta usano i dati reali.</value></data>
+  <data name="TacticsPotentialMissing" xml:space="preserve"><value>Stima non disponibile: servono CA e PA note su scala 1–200, età valida (14–60 anni) e almeno una posizione leggibile con familiarità ≥12. Il massimo di un intervallo PA non viene sostituito. Restano consultabili i dati attuali.</value></data>
+  <data name="TacticsFutureCa" xml:space="preserve"><value>CA futura stimata</value></data>
+  <data name="TacticsFutureRange" xml:space="preserve"><value>CA prudente–favorevole</value></data>
+  <data name="TacticsGrowthDetail" xml:space="preserve"><value>Età: {0} · curva: {1}. CA {2} → stima {3}; scenari {4}–{5}; PA teorica {6}.</value></data>
+  <data name="TacticsGrowthKeeper" xml:space="preserve"><value>portiere</value></data>
+  <data name="TacticsGrowthOutfield" xml:space="preserve"><value>movimento</value></data>
 </root>

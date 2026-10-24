@@ -13,7 +13,7 @@ internal static class TacticsChecks
     };
     private static PlayerDetail Player(uint uid, uint team) => new()
     {
-        Player = new PlayerRow { Uid = uid, Name = "P" + uid.ToString("00"), TeamId = team, Ca = 100, Pa = uid == 2 ? null : 160, Positions = new() { ["MC"] = 20, ["DM"] = uid == 1 ? 11 : 20 } },
+        Player = new PlayerRow { Uid = uid, Name = "P" + uid.ToString("00"), TeamId = team, Age = 17, Ca = 100, Pa = uid == 2 ? null : 160, Positions = new() { ["MC"] = 20, ["DM"] = uid == 1 ? 11 : 20 } },
         Attributes = TacticalRoles.All.SelectMany(r => r.Focus.Concat(r.Support)).Concat(PositionScheme.Order.SelectMany(RoleImportance.Fields).Select(x => x.Key)).Distinct()
             .Select((key, i) => new EditableField { Key = key, Index = i, Value = uid == 8 ? 100 : 75 }).ToList(),
         Positions = [new EditableField { Key = "MC", Value = 20 }, new EditableField { Key = "DM", Value = uid == 1 ? 11 : 20 }]
@@ -65,6 +65,9 @@ internal static class TacticsChecks
         futureOpen.PerformClick();
         check(openedFuture==1 && ((SquadRecommendation)future.Rows[0].Tag!).Score==15 && (double)future.Rows[0].Cells[3].Value! == 20,
             "opening a potential candidate uses the current player rather than projected attributes");
+        check((int)future.Rows[0].Cells["TacticFutureCa"].Value! > 100 && future.Rows[0].Cells["TacticFutureRange"].Value is string &&
+              future.Rows[0].Cells[3].ToolTipText.Contains("Età: 17") && future.Rows[0].Cells[3].ToolTipText.Contains("PA teorica 160"),
+            "future table exposes age-based CA, scenario range and theoretical PA separately");
         grid.ClearSelection(); grid.Rows[0].Selected=true; grid.Rows[1].Selected=true;
         opening.Invoke(grid.ContextMenuStrip, [new System.ComponentModel.CancelEventArgs()]);
         compare.PerformClick();
@@ -85,7 +88,8 @@ internal static class TacticsChecks
         var futureGroup = All(panel).OfType<GroupBox>().Single(c=>c.Name=="TacticPotentialGroup");
         check(currentGroup.Right <= futureGroup.Left && rankingColumns.ClientRectangle.Contains(currentGroup.Bounds) && rankingColumns.ClientRectangle.Contains(futureGroup.Bounds) &&
               grid.Height>30 && future.Height>30, "current and potential tables stay side by side with usable scrolling space at narrow width");
-        check(future.Columns[3].HeaderText=="PA estimate /20" && future.AccessibleDescription.Contains("not FM"), "projected headings and scenario explanation follow language changes");
+        check(future.Columns[3].HeaderText=="Future estimate /20" && future.AccessibleDescription.Contains("not FM") &&
+              future.Columns["TacticFutureCa"].HeaderText=="Estimated future CA", "projected headings and scenario explanation follow language changes");
         var pitchesViewport = All(panel).OfType<ContentViewport>().Single(p => p.Name == "TacticPitchesScroll");
         var outerViewport = All(panel).OfType<ContentViewport>().Single(p => p.Name == "TacticsScroll");
         check(pitchesViewport.VerticalScroll.Visible && pitchesViewport.DisplayRectangle.Height >= pitchesViewport.Controls[0].Height,

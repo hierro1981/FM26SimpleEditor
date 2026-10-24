@@ -79,3 +79,7 @@ The research identifies all active role codes, but the 13 OOP attribute IDs rema
 ## v15.3 staff profile extension
 
 Saved personal reputation, five job affinities and eight more tactical preferences are documented in [StaffProfileFields](StaffProfileFields.md), including structural gates, independent screen comparisons and unresolved percentage-rating formulas. They are profile facts, not a recovered transfer-acceptance formula.
+
+## Stima di crescita / Growth estimate
+
+La classifica futura per tattica usa dalla v15.4.1 una curva per età e posizione. Metodo, coefficienti sperimentali, fonti e limiti: [PotentialSelection.md](PotentialSelection.md). / Since v15.4.1 the future tactic ranking uses age and position curves; see the linked method for assumptions, sources and limitations.

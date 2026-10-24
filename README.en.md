@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.4 (in development)
+# FM26 Simple Editor · v15.4.1 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.4.1 · in development
+
+- The future ranking in **Best by tactic** now accounts for age and uses separate goalkeeper/outfield growth curves, instead of assuming every player reaches full PA.
+- Shows **estimated future CA**, remaining growth and cautious/favourable scenarios. Future role scores and stars use the new estimate; PA remains visible as the theoretical ceiling.
+- This experimental estimate assumes adequate training and playing time; development is not guaranteed. Missing age or abilities are not invented.
 
 ### v15.4 · in development
 

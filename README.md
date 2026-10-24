@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.4 (in sviluppo)
+# FM26 Simple Editor · v15.4.1 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.4.1 · in sviluppo
+
+- La classifica futura in **Migliori per tattica** tiene ora conto dell’età e distingue portieri e giocatori di movimento, invece di ipotizzare il raggiungimento automatico della PA.
+- Sono mostrate **CA futura stimata**, crescita residua e scenari prudente/favorevole. Punteggi e stelle futuri usano la nuova stima; la PA resta visibile come tetto teorico.
+- È una stima sperimentale che assume allenamento e minuti adeguati, non una promessa di sviluppo. Età o abilità mancanti non vengono inventate.
 
 ### v15.4 · in sviluppo
 

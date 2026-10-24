@@ -222,6 +222,10 @@ public sealed class TacticsPanel : UserControl
             DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight, Format = "0.00" } });
         potential.Columns.Add(new DataGridViewTextBoxColumn { Name = "TacticHeadroom", HeaderText = L10n.Get("TacticsHeadroom"), Width = 100, SortMode = DataGridViewColumnSortMode.NotSortable,
             DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight, NullValue = "—" } });
+        potential.Columns.Add(new DataGridViewTextBoxColumn { Name = "TacticFutureCa", HeaderText = L10n.Get("TacticsFutureCa"), Width = 105, SortMode = DataGridViewColumnSortMode.NotSortable,
+            DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight, NullValue = "—" } });
+        potential.Columns.Add(new DataGridViewTextBoxColumn { Name = "TacticFutureRange", HeaderText = L10n.Get("TacticsFutureRange"), Width = 150, SortMode = DataGridViewColumnSortMode.NotSortable,
+            DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight, NullValue = "—" } });
         potential.RowTemplate.Height = 41;
         potential.AccessibleDescription = L10n.Get("TacticsPotentialMethod");
         lineupTips.SetToolTip(potentialGroup, potential.AccessibleDescription);
@@ -306,10 +310,13 @@ public sealed class TacticsPanel : UserControl
         {
             var p = projected[i]; var r = p.Current;
             int at = potential.Rows.Add(i + 1, p.Player.Name, PositionScheme.Compact(p.Player.Positions, L10n.IsItalian), p.Score, p.Stars,
-                string.Join(" · ", r.Familiarities.Select(f => Labels.PositionCode(f.Key, L10n.IsItalian) + ": " + f.Value)), p.Player.Ca, p.Player.Pa, p.Player.Age, r.Score, p.Headroom);
+                string.Join(" · ", r.Familiarities.Select(f => Labels.PositionCode(f.Key, L10n.IsItalian) + ": " + f.Value)), p.Player.Ca, p.Player.Pa, p.Player.Age, r.Score, p.Headroom,
+                p.Growth?.Ability, p.Growth is { } g ? $"{g.Conservative}–{g.Favourable}" : null);
             // Actions must always inspect/compare the real current player, not fabricated future attributes.
             potential.Rows[at].Tag = r;
             string tooltip = p.Score is null ? L10n.Get("TacticsPotentialMissing") : L10n.Get("TacticsPotentialMethod") + "\n" +
+                L10n.Format("TacticsGrowthDetail", p.Player.Age, L10n.Get(p.Growth!.Goalkeeper ? "TacticsGrowthKeeper" : "TacticsGrowthOutfield"),
+                    p.Player.Ca, p.Growth.Ability, p.Growth.Conservative, p.Growth.Favourable, p.Player.Pa) + "\n" +
                 string.Join("\n", p.PositionScores.Select(s => TacticalRoles.LabelKey(s.Key) + ": " + s.Value.ToString("0.00", L10n.Culture) + "/20"));
             foreach (DataGridViewCell cell in potential.Rows[at].Cells) cell.ToolTipText = tooltip;
         }

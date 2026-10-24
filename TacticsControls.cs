@@ -164,7 +164,7 @@ public sealed class TacticsPanel : UserControl
     private DataGridView? activeRanking;
     private readonly ContextMenuStrip menu = new();
     private readonly Button open = new() { AutoSize = true, Text = L10n.Get("Text_9337b648a0e1") };
-    private readonly Button criteria = new() { AutoSize = true, Text = L10n.Get("TacticalCriteria") };
+    private readonly Button criteria = new() { Name = "TacticsCriteria", AutoSize = true, Text = L10n.Get("TacticalCriteria") };
     private SavedTacticsResult data = new();
     private IReadOnlyList<PlayerDetail> members = [];
     private uint? clubUid;

@@ -41,7 +41,7 @@ internal static class TacticsChecks
         var slots = All(squad).OfType<ComboBox>().Single(c => c.Name == "SavedTacticSlot");
         var grid = All(squad).OfType<DataGridView>().Single(g => g.Name == "TacticRanking");
         var future = All(squad).OfType<DataGridView>().Single(g => g.Name == "TacticPotentialRanking");
-        var criteria=All(squad).OfType<Button>().Single(b=>b.Text==L10n.Get("TacticalCriteria"));
+        var criteria=All(squad).OfType<Button>().Single(b=>b.Name=="TacticsCriteria");
         check(!All(squad).OfType<Label>().Single(l=>l.Name=="TacticsRankingWarning").Visible &&
             criteria.AccessibleDescription.Contains(L10n.Format("TacticsMethod",SquadSelection.ResultLimit)),
             "normal shortlist explanation moves into Criteria without reserving a row above the actions");

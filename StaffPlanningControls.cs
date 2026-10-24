@@ -58,13 +58,13 @@ public sealed class StaffPlanningPanel : UserControl
         columns.Controls.Add(altGroup, 0, 0); columns.Controls.Add(attrGroup, 1, 0); detail.Controls.Add(columns, 0, 2);
         root.Controls.Add(detail, 0, 3); Controls.Add(root);
         Add(list, "Name", "Text_f537c6bd038e", 190); CopyColumn(list);
-        Add(list, "Role", "StaffRole", 230);
+        Add(list, "Role", "StaffRole", 230); Add(list, "Team", "StaffTeam", 210);
         Add(list, "ContractEnd", "Text_51bf843f1751", 110, true); Add(list, "Days", "PlanDays", 85, true);
         Add(list, "Recommendation", "PlanRecommendation", 240); Add(list, "Criterion", "PlanCriterion", 210);
         Add(list, "Quality", "RecruitQuality", 95, true); Add(list, "Stars", "RecruitRoleStars", 170, true, true);
-        Add(list, "Wage", "StaffWage", 145, true); Add(list, "Replacement", "PlanBestAlternative", 190); Add(list, "ReplacementStars", "PlanReplacementStars", 180, true, true); Add(list, "BetterCount", "PlanBetterCount", 100, true);
+        Add(list, "Wage", "StaffWage", 145, true); Add(list, "Replacement", "PlanBestAlternative", 190); Add(list, "ReplacementStars", "PlanReplacementStars", 180, true, true); Add(list, "ReplacementTeam", "PlanReplacementTeam", 210); Add(list, "BetterCount", "PlanBetterCount", 100, true);
         Add(alternatives, "Name", "Text_f537c6bd038e", 180); CopyColumn(alternatives);
-        Add(alternatives, "Club", "StaffClub", 170); Add(alternatives, "CurrentRole", "StaffRole", 220);
+        Add(alternatives, "Club", "StaffClub", 170); Add(alternatives, "CurrentRole", "StaffRole", 220); Add(alternatives, "Team", "StaffTeam", 210);
         Add(alternatives, "Quality", "RecruitQuality", 95, true); Add(alternatives, "RoleStars", "RecruitRoleStars", 170, true, true);
         Add(alternatives, "InterestLabel", "RecruitInterest", 220); Add(alternatives, "ClubReputation", "RecruitClubReputation", 150, true);
         Add(alternatives, "Wage", "StaffWage", 145, true); Add(alternatives, "MainAttributes", "RecruitAttributes", 650);
@@ -93,10 +93,16 @@ public sealed class StaffPlanningPanel : UserControl
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "Recommendation" && list.Rows[e.RowIndex].DataBoundItem is StaffRenewal row)
                 e.CellStyle!.ForeColor = row.Advice switch { StaffRenewalAdvice.Renew => Color.DarkGreen, StaffRenewalAdvice.CompareReplacement => Color.DarkOrange, StaffRenewalAdvice.VerifyAlternatives => Color.DarkGoldenrod, _ => Color.DimGray };
         };
+        list.CellToolTipTextNeeded += (_, e) =>
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0 || list.Rows[e.RowIndex].DataBoundItem is not StaffRenewal row) return;
+            e.ToolTipText = list.Columns[e.ColumnIndex].Name == "Team" ? row.Person.TeamTooltip :
+                list.Columns[e.ColumnIndex].Name == "ReplacementTeam" ? row.Proposed?.Person.TeamTooltip ?? "" : "";
+        };
         alternatives.CellToolTipTextNeeded += (_, e) =>
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && alternatives.Rows[e.RowIndex].DataBoundItem is StaffCandidate c)
-                e.ToolTipText = alternatives.Columns[e.ColumnIndex].Name == "CopyName" ? L10n.Get("RecruitCopyName") : string.Join("\n", c.Interest.Reasons);
+                e.ToolTipText = alternatives.Columns[e.ColumnIndex].Name == "CopyName" ? L10n.Get("RecruitCopyName") : c.Person.TeamTooltip + "\n" + string.Join("\n", c.Interest.Reasons);
         };
         criterion.SelectedIndexChanged += (_, _) =>
         {
@@ -139,10 +145,10 @@ public sealed class StaffPlanningPanel : UserControl
         if (binding) return;
         uint? selected = Selected?.Uid;
         var rows = cached ??= own is null ? [] : StaffPlanning.Build(own, market, (long)offer.Value, choices);
-        var filtered = rows.Where(p => string.IsNullOrWhiteSpace(search.Text) || p.Name.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Role.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Uid.ToString().Contains(search.Text.Trim()));
-        object? Value(StaffRenewal p) => sort switch { "Name" => p.Name, "Role" => p.Role, "Days" => p.Days,
+        var filtered = rows.Where(p => string.IsNullOrWhiteSpace(search.Text) || p.Name.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Role.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Team.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Uid.ToString().Contains(search.Text.Trim()));
+        object? Value(StaffRenewal p) => sort switch { "Name" => p.Name, "Role" => p.Role, "Team" => p.Team, "Days" => p.Days,
             "Recommendation" => p.Advice, "Criterion" => p.Criterion, "Quality" => p.Quality, "Stars" => p.Stars, "Wage" => p.Wage,
-            "Replacement" => p.Replacement, "ReplacementStars" => p.ReplacementStars, "BetterCount" => p.BetterCount, _ => p.End };
+            "Replacement" => p.Replacement, "ReplacementStars" => p.ReplacementStars, "ReplacementTeam" => p.ReplacementTeam, "BetterCount" => p.BetterCount, _ => p.End };
         var known = filtered.Where(p => Value(p) is not null);
         var sorted = (descending ? known.OrderByDescending(Value) : known.OrderBy(Value)).ThenBy(p => p.Name).ThenBy(p => p.Uid).Concat(filtered.Where(p => Value(p) is null)).ToList();
         binding = true; list.DataSource = new BindingList<StaffRenewal>(sorted); list.ClearSelection();
@@ -162,7 +168,7 @@ public sealed class StaffPlanningPanel : UserControl
         var candidates = row?.Alternatives.OrderByDescending(c => c.Interest.Band == StaffInterest.Likely).ThenByDescending(c => c.Quality).ThenBy(c => c.Name).Take(50).ToList() ?? [];
         alternatives.DataSource = new BindingList<StaffCandidate>(candidates); alternatives.ClearSelection();
         if (candidates.Count > 0) alternatives.Rows[0].Selected = true;
-        explanation.Text = row is null ? "" : row.Name + " · " + row.Recommendation + "\n" + row.Explanation + " " + L10n.Format("PlanAlternativeCount", candidates.Count, row.BetterCount);
+        explanation.Text = row is null ? "" : row.Name + " · " + row.Team + " · " + row.Recommendation + "\n" + row.Explanation + " " + L10n.Format("PlanAlternativeCount", candidates.Count, row.BetterCount);
         binding = false; AttributeComparison();
     }
     private void AttributeComparison()

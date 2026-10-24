@@ -33,6 +33,7 @@ internal static class StaffPlanningChecks
         }
         var current = Person(1); var own = new StaffResult { Status = "ready", ClubUid = 1, GameDate = market.GameDate, Staff = [current] };
         var better = Person(2, 12, club:2); market.Staff = [better];
+        current.TeamId=100; current.TeamSlot=0; better.TeamId=101;better.TeamSlot=1;better.TeamName="U20";
         var row = StaffPlanning.Build(own, market).Single();
         check(row.Advice == StaffRenewalAdvice.CompareReplacement && row.Quality == 10 && row.Alternatives.Single().Quality == 12 && row.BestPlausible?.Uid == 2,
             "renewal advice compares same-job quality with a stronger plausible recruit");
@@ -56,7 +57,7 @@ internal static class StaffPlanningChecks
         check(StaffPlanning.Build(own, market).Single().BetterCount == 1, "meaningful quality advantage is measured on the shared /20 scale");
         better.Attributes["sports_science"] = 10; better.Attributes["analysing_data"] = 11;
         check(StaffPlanning.Build(own, market).Single().Advice == StaffRenewalAdvice.Renew, "tiny attribute differences are not treated as a meaningful upgrade");
-        better = Person(2, 20, club:2); better.JobKey = "head_sports_science"; better.JobCode = 40; market.Staff = [better];
+        better = Person(2, 20, club:2); better.TeamId=101;better.TeamSlot=1;better.TeamName="U20"; better.JobKey = "head_sports_science"; better.JobCode = 40; market.Staff = [better];
         check(StaffPlanning.Build(own, market).Single().BetterCount == 0, "a different current job is not silently assumed to accept a demotion");
         better.JobKey = "sports_scientist"; better.JobFamilyOnly = true;
         check(StaffPlanning.Build(own, market).Single().BetterCount == 0, "imprecise job categories do not establish a replacement");
@@ -114,6 +115,8 @@ internal static class StaffPlanningChecks
         check(grid.Rows.Count==1 && alts.Rows.Count==1 && attrs.Rows.Count==2 && grid.Columns["Stars"].CellTemplate is StarRatingCell &&
             grid.ReadOnly && grid.ScrollBars==ScrollBars.Both && alts.ScrollBars==ScrollBars.Both,
             "planning shows renewal advice, stronger alternatives and attribute comparison with scrolling and stars");
+        check(grid.Rows[0].Cells["Team"].Value?.ToString()=="Prima squadra" && grid.Rows[0].Cells["ReplacementTeam"].Value?.ToString()=="U20" &&
+            alts.Rows[0].Cells["Team"].Value?.ToString()=="U20", "planning exposes incumbent and proposed candidate squads in every list");
         check(!grid.Columns.Contains("Club") && grid.Columns["ReplacementStars"].CellTemplate is StarRatingCell &&
             grid.Rows[0].Cells["ReplacementStars"].Value is double replacementStars && replacementStars==((StaffRenewal)grid.Rows[0].DataBoundItem).Proposed?.RoleStars,
             "renewal grid removes own-club column and shows the proposed candidate stars");

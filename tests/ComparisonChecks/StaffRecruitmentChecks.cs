@@ -103,6 +103,8 @@ internal static class StaffRecruitmentChecks
         panel.ClearForClub(1); panel.SetData(data); host.Show(); Application.DoEvents();
         var grid=All(panel).OfType<DataGridView>().Single(g=>g.Name=="RecruitList");
         check(grid.Rows.Count==2 && grid.ReadOnly && grid.ScrollBars==ScrollBars.Both && grid.Columns["RoleStars"].CellTemplate is StarRatingCell, "recruitment UI shows sortable scrollable candidate and suitability-star columns");
+        check(grid.Columns.Contains("Team") && grid.Columns["Team"].SortMode==DataGridViewColumnSortMode.Programmatic,
+            "recruitment exposes the current contract squad as a sortable column");
         var mode=All(panel).OfType<ComboBox>().Single(c=>c.Name=="RecruitMode");mode.SelectedIndex=1;Application.DoEvents();
         var choice=All(panel).OfType<ComboBox>().Single(c=>c.Name=="RecruitProfile");
         check(choice.Items.Count==9 && grid.Rows.Count==2, "training mode offers every shared training category");

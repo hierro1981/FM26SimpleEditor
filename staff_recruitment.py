@@ -2,6 +2,7 @@
 from collections import Counter
 import warnings
 from operation_progress import report
+from staff_teams import team_index, team_fields
 from staff_reader import (PERSONALITY, PREFERENCES, values, attributes_at_block,
                           reputation_at_block, preferences_at_block)
 
@@ -57,6 +58,7 @@ def recruitment_pool(store, progress=None):
     from staff_jobs import StaffJobReader
     jobs = StaffJobReader(store)
     clubs = {club.uid: club for club in store.save.clubs()}
+    teams = team_index(clubs)
     result = []
     for i, person in enumerate(people):
         if person.is_human_manager:
@@ -84,6 +86,7 @@ def recruitment_pool(store, progress=None):
             personality=values(person.personality, PERSONALITY), attributes=attributes,
             preferences={**values(person.preferences, PREFERENCES), **preferences_at_block(store.raw, block, layout)},
             reputation=reputation_at_block(store.raw, block, layout),
+            **team_fields(person, teams),
             **(jobs.read(person, block[0]) if block is not None else {})))
         if (i+1) % 500 == 0 or i+1 == len(people):
             report(progress, 40+50*(i+1)/max(1,len(people)), 'Preparazione candidati staff', i+1, len(people), 'persone')

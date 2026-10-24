@@ -45,7 +45,7 @@ public sealed class StaffPanel : UserControl
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2); root.Controls.Add(count, 0, 3); root.Controls.Add(detailArea, 0, 4);
         (string Field, string Header, int Width)[] columns =
         [
-            ("Name", "Text_f537c6bd038e", 190), ("RoleDisplay", "StaffRole", 225),
+            ("Name", "Text_f537c6bd038e", 190), ("RoleDisplay", "StaffRole", 225), ("TeamDisplay", "StaffTeam", 210),
             ("CurrentRoleStars", "StaffCurrentRoleStars", 225),
             ("ClubName", "StaffClub", 180), ("ListedClubName", "StaffListedClub", 180),
             ("Age", "Text_9efdc62c88bf", 60), ("BirthDisplay", "StaffBirth", 105),
@@ -57,7 +57,7 @@ public sealed class StaffPanel : UserControl
         {
             var column = new DataGridViewTextBoxColumn { Name = c.Field, DataPropertyName = c.Field, HeaderText = c.Header.Length == 0 ? c.Field.ToUpperInvariant() : L10n.Get(c.Header), Width = c.Width, MinimumWidth = 50, SortMode = DataGridViewColumnSortMode.Programmatic };
             column.DefaultCellStyle.NullValue = "—";
-            if (c.Field is "Age" or "Ca" or "Pa" or "Wage" or "CurrentReputation" or "Id" or "Uid" || c.Field.EndsWith("Display") && c.Field != "RoleDisplay" && c.Field != "ContractDisplay") column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            if (c.Field is "Age" or "Ca" or "Pa" or "Wage" or "CurrentReputation" or "Id" or "Uid" || c.Field.EndsWith("Display") && c.Field != "RoleDisplay" && c.Field != "ContractDisplay" && c.Field != "TeamDisplay") column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             if (c.Field == "Wage") column.DefaultCellStyle.Format = "N0";
             if (c.Field == "CurrentRoleStars")
             {
@@ -85,6 +85,8 @@ public sealed class StaffPanel : UserControl
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "RoleDisplay" &&
                 list.Rows[e.RowIndex].DataBoundItem is StaffRow person) e.ToolTipText = person.RoleTooltip;
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "TeamDisplay" && list.Rows[e.RowIndex].DataBoundItem is StaffRow assigned)
+                e.ToolTipText = assigned.TeamTooltip;
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "CurrentRoleStars")
                 e.ToolTipText = list.Rows[e.RowIndex].DataBoundItem is StaffRow rated ? StaffRecruitment.CurrentStarsTooltip(rated) : L10n.Get("StaffCurrentRoleStarsNote");
         };
@@ -122,12 +124,12 @@ public sealed class StaffPanel : UserControl
         var selected = Selected;
         string text = search.Text.Trim();
         var rows = (data?.Staff ?? []).Where(p => data!.Status == "ready" && (text.Length == 0 || p.Name.Contains(text, StringComparison.CurrentCultureIgnoreCase) ||
-            p.RoleDisplay.Contains(text, StringComparison.CurrentCultureIgnoreCase) ||
+            p.RoleDisplay.Contains(text, StringComparison.CurrentCultureIgnoreCase) || p.TeamDisplay.Contains(text, StringComparison.CurrentCultureIgnoreCase) || p.TeamId?.ToString().Contains(text) == true ||
             p.ClubName.Contains(text, StringComparison.CurrentCultureIgnoreCase) || p.ListedClubName?.Contains(text, StringComparison.CurrentCultureIgnoreCase) == true ||
             p.Uid.ToString(CultureInfo.InvariantCulture).Contains(text) || p.Id?.ToString(CultureInfo.InvariantCulture).Contains(text) == true)).ToArray();
         object? Value(StaffRow p) => sortField switch
         {
-            "RoleDisplay" => p.RoleDisplay, "ClubName" => p.ClubName, "ListedClubName" => p.ListedClubName,
+            "RoleDisplay" => p.RoleDisplay, "TeamDisplay" => p.TeamDisplay, "ClubName" => p.ClubName, "ListedClubName" => p.ListedClubName,
             "Age" => p.Age, "BirthDisplay" => p.Birth, "Ca" => p.Ca, "Pa" => p.Pa, "Wage" => p.Wage,
             "CurrentRoleStars" => p.CurrentRoleStars, "CurrentReputation" => p.CurrentReputation,
             "ContractDisplay" => p.ContractDisplay, "ContractStartDisplay" => p.ContractStart, "ContractEndDisplay" => p.ContractEnd,
@@ -172,6 +174,8 @@ public sealed class StaffPanel : UserControl
             foreach (var pair in values.OrderBy(x => L10n.Get(prefix + x.Key), Labels.Comparer(L10n.IsItalian)))
                 details.Rows.Add(L10n.Get(group), L10n.Get(prefix + pair.Key), pair.Value is >= 1 and <= 20 ? pair.Value : "—");
         }
+        details.Rows.Add(L10n.Get("StaffContract"), L10n.Get("StaffTeam"), person.TeamDisplay);
+        details.Rows[details.Rows.Count-1].Cells[2].ToolTipText = person.TeamTooltip;
         foreach (var pair in person.Reputation.Where(p => p.Value is >= 1 and <= 10000))
             details.Rows.Add(L10n.Get("StaffReputation"), L10n.Get("StaffReputation_" + pair.Key), pair.Value);
         foreach (var pair in person.JobPreferences.Where(p => p.Value is >= 1 and <= 20 && L10n.Keys.Contains("StaffJob_" + p.Key)))

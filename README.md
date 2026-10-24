@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.6.2 (in sviluppo)
+# FM26 Simple Editor · v15.6.3 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.6.3 · in sviluppo
+
+- Aggiunta la **Squadra incarico** in Staff, Trova staff e Pianificazione staff, comprese le alternative proposte e le valutazioni copiate.
+- Mostra prima squadra, sottosquadra o squadra affiliata in base al contratto. I nomi vengono mostrati quando leggibili; senza un nome verificato, gli altri gruppi restano indicati tramite slot e ID, senza attribuire arbitrariamente etichette U20/U18.
+- La ricerca testuale dello staff comprende anche la squadra; il tooltip riporta il riferimento del contratto.
 
 ### v15.6.2 · in sviluppo
 

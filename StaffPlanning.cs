@@ -9,6 +9,7 @@ public sealed record StaffRenewal(StaffRow Person, DateTime End, int Days, Staff
     public uint Uid => Person.Uid;
     public string Name => Person.Name;
     public string Role => Person.RoleDisplay;
+    public string Team => Person.TeamDisplay;
     public string ContractEnd => End.ToString("dd/MM/yyyy", L10n.Culture);
     public long? Wage => Person.Wage;
     public string Criterion => Profile?.Label ?? "—";
@@ -17,6 +18,7 @@ public sealed record StaffRenewal(StaffRow Person, DateTime End, int Days, Staff
     public StaffCandidate? Proposed => BestPlausible ?? Alternatives.FirstOrDefault();
     public string Replacement => Proposed?.Name ?? "—";
     public double? ReplacementStars => Proposed?.RoleStars;
+    public string ReplacementTeam => Proposed?.Team ?? "—";
     public int BetterCount => Alternatives.Count;
     public string Explanation => L10n.Get("PlanReason_" + Advice);
 }

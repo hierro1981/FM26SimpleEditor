@@ -202,3 +202,28 @@ It restores interest filtering, clears stale text search and sorts quality
 descending. It opens the broader position search, not only the upgrades above
 the incumbent's 0.75/20 margin. Existing recruitment data is reused; if missing,
 the usual loader runs. No backend write or new save scan is introduced.
+
+### Contract squad context (v15.6.3)
+
+Pinned fmsave exposes `Staff.team_id` from the contract and a `team_slot` field;
+its `Team` model carries the stored slot, owner club and affiliate flag, without
+an age-group name/type. See the primary [Staff model](https://github.com/rhiever/fmsave/blob/v0.5.11/src/fmsave/models/staff.py)
+and [Team model](https://github.com/rhiever/fmsave/blob/v0.5.11/src/fmsave/models/clubs.py).
+`staff_teams.py` builds one exact team-ID index from clubs' own, non-affiliate
+entries. Parent-appended affiliate entries are skipped, so a B club's first team
+is not mislabelled with its position in the parent's list. Contradictory mappings,
+unknown IDs and unlinked contracts stay unknown. Job titles, department lists
+and listed-club names do not establish a squad assignment.
+
+Slot 0 uses the editor's existing first-team convention. Other slots are displayed
+as subteam slot numbers, with team IDs in tooltips. A real team name is forwarded
+only if readable; the pinned model does not supply U20/U18 labels and no universal
+slot-to-age mapping is claimed. The original contract club and listed club remain
+separate facts. The UI shows the affiliate owner when it differs from the employer.
+Contract squad is not a training assignment; expired contract references are not
+proof of a current job. These fields do not change quality or acceptance scores.
+
+The context is visible in own staff, global recruitment, renewal rows, proposed
+replacement context and alternative rows, plus copied assessments and detail
+headers/tooltips. Text search can use names and readable squad labels, and the
+own-staff/recruitment searches also accept the contract team ID.

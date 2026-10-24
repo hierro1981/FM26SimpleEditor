@@ -22,6 +22,7 @@ public sealed record StaffCandidate(StaffRow Person, StaffSearchProfile Profile,
     public string Club => Person.ClubName;
     public int? ClubReputation => Person.ClubReputation is >= 1 and <= 10000 ? Person.ClubReputation : null;
     public string CurrentRole => Person.RoleDisplay;
+    public string Team => Person.TeamDisplay;
     public int? Ca => Person.Ca;
     public int? CurrentReputation => Person.CurrentReputation;
     public int? JobPreference => StaffRecruitment.JobPreference(Person, Profile);
@@ -181,7 +182,7 @@ public static class StaffRecruitment
             .Select(p => new StaffCandidate(p, profile, Quality(p, profile), Estimate(p, profile, data, offeredWage),
                 CoachingStars.Calculate(p).Where(c => c.Score.HasValue).OrderByDescending(c => c.Score).FirstOrDefault()))
             .Where(c => (ignoreInterest || c.Interest.Band != StaffInterest.Unlikely) &&
-                (string.IsNullOrWhiteSpace(search) || c.Name.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Club.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.CurrentRole.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Person.Uid.ToString().Contains(search) || c.Person.Id?.ToString().Contains(search) == true))
+                (string.IsNullOrWhiteSpace(search) || c.Name.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Club.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.CurrentRole.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Team.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Person.TeamId?.ToString().Contains(search) == true || c.Person.Uid.ToString().Contains(search) || c.Person.Id?.ToString().Contains(search) == true))
             .OrderByDescending(c => c.Quality.HasValue).ThenByDescending(c => c.Quality).ThenByDescending(c => ignoreInterest ? 0 : c.Interest.Score).ThenBy(c => c.Name).ThenBy(c => c.Person.Uid).ToArray();
     }
 }

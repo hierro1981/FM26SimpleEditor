@@ -48,7 +48,7 @@ public sealed class StaffRecruitmentPanel : UserControl
                 $"{c.RoleStars} ★ | {c.Quality?.ToString("0.00", L10n.Culture) ?? "—"}/20 | {c.Interest.Label} ({c.Interest.Score})\n" +
                 L10n.Format("RecruitFeedbackContext", c.CurrentRole, c.Club, c.Person.ContractEndDisplay, c.Wage?.ToString("N0", L10n.Culture) ?? "—") + "\n" +
                 (offer.Value == 0 ? L10n.Get("RecruitNoOffer") : L10n.Get("RecruitOffer") + ": " + offer.Value.ToString("N0", L10n.Culture)) + "\n" +
-                c.MainAttributes + "\n" + string.Join("\n", c.Interest.Reasons));
+                c.Person.TeamTooltip + "\n" + c.MainAttributes + "\n" + string.Join("\n", c.Interest.Reasons));
             tips.Show(L10n.Get("RecruitCopied"), copy, 0, copy.Height, 4000);
         };
         var currentJobTools = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, WrapContents = false, Margin = Padding.Empty };
@@ -73,7 +73,7 @@ public sealed class StaffRecruitmentPanel : UserControl
             CellTemplate = new CopyNameCell(), UseColumnTextForButtonValue = true, Width = 34, MinimumWidth = 28, Resizable = DataGridViewTriState.False,
             SortMode = DataGridViewColumnSortMode.NotSortable, ToolTipText = L10n.Get("RecruitCopyName")
         });
-        Add(list, "CurrentRole", "RecruitCurrentRole", 200);
+        Add(list, "CurrentRole", "RecruitCurrentRole", 200); Add(list, "Team", "StaffTeam", 210);
         Add(list, "JobPreference", "StaffJobPreferenceScore", 185, true);
         Add(list, "RoleStars", "RecruitRoleStars", 180, true, true); Add(list, "Quality", "RecruitQuality", 90, true);
         Add(list, "InterestLabel", "RecruitInterest", 170);
@@ -99,7 +99,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         };
         list.CellToolTipTextNeeded += (_, e) =>
         { if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Rows[e.RowIndex].DataBoundItem is StaffCandidate c)
-            e.ToolTipText = list.Columns[e.ColumnIndex].Name == "CopyName" ? L10n.Get("RecruitCopyName") : list.Columns[e.ColumnIndex].Name == "CurrentRoleStars" ? StaffRecruitment.CurrentStarsTooltip(c.Person) : string.Join("\n", c.Interest.Reasons); };
+            e.ToolTipText = list.Columns[e.ColumnIndex].Name == "CopyName" ? L10n.Get("RecruitCopyName") : list.Columns[e.ColumnIndex].Name == "Team" ? c.Person.TeamTooltip : list.Columns[e.ColumnIndex].Name == "CurrentRoleStars" ? StaffRecruitment.CurrentStarsTooltip(c.Person) : string.Join("\n", c.Interest.Reasons); };
         list.CellFormatting += (_, e) =>
         {
             if (e.RowIndex >= 0 && list.Rows[e.RowIndex].DataBoundItem is StaffCandidate c && list.Columns[e.ColumnIndex].Name == "InterestLabel")
@@ -166,7 +166,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         var ranked = data is null || Profile is null ? [] : StaffRecruitment.Rank(data, Profile, (long)offer.Value, ignoreInterest.Checked, search.Text.Trim(), (currentJob.SelectedItem as JobChoice)?.Key);
         object? Value(StaffCandidate c) => sort switch { "CurrentReputation" => c.CurrentReputation, "JobPreference" => c.JobPreference, "ClubReputation" => c.ClubReputation, "PublicId" => c.PublicId, "Uid" => c.Uid, "InterestLabel" => c.Interest.Band == StaffInterest.Likely ? 3 : c.Interest.Band == StaffInterest.Borderline ? 2 : c.Interest.Band == StaffInterest.Uncertain ? 1 : 0,
             "RoleStars" => c.RoleStars, "CurrentRoleStars" => c.CurrentRoleStars, "TrainingStars" => c.TrainingStars, "Wage" => c.Wage, "Age" => c.Age, "Ca" => c.Ca,
-            "Name" => c.Name, "CurrentRole" => c.CurrentRole, "Club" => c.Club, "TrainingCategory" => c.TrainingCategory, "MainAttributes" => c.MainAttributes, _ => c.Quality };
+            "Name" => c.Name, "CurrentRole" => c.CurrentRole, "Team" => c.Team, "Club" => c.Club, "TrainingCategory" => c.TrainingCategory, "MainAttributes" => c.MainAttributes, _ => c.Quality };
         var known = ranked.Where(c => Value(c) is not null);
         var rows = (descending ? known.OrderByDescending(Value) : known.OrderBy(Value)).ThenBy(c => c.Name).ThenBy(c => c.Person.Uid)
             .Concat(ranked.Where(c => Value(c) is null)).Take((int)limit.Value).ToList();
@@ -182,7 +182,7 @@ public sealed class StaffRecruitmentPanel : UserControl
     {
         attributes.Rows.Clear(); coaching.Rows.Clear(); reason.Text = "";
         if (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem is not StaffCandidate c) return;
-        reason.Text = c.Name + " · " + c.Interest.Label + "\n" + string.Join("\n", c.Interest.Reasons);
+        reason.Text = c.Name + " · " + c.Team + " · " + c.Interest.Label + "\n" + string.Join("\n", c.Interest.Reasons);
         if (c.Profile.Key == "doctor") reason.Text += "\n" + L10n.Get("RecruitDoctorMissing");
         foreach (var w in c.Profile.Weights.OrderByDescending(w => w.Value))
             attributes.Rows.Add(L10n.Get("StaffAttribute_" + w.Key), StaffRecruitment.Attribute(c.Person, w.Key)?.ToString(L10n.Culture) ?? "—");

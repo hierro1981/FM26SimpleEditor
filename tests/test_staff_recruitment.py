@@ -30,6 +30,16 @@ class RecruitmentTests(unittest.TestCase):
         self.assertEqual(result['ownExcluded'],2)
         self.assertEqual(result['clubReputation'],5000)
 
+    def test_external_contract_squad_is_preserved_in_pool(self):
+        store=self.store();clubs=store.save.clubs()
+        next(c for c in clubs if c.uid==99).teams=[NS(team_id=100,slot=2,club_uid=99,is_affiliate=False)]
+        store.save.clubs=lambda:clubs
+        with patch('staff_recruitment.indexed_blocks',return_value=({},None)), patch('staff_jobs.StaffJobReader'):
+            result=read_staff_recruitment(store,10)
+        row=next(p for p in result['staff'] if p['clubUid']==99 and p['hasContract'])
+        self.assertEqual((row['teamId'],row['teamSlot'],row['teamClubUid']),(100,2,99))
+        self.assertNotIn('teamSlot',next(p for p in result['staff'] if not p['hasContract']))
+
     def test_catalogue_cached_per_store_without_leaking_destination_mutations(self):
         store=self.store()
         with patch('staff_recruitment.indexed_blocks',return_value=({},None)) as scan, patch('staff_jobs.StaffJobReader'):

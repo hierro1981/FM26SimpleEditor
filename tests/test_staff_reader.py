@@ -31,6 +31,12 @@ class StaffReaderTests(unittest.TestCase):
         self.assertEqual([p['uid'] for p in result['staff']],[1,2,4])
         self.assertEqual(result['staff'][0]['listedClubName'],'B team')
 
+    def test_contract_team_fields_are_exposed(self):
+        store=self.store();club=store.save.clubs()[0]
+        club.teams[0].team_id=100;club.teams[0].slot=1;club.teams[0].name='U20'
+        person=read_my_staff(store,10)['staff'][0]
+        self.assertEqual((person['teamId'],person['teamSlot'],person['teamName']),(100,1,'U20'))
+
     def test_missing_values_and_zero_pay_are_preserved_without_role_guesses(self):
         person=read_my_staff(self.store(),10)['staff'][0]
         self.assertEqual(person['wage'],0)

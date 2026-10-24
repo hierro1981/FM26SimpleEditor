@@ -2315,4 +2315,11 @@ An alternative must improve the score by at least 0.75/20: an editor choice, not
 Training stars use the same calculation as the Staff page. Other stars describe job suitability, not overall CA. Comparisons concern the selected criterion: they do not optimise the whole training allocation, allocate candidates or verify salary demands and available posts. No contract is modified.</value></data>
   <data name="PlanFindStaff" xml:space="preserve"><value>Find staff using this criterion</value></data>
   <data name="PlanReplacementStars" xml:space="preserve"><value>Proposed alternative stars</value></data>
+  <data name="StaffTeam" xml:space="preserve"><value>Job squad</value></data>
+  <data name="StaffTeamUnknown" xml:space="preserve"><value>Squad not identified</value></data>
+  <data name="StaffSubteamSlot" xml:space="preserve"><value>Subteam · slot {0}</value></data>
+  <data name="StaffTeamContext" xml:space="preserve"><value>Contract squad: {0} · Team ID: {1}</value></data>
+  <data name="StaffTeamNote" xml:space="preserve"><value>Team reference in the readable contract, not training assignment. Slot 0 denotes the first team; other slots identify subteams but do not establish age group (U20, U18) or type. A name is displayed only when readable. Without a linked contract the squad remains unidentified.</value></data>
+  <data name="PlanReplacementTeam" xml:space="preserve"><value>Proposed alternative squad</value></data>
+  <data name="StaffFirstTeam" xml:space="preserve"><value>First team</value></data>
 </root>

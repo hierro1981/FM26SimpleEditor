@@ -190,12 +190,14 @@ public sealed class StaffPlanningPanel : UserControl
     private void AttributeComparison()
     {
         attributes.Rows.Clear();
-        if (Selected is not StaffRenewal row || row.Profile is null) return;
+        if (Selected is not StaffRenewal row) return;
         var candidate = alternatives.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem as StaffCandidate;
-        foreach (var weight in row.Profile.Weights.OrderByDescending(w => w.Value))
+        IEnumerable<string> fields = row.Profile?.Weights.OrderByDescending(w => w.Value).Select(w => w.Key) ?? Enumerable.Empty<string>();
+        if (StaffSquads.Matches(row.Person, "subteam")) fields = fields.Prepend("working_with_youngsters");
+        foreach (string key in fields.Distinct(StringComparer.Ordinal))
         {
-            int? a = StaffRecruitment.Attribute(row.Person, weight.Key), b = candidate is null ? null : StaffRecruitment.Attribute(candidate.Person, weight.Key);
-            int index = attributes.Rows.Add(L10n.Get("StaffAttribute_" + weight.Key), a, b, a.HasValue && b.HasValue ? (b.Value - a.Value).ToString("+0;-0;0", L10n.Culture) : "—");
+            int? a = StaffRecruitment.Attribute(row.Person, key), b = candidate is null ? null : StaffRecruitment.Attribute(candidate.Person, key);
+            int index = attributes.Rows.Add(L10n.Get("StaffAttribute_" + key), a, b, a.HasValue && b.HasValue ? (b.Value - a.Value).ToString("+0;-0;0", L10n.Culture) : "—");
             if (a.HasValue && b.HasValue) attributes.Rows[index].Cells["Delta"].Style.ForeColor = b > a ? Color.DarkGreen : b < a ? Color.Firebrick : SystemColors.ControlText;
         }
         attributes.ClearSelection();

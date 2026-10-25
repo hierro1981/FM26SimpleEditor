@@ -125,6 +125,18 @@ internal static class StaffPlanningChecks
             grid.Rows[0].Cells["ReplacementStars"].Value is double replacementStars && replacementStars==((StaffRenewal)grid.Rows[0].DataBoundItem).Proposed?.RoleStars,
             "renewal grid removes own-club column and shows the proposed candidate stars");
         check(!All(panel).OfType<ComboBox>().Single(c=>c.Name=="MySquadScope").Enabled, "player squad scope is disabled for staff planning");
+        current.TeamSlot=1;current.TeamName="U20";current.Attributes["working_with_youngsters"]=10;
+        better.Attributes["working_with_youngsters"]=16;panel.SetStaffData(own);panel.SetRecruitmentData(market);Application.DoEvents();
+        check(attrs.Rows[0].Cells[0].Value?.ToString()==L10n.Get("StaffAttribute_working_with_youngsters") &&
+            attrs.Rows[0].Cells["Current"].Value?.ToString()=="10" && attrs.Rows[0].Cells["Alternative"].Value?.ToString()=="16" &&
+            attrs.Rows[0].Cells["Delta"].Value?.ToString()=="+6" && attrs.Rows[0].Cells["Delta"].Style.ForeColor==Color.DarkGreen,
+            "subteam comparison highlights working with youngsters for both people and its coloured delta");
+        better.Attributes.Remove("working_with_youngsters");panel.SetRecruitmentData(market);
+        check(attrs.Rows[0].Cells["Alternative"].FormattedValue?.ToString()=="—" && attrs.Rows[0].Cells["Delta"].Value?.ToString()=="—",
+            "missing alternative youth-work ability is explicit rather than substituted");
+        better.Attributes["working_with_youngsters"]=16;current.TeamSlot=0;current.TeamName=null;panel.SetStaffData(own);panel.SetRecruitmentData(market);
+        check(!attrs.Rows.Cast<DataGridViewRow>().Any(r=>r.Cells[0].Value?.ToString()==L10n.Get("StaffAttribute_working_with_youngsters")),
+            "first-team comparison keeps its original profile without an unrelated extra attribute");
         foreach(int width in new[]{1100,760})
         {
             host.Width=width; Application.DoEvents();

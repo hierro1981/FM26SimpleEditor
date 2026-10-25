@@ -64,7 +64,7 @@ internal static class CoachingChecks
         check(stam.CurrentRoleStars is null, "missing job-specific input cannot fall back to CA or an unrelated category");
         foreach (var job in StaffRecruitment.Roles)
         {
-            var staff = Coach(); staff.JobKey=job.Key; staff.JobCode=2;
+            var staff = Coach(); staff.JobKey=job.Key; staff.JobCode=job.Key=="analyst"?60:2;
             foreach(var key in job.Weights.Keys) staff.Attributes[key]=16;
             var currentProfile=StaffRecruitment.CurrentProfile(staff)!;
             check(staff.CurrentRoleStars == new StaffCandidate(staff,currentProfile,StaffRecruitment.Quality(staff,currentProfile),new(StaffInterest.Uncertain,0,[]),null).RoleStars,

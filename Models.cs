@@ -256,7 +256,8 @@ public sealed class StaffRow
             return IsPlayerJob ? L10n.Format("StaffPlayerJobFormat", label) : label;
         }
     }
-    [JsonIgnore] public string RoleTooltip => JobFamilyOnly ? L10n.Get("StaffJobFamilyNote") : "";
+    [JsonIgnore] public string RoleTooltip => StaffRecruitment.AnalystJob(this) is int code ?
+        L10n.Format("AnalystVariantContext", code) + " " + L10n.Get("AnalystCategoryNote") : JobFamilyOnly ? L10n.Get("StaffJobFamilyNote") : "";
     [JsonIgnore] public string ContractDisplay => L10n.Get(HasContract ? "StaffContractFound" : "StaffContractMissing");
     [JsonIgnore] public string BirthDisplay => DisplayDate(Birth);
     [JsonIgnore] public string ContractStartDisplay => DisplayDate(ContractStart);

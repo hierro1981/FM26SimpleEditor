@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.7.3 (in development)
+# FM26 Simple Editor · v15.7.4 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.7.4 · in development
+
+- **Analysts:** planning now assesses the identified category, showing scores, stars and alternatives when attributes are complete.
+- Renewal alternatives require the same contract variant. The **Find staff** shortcut preserves that filter; search can also show all variants.
+- Exact specialisation remains explicitly unidentified. Missing required attributes are named in the assessment.
 
 ### v15.7.3 · in development
 

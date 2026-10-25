@@ -87,7 +87,7 @@ attributes, not CA, PA, reputation or an average across all training categories.
 - Other exact supported jobs use the same job weights and half-star conversion
   as recruitment. Youth development heads are assessed for that job, not as
   generic coaches.
-- Unknown jobs, family-only jobs, human managers, doctors without a quality
+- Unknown jobs, unsupported family-only jobs, human managers, doctors without a quality
   formula and incomplete required inputs yield a dash. No CA fallback is used.
 
 The tooltip identifies the criterion. `StaffRecruitment.CurrentProfile/Stars`
@@ -98,3 +98,7 @@ current-job rating. A different planning criterion can also give different stars
 The underlying training formulas and player CA-star previews are unchanged.
 CA remains visible in its numeric column. These are editor estimates, not a
 recovered official overall rating or actual assigned workload.
+
+Since v15.7.4, known analyst contract variants may receive generic category
+stars even while their exact specialisation remains unidentified. Planning
+compares only equal base contract variants; see [StaffRecruitment](StaffRecruitment.md).

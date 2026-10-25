@@ -2344,4 +2344,8 @@ Training stars use the same calculation as the Staff page. Other stars describe 
   <data name="StaffSquad_u23" xml:space="preserve"><value>U23</value></data>
   <data name="StaffAdditionalSquad" xml:space="preserve"><value>Additional squad</value></data>
   <data name="StaffTypeEvidence" xml:space="preserve"><value>Read team type: {0} · Age-limit field: {1}.</value></data>
+  <data name="AnalystCategoryNote" xml:space="preserve"><value>Generic assessment of the Analyst category, not an identified specialisation. Renewal alternatives are limited to the same contract variant.</value></data>
+  <data name="AnalystVariantContext" xml:space="preserve"><value>Analyst job variant: {0}; exact title not yet identified.</value></data>
+  <data name="RecruitAnalystVariantChoice" xml:space="preserve"><value>Analyst · variant {0}</value></data>
+  <data name="PlanMissingAttributes" xml:space="preserve"><value>Incomplete assessment: valid inputs are missing for {0}.</value></data>
 </root>

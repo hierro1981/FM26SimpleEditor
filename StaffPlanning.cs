@@ -12,7 +12,7 @@ public sealed record StaffRenewal(StaffRow Person, DateTime End, int Days, Staff
     public string Team => Person.TeamDisplay;
     public string ContractEnd => End.ToString("dd/MM/yyyy", L10n.Culture);
     public long? Wage => Person.Wage;
-    public string Criterion => Profile?.Label ?? "—";
+    public string Criterion => Profile?.Key == "analyst" && Person.JobFamilyOnly ? Person.RoleDisplay : Profile?.Label ?? "—";
     public string Recommendation => L10n.Get("PlanAdvice_" + Advice);
     public StaffCandidate? BestPlausible => Alternatives.FirstOrDefault(c => c.Interest.Band == StaffInterest.Likely);
     public StaffCandidate? Proposed => BestPlausible ?? Alternatives.FirstOrDefault();
@@ -20,7 +20,17 @@ public sealed record StaffRenewal(StaffRow Person, DateTime End, int Days, Staff
     public double? ReplacementStars => Proposed?.RoleStars;
     public string ReplacementTeam => Proposed?.Team ?? "—";
     public int BetterCount => Alternatives.Count;
-    public string Explanation => L10n.Get("PlanReason_" + Advice);
+    public string Explanation
+    {
+        get
+        {
+            string text = L10n.Get("PlanReason_" + Advice);
+            var missing = Profile?.Weights.Keys.Where(k => StaffRecruitment.Attribute(Person,k) is null).ToArray() ?? [];
+            if (Advice == StaffRenewalAdvice.Review && missing.Length > 0)
+                text = L10n.Format("PlanMissingAttributes", string.Join(", ", missing.Select(k=>L10n.Get("StaffAttribute_"+k))));
+            return text + (StaffRecruitment.AnalystJob(Person).HasValue ? " " + L10n.Get("AnalystCategoryNote") : "");
+        }
+    }
 }
 
 // Read-only renewal advice: compare the same job/category on identical /20 scales.
@@ -54,10 +64,11 @@ public static class StaffPlanning
             if (ready && profile is not null && quality.HasValue)
             {
                 string target = StaffSquads.TargetFor(person);
-                string rankKey = profile.Key + "|" + target;
+                int? analystCode = StaffRecruitment.AnalystJob(person);
+                string rankKey = profile.Key + "|" + target + "|" + analystCode;
                 if (!ranks.TryGetValue(rankKey, out var ranked))
-                    ranks[rankKey] = ranked = StaffRecruitment.Rank(market!, profile, offer, currentJob: person.JobKey, targetSquad: target)
-                        .Where(c => !ownIds.Contains(c.Uid) && !c.Person.JobFamilyOnly).ToArray();
+                    ranks[rankKey] = ranked = StaffRecruitment.Rank(market!, profile, offer, currentJob: person.JobKey, targetSquad: target, currentJobCode: analystCode)
+                        .Where(c => !ownIds.Contains(c.Uid) && StaffRecruitment.CanAssessCurrent(c.Person)).ToArray();
                 alternatives = ranked.Where(c => c.Quality is double q && q >= quality.Value + MeaningfulGain).ToArray();
             }
             var advice = !ready || !quality.HasValue ? StaffRenewalAdvice.Review :

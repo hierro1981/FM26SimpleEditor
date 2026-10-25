@@ -64,9 +64,11 @@ public static class StaffRecruitment
         Role("doctor")
     ]);
     public static IReadOnlyList<StaffSearchProfile> Training { get; } = CoachingStars.Categories.Select(c => new StaffSearchProfile(c.Key, c.Weights, c.Key)).ToArray();
+    public static int? AnalystJob(StaffRow person) => !person.IsHumanManager && person.JobKey == "analyst" && person.JobCode is int code && code is >= 0 and <= 255 && (code & 254) is 58 or 60 or 62 ? code & 254 : null;
+    public static bool CanAssessCurrent(StaffRow person) => person.JobKey == "analyst" ? AnalystJob(person).HasValue : !person.JobFamilyOnly;
     public static IReadOnlyList<StaffSearchProfile> CurrentProfiles(StaffRow person)
     {
-        if (person.IsHumanManager || !person.JobCode.HasValue || person.JobFamilyOnly) return [];
+        if (person.IsHumanManager || !person.JobCode.HasValue || !CanAssessCurrent(person)) return [];
         var job = Roles.SingleOrDefault(p => p.Key == person.JobKey);
         return job is null ? [] : new[] { job }.Concat(Training.Where(p => DesiredJob(p) == person.JobKey)).ToArray();
     }
@@ -85,7 +87,7 @@ public static class StaffRecruitment
     }
     public static double? CurrentStars(StaffRow person) => CurrentProfile(person) is StaffSearchProfile profile ? Stars(person, profile) : null;
     public static string CurrentStarsTooltip(StaffRow person) =>
-        (CurrentProfile(person) is StaffSearchProfile profile ? profile.Label + "\n" : "") + L10n.Get("StaffCurrentRoleStarsNote");
+        (CurrentProfile(person) is StaffSearchProfile profile ? profile.Label + "\n" : "") + L10n.Get("StaffCurrentRoleStarsNote") + (AnalystJob(person).HasValue ? "\n" + L10n.Get("AnalystCategoryNote") : "");
     public static int? Attribute(StaffRow person, string key) => person.Attributes.TryGetValue(key, out int n) && n is >= 1 and <= 20 ? n : null;
     public static double? Quality(StaffRow person, StaffSearchProfile profile)
     {
@@ -120,6 +122,8 @@ public static class StaffRecruitment
         if (new[] { "home", "current", "world" }.All(k => person.Reputation.TryGetValue(k, out int value) && value is >= 1 and <= 10000))
             reasons.Add(L10n.Format("RecruitPersonalReputation", person.Reputation.GetValueOrDefault("home"), person.CurrentReputation, person.Reputation.GetValueOrDefault("world")));
         else reasons.Add(L10n.Get("RecruitPersonalReputationMissing"));
+        if (AnalystJob(person) is int analystCode)
+            reasons.Add(L10n.Format("AnalystVariantContext", analystCode) + " " + L10n.Get("AnalystCategoryNote"));
         if (JobPreference(person, profile) is int preference)
             reasons.Add(L10n.Format("RecruitJobPreference", L10n.Get("StaffJob_" + DesiredJob(profile)), preference));
         if (expired) { score += 12; reasons.Add(L10n.Get("RecruitExpired")); }
@@ -170,7 +174,7 @@ public static class StaffRecruitment
         }
         return new(band, score, reasons, noClearUpgrade);
     }
-    public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "", string? currentJob = null, string targetSquad = "any", string currentSquad = "any", int minimumYouthWork = 12)
+    public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "", string? currentJob = null, string targetSquad = "any", string currentSquad = "any", int minimumYouthWork = 12, int? currentJobCode = null)
     {
         if (data.Status != "ready") return [];
         // Avoid treating the easiest of two concurrent employers as the only job to leave.
@@ -180,6 +184,7 @@ public static class StaffRecruitment
             .Where(p => string.IsNullOrEmpty(currentJob) || (currentJob == "__unknown"
                 ? !p.JobCode.HasValue || !Roles.Any(r => r.Key == p.JobKey)
                 : p.JobCode.HasValue && p.JobKey == currentJob))
+            .Where(p => !currentJobCode.HasValue || currentJobCode is >= 0 and <= 255 && AnalystJob(p) == (currentJobCode.Value & 254))
             .Where(p => StaffSquads.Matches(p, currentSquad))
             .Where(p => !StaffSquads.Youth(targetSquad) || !StaffSquads.UsesYouthWork(profile) ||
                 Attribute(p, "working_with_youngsters") is int youth && youth >= Math.Clamp(minimumYouthWork, 1, 20))

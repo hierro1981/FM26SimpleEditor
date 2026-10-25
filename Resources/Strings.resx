@@ -2344,4 +2344,8 @@ Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre st
   <data name="StaffSquad_u23" xml:space="preserve"><value>U23</value></data>
   <data name="StaffAdditionalSquad" xml:space="preserve"><value>Altra squadra</value></data>
   <data name="StaffTypeEvidence" xml:space="preserve"><value>Tipo squadra letto: {0} · Campo limite età: {1}.</value></data>
+  <data name="AnalystCategoryNote" xml:space="preserve"><value>Valutazione generica della categoria Analista, non di una specializzazione identificata. Per i rinnovi si confrontano solo candidati con la stessa variante contrattuale.</value></data>
+  <data name="AnalystVariantContext" xml:space="preserve"><value>Variante dell’incarico analista: {0}; nome esatto non ancora identificato.</value></data>
+  <data name="RecruitAnalystVariantChoice" xml:space="preserve"><value>Analista · variante {0}</value></data>
+  <data name="PlanMissingAttributes" xml:space="preserve"><value>Valutazione incompleta: mancano attributi validi per {0}.</value></data>
 </root>

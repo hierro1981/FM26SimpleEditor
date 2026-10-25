@@ -23,7 +23,7 @@ public sealed class StaffPlanningPanel : UserControl
     private string sort = "ContractEnd";
     private bool descending;
     public event Action? ReloadRequested;
-    public event Action<StaffSearchProfile, string?, long, string>? FindStaffRequested;
+    public event Action<StaffSearchProfile, string?, long, string, int?>? FindStaffRequested;
     public StaffPlanningPanel()
     {
         Dock = DockStyle.Fill;
@@ -107,13 +107,13 @@ public sealed class StaffPlanningPanel : UserControl
         list.CellToolTipTextNeeded += (_, e) =>
         {
             if (e.RowIndex < 0 || e.ColumnIndex < 0 || list.Rows[e.RowIndex].DataBoundItem is not StaffRenewal row) return;
-            e.ToolTipText = list.Columns[e.ColumnIndex].Name == "Team" ? row.Person.TeamTooltip :
+            e.ToolTipText = list.Columns[e.ColumnIndex].Name == "Role" ? row.Person.RoleTooltip : list.Columns[e.ColumnIndex].Name == "Team" ? row.Person.TeamTooltip :
                 list.Columns[e.ColumnIndex].Name == "ReplacementTeam" ? row.Proposed?.Person.TeamTooltip ?? "" : "";
         };
         alternatives.CellToolTipTextNeeded += (_, e) =>
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && alternatives.Rows[e.RowIndex].DataBoundItem is StaffCandidate c)
-                e.ToolTipText = alternatives.Columns[e.ColumnIndex].Name == "CopyName" ? L10n.Get("RecruitCopyName") : c.Person.TeamTooltip + "\n" + string.Join("\n", c.Interest.Reasons);
+                e.ToolTipText = alternatives.Columns[e.ColumnIndex].Name == "CopyName" ? L10n.Get("RecruitCopyName") : c.Person.RoleTooltip + "\n" + c.Person.TeamTooltip + "\n" + string.Join("\n", c.Interest.Reasons);
         };
         criterion.SelectedIndexChanged += (_, _) =>
         {
@@ -128,7 +128,7 @@ public sealed class StaffPlanningPanel : UserControl
     private void OpenRecruitment(StaffRenewal? row)
     {
         if (row?.Profile is StaffSearchProfile profile)
-            FindStaffRequested?.Invoke(profile, row.Person.JobKey, (long)offer.Value, StaffSquads.TargetFor(row.Person));
+            FindStaffRequested?.Invoke(profile, row.Person.JobKey, (long)offer.Value, StaffSquads.TargetFor(row.Person), StaffRecruitment.AnalystJob(row.Person));
     }
     private StaffRenewal? Selected => list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem as StaffRenewal;
     private static DataGridView Grid(string name) => new() { Name = name, Dock = DockStyle.Fill, ReadOnly = true, AutoGenerateColumns = false,

@@ -160,7 +160,7 @@ subteams; their UIDs are all excluded from external alternatives.
 For a known exact job, start with its shared recruitment profile. For coaches,
 choose the highest readable relevant training-category score; this is not a
 read training assignment. The user can switch to the job profile or another
-relevant training category for the selected employee. Family-only jobs and
+relevant training category for the selected employee. Unsupported family-only jobs and
 doctors without a quality formula get **Review required**, not fabricated
 quality. All job and training stars reuse recruitment/CoachingStars unchanged.
 
@@ -275,3 +275,31 @@ squad filtering. The current save calibrates its own mapping using multiple
 independent club references. Unknown cases still use the slot fallback.
 Planning's cached rankings include target squad in their key and apply the
 same destination/youth-work rules as the linked search.
+
+## Analyst category comparisons (v15.7.4)
+
+A new read of the supplied save confirmed six own analysts (five base code 60,
+one 62), all with valid analysing_data, tactical_knowledge and judging_ability.
+The external pool held 2,987 analyst rows: 1,400 code 58, 1,510 code 60 and 77
+code 62, with those three attributes readable. The previous planning blanket
+ban on category-only jobs, rather than missing attributes, prevented advice.
+These observations do not establish exact specialisation or seniority labels.
+
+Known analyst variants 58/60/62 can now use the existing generic profile:
+(6 × analysing_data + 3 × tactical_knowledge + judging_ability) / 10. Stars use
+the shared job-profile conversion, not CA or a claimed native analyst formula.
+The category-only flag and labels remain; tooltips and assessments explicitly
+state the generic nature and raw contract variant. Other ambiguous job families
+and doctors without an established quality formula keep their safeguards.
+
+Renewal alternatives require the **same base native job code**, masking only the
+already-established dual player/staff bit. Ranking caches include criterion,
+destination squad and analyst variant. Different analyst variants are not
+silently treated as interchangeable. Normal quality improvement and interest
+rules still apply. Missing inputs retain Review with the specific field names.
+
+Current-job search offers generic Analyst (all variants) and explicit variants
+58/60/62, without invented specialist names. Planning button/double-click passes
+its variant, destination and salary; language changes retain semantic selection.
+Selected-profile search remains a generic skill assessment. No native contract
+mapping, acceptance formula or training-star weights were changed.

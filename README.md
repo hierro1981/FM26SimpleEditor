@@ -89,6 +89,7 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 - **Pianificazione staff:** filtro contratti scaduti / meno di 3 giorni rimasti, meno di 6 mesi (predefinito), meno di 12 mesi oppure tutti. Le date si basano sul calendario del salvataggio.
 - Alternative migliori inizialmente ordinate per punteggio decrescente; clic sulle intestazioni per ordinare le colonne.
+- Colonne **CA e PA** per lo staff attuale e le alternative migliori, con ordinamento numerico; i dati mancanti appaiono come un trattino.
 - Dettagli compatti solo passando sull’icona **i** accanto al nome, per lasciare leggibili le tabelle.
 
 ### v15.7.4

@@ -125,6 +125,7 @@ internal static class StaffPlanningChecks
         panel.StaffRequested += _ => staffRequests++; panel.RecruitmentRequested += _ => marketRequests++;
         host.Show(); var tabs = All(panel).OfType<TabControl>().Single(); tabs.SelectedIndex=5; Application.DoEvents();
         check(staffRequests==1 && marketRequests==0, "opening planning loads own staff before requesting market");
+        current.Ca=91; current.Pa=145; better.Ca=123; better.Pa=166;
         own.Staff = [current]; panel.SetStaffData(own); panel.EnsureRecruitmentLoaded();
         check(marketRequests==1, "planning chains existing recruitment after own staff completes");
         panel.SetRecruitmentData(market); Application.DoEvents();
@@ -143,13 +144,18 @@ internal static class StaffPlanningChecks
         check(!grid.Columns.Contains("Club") && grid.Columns["ReplacementStars"].CellTemplate is StarRatingCell &&
             grid.Rows[0].Cells["ReplacementStars"].Value is double replacementStars && replacementStars==((StaffRenewal)grid.Rows[0].DataBoundItem).Proposed?.RoleStars,
             "renewal grid removes own-club column and shows the proposed candidate stars");
+        check(grid.Rows[0].Cells["Ca"].Value is int ca && ca==91 && grid.Rows[0].Cells["Pa"].Value is int pa && pa==145 &&
+            alts.Rows[0].Cells["Ca"].Value is int altCa && altCa==123 && alts.Rows[0].Cells["Pa"].Value is int altPa && altPa==166 &&
+            new[]{grid,alts}.All(g=>new[]{"Ca","Pa"}.All(k=>g.Columns[k].HeaderText==k.ToUpperInvariant() &&
+                g.Columns[k].SortMode==DataGridViewColumnSortMode.Programmatic && g.Columns[k].DefaultCellStyle.Alignment==DataGridViewContentAlignment.MiddleRight)),
+            "planning exposes read-only current and alternative CA/PA with numeric sortable columns");
         check(!All(panel).OfType<ComboBox>().Single(c=>c.Name=="MySquadScope").Enabled, "player squad scope is disabled for staff planning");
         var expiry = All(panel).OfType<ComboBox>().Single(c=>c.Name=="PlanExpiry");
         check(expiry.SelectedIndex==(int)StaffContractWindow.SixMonths && expiry.Items.Count==4,
             "planning starts with the six-month expiry filter");
-        var highest=Person(31,20,club:2);highest.ClubReputation=6308;
-        var middle=Person(32,15,club:2);middle.ClubReputation=4000;
-        var lower=Person(33,12,club:2);lower.ClubReputation=4000;
+        var highest=Person(31,20,club:2);highest.ClubReputation=6308;highest.Ca=160;highest.Pa=180;
+        var middle=Person(32,15,club:2);middle.ClubReputation=4000;middle.Ca=110;middle.Pa=155;
+        var lower=Person(33,12,club:2);lower.ClubReputation=4000;lower.Ca=95;lower.Pa=null;
         market.Staff=[lower,middle,highest];panel.SetRecruitmentData(market);
         check(alts.Rows.Cast<DataGridViewRow>().Select(r=>((StaffCandidate)r.DataBoundItem).Quality).SequenceEqual(new double?[]{20,15,12}),
             "alternatives default to score descending even when the strongest has borderline interest");
@@ -163,6 +169,16 @@ internal static class StaffPlanningChecks
             SortAlternative(column);
             check(alts.Columns[column].SortMode==DataGridViewColumnSortMode.Programmatic && alts.Columns[column].HeaderCell.SortGlyphDirection!=SortOrder.None,
                 "alternative column is sortable: "+column);
+        }
+        foreach(string field in new[]{"Ca","Pa"})
+        {
+            SortAlternative(field);
+            check(((StaffCandidate)alts.Rows[0].DataBoundItem).Uid==highest.Uid,
+                "alternative "+field+" sorts numerically descending");
+            SortAlternative(field);
+            check(((StaffCandidate)alts.Rows[0].DataBoundItem).Uid==(field=="Ca" ? lower.Uid : middle.Uid) &&
+                (field!="Pa" || alts.Rows[2].Cells["Pa"].FormattedValue?.ToString()=="—"),
+                "alternative "+field+" sorts ascending with missing values last and no invented ability");
         }
         SortAlternative("Quality");
         check(alts.Rows.Count==3 && alts.Columns["Quality"].HeaderCell.SortGlyphDirection==SortOrder.Descending,

@@ -12,6 +12,8 @@ public sealed record StaffRenewal(StaffRow Person, DateTime End, int Days, Staff
     public string Role => Person.RoleDisplay;
     public string Team => Person.TeamDisplay;
     public string ContractEnd => End.ToString("dd/MM/yyyy", L10n.Culture);
+    public int? Ca => Person.Ca;
+    public int? Pa => Person.Pa;
     public long? Wage => Person.Wage;
     public string Criterion => Profile?.Key == "analyst" && Person.JobFamilyOnly ? Person.RoleDisplay : Profile?.Label ?? "—";
     public string Recommendation => L10n.Get("PlanAdvice_" + Advice);

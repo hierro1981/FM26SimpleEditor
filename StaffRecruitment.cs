@@ -24,6 +24,7 @@ public sealed record StaffCandidate(StaffRow Person, StaffSearchProfile Profile,
     public string CurrentRole => Person.RoleDisplay;
     public string Team => Person.TeamDisplay;
     public int? Ca => Person.Ca;
+    public int? Pa => Person.Pa;
     public int? CurrentReputation => Person.CurrentReputation;
     public int? JobPreference => StaffRecruitment.JobPreference(Person, Profile);
     public int? Age => Person.Age;

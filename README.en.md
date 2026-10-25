@@ -89,6 +89,7 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 - **Staff planning:** contract filters for expired / fewer than 3 days left, fewer than 6 months (default), fewer than 12 months, or all. Dates use the save calendar.
 - Better alternatives start in descending score order; click headers to sort columns.
+- **CA and PA** columns for current staff and better alternatives, with numeric sorting; missing values appear as a dash.
 - Compact details appear only when hovering over the **i** icon beside the name, keeping tables readable.
 
 ### v15.7.4

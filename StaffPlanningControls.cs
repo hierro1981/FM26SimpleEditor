@@ -61,6 +61,7 @@ public sealed class StaffPlanningPanel : UserControl
         Add(list, "ContractEnd", "Text_51bf843f1751", 110, true); Add(list, "Days", "PlanDays", 85, true);
         Add(list, "Recommendation", "PlanRecommendation", 240);
         Add(list, "Quality", "RecruitQuality", 95, true); Add(list, "Stars", "RecruitRoleStars", 170, true, true);
+        Add(list, "Ca", "", 60, true); Add(list, "Pa", "", 60, true);
         Add(list, "Wage", "StaffWage", 145, true); Add(list, "Replacement", "PlanBestAlternative", 190); Add(list, "ReplacementStars", "PlanReplacementStars", 180, true, true); Add(list, "ReplacementTeam", "PlanReplacementTeam", 210); Add(list, "BetterCount", "PlanBetterCount", 100, true);
         Add(list, "Criterion", "PlanCriterion", 130);
         list.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -80,6 +81,7 @@ public sealed class StaffPlanningPanel : UserControl
         Add(alternatives, "Name", "Text_f537c6bd038e", 180); CopyColumn(alternatives); InfoColumn(alternatives);
         Add(alternatives, "Club", "StaffClub", 170); Add(alternatives, "CurrentRole", "StaffRole", 220); Add(alternatives, "Team", "StaffTeam", 210);
         Add(alternatives, "Quality", "RecruitQuality", 95, true); Add(alternatives, "RoleStars", "RecruitRoleStars", 170, true, true);
+        Add(alternatives, "Ca", "", 60, true); Add(alternatives, "Pa", "", 60, true);
         Add(alternatives, "InterestLabel", "RecruitInterest", 220); Add(alternatives, "ClubReputation", "RecruitClubReputation", 150, true);
         Add(alternatives, "Wage", "StaffWage", 145, true); Add(alternatives, "MainAttributes", "RecruitAttributes", 650);
         Add(attributes, "Attribute", "Text_51df0484073a", 190); Add(attributes, "Current", "PlanCurrent", 100, true);
@@ -111,7 +113,7 @@ public sealed class StaffPlanningPanel : UserControl
         {
             var field = alternatives.Columns[e.ColumnIndex].Name;
             if (field is "CopyName" or "Info") return;
-            alternativeDescending = alternativeSort == field ? !alternativeDescending : field is "Quality" or "RoleStars" or "ClubReputation" or "Wage";
+            alternativeDescending = alternativeSort == field ? !alternativeDescending : field is "Quality" or "RoleStars" or "ClubReputation" or "Wage" or "Ca" or "Pa";
             alternativeSort = field; RefreshAlternatives();
         };
         foreach (var grid in new[] { list, alternatives })
@@ -152,7 +154,7 @@ public sealed class StaffPlanningPanel : UserControl
         MultiSelect = false, SelectionMode = DataGridViewSelectionMode.FullRowSelect, ScrollBars = ScrollBars.Both, BackgroundColor = SystemColors.Window };
     private static void Add(DataGridView grid, string field, string header, int width, bool numeric = false, bool stars = false)
     {
-        var column = new DataGridViewTextBoxColumn { Name = field, DataPropertyName = field, HeaderText = L10n.Get(header), Width = width,
+        var column = new DataGridViewTextBoxColumn { Name = field, DataPropertyName = field, HeaderText = header.Length == 0 ? field.ToUpperInvariant() : L10n.Get(header), Width = width,
             SortMode = grid.Name is "PlanList" or "PlanAlternatives" ? DataGridViewColumnSortMode.Programmatic : DataGridViewColumnSortMode.NotSortable };
         column.DefaultCellStyle.NullValue = "—";
         if (numeric) column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -214,7 +216,7 @@ public sealed class StaffPlanningPanel : UserControl
         var rows = cached ??= own is null ? [] : StaffPlanning.Build(own, market, (long)offer.Value, choices, (StaffContractWindow)expiry.SelectedIndex);
         var filtered = rows.Where(p => string.IsNullOrWhiteSpace(search.Text) || p.Name.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Role.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Team.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Uid.ToString().Contains(search.Text.Trim()));
         object? Value(StaffRenewal p) => sort switch { "Name" => p.Name, "Role" => p.Role, "Team" => p.Team, "Days" => p.Days,
-            "Recommendation" => p.Advice, "Criterion" => p.Criterion, "Quality" => p.Quality, "Stars" => p.Stars, "Wage" => p.Wage,
+            "Recommendation" => p.Advice, "Criterion" => p.Criterion, "Quality" => p.Quality, "Stars" => p.Stars, "Wage" => p.Wage, "Ca" => p.Ca, "Pa" => p.Pa,
             "Replacement" => p.Replacement, "ReplacementStars" => p.ReplacementStars, "ReplacementTeam" => p.ReplacementTeam, "BetterCount" => p.BetterCount, _ => p.End };
         var known = filtered.Where(p => Value(p) is not null);
         var sorted = (descending ? known.OrderByDescending(Value) : known.OrderBy(Value)).ThenBy(p => p.Name).ThenBy(p => p.Uid).Concat(filtered.Where(p => Value(p) is null)).ToList();
@@ -246,7 +248,7 @@ public sealed class StaffPlanningPanel : UserControl
         {
             "Name" => c.Name, "Club" => c.Club, "CurrentRole" => c.CurrentRole, "Team" => c.Team,
             "RoleStars" => c.RoleStars, "InterestLabel" => c.Interest.Band, "ClubReputation" => c.ClubReputation,
-            "Wage" => c.Wage, "MainAttributes" => c.MainAttributes, _ => c.Quality
+            "Wage" => c.Wage, "Ca" => c.Ca, "Pa" => c.Pa, "MainAttributes" => c.MainAttributes, _ => c.Quality
         };
         var known = candidates.Where(c => Value(c) is not null);
         var sorted = (alternativeDescending ? known.OrderByDescending(Value) : known.OrderBy(Value))

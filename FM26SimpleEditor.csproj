@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <ApplicationIcon>Assets\App.ico</ApplicationIcon>
-    <Version>15.8.0</Version>
+    <Version>15.8.1</Version>
     <NeutralLanguage>it</NeutralLanguage>
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>

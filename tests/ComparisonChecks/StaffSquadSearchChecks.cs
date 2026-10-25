@@ -40,6 +40,15 @@ internal static class StaffSquadSearchChecks
             "youth filtering does not alter training star formulas");
         var physio=StaffRecruitment.Roles.Single(p=>p.Key=="physio");
         check(StaffRecruitment.Rank(data,physio,targetSquad:"u20").Any(c=>c.Uid==5),"medical searches do not use coaching youth-work eligibility");
+        check(StaffSquads.AssignmentPriority(youth,"u18")==0 && StaffSquads.AssignmentPriority(unnamed,"u18")==1 &&
+            StaffSquads.AssignmentPriority(missing,"u18")==2 && StaffSquads.AssignmentPriority(first,"u18")==3 &&
+            StaffSquads.AssignmentPriority(first,"first")==0,
+            "youth vacancy prefers known youth staff over unnamed subteams, unknown assignments and first teams");
+        foreach(var key in first.Attributes.Keys.ToArray()) first.Attributes[key]=20;
+        var preferred=StaffRecruitment.Rank(data,coach,targetSquad:"u18");
+        check(preferred.First().Uid==youth.Uid && preferred.Last().Uid==first.Uid && preferred.Last().Quality>preferred.First().Quality &&
+            preferred.First().Quality==StaffRecruitment.Quality(youth,coach),
+            "squad priority precedes ability without changing ability, stars or interest eligibility");
         using var host=new Form {Size=new Size(1000,800)};using var panel=new StaffRecruitmentPanel();host.Controls.Add(panel);
         panel.ClearForClub(1);panel.SetData(data);host.Show();Application.DoEvents();
         var target=All(panel).OfType<ComboBox>().Single(c=>c.Name=="RecruitTargetSquad");
@@ -49,10 +58,17 @@ internal static class StaffSquadSearchChecks
         panel.ApplyPlanningSearch(coach,"coach",2000,"u20");Application.DoEvents();
         check(target.SelectedItem!.ToString()=="U20" && current.SelectedIndex==0 && minimum.Enabled && minimum.Value==12 && grid.Columns.Contains("YouthWork") && grid.Rows.Count==3,
             "recruitment UI supports youth vacancy with adjustable youth-work minimum and visible attribute");
+        var prefer=All(panel).OfType<CheckBox>().Single(c=>c.Name=="RecruitPreferSubteams");
+        check(prefer.Enabled && prefer.Checked && ((StaffCandidate)grid.Rows[0].DataBoundItem).Uid==youth.Uid,
+            "recruitment preserves squad priority instead of overwriting it with the column score sort");
+        prefer.Checked=false;
+        check(((StaffCandidate)grid.Rows[0].DataBoundItem).Uid==first.Uid,
+            "disabling squad priority restores global score sorting including first-team staff");
+        prefer.Checked=true;
         current.SelectedIndex=current.Items.Cast<object>().ToList().FindIndex(c=>c.ToString()=="U20");Application.DoEvents();
         check(grid.Rows.Count==1 && ((StaffCandidate)grid.Rows[0].DataBoundItem).Uid==2,"current-squad UI can narrow a youth search to existing U20 staff");
         L10n.SetLanguage("en");panel.SetLanguage();Application.DoEvents();
-        check(target.SelectedItem!.ToString()=="U20" && current.SelectedItem!.ToString()=="U20" && grid.Rows.Count==1 && minimum.Value==12,
+        check(target.SelectedItem!.ToString()=="U20" && current.SelectedItem!.ToString()=="U20" && grid.Rows.Count==1 && minimum.Value==12 && prefer.Checked,
             "language switch preserves desired and current squad keys and youth minimum");
         host.Width=760;Application.DoEvents();
         check(grid.Height>60 && target.Visible && current.Visible,"staff squad search remains usable in narrow windows");

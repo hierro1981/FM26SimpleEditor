@@ -10,6 +10,7 @@ public sealed class StaffPlanningPanel : UserControl
     private readonly ComboBox expiry = new() { Name = "PlanExpiry", DropDownStyle = ComboBoxStyle.DropDownList, Width = 210, DropDownWidth = 300 };
     private string alternativeSort = "Quality";
     private bool alternativeDescending = true;
+    private readonly CheckBox preferSubteams = new() { Name = "PlanPreferSubteams", Text = L10n.Get("StaffPreferSubteams"), AutoSize = true, Checked = true };
     private readonly Button findStaff = new() { Name = "PlanFindStaff", Text = L10n.Get("PlanFindStaff"), AutoSize = true };
     private readonly Label status = new() { Name = "PlanStatus", Dock = DockStyle.Fill, AutoSize = true, ForeColor = Color.DimGray };
     private readonly Label explanation = new() { Name = "PlanExplanation", Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(4) };
@@ -46,7 +47,7 @@ public sealed class StaffPlanningPanel : UserControl
         detail.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         detail.RowStyles.Add(new RowStyle(SizeType.AutoSize)); detail.RowStyles.Add(new RowStyle(SizeType.Percent, 25)); detail.RowStyles.Add(new RowStyle(SizeType.Percent, 75));
         var profileTools = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, WrapContents = true };
-        profileTools.Controls.AddRange([new Label { Text = L10n.Get("PlanCriterion"), AutoSize = true, Margin = new Padding(6,8,0,0) }, criterion, findStaff]);
+        profileTools.Controls.AddRange([new Label { Text = L10n.Get("PlanCriterion"), AutoSize = true, Margin = new Padding(6,8,0,0) }, criterion, findStaff, preferSubteams]);
         detail.Controls.Add(profileTools, 0, 0);
         var reasonScroll = new Panel { Name = "PlanReasonScroll", Dock = DockStyle.Fill, AutoScroll = true };
         reasonScroll.Controls.Add(explanation); detail.Controls.Add(reasonScroll, 0, 1);
@@ -103,6 +104,7 @@ public sealed class StaffPlanningPanel : UserControl
             var field = list.Columns[e.ColumnIndex].Name; descending = sort == field && !descending; sort = field; RefreshRows();
         };
         list.SelectionChanged += (_, _) => { if (!binding) Details(); };
+        preferSubteams.CheckedChanged += (_, _) => { if (!binding) RefreshAlternatives(); };
         alternatives.SelectionChanged += (_, _) => { if (!binding) AttributeComparison(); };
         list.CellFormatting += (_, e) =>
         {
@@ -203,6 +205,7 @@ public sealed class StaffPlanningPanel : UserControl
         binding = true; expiry.Items.Clear();
         expiry.Items.AddRange(Enum.GetValues<StaffContractWindow>().Select(w => (object)L10n.Get("PlanWindow_" + w)).ToArray());
         expiry.SelectedIndex = selectedExpiry; binding = false;
+        tips.SetToolTip(preferSubteams, L10n.Get("StaffPreferSubteamsHint"));
         tips.SetToolTip(expiry, L10n.Get("PlanExpiryHint"));
         tips.SetToolTip(offer, L10n.Get("RecruitOfferHint"));
         foreach (var grid in new[] { list, alternatives }) ((DataGridViewButtonColumn)grid.Columns["CopyName"]).Text = grid.Columns["CopyName"].ToolTipText = L10n.Get("RecruitCopyName");
@@ -233,6 +236,7 @@ public sealed class StaffPlanningPanel : UserControl
     {
         var row = Selected; binding = true; criterion.Items.Clear();
         if (row is not null) { criterion.Items.AddRange(StaffPlanning.Profiles(row.Person).Cast<object>().ToArray()); criterion.SelectedIndex = criterion.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p => p.Key == row.Profile?.Key); }
+        preferSubteams.Enabled = row is not null && StaffSquads.SubteamTarget(StaffSquads.TargetFor(row.Person));
         criterion.Enabled = criterion.Items.Count > 1; findStaff.Enabled = row?.Profile is not null;
         binding = false; RefreshAlternatives(); binding = true;
         int count = alternatives.Rows.Count;
@@ -242,8 +246,10 @@ public sealed class StaffPlanningPanel : UserControl
     private void RefreshAlternatives()
     {
         var selected = alternatives.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem as StaffCandidate;
-        // Keep the best 50 by score even when sorting another column.
-        var candidates = Selected?.Alternatives.OrderByDescending(c => c.Quality).ThenBy(c => c.Name).ThenBy(c => c.Uid).Take(50).ToArray() ?? [];
+        // Choose the 50 candidates after applying squad priority, before sorting their columns.
+        string target = Selected is StaffRenewal row ? StaffSquads.TargetFor(row.Person) : "any";
+        int Priority(StaffCandidate c) => preferSubteams.Checked ? StaffSquads.AssignmentPriority(c.Person, target) : 0;
+        var candidates = Selected?.Alternatives.OrderBy(Priority).ThenByDescending(c => c.Quality).ThenBy(c => c.Name).ThenBy(c => c.Uid).Take(50).ToArray() ?? [];
         object? Value(StaffCandidate c) => alternativeSort switch
         {
             "Name" => c.Name, "Club" => c.Club, "CurrentRole" => c.CurrentRole, "Team" => c.Team,
@@ -252,7 +258,7 @@ public sealed class StaffPlanningPanel : UserControl
         };
         var known = candidates.Where(c => Value(c) is not null);
         var sorted = (alternativeDescending ? known.OrderByDescending(Value) : known.OrderBy(Value))
-            .ThenBy(c => c.Name).ThenBy(c => c.Uid).Concat(candidates.Where(c => Value(c) is null)).ToList();
+            .ThenBy(c => c.Name).ThenBy(c => c.Uid).Concat(candidates.Where(c => Value(c) is null)).OrderBy(Priority).ToList();
         binding = true; tips.Hide(alternatives);
         alternatives.DataSource = new BindingList<StaffCandidate>(sorted); alternatives.ClearSelection();
         foreach (DataGridViewColumn col in alternatives.Columns)

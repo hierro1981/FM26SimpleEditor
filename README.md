@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.8.0 (in sviluppo)
+# FM26 Simple Editor · v15.8.1 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.8.1 (in sviluppo)
+
+- **Alternative per le giovanili:** precedenza a chi lavora già nelle squadre giovanili, poi altre sottosquadre, incarichi non identificati e prime squadre, anche con il limite dei 50 risultati.
+- **Privilegia staff già nelle sottosquadre** è attivo inizialmente per le destinazioni nelle sottosquadre, sia nella pianificazione sia in Trova staff. Le colonne ordinano entro ciascun gruppo; disattivalo per una classifica globale. La squadra attuale rimane visibile; punteggi e stelle non cambiano.
+- Corretta l’intestazione delle alternative, che dichiarava erroneamente la precedenza per interesse.
 
 ### v15.8.0 (in sviluppo)
 

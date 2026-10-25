@@ -208,6 +208,33 @@ internal static class StaffPlanningChecks
         better.Attributes.Remove("working_with_youngsters");panel.SetRecruitmentData(market);
         check(attrs.Rows[0].Cells["Alternative"].FormattedValue?.ToString()=="—" && attrs.Rows[0].Cells["Delta"].Value?.ToString()=="—",
             "missing alternative youth-work ability is explicit rather than substituted");
+        var youthManager=Person(500,10);youthManager.JobKey="manager";youthManager.JobCode=16;
+        youthManager.TeamId=5500;youthManager.TeamSlot=2;youthManager.TeamName="U18";
+        var youthCandidate=Person(501,14,club:2);youthCandidate.JobKey="manager";youthCandidate.JobCode=16;
+        youthCandidate.TeamId=5501;youthCandidate.TeamSlot=1;youthCandidate.TeamName="U20";
+        var seniorManagers=Enumerable.Range(600,60).Select(i=>
+        {
+            var p=Person((uint)i,20,club:2);p.JobKey="manager";p.JobCode=16;p.TeamId=(uint)(6000+i);p.TeamSlot=0;return p;
+        }).ToArray();
+        own.Staff=[youthManager];market.Staff=[..seniorManagers,youthCandidate];panel.SetStaffData(own);panel.SetRecruitmentData(market);
+        var preferPlanning=All(panel).OfType<CheckBox>().Single(c=>c.Name=="PlanPreferSubteams");
+        check(preferPlanning.Enabled && preferPlanning.Checked && alts.Rows.Count==50 &&
+            ((StaffCandidate)alts.Rows[0].DataBoundItem).Uid==youthCandidate.Uid &&
+            grid.Rows[0].Cells["ReplacementTeam"].Value?.ToString()=="U20",
+            "U18 manager alternatives keep youth staff before 60 stronger first-team managers, before taking the best 50");
+        SortAlternative("Ca");
+        check(((StaffCandidate)alts.Rows[0].DataBoundItem).Uid==youthCandidate.Uid,
+            "planning column sorting respects current squad priority");
+        preferPlanning.Checked=false;
+        check(alts.Rows.Cast<DataGridViewRow>().All(r=>((StaffCandidate)r.DataBoundItem).Uid!=youthCandidate.Uid),
+            "planning priority switch restores top 50 by global score");
+        preferPlanning.Checked=true;SortAlternative("Quality");
+        All(panel).OfType<Button>().Single(b=>b.Name=="PlanFindStaff").PerformClick();Application.DoEvents();
+        var recruitGrid=All(panel).OfType<DataGridView>().Single(g=>g.Name=="RecruitList");
+        check(tabs.SelectedIndex==4 && ((StaffCandidate)recruitGrid.Rows[0].DataBoundItem).Uid==youthCandidate.Uid &&
+            All(panel).OfType<CheckBox>().Single(c=>c.Name=="RecruitPreferSubteams").Checked,
+            "planning shortcut preserves the U18 destination and activates existing youth-staff priority in search");
+        tabs.SelectedIndex=5;own.Staff=[current];market.Staff=[better];panel.SetStaffData(own);panel.SetRecruitmentData(market);
         better.Attributes["working_with_youngsters"]=16;current.TeamSlot=0;current.TeamName=null;panel.SetStaffData(own);panel.SetRecruitmentData(market);
         check(!attrs.Rows.Cast<DataGridViewRow>().Any(r=>r.Cells[0].Value?.ToString()==L10n.Get("StaffAttribute_working_with_youngsters")),
             "first-team comparison keeps its original profile without an unrelated extra attribute");

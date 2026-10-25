@@ -2286,7 +2286,7 @@ Hover over a position for its rating.</value>
   <data name="PlanRecommendation" xml:space="preserve"><value>Renewal advice</value></data>
   <data name="PlanBestAlternative" xml:space="preserve"><value>Alternative to assess</value></data>
   <data name="PlanBetterCount" xml:space="preserve"><value>Better alternatives</value></data>
-  <data name="PlanAlternatives" xml:space="preserve"><value>Better alternatives · up to 50 · plausible interest first</value></data>
+  <data name="PlanAlternatives" xml:space="preserve"><value>Better alternatives · up to 50</value></data>
   <data name="PlanAttributeComparison" xml:space="preserve"><value>Attribute comparison · select an alternative</value></data>
   <data name="PlanCurrent" xml:space="preserve"><value>Current staff</value></data>
   <data name="PlanAlternative" xml:space="preserve"><value>Alternative</value></data>
@@ -2354,4 +2354,6 @@ Training stars use the same calculation as the Staff page. Other stars describe 
   <data name="PlanWindow_TwelveMonths" xml:space="preserve"><value>Expiring (&lt;12 months)</value></data>
   <data name="PlanWindow_All" xml:space="preserve"><value>All</value></data>
   <data name="PlanExpiryHint" xml:space="preserve"><value>Uses the save date. Expired / &lt;3 days includes overdue contracts and those with fewer than 3 days left. The 6/12 month windows exclude overdue contracts. All includes every readable current or expired contract, excluding future starts and human managers.</value></data>
+  <data name="StaffPreferSubteams" xml:space="preserve"><value>Prioritise current subteam staff</value></data>
+  <data name="StaffPreferSubteamsHint" xml:space="preserve"><value>For a youth vacancy: youth staff first, then other subteams, unknown assignments and first teams. For other subteams, matching assignments come first. Column sorting applies within each priority group, before limiting results. Turn off to sort everybody together. Current assignment is shown in Job squad; it does not guarantee acceptance or change scores and stars.</value></data>
 </root>

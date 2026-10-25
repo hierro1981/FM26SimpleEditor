@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.8.0 (in development)
+# FM26 Simple Editor · v15.8.1 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.8.1 (in development)
+
+- **Youth staff alternatives:** staff already working in youth teams appear before other subteams, unknown assignments and first-team staff, even when limiting results to 50.
+- **Prioritise current subteam staff** is on by default for subteam vacancies, both in planning and staff search. Columns sort within each priority group; turn it off for a global ranking. Current assignments remain visible; scores and stars are unchanged.
+- Fixed the alternatives heading, which incorrectly claimed to prioritise interest.
 
 ### v15.8.0 (in development)
 

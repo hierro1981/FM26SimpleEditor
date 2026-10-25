@@ -17,6 +17,7 @@ public sealed class StaffRecruitmentPanel : UserControl
     private readonly NumericUpDown youthMinimum = new() { Name="RecruitYouthMinimum", Minimum=1, Maximum=20, Value=12, Width=55 };
     private readonly NumericUpDown offer = new() { Name = "RecruitWage", Minimum = 0, Maximum = 10000000, Increment = 100, ThousandsSeparator = true, Width = 125 };
     private readonly NumericUpDown limit = new() { Name = "RecruitLimit", Minimum = 10, Maximum = 500, Value = 50, Increment = 10, Width = 65 };
+    private readonly CheckBox preferSubteams = new() { Name = "RecruitPreferSubteams", Text = L10n.Get("StaffPreferSubteams"), AutoSize = true, Checked = true };
     private readonly CheckBox ignoreInterest = new() { Name = "RecruitIgnoreInterest", Text = L10n.Get("RecruitIgnoreInterest"), AutoSize = true };
     private readonly TextBox search = new() { Name = "RecruitSearch", Width = 230, PlaceholderText = L10n.Get("StaffSearch") };
     private readonly Label status = new() { AutoSize = true, ForeColor = Color.DimGray, Dock = DockStyle.Fill };
@@ -63,7 +64,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         var currentSquadTools = new FlowLayoutPanel { AutoSize=true, WrapContents=false, Margin=Padding.Empty };
         currentSquadTools.Controls.AddRange([new Label {Text=L10n.Get("RecruitCurrentSquad"),AutoSize=true,Margin=new Padding(6,8,0,0)},currentSquad]);
         tools.Controls.AddRange([mode, profile, currentJobTools, squadTools, currentSquadTools, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer,
-            new Label { Text = L10n.Get("RecruitLimit"), AutoSize = true, Margin = new Padding(6,8,0,0) }, limit, ignoreInterest, search, reload, copy]);
+            new Label { Text = L10n.Get("RecruitLimit"), AutoSize = true, Margin = new Padding(6,8,0,0) }, limit, preferSubteams, ignoreInterest, search, reload, copy]);
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var lower = new TableLayoutPanel { Name = "RecruitDetailColumns", Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
         lower.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); lower.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); lower.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
@@ -93,6 +94,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         Add(list, "Wage", "StaffWage", 140, true); Add(list, "Age", "Text_9efdc62c88bf", 60, true); Add(list, "Ca", "", 60, true);
         Add(list, "PublicId", "Text_358796f71be1", 110, true); Add(list, "Uid", "Text_e1e8b54d45e2", 110, true);
         Add(list, "CurrentRoleStars", "StaffCurrentRoleStars", 225, true, true); Add(list, "TrainingStars", "RecruitBestTraining", 170, true, true);
+        tips.SetToolTip(preferSubteams, L10n.Get("StaffPreferSubteamsHint"));
         list.Columns["JobPreference"].ToolTipText = L10n.Get("StaffJobPreferencesNote");
         list.Columns["Quality"].DefaultCellStyle.Format = "0.00"; list.Columns["Wage"].DefaultCellStyle.Format = "N0";
         list.Columns["CurrentRoleStars"].ToolTipText = L10n.Get("StaffCurrentRoleStarsNote");
@@ -117,6 +119,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         mode.SelectedIndexChanged += (_, _) => { if (!binding) { Profiles(); RefreshRows(); } };
         profile.SelectedIndexChanged += (_, _) => { if (!binding) { UpdateYouthFilter(); sort = "Quality"; descending = true; RefreshRows(); } };
         targetSquad.SelectedIndexChanged += (_, _) => { if (!binding) { UpdateYouthFilter(); RefreshRows(); } };
+        preferSubteams.CheckedChanged += (_, _) => { if (!binding) RefreshRows(); };
         currentSquad.SelectedIndexChanged += (_, _) => { if (!binding) RefreshRows(); };
         youthMinimum.ValueChanged += (_, _) => { if (!binding) RefreshRows(); };
         currentJob.SelectedIndexChanged += (_, _) => { if (!binding) RefreshRows(); };
@@ -153,12 +156,16 @@ public sealed class StaffRecruitmentPanel : UserControl
         currentJob.SelectedIndex = Math.Max(0, currentJob.Items.Cast<JobChoice>().ToList().FindIndex(c => c.Key == job && c.Variant == (job == "analyst" ? analystCode & 254 : null)));
         offer.Value = Math.Clamp((decimal)wage, offer.Minimum, offer.Maximum);
         targetSquad.SelectedIndex = Math.Max(0,targetSquad.Items.Cast<SquadChoice>().ToList().FindIndex(s=>s.Key==squad));
-        currentSquad.SelectedIndex = 0; youthMinimum.Value = 12;
+        currentSquad.SelectedIndex = 0; youthMinimum.Value = 12; preferSubteams.Checked = true;
         ignoreInterest.Checked = false; search.Clear(); sort = "Quality"; descending = true;
         binding = false; UpdateYouthFilter(); RefreshRows();
     }
     private bool YouthFilterActive => Profile is not null && StaffSquads.Youth((targetSquad.SelectedItem as SquadChoice)?.Key ?? "any") && StaffSquads.UsesYouthWork(Profile);
-    private void UpdateYouthFilter() => youthMinimum.Enabled = YouthFilterActive;
+    private void UpdateYouthFilter()
+    {
+        youthMinimum.Enabled = YouthFilterActive;
+        preferSubteams.Enabled = StaffSquads.SubteamTarget((targetSquad.SelectedItem as SquadChoice)?.Key ?? "any");
+    }
     public void SetLanguage()
     {
         L10n.Apply(this); int selected = Math.Max(0, mode.SelectedIndex); string job = (currentJob.SelectedItem as JobChoice)?.Key ?? ""; int? variant=(currentJob.SelectedItem as JobChoice)?.Variant; binding = true;
@@ -174,6 +181,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         currentJob.SelectedIndex = Math.Max(0, currentJob.Items.Cast<JobChoice>().ToList().FindIndex(c => c.Key == job && c.Variant == variant));
         mode.Items.Clear(); mode.Items.AddRange([L10n.Get("RecruitRoles"), L10n.Get("RecruitTraining")]); mode.SelectedIndex = selected; binding = false;
         Profiles(); tips.SetToolTip(targetSquad,L10n.Get("RecruitSquadHelp")); tips.SetToolTip(currentSquad,L10n.Get("RecruitSquadHelp")); tips.SetToolTip(youthMinimum,L10n.Get("RecruitYouthHelp")); tips.SetToolTip(offer, L10n.Get("RecruitOfferHint")); tips.SetToolTip(profile, L10n.Get("RecruitQualityHint"));
+        tips.SetToolTip(preferSubteams, L10n.Get("StaffPreferSubteamsHint"));
         list.Columns["JobPreference"].ToolTipText = L10n.Get("StaffJobPreferencesNote");
         list.Columns["RoleStars"].ToolTipText = list.Columns["Quality"].ToolTipText = L10n.Get("RecruitQualityHint");
         ((DataGridViewButtonColumn)list.Columns["CopyName"]).Text = list.Columns["CopyName"].ToolTipText = L10n.Get("RecruitCopyName");
@@ -189,9 +197,11 @@ public sealed class StaffRecruitmentPanel : UserControl
         object? Value(StaffCandidate c) => sort switch { "CurrentReputation" => c.CurrentReputation, "JobPreference" => c.JobPreference, "ClubReputation" => c.ClubReputation, "PublicId" => c.PublicId, "Uid" => c.Uid, "InterestLabel" => c.Interest.Band == StaffInterest.Likely ? 3 : c.Interest.Band == StaffInterest.Borderline ? 2 : c.Interest.Band == StaffInterest.Uncertain ? 1 : 0,
             "YouthWork" => c.YouthWork, "RoleStars" => c.RoleStars, "CurrentRoleStars" => c.CurrentRoleStars, "TrainingStars" => c.TrainingStars, "Wage" => c.Wage, "Age" => c.Age, "Ca" => c.Ca,
             "Name" => c.Name, "CurrentRole" => c.CurrentRole, "Team" => c.Team, "Club" => c.Club, "TrainingCategory" => c.TrainingCategory, "MainAttributes" => c.MainAttributes, _ => c.Quality };
+        string destination = (targetSquad.SelectedItem as SquadChoice)?.Key ?? "any";
+        int Priority(StaffCandidate c) => preferSubteams.Checked ? StaffSquads.AssignmentPriority(c.Person, destination) : 0;
         var known = ranked.Where(c => Value(c) is not null);
         var rows = (descending ? known.OrderByDescending(Value) : known.OrderBy(Value)).ThenBy(c => c.Name).ThenBy(c => c.Person.Uid)
-            .Concat(ranked.Where(c => Value(c) is null)).Take((int)limit.Value).ToList();
+            .Concat(ranked.Where(c => Value(c) is null)).OrderBy(Priority).Take((int)limit.Value).ToList();
         list.DataSource = new BindingList<StaffCandidate>(rows); list.ClearSelection();
         foreach (DataGridViewColumn column in list.Columns) column.HeaderCell.SortGlyphDirection = column.Name == sort ? descending ? SortOrder.Descending : SortOrder.Ascending : SortOrder.None;
         if (rows.Count > 0) list.Rows[Math.Max(0, rows.FindIndex(c => c.Person.Uid == uid))].Selected = true;

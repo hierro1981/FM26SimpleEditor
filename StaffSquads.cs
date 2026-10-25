@@ -28,6 +28,15 @@ public static class StaffSquads
         "reserves" => person.HasContract && person.TeamId.HasValue && Regex.IsMatch(person.TeamName ?? (Affiliate(person) ? person.TeamClubName : null) ?? "", @"(?:^|\W)(?:B|C|II|reserves|riserve)(?:\W|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant),
         _ => Youth(filter) && AgeGroup(person) == filter
     };
+    public static bool SubteamTarget(string target) => Targets.Contains(target) && target is not ("any" or "first");
+    // Assignment evidence is a shortlist preference, never a bonus to attributes or willingness.
+    public static int AssignmentPriority(StaffRow person, string target)
+    {
+        if (!SubteamTarget(target)) return 0;
+        if ((Youth(target) && Matches(person, "youth")) || Matches(person, target)) return 0;
+        if (Matches(person, "subteam")) return 1;
+        return Matches(person, "first") ? 3 : 2;
+    }
     public static bool UsesYouthWork(StaffSearchProfile profile) => profile.CategoryKey is not null || profile.Key is
         "manager" or "assistant_manager" or "coach" or "goalkeeping_coach" or "fitness_coach" or "set_piece_coach" or "head_youth_development" or "head_player_development";
     public static StaffInterestEstimate ForTarget(StaffInterestEstimate estimate, StaffRow person, string target)

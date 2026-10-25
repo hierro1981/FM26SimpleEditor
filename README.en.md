@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.9.0 (in development)
+# FM26 Simple Editor · v15.9.1 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,13 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.9.1 (in development)
+
+- **Staff planning:** combine column sorts with **Ctrl/Shift+click** in the current staff and alternatives lists. Header numbers show sort priority; a regular click returns to a single column.
+- Filter current staff by **job** and **job squad** (first team, U20, U18 and readable squads). Filters combine with search and expiry and survive language changes.
+- Attribute comparisons end with five-star visualisations for both people: attribute value divided by four, separate from training ratings.
+- More compact role and job-squad columns in the alternatives, with wrapping text.
 
 ### v15.9.0 (in development)
 

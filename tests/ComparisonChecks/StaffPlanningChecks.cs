@@ -13,6 +13,23 @@ internal static class StaffPlanningChecks
     public static void Run(Action<bool,string> check)
     {
         L10n.SetLanguage("it");
+        var multi = new StaffPlanningSort("Group");
+        var samples = new[] { (Id:1,Group:"A",Ca:(int?)10,Pa:1), (Id:2,Group:"A",Ca:(int?)20,Pa:2),
+            (Id:3,Group:"B",Ca:(int?)1,Pa:3), (Id:4,Group:"A",Ca:(int?)null,Pa:100), (Id:5,Group:"A",Ca:(int?)10,Pa:5) };
+        object? SampleValue((int Id,string Group,int? Ca,int Pa) r,string field) => field switch { "Group"=>r.Group,"Ca"=>r.Ca,_=>r.Pa };
+        multi.Click("Ca",true,true);
+        check(multi.Apply(samples,SampleValue).Select(r=>r.Id).SequenceEqual(new[]{2,1,5,4,3}),
+            "multi-sort preserves the first criterion and sorts numeric secondary values with nulls last");
+        multi.Click("Ca",true);multi.Click("Pa",true,true);
+        check(multi.Terms.Select(t=>t.Field).SequenceEqual(new[]{"Group","Ca","Pa"}) &&
+            multi.Apply(samples,SampleValue).Select(r=>r.Id).SequenceEqual(new[]{5,1,2,4,3}),
+            "adding a third criterion and toggling a secondary one retains its priority");
+        multi.Click("Group",false);
+        check(multi.Terms.Count==1 && multi.Terms[0].Descending && multi.Apply(samples,SampleValue).First().Id==3,
+            "plain click resets multi-sort to a single toggled column");
+        check(StaffPlanning.AttributeStars(20)==5 && StaffPlanning.AttributeStars(10)==2.5 && StaffPlanning.AttributeStars(1)==.25 &&
+            StaffPlanning.AttributeStars(null) is null && StaffPlanning.AttributeStars(0) is null,
+            "attribute stars use a direct five-star visual scale and preserve missing values");
         var profile = StaffRecruitment.Roles.Single(p => p.Key == "sports_scientist");
         var market = new StaffRecruitmentResult { Status = "ready", ClubUid = 1, ClubReputation = 6308, GameDate = "2028-03-28" };
         foreach (var context in new[] { (Rep:6552, End:"2028-06-30", Loyalty:11), (Rep:6695, End:"2029-06-30", Loyalty:12) })
@@ -186,6 +203,53 @@ internal static class StaffPlanningChecks
         check(!grid.ShowCellToolTips && !alts.ShowCellToolTips && grid.Columns.Contains("Info") && alts.Columns.Contains("Info") &&
             StaffPlanningPanel.InfoText(alts.Rows[0].DataBoundItem).Split('\n').All(line=>line.Length<=85),
             "only dedicated information cells show compact wrapped details, disabling native clipped-cell tooltips");
+        check(alts.Columns["CurrentRole"].Width<=145 && alts.Columns["Team"].Width<=100 &&
+            alts.Columns["CurrentRole"].DefaultCellStyle.WrapMode==DataGridViewTriState.True &&
+            alts.AutoSizeRowsMode==DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders,
+            "alternatives use compact role and team columns without clipping their text");
+        var sortColumn=typeof(StaffPlanningPanel).GetMethod("SortColumn",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!;
+        var planning=All(panel).OfType<StaffPlanningPanel>().Single();
+        sortColumn.Invoke(planning,[alts,alts.Columns["CurrentRole"].Index,false]);
+        sortColumn.Invoke(planning,[alts,alts.Columns["Quality"].Index,true]);
+        check(alts.Columns["CurrentRole"].HeaderText.EndsWith("[1]") && alts.Columns["Quality"].HeaderText.EndsWith("[2]") &&
+            alts.Rows.Cast<DataGridViewRow>().Select(r=>((StaffCandidate)r.DataBoundItem).Quality).SequenceEqual(new double?[]{20,15,12}),
+            "alternative multi-sort shows priorities and orders same-role candidates by descending score");
+        sortColumn.Invoke(planning,[alts,alts.Columns["Quality"].Index,true]);
+        check(alts.Columns["CurrentRole"].HeaderText.EndsWith("[1]") && alts.Columns["Quality"].HeaderText.EndsWith("[2]") &&
+            ((StaffCandidate)alts.Rows[0].DataBoundItem).Quality==12,
+            "secondary direction toggles without dropping the primary column");
+        L10n.SetLanguage("en");panel.SetLanguage();
+        check(alts.Columns["CurrentRole"].HeaderText==L10n.Get("StaffRole")+" [1]" && alts.Columns["Quality"].HeaderText.EndsWith("[2]"),
+            "multi-sort captions translate while retaining priority and direction");
+        L10n.SetLanguage("it");panel.SetLanguage();
+        sortColumn.Invoke(planning,[alts,alts.Columns["Quality"].Index,false]);
+        check(!alts.Columns["CurrentRole"].HeaderText.Contains('[') && !alts.Columns["Quality"].HeaderText.Contains('['),
+            "plain alternative header click removes obsolete secondary sort markers");
+        var roleCombo=All(panel).OfType<ComboBox>().Single(c=>c.Name=="PlanRoleFilter");
+        var teamCombo=All(panel).OfType<ComboBox>().Single(c=>c.Name=="PlanTeamFilter");
+        var youthEmployee=Person(80,11);youthEmployee.TeamId=180;youthEmployee.TeamSlot=1;youthEmployee.TeamName="U20";
+        var youthCoach=Person(81,12);youthCoach.TeamId=181;youthCoach.TeamSlot=2;youthCoach.TeamName="U18";youthCoach.JobKey="coach";youthCoach.JobCode=2;
+        var anotherYouth=Person(82,13);anotherYouth.TeamId=180;anotherYouth.TeamSlot=1;anotherYouth.TeamName="U20";
+        own.Staff=[current,youthEmployee,youthCoach,anotherYouth];panel.SetStaffData(own);
+        roleCombo.SelectedIndex=Enumerable.Range(0,roleCombo.Items.Count).Single(i=>roleCombo.Items[i]!.ToString()==L10n.Get("StaffJob_sports_scientist"));
+        teamCombo.SelectedIndex=Enumerable.Range(0,teamCombo.Items.Count).Single(i=>teamCombo.Items[i]!.ToString()=="U20");
+        check(grid.Rows.Count==2 && grid.Rows.Cast<DataGridViewRow>().All(r=>((StaffRenewal)r.DataBoundItem).Team=="U20"),
+            "role and actual U20 squad filters combine without mixing the U18 coach or first team");
+        sortColumn.Invoke(planning,[grid,grid.Columns["Team"].Index,false]);
+        sortColumn.Invoke(planning,[grid,grid.Columns["Quality"].Index,true]);
+        check(grid.Columns["Team"].HeaderText.EndsWith("[1]") && grid.Columns["Quality"].HeaderText.EndsWith("[2]"),
+            "current staff list supports additive column ordering too");
+        L10n.SetLanguage("en");panel.SetLanguage();
+        check(grid.Rows.Count==2 && teamCombo.SelectedItem?.ToString()=="U20" && roleCombo.SelectedItem?.ToString()==L10n.Get("StaffJob_sports_scientist"),
+            "current role and team filters survive language changes by stable keys");
+        L10n.SetLanguage("it");panel.SetLanguage();
+        teamCombo.SelectedIndex=Enumerable.Range(0,teamCombo.Items.Count).Single(i=>teamCombo.Items[i]!.ToString()=="U18");
+        check(grid.Rows.Count==0 && alts.Rows.Count==0 && attrs.Rows.Count==0,"empty filter combinations clear all stale comparison details");
+        roleCombo.SelectedIndex=0;
+        check(grid.Rows.Count==1 && ((StaffRenewal)grid.Rows[0].DataBoundItem).Uid==youthCoach.Uid,"clearing role filter reveals the U18 coach");
+        roleCombo.SelectedIndex=0;teamCombo.SelectedIndex=0;
+        sortColumn.Invoke(planning,[grid,grid.Columns["ContractEnd"].Index,false]);
+        own.Staff=[current];panel.SetStaffData(own);
         own.Staff=[current,Person(41,end:"2028-03-20"),Person(42,end:"2028-12-01"),Person(43,end:"2030-01-01")];panel.SetStaffData(own);
         check(grid.Rows.Count==1,"default expiry filter excludes past and long contracts");
         expiry.SelectedIndex=(int)StaffContractWindow.Expired;
@@ -205,8 +269,14 @@ internal static class StaffPlanningChecks
             attrs.Rows[0].Cells["Current"].Value?.ToString()=="10" && attrs.Rows[0].Cells["Alternative"].Value?.ToString()=="16" &&
             attrs.Rows[0].Cells["Delta"].Value?.ToString()=="+6" && attrs.Rows[0].Cells["Delta"].Style.ForeColor==Color.DarkGreen,
             "subteam comparison highlights working with youngsters for both people and its coloured delta");
+        check(attrs.Columns["CurrentAttributeStars"].DisplayIndex==attrs.Columns.Count-2 &&
+            attrs.Columns["AlternativeAttributeStars"].DisplayIndex==attrs.Columns.Count-1 &&
+            attrs.Rows[0].Cells["CurrentAttributeStars"].Value is double currentAttributeStars && currentAttributeStars==2.5 &&
+            attrs.Rows[0].Cells["AlternativeAttributeStars"].Value is double alternativeAttributeStars && alternativeAttributeStars==4 &&
+            attrs.Columns["CurrentAttributeStars"].CellTemplate is StarRatingCell,
+            "attribute comparison ends with the current and alternative per-attribute stars");
         better.Attributes.Remove("working_with_youngsters");panel.SetRecruitmentData(market);
-        check(attrs.Rows[0].Cells["Alternative"].FormattedValue?.ToString()=="—" && attrs.Rows[0].Cells["Delta"].Value?.ToString()=="—",
+        check(attrs.Rows[0].Cells["Alternative"].FormattedValue?.ToString()=="—" && attrs.Rows[0].Cells["Delta"].Value?.ToString()=="—" && attrs.Rows[0].Cells["AlternativeAttributeStars"].Value is null,
             "missing alternative youth-work ability is explicit rather than substituted");
         var youthManager=Person(500,10);youthManager.JobKey="manager";youthManager.JobCode=16;
         youthManager.TeamId=5500;youthManager.TeamSlot=2;youthManager.TeamName="U18";

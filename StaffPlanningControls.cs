@@ -8,8 +8,11 @@ public sealed class StaffPlanningPanel : UserControl
     private readonly NumericUpDown offer = new() { Name = "PlanOffer", Minimum = 0, Maximum = 10000000, Increment = 100, ThousandsSeparator = true, Width = 125 };
     private readonly ComboBox criterion = new() { Name = "PlanCriterion", DropDownStyle = ComboBoxStyle.DropDownList, Width = 300, DropDownWidth = 450 };
     private readonly ComboBox expiry = new() { Name = "PlanExpiry", DropDownStyle = ComboBoxStyle.DropDownList, Width = 210, DropDownWidth = 300 };
-    private string alternativeSort = "Quality";
-    private bool alternativeDescending = true;
+    private readonly StaffPlanningSort mainSort = new("ContractEnd");
+    private readonly StaffPlanningSort alternativeSort = new("Quality", true);
+    private sealed record FilterChoice(string Key, string Label) { public override string ToString() => Label; }
+    private readonly ComboBox roleFilter = new() { Name = "PlanRoleFilter", DropDownStyle = ComboBoxStyle.DropDownList, Width = 205, DropDownWidth = 330 };
+    private readonly ComboBox teamFilter = new() { Name = "PlanTeamFilter", DropDownStyle = ComboBoxStyle.DropDownList, Width = 145, DropDownWidth = 300 };
     private readonly CheckBox preferSubteams = new() { Name = "PlanPreferSubteams", Text = L10n.Get("StaffPreferSubteams"), AutoSize = true, Checked = true };
     private readonly Button findStaff = new() { Name = "PlanFindStaff", Text = L10n.Get("PlanFindStaff"), AutoSize = true };
     private readonly Label status = new() { Name = "PlanStatus", Dock = DockStyle.Fill, AutoSize = true, ForeColor = Color.DimGray };
@@ -24,8 +27,6 @@ public sealed class StaffPlanningPanel : UserControl
     private StaffRecruitmentResult? market;
     private uint? clubUid;
     private bool binding;
-    private string sort = "ContractEnd";
-    private bool descending;
     public event Action? ReloadRequested;
     public event Action<StaffSearchProfile, string?, long, string, int?>? FindStaffRequested;
     public StaffPlanningPanel()
@@ -40,7 +41,10 @@ public sealed class StaffPlanningPanel : UserControl
         reload.Click += (_, _) => ReloadRequested?.Invoke();
         var method = new Button { Name = "PlanMethod", Text = L10n.Get("TacticalCriteria"), AutoSize = true };
         method.Click += (_, _) => MessageBox.Show(this, L10n.Get("PlanMethod"), L10n.Get("PlanTab"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-        tools.Controls.AddRange([search, new Label { Text = L10n.Get("PlanExpiry"), AutoSize = true, Margin = new Padding(6,8,0,0) }, expiry, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer, reload, method]);
+        tools.Controls.AddRange([search, new Label { Text = L10n.Get("PlanExpiry"), AutoSize = true, Margin = new Padding(6,8,0,0) }, expiry,
+            new Label { Text = L10n.Get("StaffRole"), AutoSize = true, Margin = new Padding(6,8,0,0) }, roleFilter,
+            new Label { Text = L10n.Get("StaffTeam"), AutoSize = true, Margin = new Padding(6,8,0,0) }, teamFilter,
+            new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer, reload, method, new Label { Text = L10n.Get("PlanMultiSortHint"), AutoSize = true, ForeColor = Color.DimGray, Margin = new Padding(6,8,0,0) }]);
         findStaff.Click += (_, _) => OpenRecruitment(Selected);
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var detail = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3 };
@@ -80,16 +84,28 @@ public sealed class StaffPlanningPanel : UserControl
                 OpenRecruitment(list.Rows[e.RowIndex].DataBoundItem as StaffRenewal);
         };
         Add(alternatives, "Name", "Text_f537c6bd038e", 180); CopyColumn(alternatives); InfoColumn(alternatives);
-        Add(alternatives, "Club", "StaffClub", 170); Add(alternatives, "CurrentRole", "StaffRole", 220); Add(alternatives, "Team", "StaffTeam", 210);
+        Add(alternatives, "Club", "StaffClub", 170); Add(alternatives, "CurrentRole", "StaffRole", 135); Add(alternatives, "Team", "StaffTeam", 95);
         Add(alternatives, "Quality", "RecruitQuality", 95, true); Add(alternatives, "RoleStars", "RecruitRoleStars", 170, true, true);
         Add(alternatives, "Ca", "", 60, true); Add(alternatives, "Pa", "", 60, true);
         Add(alternatives, "InterestLabel", "RecruitInterest", 220); Add(alternatives, "ClubReputation", "RecruitClubReputation", 150, true);
         Add(alternatives, "Wage", "StaffWage", 145, true); Add(alternatives, "MainAttributes", "RecruitAttributes", 650);
+        alternatives.Columns["CurrentRole"].MinimumWidth = 100; alternatives.Columns["Team"].MinimumWidth = 75;
+        alternatives.Columns["CurrentRole"].DefaultCellStyle.WrapMode = alternatives.Columns["Team"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+        alternatives.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+        alternatives.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
+        alternatives.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
         Add(attributes, "Attribute", "Text_51df0484073a", 190); Add(attributes, "Current", "PlanCurrent", 100, true);
         Add(attributes, "Alternative", "PlanAlternative", 110, true); Add(attributes, "Delta", "PlanGain", 85, true);
+        Add(attributes, "CurrentAttributeStars", "PlanCurrentAttributeStars", 110, true, true);
+        Add(attributes, "AlternativeAttributeStars", "PlanAlternativeAttributeStars", 110, true, true);
+        attributes.RowTemplate.Height = 32;
+        attributes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+        attributes.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
+        foreach (var field in new[] { "CurrentAttributeStars", "AlternativeAttributeStars" })
+            attributes.Columns[field].ToolTipText = L10n.Get("PlanAttributeStarsHint");
         foreach (var grid in new[] { list, alternatives })
         {
-            grid.RowTemplate.Height = 38;
+            grid.RowTemplate.MinimumHeight = 38; grid.RowTemplate.Height = 38;
             grid.Columns["Quality"].DefaultCellStyle.Format = "0.00"; grid.Columns["Wage"].DefaultCellStyle.Format = "N0";
             grid.CellContentClick += (_, e) =>
             {
@@ -98,11 +114,7 @@ public sealed class StaffPlanningPanel : UserControl
                 if (name.Length > 0) Clipboard.SetText(name);
             };
         }
-        list.ColumnHeaderMouseClick += (_, e) =>
-        {
-            if (list.Columns[e.ColumnIndex].Name is "CopyName" or "Info") return;
-            var field = list.Columns[e.ColumnIndex].Name; descending = sort == field && !descending; sort = field; RefreshRows();
-        };
+        list.ColumnHeaderMouseClick += (_, e) => SortColumn(list, e.ColumnIndex, (ModifierKeys & (Keys.Control | Keys.Shift)) != 0);
         list.SelectionChanged += (_, _) => { if (!binding) Details(); };
         preferSubteams.CheckedChanged += (_, _) => { if (!binding) RefreshAlternatives(); };
         alternatives.SelectionChanged += (_, _) => { if (!binding) AttributeComparison(); };
@@ -111,13 +123,9 @@ public sealed class StaffPlanningPanel : UserControl
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "Recommendation" && list.Rows[e.RowIndex].DataBoundItem is StaffRenewal row)
                 e.CellStyle!.ForeColor = row.Advice switch { StaffRenewalAdvice.Renew => Color.DarkGreen, StaffRenewalAdvice.CompareReplacement => Color.DarkOrange, StaffRenewalAdvice.VerifyAlternatives => Color.DarkGoldenrod, _ => Color.DimGray };
         };
-        alternatives.ColumnHeaderMouseClick += (_, e) =>
-        {
-            var field = alternatives.Columns[e.ColumnIndex].Name;
-            if (field is "CopyName" or "Info") return;
-            alternativeDescending = alternativeSort == field ? !alternativeDescending : field is "Quality" or "RoleStars" or "ClubReputation" or "Wage" or "Ca" or "Pa";
-            alternativeSort = field; RefreshAlternatives();
-        };
+        alternatives.ColumnHeaderMouseClick += (_, e) => SortColumn(alternatives, e.ColumnIndex, (ModifierKeys & (Keys.Control | Keys.Shift)) != 0);
+        roleFilter.SelectedIndexChanged += (_, _) => { if (!binding) RefreshRows(); };
+        teamFilter.SelectedIndexChanged += (_, _) => { if (!binding) RefreshRows(); };
         foreach (var grid in new[] { list, alternatives })
         {
             // Native grid tooltips also appear for clipped cells. Disable those: only the i icon opens details.
@@ -145,6 +153,35 @@ public sealed class StaffPlanningPanel : UserControl
         reasonScroll.SizeChanged += (_, _) => explanation.MaximumSize = new Size(Math.Max(100, reasonScroll.ClientSize.Width - 24), 0);
         L10n.Capture(this); SetLanguage();
     }
+    private void SortColumn(DataGridView grid, int index, bool additive)
+    {
+        if (index < 0 || index >= grid.Columns.Count || grid.Columns[index].SortMode == DataGridViewColumnSortMode.NotSortable) return;
+        var field = grid.Columns[index].Name;
+        if (grid == list) { mainSort.Click(field, additive); RefreshRows(); }
+        else
+        {
+            alternativeSort.Click(field, additive, field is "Quality" or "RoleStars" or "ClubReputation" or "Wage" or "Ca" or "Pa");
+            RefreshAlternatives();
+        }
+    }
+    private static string RoleKey(StaffRow person) => StaffRecruitment.Roles.Any(r => r.Key == person.JobKey) ? person.JobKey! : "__unknown";
+    private static string TeamKey(StaffRow person) => person.HasContract && person.TeamId.HasValue ? person.TeamId.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "__unknown";
+    private void PopulateFilters()
+    {
+        string role = (roleFilter.SelectedItem as FilterChoice)?.Key ?? "", team = (teamFilter.SelectedItem as FilterChoice)?.Key ?? "";
+        var people = own?.Staff.Where(p => !p.IsHumanManager && p.HasContract).ToArray() ?? [];
+        bool before = binding; binding = true;
+        roleFilter.Items.Clear(); roleFilter.Items.Add(new FilterChoice("", L10n.Get("RecruitAnyJob")));
+        roleFilter.Items.AddRange(people.Select(RoleKey).Distinct().Select(key => new FilterChoice(key,
+            L10n.Get(key == "__unknown" ? "StaffUnknownRole" : "StaffJob_" + key))).OrderBy(c => c.Label, StringComparer.CurrentCultureIgnoreCase).Cast<object>().ToArray());
+        teamFilter.Items.Clear(); teamFilter.Items.Add(new FilterChoice("", L10n.Get("StaffSquad_any")));
+        var teams = people.GroupBy(TeamKey).Select(g => new FilterChoice(g.Key, g.First().TeamDisplay)).ToArray();
+        teamFilter.Items.AddRange(teams.Select(c => teams.Count(t => t.Label == c.Label) > 1 ? c with { Label = c.Label + " · #" + c.Key } : c)
+            .OrderBy(c => c.Label, StringComparer.CurrentCultureIgnoreCase).Cast<object>().ToArray());
+        roleFilter.SelectedIndex = Math.Max(0, roleFilter.Items.Cast<FilterChoice>().ToList().FindIndex(c => c.Key == role));
+        teamFilter.SelectedIndex = Math.Max(0, teamFilter.Items.Cast<FilterChoice>().ToList().FindIndex(c => c.Key == team));
+        binding = before;
+    }
     private void OpenRecruitment(StaffRenewal? row)
     {
         if (row?.Profile is StaffSearchProfile profile)
@@ -156,7 +193,7 @@ public sealed class StaffPlanningPanel : UserControl
         MultiSelect = false, SelectionMode = DataGridViewSelectionMode.FullRowSelect, ScrollBars = ScrollBars.Both, BackgroundColor = SystemColors.Window };
     private static void Add(DataGridView grid, string field, string header, int width, bool numeric = false, bool stars = false)
     {
-        var column = new DataGridViewTextBoxColumn { Name = field, DataPropertyName = field, HeaderText = header.Length == 0 ? field.ToUpperInvariant() : L10n.Get(header), Width = width,
+        var column = new DataGridViewTextBoxColumn { Name = field, DataPropertyName = field, HeaderText = header.Length == 0 ? field.ToUpperInvariant() : L10n.Get(header), Width = width, Tag = header.Length == 0 ? null : header,
             SortMode = grid.Name is "PlanList" or "PlanAlternatives" ? DataGridViewColumnSortMode.Programmatic : DataGridViewColumnSortMode.NotSortable };
         column.DefaultCellStyle.NullValue = "—";
         if (numeric) column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -209,22 +246,25 @@ public sealed class StaffPlanningPanel : UserControl
         tips.SetToolTip(expiry, L10n.Get("PlanExpiryHint"));
         tips.SetToolTip(offer, L10n.Get("RecruitOfferHint"));
         foreach (var grid in new[] { list, alternatives }) ((DataGridViewButtonColumn)grid.Columns["CopyName"]).Text = grid.Columns["CopyName"].ToolTipText = L10n.Get("RecruitCopyName");
+        foreach (var field in new[] { "CurrentAttributeStars", "AlternativeAttributeStars" }) attributes.Columns[field].ToolTipText = L10n.Get("PlanAttributeStarsHint");
         RefreshRows();
     }
     private void RefreshRows()
     {
         if (binding) return;
+        PopulateFilters();
         tips.Hide(list); tips.Hide(alternatives);
         uint? selected = Selected?.Uid;
         var rows = cached ??= own is null ? [] : StaffPlanning.Build(own, market, (long)offer.Value, choices, (StaffContractWindow)expiry.SelectedIndex);
-        var filtered = rows.Where(p => string.IsNullOrWhiteSpace(search.Text) || p.Name.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Role.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Team.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Uid.ToString().Contains(search.Text.Trim()));
-        object? Value(StaffRenewal p) => sort switch { "Name" => p.Name, "Role" => p.Role, "Team" => p.Team, "Days" => p.Days,
+        string role = (roleFilter.SelectedItem as FilterChoice)?.Key ?? "", team = (teamFilter.SelectedItem as FilterChoice)?.Key ?? "";
+        var filtered = rows.Where(p => (role.Length == 0 || RoleKey(p.Person) == role) && (team.Length == 0 || TeamKey(p.Person) == team))
+            .Where(p => string.IsNullOrWhiteSpace(search.Text) || p.Name.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Role.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Team.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Uid.ToString().Contains(search.Text.Trim()));
+        object? Value(StaffRenewal p, string field) => field switch { "Name" => p.Name, "Role" => p.Role, "Team" => p.Team, "Days" => p.Days,
             "Recommendation" => p.Advice, "Criterion" => p.Criterion, "Quality" => p.Quality, "Stars" => p.Stars, "Wage" => p.Wage, "Ca" => p.Ca, "Pa" => p.Pa,
             "Replacement" => p.Replacement, "ReplacementStars" => p.ReplacementStars, "ReplacementTeam" => p.ReplacementTeam, "BetterCount" => p.BetterCount, _ => p.End };
-        var known = filtered.Where(p => Value(p) is not null);
-        var sorted = (descending ? known.OrderByDescending(Value) : known.OrderBy(Value)).ThenBy(p => p.Name).ThenBy(p => p.Uid).Concat(filtered.Where(p => Value(p) is null)).ToList();
+        var sorted = mainSort.Apply(filtered, Value).ThenBy(p => p.Name).ThenBy(p => p.Uid).ToList();
         binding = true; list.DataSource = new BindingList<StaffRenewal>(sorted); list.ClearSelection();
-        foreach (DataGridViewColumn col in list.Columns) col.HeaderCell.SortGlyphDirection = col.Name == sort ? descending ? SortOrder.Descending : SortOrder.Ascending : SortOrder.None;
+        mainSort.UpdateHeaders(list);
         if (sorted.Count > 0) list.Rows[Math.Max(0, sorted.FindIndex(p => p.Uid == selected))].Selected = true;
         binding = false;
         status.Text = clubUid is null ? L10n.Get("StaffSelectClub") : own is null ? L10n.Get("PlanPendingStaff") : own.Status != "ready" ? L10n.Format("StaffUnavailable", own.Error ?? "—") :
@@ -250,19 +290,16 @@ public sealed class StaffPlanningPanel : UserControl
         string target = Selected is StaffRenewal row ? StaffSquads.TargetFor(row.Person) : "any";
         int Priority(StaffCandidate c) => preferSubteams.Checked ? StaffSquads.AssignmentPriority(c.Person, target) : 0;
         var candidates = Selected?.Alternatives.OrderBy(Priority).ThenByDescending(c => c.Quality).ThenBy(c => c.Name).ThenBy(c => c.Uid).Take(50).ToArray() ?? [];
-        object? Value(StaffCandidate c) => alternativeSort switch
+        object? Value(StaffCandidate c, string field) => field switch
         {
             "Name" => c.Name, "Club" => c.Club, "CurrentRole" => c.CurrentRole, "Team" => c.Team,
             "RoleStars" => c.RoleStars, "InterestLabel" => c.Interest.Band, "ClubReputation" => c.ClubReputation,
             "Wage" => c.Wage, "Ca" => c.Ca, "Pa" => c.Pa, "MainAttributes" => c.MainAttributes, _ => c.Quality
         };
-        var known = candidates.Where(c => Value(c) is not null);
-        var sorted = (alternativeDescending ? known.OrderByDescending(Value) : known.OrderBy(Value))
-            .ThenBy(c => c.Name).ThenBy(c => c.Uid).Concat(candidates.Where(c => Value(c) is null)).OrderBy(Priority).ToList();
+        var sorted = alternativeSort.Apply(candidates, Value, Priority).ThenBy(c => c.Name).ThenBy(c => c.Uid).ToList();
         binding = true; tips.Hide(alternatives);
         alternatives.DataSource = new BindingList<StaffCandidate>(sorted); alternatives.ClearSelection();
-        foreach (DataGridViewColumn col in alternatives.Columns)
-            col.HeaderCell.SortGlyphDirection = col.Name == alternativeSort ? alternativeDescending ? SortOrder.Descending : SortOrder.Ascending : SortOrder.None;
+        alternativeSort.UpdateHeaders(alternatives);
         if (sorted.Count > 0) alternatives.Rows[Math.Max(0, sorted.FindIndex(c => c.Uid == selected?.Uid))].Selected = true;
         binding = false; AttributeComparison();
     }
@@ -276,7 +313,7 @@ public sealed class StaffPlanningPanel : UserControl
         foreach (string key in fields.Distinct(StringComparer.Ordinal))
         {
             int? a = StaffRecruitment.Attribute(row.Person, key), b = candidate is null ? null : StaffRecruitment.Attribute(candidate.Person, key);
-            int index = attributes.Rows.Add(L10n.Get("StaffAttribute_" + key), a, b, a.HasValue && b.HasValue ? (b.Value - a.Value).ToString("+0;-0;0", L10n.Culture) : "—");
+            int index = attributes.Rows.Add(L10n.Get("StaffAttribute_" + key), a, b, a.HasValue && b.HasValue ? (b.Value - a.Value).ToString("+0;-0;0", L10n.Culture) : "—", StaffPlanning.AttributeStars(a), StaffPlanning.AttributeStars(b));
             if (a.HasValue && b.HasValue) attributes.Rows[index].Cells["Delta"].Style.ForeColor = b > a ? Color.DarkGreen : b < a ? Color.Firebrick : SystemColors.ControlText;
         }
         attributes.ClearSelection();

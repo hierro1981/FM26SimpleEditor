@@ -2312,7 +2312,9 @@ Confronta lo stesso incarico riconosciuto, con gli stessi attributi e pesi della
 
 Un’alternativa deve migliorare il punteggio di almeno 0,75/20: è una scelta dell’editor, non una soglia ufficiale. I candidati con probabile rifiuto sono esclusi; quelli al limite o incerti sono mostrati per verifica, ma da soli non giustificano una sostituzione. Vengono esclusi il tuo staff, gli incarichi non identificati e le categorie non precise.
 
-Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre stelle descrivono l’idoneità all’incarico, non la CA complessiva. Il confronto riguarda il criterio selezionato: non ottimizza tutta la distribuzione degli allenamenti; uno stesso candidato può essere suggerito per più rinnovi. Richieste economiche e posti disponibili non sono verificati. Nessun contratto viene modificato.</value></data>
+Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre stelle descrivono l’idoneità all’incarico, non la CA complessiva. Il confronto riguarda il criterio selezionato: non ottimizza tutta la distribuzione degli allenamenti; uno stesso candidato può essere suggerito per più rinnovi. Richieste economiche e posti disponibili non sono verificati. Nessun contratto viene modificato.
+
+Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio o ne inverte il verso mantenendone la priorità. [1], [2] indicano la precedenza. Se attiva, la preferenza per incarichi nelle sottosquadre resta prioritaria. I filtri ruolo e squadra incarico agiscono sull’elenco dello staff attuale, non sul bacino delle alternative. Le stelle degli attributi mostrano semplicemente valore/4 su una scala di cinque stelle.</value></data>
   <data name="PlanFindStaff" xml:space="preserve"><value>Trova staff per questo criterio</value></data>
   <data name="PlanReplacementStars" xml:space="preserve"><value>Stelle alternativa proposta</value></data>
   <data name="StaffTeam" xml:space="preserve"><value>Squadra incarico</value></data>
@@ -2360,4 +2362,8 @@ Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre st
   <data name="HistoryCA" xml:space="preserve"><value>CA · Abilità attuale</value></data>
   <data name="HistoryCAHint" xml:space="preserve"><value>Grafico CA: valori reali dei salvataggi confrontati, su scala separata 1–200. Nei campioni interni degli attributi la CA storica non è decodificata.</value></data>
   <data name="HistoryCANeedSaves" xml:space="preserve"><value>Usa Aggiungi salvataggi per confrontare la CA a date diverse.</value></data>
+  <data name="PlanMultiSortHint" xml:space="preserve"><value>Ctrl/Shift + clic: aggiungi colonne di ordinamento</value></data>
+  <data name="PlanCurrentAttributeStars" xml:space="preserve"><value>Attributo attuale ★</value></data>
+  <data name="PlanAlternativeAttributeStars" xml:space="preserve"><value>Attributo alternativa ★</value></data>
+  <data name="PlanAttributeStarsHint" xml:space="preserve"><value>Scala visiva dell’attributo: valore / 4, fino a 5 stelle (20/20 = 5 stelle). Non sono stelle di allenamento né una valutazione del gioco.</value></data>
 </root>

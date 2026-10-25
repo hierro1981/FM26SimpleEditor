@@ -2312,7 +2312,9 @@ Compares the same identified job using the same attributes and weights as staff 
 
 An alternative must improve the score by at least 0.75/20: an editor choice, not an official threshold. Likely refusals are excluded; borderline or uncertain candidates are shown for verification but alone do not justify replacement. Your own staff, unidentified jobs and imprecise job categories are excluded.
 
-Training stars use the same calculation as the Staff page. Other stars describe job suitability, not overall CA. Comparisons concern the selected criterion: they do not optimise the whole training allocation, allocate candidates or verify salary demands and available posts. No contract is modified.</value></data>
+Training stars use the same calculation as the Staff page. Other stars describe job suitability, not overall CA. Comparisons concern the selected criterion: they do not optimise the whole training allocation, allocate candidates or verify salary demands and available posts. No contract is modified.
+
+Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses an existing one, keeping its priority. [1], [2] show priority. If enabled, current subteam assignment preference still comes first. Role and job-squad filters apply to the current staff list; they do not restrict the alternative pool. Attribute stars simply display value/4 on a five-star scale.</value></data>
   <data name="PlanFindStaff" xml:space="preserve"><value>Find staff using this criterion</value></data>
   <data name="PlanReplacementStars" xml:space="preserve"><value>Proposed alternative stars</value></data>
   <data name="StaffTeam" xml:space="preserve"><value>Job squad</value></data>
@@ -2360,4 +2362,8 @@ Training stars use the same calculation as the Staff page. Other stars describe 
   <data name="HistoryCA" xml:space="preserve"><value>CA · Current ability</value></data>
   <data name="HistoryCAHint" xml:space="preserve"><value>CA chart: actual values from compared saves, on a separate 1–200 scale. Internal attribute samples do not provide decoded historic CA.</value></data>
   <data name="HistoryCANeedSaves" xml:space="preserve"><value>Use Add saves to compare CA at different dates.</value></data>
+  <data name="PlanMultiSortHint" xml:space="preserve"><value>Ctrl/Shift + click: add sort columns</value></data>
+  <data name="PlanCurrentAttributeStars" xml:space="preserve"><value>Current attribute ★</value></data>
+  <data name="PlanAlternativeAttributeStars" xml:space="preserve"><value>Alternative attribute ★</value></data>
+  <data name="PlanAttributeStarsHint" xml:space="preserve"><value>Visual attribute scale: value / 4, up to 5 stars (20/20 = 5 stars). These are not training-category stars or a game rating.</value></data>
 </root>

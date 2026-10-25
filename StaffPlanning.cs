@@ -40,6 +40,7 @@ public sealed record StaffRenewal(StaffRow Person, DateTime End, int Days, Staff
 public static class StaffPlanning
 {
     public const double MeaningfulGain = .75;
+    public static double? AttributeStars(int? value) => value is >= 1 and <= 20 ? value.Value / 4.0 : null;
     public static DateTime? Date(string? value) => DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture,
         DateTimeStyles.None, out var date) ? date : null;
     public static bool InWindow(DateTime end, DateTime clock, StaffContractWindow window) => window switch

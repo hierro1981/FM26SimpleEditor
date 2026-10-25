@@ -1,8 +1,9 @@
 """Contract-team context; slot order is not an age-group mapping."""
 
 
-def team_index(clubs):
+def team_index(clubs, types=None):
     """Prefer each team's own club record, never its parent's appended affiliate slot."""
+    types = types or {}
     result = {}
     for club in clubs.values():
         for team in getattr(club, 'teams', ()):
@@ -12,9 +13,11 @@ def team_index(clubs):
                     or type(tid) is not int or not 0 <= tid <= 4294967295
                     or type(slot) is not int or not 0 <= slot <= 255):
                 continue
-            name = getattr(team, 'name', None)
+            typed = types.get(tid, {})
+            name = getattr(team, 'name', None) or typed.get('teamName')
             entry = dict(teamSlot=slot, teamName=name.strip() if isinstance(name, str) and name.strip() else None,
-                         teamClubUid=club.uid, teamClubName=getattr(club, 'name', None))
+                         teamClubUid=club.uid, teamClubName=getattr(club, 'name', None),
+                         **{key: value for key, value in typed.items() if key != 'teamName'})
             if tid in result and result[tid] != entry:
                 result[tid] = None  # Contradictory ownership/slot is not an assignment.
             else:

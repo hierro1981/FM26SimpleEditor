@@ -2319,7 +2319,7 @@ Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre st
   <data name="StaffTeamUnknown" xml:space="preserve"><value>Squadra non identificata</value></data>
   <data name="StaffSubteamSlot" xml:space="preserve"><value>Sottosquadra · slot {0}</value></data>
   <data name="StaffTeamContext" xml:space="preserve"><value>Squadra del contratto: {0} · ID squadra: {1}</value></data>
-  <data name="StaffTeamNote" xml:space="preserve"><value>Riferimento alla squadra nel contratto letto, non all’assegnazione degli allenamenti. Slot 0 = prima squadra; gli altri slot identificano sottosquadre ma non ne provano l’età (U20, U18) o il tipo. Un eventuale nome viene mostrato solo se leggibile. Senza un contratto associabile la squadra resta non identificata.</value></data>
+  <data name="StaffTeamNote" xml:space="preserve"><value>Riferimento alla squadra nel contratto letto, distinto dall’assegnazione degli allenamenti. U20/U18 e altri gruppi vengono identificati dai record squadra, controllando club, ID e coerenza del tipo su più club. In assenza di riscontri sufficienti resta lo slot generico; lo slot da solo non determina l’età.</value></data>
   <data name="PlanReplacementTeam" xml:space="preserve"><value>Squadra alternativa proposta</value></data>
   <data name="StaffFirstTeam" xml:space="preserve"><value>Prima squadra</value></data>
   <data name="StaffSquad_any" xml:space="preserve"><value>Qualsiasi</value></data>
@@ -2342,4 +2342,6 @@ Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre st
   <data name="StaffSquad_u20" xml:space="preserve"><value>U20</value></data>
   <data name="StaffSquad_u21" xml:space="preserve"><value>U21</value></data>
   <data name="StaffSquad_u23" xml:space="preserve"><value>U23</value></data>
+  <data name="StaffSeniorSquad" xml:space="preserve"><value>Riserve</value></data>
+  <data name="StaffTypeEvidence" xml:space="preserve"><value>Tipo squadra letto: {0} · Campo limite età: {1}.</value></data>
 </root>

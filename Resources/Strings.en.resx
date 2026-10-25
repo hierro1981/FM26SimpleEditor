@@ -2319,7 +2319,7 @@ Training stars use the same calculation as the Staff page. Other stars describe 
   <data name="StaffTeamUnknown" xml:space="preserve"><value>Squad not identified</value></data>
   <data name="StaffSubteamSlot" xml:space="preserve"><value>Subteam · slot {0}</value></data>
   <data name="StaffTeamContext" xml:space="preserve"><value>Contract squad: {0} · Team ID: {1}</value></data>
-  <data name="StaffTeamNote" xml:space="preserve"><value>Team reference in the readable contract, not training assignment. Slot 0 denotes the first team; other slots identify subteams but do not establish age group (U20, U18) or type. A name is displayed only when readable. Without a linked contract the squad remains unidentified.</value></data>
+  <data name="StaffTeamNote" xml:space="preserve"><value>Team reference in the readable contract, separate from training assignments. U20/U18 and other groups are identified from team records, checking club, ID and consistent types across several clubs. Without sufficient evidence, the generic slot remains; slot order alone does not establish age.</value></data>
   <data name="PlanReplacementTeam" xml:space="preserve"><value>Proposed alternative squad</value></data>
   <data name="StaffFirstTeam" xml:space="preserve"><value>First team</value></data>
   <data name="StaffSquad_any" xml:space="preserve"><value>Any</value></data>
@@ -2342,4 +2342,6 @@ Training stars use the same calculation as the Staff page. Other stars describe 
   <data name="StaffSquad_u20" xml:space="preserve"><value>U20</value></data>
   <data name="StaffSquad_u21" xml:space="preserve"><value>U21</value></data>
   <data name="StaffSquad_u23" xml:space="preserve"><value>U23</value></data>
+  <data name="StaffSeniorSquad" xml:space="preserve"><value>Reserves</value></data>
+  <data name="StaffTypeEvidence" xml:space="preserve"><value>Read team type: {0} · Age-limit field: {1}.</value></data>
 </root>

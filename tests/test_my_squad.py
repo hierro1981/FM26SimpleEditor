@@ -2,6 +2,7 @@ import io
 import json
 import unittest
 from types import SimpleNamespace as NS
+from unittest.mock import patch
 from my_squad import read_my_squad
 from operation_progress import ProgressReporter
 
@@ -48,6 +49,11 @@ class MySquadTests(unittest.TestCase):
         self.assertEqual(teams[2]['name'],'Club B')
         self.assertIsNone(teams[1]['name'])  # An unknown internal slot is not invented U20.
         self.assertEqual(teams[1]['teamId'],101)
+
+    def test_decoded_type_names_reach_selector_without_guessing_slot(self):
+        with patch('my_squad.read_team_types',return_value={101:dict(teamName='U20',teamTypeMethod='cross_club_age')}):
+            team=read_my_squad(self.store())['clubs'][0]['teams'][1]
+        self.assertEqual((team['teamId'],team['name'],team['typeMethod']),(101,'U20','cross_club_age'))
 
     def test_attributes_and_positions_keep_raw_values_without_loading_edit_details(self):
         result=read_my_squad(self.store())

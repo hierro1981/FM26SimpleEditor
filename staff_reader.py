@@ -1,6 +1,7 @@
 """Read-only staff at a verified human-managed club; no guessed job titles."""
 from operation_progress import report
 from staff_teams import team_index, team_fields
+from team_types import read_team_types
 import struct
 
 PERSONALITY = ('adaptability', 'ambition', 'loyalty', 'pressure', 'professionalism',
@@ -130,7 +131,7 @@ def read_my_staff(store, club_uid, progress=None):
             raise ValueError('Club gestito non presente nel database')
         associated = {club_uid} | {team.club_uid for team in club.teams}
         report(progress, 10, 'Lettura dei contratti e dei profili dello staff')
-        teams = team_index(clubs)
+        teams = team_index(clubs, read_team_types(store, clubs))
         decoded = list(store.save.staff())
         native_layout = None
         job_reader = None

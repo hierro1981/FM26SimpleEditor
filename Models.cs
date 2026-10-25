@@ -203,6 +203,9 @@ public sealed class StaffRow
     public string? ListedClubName { get; set; }
     public uint? TeamId { get; set; }
     public int? TeamSlot { get; set; }
+    public int? TeamTypeCode { get; set; }
+    public int? TeamAgeLimit { get; set; }
+    public string? TeamTypeMethod { get; set; }
     public string? TeamName { get; set; }
     public uint? TeamClubUid { get; set; }
     public string? TeamClubName { get; set; }
@@ -211,13 +214,13 @@ public sealed class StaffRow
         get
         {
             if (!HasContract || !TeamId.HasValue) return L10n.Get("StaffTeamUnknown");
-            string label = !string.IsNullOrWhiteSpace(TeamName) ? TeamName : TeamSlot == 0 ? L10n.Get("StaffFirstTeam") :
+            string label = TeamTypeMethod == "senior_subteam" ? L10n.Get("StaffSeniorSquad") : !string.IsNullOrWhiteSpace(TeamName) ? TeamName : TeamSlot == 0 ? L10n.Get("StaffFirstTeam") :
                 TeamSlot is > 0 ? L10n.Format("StaffSubteamSlot", TeamSlot) : L10n.Get("StaffTeamUnknown");
             if (TeamSlot is null && string.IsNullOrWhiteSpace(TeamName)) label += " · ID " + TeamId;
             return TeamClubUid.HasValue && TeamClubUid != ClubUid && !string.IsNullOrWhiteSpace(TeamClubName) ? TeamClubName + " · " + label : label;
         }
     }
-    [JsonIgnore] public string TeamTooltip => L10n.Format("StaffTeamContext", TeamDisplay, TeamId?.ToString(L10n.Culture) ?? "—") + "\n" + L10n.Get("StaffTeamNote");
+    [JsonIgnore] public string TeamTooltip => L10n.Format("StaffTeamContext", TeamDisplay, TeamId?.ToString(L10n.Culture) ?? "—") + "\n" + L10n.Get("StaffTeamNote") + (TeamTypeCode.HasValue ? "\n" + L10n.Format("StaffTypeEvidence", TeamTypeCode, TeamAgeLimit == 255 ? "—" : TeamAgeLimit?.ToString(L10n.Culture) ?? "—") : "");
     public int? NationId { get; set; }
     public int? ClubNationId { get; set; }
     public int? ClubReputation { get; set; }
@@ -290,4 +293,5 @@ public sealed class ManagedSquadTeam
     public uint TeamId { get; set; }
     public int? Slot { get; set; }
     public string? Name { get; set; }
+    public string? TypeMethod { get; set; }
 }

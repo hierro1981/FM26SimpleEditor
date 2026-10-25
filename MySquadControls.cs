@@ -54,9 +54,9 @@ public sealed class MySquadPanel : UserControl
     {
         public override string ToString() => Id is null ? L10n.Get("TacticalGeneric") : TacticalRoles.All.Single(r => r.Id == Id).Label;
     }
-    private sealed record ScopeChoice(SquadScope Mode, uint? TeamId = null, string? Name = null, int? Slot = null)
+    private sealed record ScopeChoice(SquadScope Mode, uint? TeamId = null, string? Name = null, int? Slot = null, string? Kind = null)
     {
-        public override string ToString() => TeamId.HasValue ? !string.IsNullOrWhiteSpace(Name) ? Name + " · ID " + TeamId :
+        public override string ToString() => TeamId.HasValue ? !string.IsNullOrWhiteSpace(Name) ? (Kind == "senior_subteam" ? L10n.Get("StaffSeniorSquad") : Name) + " · ID " + TeamId :
             Slot.HasValue ? L10n.Format("MySquadTeamSlot", Slot.Value, TeamId) : L10n.Format("MySquadTeamId", TeamId) :
             L10n.Get(Mode == SquadScope.FirstTeam ? "MySquadFirst" : Mode == SquadScope.OtherTeams ? "MySquadOther" : "MySquadAll");
     }
@@ -224,7 +224,7 @@ public sealed class MySquadPanel : UserControl
         {
             var teams = current.Teams.Concat(current.TeamIds.Where(id => current.Teams.All(t => t.TeamId != id)).Select(id => new ManagedSquadTeam { TeamId = id }));
             foreach (var team in teams.Where(t => t.TeamId != current.FirstTeamId).DistinctBy(t => t.TeamId).OrderBy(t => t.Slot ?? int.MaxValue).ThenBy(t => t.TeamId))
-                scope.Items.Add(new ScopeChoice(SquadScope.All, team.TeamId, team.Name, team.Slot));
+                scope.Items.Add(new ScopeChoice(SquadScope.All, team.TeamId, team.Name, team.Slot, team.TypeMethod));
         }
         int index = selected is null ? -1 : scope.Items.Cast<ScopeChoice>().ToList().FindIndex(c => c.Mode == selected.Mode && c.TeamId == selected.TeamId);
         scope.SelectedIndex = Math.Max(0, index); binding = wasBinding;

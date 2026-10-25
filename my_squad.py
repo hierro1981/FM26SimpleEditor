@@ -1,5 +1,6 @@
 """Read-only roster of the human-managed club, using validated team IDs."""
 from operation_progress import report
+from team_types import read_team_types
 
 
 def read_my_squad(store, progress=None):
@@ -10,6 +11,7 @@ def read_my_squad(store, progress=None):
         if not managed:
             return dict(status='none', clubs=[], players=[], firstHumanOnly=True)
         clubs = {club.uid: club for club in store.save.clubs()}
+        types = read_team_types(store, clubs)
         result_clubs = []
         wanted = set()
         for manager in managed:
@@ -27,7 +29,10 @@ def read_my_squad(store, progress=None):
                 name = getattr(team, 'name', None)
                 if not name and owner is not None and owner.uid != club.uid:
                     name = owner.name
-                choices.append(dict(teamId=team.team_id, slot=team.slot, name=name))
+                if not name:
+                    name = types.get(team.team_id, {}).get('teamName')
+                choices.append(dict(teamId=team.team_id, slot=team.slot, name=name,
+                                    **({'typeMethod': types[team.team_id]['teamTypeMethod']} if team.team_id in types else {})))
             wanted.update(ids)
             result_clubs.append(dict(clubUid=club.uid, clubName=club.name,
                                      managerName=manager.manager_name,

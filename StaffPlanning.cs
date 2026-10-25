@@ -53,8 +53,10 @@ public static class StaffPlanning
             IReadOnlyList<StaffCandidate> alternatives = [];
             if (ready && profile is not null && quality.HasValue)
             {
-                if (!ranks.TryGetValue(profile.Key, out var ranked))
-                    ranks[profile.Key] = ranked = StaffRecruitment.Rank(market!, profile, offer, currentJob: person.JobKey)
+                string target = StaffSquads.TargetFor(person);
+                string rankKey = profile.Key + "|" + target;
+                if (!ranks.TryGetValue(rankKey, out var ranked))
+                    ranks[rankKey] = ranked = StaffRecruitment.Rank(market!, profile, offer, currentJob: person.JobKey, targetSquad: target)
                         .Where(c => !ownIds.Contains(c.Uid) && !c.Person.JobFamilyOnly).ToArray();
                 alternatives = ranked.Where(c => c.Quality is double q && q >= quality.Value + MeaningfulGain).ToArray();
             }

@@ -3,6 +3,7 @@ from collections import Counter
 import warnings
 from operation_progress import report
 from staff_teams import team_index, team_fields
+from team_types import read_team_types
 from staff_reader import (PERSONALITY, PREFERENCES, values, attributes_at_block,
                           reputation_at_block, preferences_at_block)
 
@@ -58,7 +59,7 @@ def recruitment_pool(store, progress=None):
     from staff_jobs import StaffJobReader
     jobs = StaffJobReader(store)
     clubs = {club.uid: club for club in store.save.clubs()}
-    teams = team_index(clubs)
+    teams = team_index(clubs, read_team_types(store, clubs))
     result = []
     for i, person in enumerate(people):
         if person.is_human_manager:

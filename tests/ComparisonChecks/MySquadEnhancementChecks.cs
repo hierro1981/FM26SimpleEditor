@@ -32,7 +32,7 @@ internal static class MySquadEnhancementChecks
         bool invalid = false; try { SquadSelection.BestForPositions(mids, "MC", "DM", "DC"); } catch (ArgumentException) { invalid = true; }
         check(invalid, "position recommendations reject more than two positions");
         var keeper = Player(10, 10, "GK", 50); var defender = Player(11, 10, "DC", 190);
-        var data = new MySquadResult { Status = "ready", Clubs = [new ManagedSquad { ClubUid = 1, ClubName = "Club", FirstTeamId = 10, TeamIds = [10, 20, 30], Teams = [new ManagedSquadTeam { TeamId = 10, Slot = 0 }, new ManagedSquadTeam { TeamId = 20, Slot = 1, Name = "Club U20" }, new ManagedSquadTeam { TeamId = 30, Slot = 2 }] }], Players = [..mids, keeper, defender, Player(20, 20, "MC", 80), Player(30, 30, "MC", 90)] };
+        var data = new MySquadResult { Status = "ready", Clubs = [new ManagedSquad { ClubUid = 1, ClubName = "Club", FirstTeamId = 10, TeamIds = [10, 20, 30, 40], Teams = [new ManagedSquadTeam { TeamId = 10, Slot = 0 }, new ManagedSquadTeam { TeamId = 20, Slot = 1, Name = "Club U20" }, new ManagedSquadTeam { TeamId = 30, Slot = 2 }, new ManagedSquadTeam {TeamId=40,Slot=3,Name="Riserve",TypeMethod="senior_subteam"}] }], Players = [..mids, keeper, defender, Player(20, 20, "MC", 80), Player(30, 30, "MC", 90)] };
         var loan = Player(90, 99, "MC", 150); loan.Player.OnLoan = true; loan.Player.OwnerClubUid = 1;
         var unknownLoan = Player(91, 99, "MC", 150); unknownLoan.Player.OnLoan = true; unknownLoan.Player.OwnerTeam = "Club";
         data.Players.AddRange([loan, unknownLoan]);
@@ -56,11 +56,11 @@ internal static class MySquadEnhancementChecks
         loans.Checked = false;
         check(scope.Enabled && scope.SelectedIndex == 0, "scope becomes enabled immediately after parent loading state ends");
         check(((PlayerRow)roster.Rows[0].DataBoundItem).Uid == 10 && ((PlayerRow)roster.Rows[1].DataBoundItem).Uid == 11 && ((PlayerRow)roster.Rows[2].DataBoundItem).Uid == 7, "initial roster grid uses position and CA ordering");
-        check(scope.Items.Count == 5 && scope.Items[3].ToString()!.Contains("Club U20") && scope.Items[4].ToString()!.Contains("slot 2") && scope.Items[4].ToString()!.Contains("30"), "scope shows named and unnamed individual sub-squads without guessed categories");
+        check(scope.Items.Count == 6 && scope.Items[3].ToString()!.Contains("Club U20") && scope.Items[4].ToString()!.Contains("slot 2") && scope.Items[4].ToString()!.Contains("30"), "scope shows named and unnamed individual sub-squads without guessed categories");
         scope.SelectedIndex = 3; Application.DoEvents();
         check(roster.Rows.Count == 1 && ((PlayerRow)roster.Rows[0].DataBoundItem).Uid == 20, "individual youth squad is filtered independently");
         L10n.SetLanguage("en"); panel.SetLanguage();
-        check(scope.SelectedIndex == 3 && roster.Rows.Count == 1 && scope.Items[3].ToString()!.Contains("Club U20"), "individual squad choice survives a language change");
+        check(scope.SelectedIndex == 3 && roster.Rows.Count == 1 && scope.Items[3].ToString()!.Contains("Club U20") && scope.Items[5].ToString()!.Contains("Reserves"), "individual squad choice survives a language change");
         scope.SelectedIndex = 0;
         var tabs = All(panel).OfType<TabControl>().Single(); tabs.SelectedIndex = 1; Application.DoEvents();
         var ranking = All(panel).OfType<DataGridView>().Single(g => g.Name == "MySquadRanking");

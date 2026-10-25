@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.7 (in development)
+# FM26 Simple Editor · v15.7.1 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.7.1 · in development
+
+- Restored **U20, U18** and other identifiable squad labels in the roster selector and staff views. Additional senior sides are shown as **Reserves**.
+- Recognition validates team records against several clubs in the same save, rather than guessing age from slot order. Consistent numeric type-code changes can be calibrated from the save.
+- Unverifiable cases retain generic labels. Planning alternatives account for the youth destination when identified.
 
 ### v15.7 · in development
 

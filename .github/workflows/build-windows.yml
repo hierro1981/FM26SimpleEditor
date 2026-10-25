@@ -64,7 +64,7 @@ jobs:
             "FM26SimpleEditor.deps.json", "FM26SimpleEditor.runtimeconfig.json",
             "en/FM26SimpleEditor.resources.dll",
             "editor.py", "archive_rewrite.py",
-            "history_reader.py", "my_squad.py", "staff_reader.py", "staff_teams.py", "staff_recruitment.py", "staff_jobs.py", "tactics_reader.py", "Data/saved_tactic_codes.json", "operation_progress.py",
+            "history_reader.py", "my_squad.py", "staff_reader.py", "staff_teams.py", "team_types.py", "staff_recruitment.py", "staff_jobs.py", "tactics_reader.py", "Data/saved_tactic_codes.json", "operation_progress.py",
             "runtime_probe.py", "requirements.txt"
           )
           foreach ($file in $required) {

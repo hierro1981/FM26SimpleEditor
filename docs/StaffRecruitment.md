@@ -265,3 +265,13 @@ inventing an owner. This is covered by synthetic regression fixtures. The player
 roster selector's `my_squad.py` code was not changed in v15.6.3; a reported loss
 of labels there still needs the affected save for reproduction. No recovered
 U20/U18 byte mapping is claimed by this change.
+
+## Structured team-name recovery (v15.7.1)
+
+[TeamTypes](TeamTypes.md) supersedes the earlier limitation that U20/U18 names
+could only be supplied by upstream objects. Owner-linked type/age records now
+provide corroborated names to the roster and all staff paths, including current
+squad filtering. The current save calibrates its own mapping using multiple
+independent club references. Unknown cases still use the slot fallback.
+Planning's cached rankings include target squad in their key and apply the
+same destination/youth-work rules as the linked search.

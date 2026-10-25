@@ -180,7 +180,11 @@ public sealed class HistoryPanel : UserControl
     private readonly ToolTip hints = new();
     private readonly CheckBox delta = new() { Text = L10n.Get("Text_7c00e624d516"), Checked = true, AutoSize = true };
     private readonly FlowLayoutPanel legend = new() { Dock = DockStyle.Fill, AutoScroll = true, WrapContents = true };
-    private readonly AttributeHistoryChart chart = new();
+    private const string CaKey = "current_ability";
+    private string FieldLabel(string key) => key == CaKey ? L10n.Get("HistoryCA") : Labels.Attribute(key, italian);
+    private readonly AttributeHistoryChart chart = new() { Name = "HistoryAttributeChart" };
+    private readonly AttributeHistoryChart caChart = new() { Name = "HistoryCAChart", Visible = false };
+    private readonly TableLayoutPanel graph = new() { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3 };
     private readonly DataGridView grid = new() { ReadOnly = true, Dock = DockStyle.Fill, AllowUserToAddRows = false, AllowUserToDeleteRows = false, RowHeadersVisible = false, ScrollBars = ScrollBars.Both, BackgroundColor = SystemColors.Window, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None };
     private readonly List<string> sources = [];
     private readonly HashSet<string> selected = new(StringComparer.Ordinal);
@@ -210,9 +214,8 @@ public sealed class HistoryPanel : UserControl
         selector.Controls.Add(preset,0,0); selector.Controls.Add(applyPreset,0,1); selector.Controls.Add(find,0,2); selector.Controls.Add(buttons,0,3); selector.Controls.Add(count,0,4); selector.Controls.Add(attributes,0,5);
         body.Panel1.Controls.Add(selector);
         var views = new SplitContainer { Size = new Size(850,550), Dock = DockStyle.Fill, Orientation = Orientation.Horizontal, SplitterDistance = 300 };
-        var graph = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2 };
-        graph.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100)); graph.RowStyles.Add(new RowStyle(SizeType.Absolute,65)); graph.RowStyles.Add(new RowStyle(SizeType.Percent,100));
-        graph.Controls.Add(legend,0,0); graph.Controls.Add(chart,0,1); views.Panel1.Controls.Add(graph); views.Panel2.Controls.Add(grid); body.Panel2.Controls.Add(views);
+        graph.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100)); graph.RowStyles.Add(new RowStyle(SizeType.Absolute,65)); graph.RowStyles.Add(new RowStyle(SizeType.Percent,100)); graph.RowStyles.Add(new RowStyle(SizeType.Percent,0));
+        graph.Controls.Add(legend,0,0); graph.Controls.Add(chart,0,1); graph.Controls.Add(caChart,0,2); views.Panel1.Controls.Add(graph); views.Panel2.Controls.Add(grid); body.Panel2.Controls.Add(views);
         root.Controls.Add(title,0,0); root.Controls.Add(tools,0,1); root.Controls.Add(info,0,2); root.Controls.Add(body,0,3);
         root.SizeChanged += (_, _) => info.MaximumSize = new Size(Math.Max(150,root.ClientSize.Width-root.Padding.Horizontal-12),0);
         Controls.Add(root);
@@ -286,7 +289,9 @@ public sealed class HistoryPanel : UserControl
     private List<HistoryPoint> DataPoints() => result is null ? [] : mode.SelectedIndex == 0 ? result.EmbeddedPoints : result.Points;
     private void RebuildAvailable()
     {
-        available = DataPoints().SelectMany(point => point.Attributes.Keys).Distinct(StringComparer.Ordinal).OrderBy(key => Labels.Attribute(key,italian),Labels.Comparer(italian)).ToList();
+        available = DataPoints().SelectMany(point => point.Attributes.Keys).Where(key => key != CaKey).Distinct(StringComparer.Ordinal).ToList();
+        if (result?.Points.Any(point => point.Ca is >= 1 and <= 200) == true) available.Add(CaKey);
+        available = available.OrderBy(key => FieldLabel(key),Labels.Comparer(italian)).ToList();
         foreach (string key in available.OrderBy(key => key,StringComparer.Ordinal))
             if (!styles.ContainsKey(key)) { int i = styles.Count; styles[key] = (Colors[i % Colors.Length], Dashes[(i / Colors.Length) % Dashes.Length]); }
         if (initialSelection && available.Count > 0) { ApplyPreset(); initialSelection = false; }
@@ -307,22 +312,24 @@ public sealed class HistoryPanel : UserControl
         if (role.Length == 0 && primary is not null) role = PositionScheme.Main(primary.Positions);
         var fields = RoleImportance.Fields(role).Where(f => f.Tier <= 2).Select(f => f.Key).ToHashSet(StringComparer.Ordinal);
         selected.Clear();
-        foreach (string key in available.Where(key => fields.Count == 0 || fields.Contains(key))) selected.Add(key);
+        foreach (string key in available.Where(key => key == CaKey || fields.Count == 0 || fields.Contains(key))) selected.Add(key);
     }
     private void RebuildList()
     {
         updating = true; attributes.BeginUpdate(); attributes.Items.Clear();
-        foreach (string key in available.Where(key => Labels.Attribute(key,italian).Contains(find.Text.Trim(),StringComparison.OrdinalIgnoreCase) || key.Contains(find.Text.Trim(),StringComparison.OrdinalIgnoreCase)))
-            attributes.Items.Add(new Choice(key,Labels.Attribute(key,italian)), selected.Contains(key));
+        foreach (string key in available.Where(key => FieldLabel(key).Contains(find.Text.Trim(),StringComparison.OrdinalIgnoreCase) || key.Contains(find.Text.Trim(),StringComparison.OrdinalIgnoreCase)))
+            attributes.Items.Add(new Choice(key,FieldLabel(key)), selected.Contains(key));
         attributes.EndUpdate(); updating = false;
     }
     private void Render()
     {
         if (IsDisposed) return;
         title.Text = L10n.Get("Text_f0cdee43e3b1") + (primary is null ? "" : " · " + primary.Player.Name);
-        grid.Columns.Clear(); grid.Rows.Clear(); chart.SetSeries([],20,false);
+        grid.Columns.Clear(); grid.Rows.Clear(); chart.SetSeries([],20,false); caChart.SetSeries([],200,true); caChart.Visible = false; chart.Visible = true; graph.RowStyles[1].Height = 100; graph.RowStyles[2].Height = 0;
         foreach (Control control in legend.Controls.Cast<Control>().ToArray()) control.Dispose(); legend.Controls.Clear();
-        var keys = available.Where(selected.Contains).ToList(); count.Text = L10n.Format("Text_46c06b548bb1", keys.Count, available.Count);
+        var keys = available.Where(key => selected.Contains(key) && key != CaKey).ToList();
+        bool showCa = available.Contains(CaKey) && selected.Contains(CaKey);
+        count.Text = L10n.Format("Text_46c06b548bb1", keys.Count + (showCa ? 1 : 0), available.Count);
         current.Visible = monthlyCalendar.Visible = mode.SelectedIndex == 0;
         if (result is null)
         {
@@ -352,18 +359,21 @@ public sealed class HistoryPanel : UserControl
         AddColumn(L10n.Get("Text_2fb609839b7f"),230);
         foreach (string key in keys)
         {
-            var column = AddColumn(Labels.Attribute(key,italian),135,raw.Checked ? 100 : 20);
+            var column = AddColumn(FieldLabel(key),135,raw.Checked ? 100 : 20);
             column.HeaderCell.Style.ForeColor = styles[key].Color; column.Tag = key;
             if (delta.Checked)
             {
-                var change = AddColumn("Δ " + Labels.Attribute(key,italian),90);
+                var change = AddColumn("Δ " + FieldLabel(key),90);
                 change.Tag = "delta:" + key; change.DefaultCellStyle.Format = "+0;-0;0";
                 change.HeaderCell.ToolTipText = L10n.Get(key is "injury_proneness" or "dirtiness" ? "HistoryInverseDeltaTip" : "HistoryDeltaTip");
             }
-            var item = new Label { Text = Labels.Attribute(key,italian) + " · " + L10n.Get("Dash_" + styles[key].Dash), AutoSize = true, ForeColor = styles[key].Color, Margin = new Padding(6,4,10,4) };
+            var item = new Label { Text = FieldLabel(key) + " · " + L10n.Get("Dash_" + styles[key].Dash), AutoSize = true, ForeColor = styles[key].Color, Margin = new Padding(6,4,10,4) };
             legend.Controls.Add(item);
         }
-        AddColumn("CA",75,200); AddColumn("PA",75,200);
+        AddColumn("CA",75,200);
+        if (delta.Checked) { var caDelta = AddColumn("Δ CA",75); caDelta.Tag = "delta:" + CaKey; caDelta.DefaultCellStyle.Format = "+0;-0;0"; }
+        AddColumn("PA",75,200);
+        int? previousCa = null;
         var lines = keys.ToDictionary(key => key,key => new List<AttributeHistoryChart.PointValue>(),StringComparer.Ordinal);
         var before = new Dictionary<string,int>(StringComparer.Ordinal);
         for (int index = 0; index < points.Count; index++)
@@ -387,7 +397,10 @@ public sealed class HistoryPanel : UserControl
                 }
                 else before.Remove(key);
             }
-            cells.Add(point.Ca); cells.Add(point.Pa);
+            cells.Add(point.Ca);
+            if (delta.Checked) cells.Add(point.Ca.HasValue && previousCa.HasValue && !duplicates ? point.Ca.Value - previousCa.Value : null);
+            previousCa = point.Ca;
+            cells.Add(point.Pa);
             int row = grid.Rows.Add(cells.ToArray());
             foreach (DataGridViewCell cell in grid.Rows[row].Cells)
             {
@@ -403,7 +416,22 @@ public sealed class HistoryPanel : UserControl
             if (now) grid.Rows[row].DefaultCellStyle.BackColor = Color.FromArgb(238,244,251);
         }
         int maximum = raw.Checked ? lines.Values.SelectMany(line => line).Any(point => point.Value>100) ? 125 : 100 : 20;
-        chart.SetSeries(keys.Select(key => new AttributeHistoryChart.Series(key,Labels.Attribute(key,italian),styles[key].Color,styles[key].Dash,lines[key])).ToList(),maximum,!embedded || calendar,calendar);
+        chart.SetSeries(keys.Select(key => new AttributeHistoryChart.Series(key,FieldLabel(key),styles[key].Color,styles[key].Dash,lines[key])).ToList(),maximum,!embedded || calendar,calendar);
+        if (showCa)
+        {
+            // CA uses actual save dates and its own 1–200 axis. Embedded monthly attributes do not establish historic CA.
+            var caPoints = result.Points.Where(p => p.Ca is >= 1 and <= 200 && DateTime.TryParseExact(p.Date,"yyyy-MM-dd",CultureInfo.InvariantCulture,DateTimeStyles.None,out _))
+                .OrderBy(p => p.Date,StringComparer.Ordinal).ThenBy(p => p.Source).Select(p => new AttributeHistoryChart.PointValue(
+                    DateTime.ParseExact(p.Date,"yyyy-MM-dd",CultureInfo.InvariantCulture).ToOADate(), p.Ca!.Value,
+                    DateTime.ParseExact(p.Date,"yyyy-MM-dd",CultureInfo.InvariantCulture).ToString("dd/MM/yyyy",L10n.Culture),p.Source,false)).ToList();
+            caChart.SetSeries([new(CaKey,FieldLabel(CaKey),styles[CaKey].Color,DashStyle.Solid,caPoints)],200,true);
+            caChart.Visible = true; chart.Visible = keys.Count > 0;
+            graph.RowStyles[1].Height = keys.Count > 0 ? 50 : 0; graph.RowStyles[2].Height = keys.Count > 0 ? 50 : 100;
+            legend.Controls.Add(new Label { Text = FieldLabel(CaKey) + " · 1–200", AutoSize = true, ForeColor = styles[CaKey].Color, Margin = new Padding(6,4,10,4) });
+            info.Text += " " + L10n.Get("HistoryCAHint");
+            if (caPoints.Select(p=>p.X).Distinct().Count()<2) info.Text += " " + L10n.Get("HistoryCANeedSaves");
+        }
+        else chart.Visible = true;
         grid.ClearSelection();
     }
     protected override void Dispose(bool disposing) { if (disposing) hints.Dispose(); base.Dispose(disposing); }

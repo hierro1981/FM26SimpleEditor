@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.8.1 (in development)
+# FM26 Simple Editor · v15.9.0 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,11 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.9.0 (in development)
+
+- **Edit player** now contains **Edit**, **In-game preview**, **Comparison** and **History** subtabs. Existing comparison shortcuts open the matching subtab.
+- **CA history:** select current ability alongside attributes to see a separate chart on its real 1–200 scale, with values and dates from compared saves. Use **Add saves** to build the trend. CA deltas are available in the table. Historic CA in internal attribute samples remains undecoded; no past values are inferred.
 
 ### v15.8.1 (in development)
 

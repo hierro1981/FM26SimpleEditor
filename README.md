@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.8.1 (in sviluppo)
+# FM26 Simple Editor · v15.9.0 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,11 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.9.0 (in sviluppo)
+
+- **Modifica giocatore** raccoglie i sottotab **Modifica**, **Anteprima nel gioco**, **Confronto** e **Storico**. Le scorciatoie di confronto aprono direttamente il sottotab corretto.
+- **Storico CA:** seleziona l’abilità attuale insieme agli attributi per vedere un grafico separato sulla scala reale 1–200, con valori e date dei salvataggi confrontati. Usa **Aggiungi salvataggi** per ricostruire l’andamento. In tabella sono disponibili le variazioni CA. La CA storica dei campioni interni non è ancora decodificata; non vengono dedotti valori passati.
 
 ### v15.8.1 (in sviluppo)
 

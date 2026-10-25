@@ -110,7 +110,7 @@ internal static class LocalizationChecks
         SetOptions("en", 17); Application.DoEvents();
         check(SquadSelection.ResultLimit == 17 && AppSettings.Load(directory).RecommendationCount == 17, "options apply one shared recommendation limit and persist it");
         check(L10n.Language == "en" && AppSettings.Load(directory).Language == "en" && All(main).OfType<Button>().Any(b => b.Text == "Open save") && All(main).OfType<TabPage>().Any(t => t.Text == "1  Player search"), "language select updates interface and persists preference immediately");
-        check(All(main).OfType<TabPage>().Any(t => t.Text == "4  Comparison (1)"), "comparison pool count tab caption changes language");
+        check(All(main).OfType<TabPage>().Any(t => t.Text == "Comparison (1)"), "comparison pool count tab caption changes language");
         check(player.Attributes[0].Value == 80 && player.Attributes[0].Label == "Technique" && All(main).OfType<Label>().Any(l => l.Text == "Portiere") && All(main).OfType<Label>().Any(l => l.Text == "Contratto") && All(main).OfType<Label>().Any(l => l.Text.StartsWith("Public ID:")), "language switch preserves unsaved values and player/team names while translating identity labels");
         check(All(main).OfType<CheckBox>().All(c => c.Text != "Etichette in italiano") && filters.Request("test", null, null).AgeMin == request.AgeMin, "language select replaces checkbox and preserves active filters");
         check(All(filters).OfType<GroupBox>().Any(g => g.Text == "Age (years)") && All(filters).OfType<ComboBox>().SelectMany(c => c.Items.Cast<object>()).Any(i => i.ToString() == "Expires within 6 months"), "filter captions and dropdown choices are localized");

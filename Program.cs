@@ -22,6 +22,8 @@ public sealed class MainForm : Form
     private readonly AccentTabControl tabs = new() { Dock = DockStyle.Fill };
     private readonly TabPage searchTab = new(L10n.Get("Text_632c1126bbb8"));
     private readonly TabPage editTab = new(L10n.Get("Text_d10c243588b5"));
+    private readonly AccentTabControl playerTabs = new() { Name = "PlayerTabs", Dock = DockStyle.Fill };
+    private readonly TabPage modificationTab = new(L10n.Get("PlayerModificationTab"));
     private readonly TabPage previewTab = new(L10n.Get("Text_e17d380480a5"));
     private readonly TabPage comparisonTab = new(L10n.Get("Text_49be2b3731fc"));
     private readonly TabPage mySquadTab = new(L10n.Get("MySquadTab"));
@@ -133,7 +135,9 @@ public sealed class MainForm : Form
         status.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         status.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         status.Controls.Add(state, 0, 0); status.Controls.Add(progress, 1, 0); status.Controls.Add(progressText, 2, 0);
-        tabs.TabPages.AddRange([searchTab, editTab, previewTab, comparisonTab, historyTab, mySquadTab]);
+        tabs.TabPages.AddRange([searchTab, editTab, mySquadTab]);
+        playerTabs.TabPages.AddRange([modificationTab, previewTab, comparisonTab, historyTab]);
+        editTab.Controls.Add(playerTabs);
         BuildSearch(); BuildEditor();
         mySquadTab.Controls.Add(mySquad);
         mySquad.PlayerOpenRequested += async uid => await LoadPlayer(uid);
@@ -169,20 +173,19 @@ public sealed class MainForm : Form
         changeBirth.CheckedChanged += (_, _) => { birth.Enabled = changeBirth.Checked && detail?.BirthEditable == true && !busy; Changed(); };
         save.Click += async (_, _) => await SaveFile();
         reset.Click += (_, _) => ResetEdits();
-        view.Click += (_, _) => { if (FinishEdits()) tabs.SelectedTab = previewTab; };
-        compareButton.Click += (_, _) => { if (FinishEdits()) tabs.SelectedTab = comparisonTab; };
-        historyButton.Click += (_, _) => { if (FinishEdits()) tabs.SelectedTab = historyTab; };
-        tabs.Selecting += (_, args) =>
+        view.Click += (_, _) => { if (FinishEdits()) ShowPlayerTab(previewTab); };
+        compareButton.Click += (_, _) => { if (FinishEdits()) ShowPlayerTab(comparisonTab); };
+        historyButton.Click += (_, _) => { if (FinishEdits()) ShowPlayerTab(historyTab); };
+        playerTabs.Selecting += (_, args) =>
         {
             if (!binding && !busy && (args.TabPage == previewTab || args.TabPage == comparisonTab || args.TabPage == historyTab) && !FinishEdits()) args.Cancel = true;
         };
         tabs.SelectedIndexChanged += async (_, _) =>
         {
-            if (tabs.SelectedTab == previewTab) { FinishEdits(); RefreshPreview(); }
-            if (tabs.SelectedTab == comparisonTab) { FinishEdits(); RefreshComparison(); }
-            if (tabs.SelectedTab == historyTab) RefreshHistory();
+            if (tabs.SelectedTab == editTab) RefreshPlayerView();
             if (tabs.SelectedTab == mySquadTab) await RefreshMySquad();
         };
+        playerTabs.SelectedIndexChanged += (_, _) => RefreshPlayerView();
         copyPlayerName.Click += (_, _) => CopyIdentity(detail?.Player.Name);
         copyPublicId.Click += (_, _) => CopyIdentity(detail?.Player.Id?.ToString(CultureInfo.InvariantCulture));
         copyInternalId.Click += (_, _) => CopyIdentity(detail?.Player.Uid.ToString(CultureInfo.InvariantCulture));
@@ -294,7 +297,7 @@ public sealed class MainForm : Form
         compareNow.Click += (_, _) =>
         {
             if (contextPlayer is not PlayerRow row || detail is null || !FinishEdits()) return;
-            AddComparison(row.Uid); tabs.SelectedTab = comparisonTab; comparison.PreferReference(row.Uid);
+            AddComparison(row.Uid); ShowPlayerTab(comparisonTab); comparison.PreferReference(row.Uid);
         };
         players.CellFormatting += (_, args) =>
         {
@@ -371,7 +374,7 @@ public sealed class MainForm : Form
         var footer = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true, Padding = new Padding(0, 10, 0, 0) };
         footer.Controls.AddRange([reset, view, compareButton, historyButton]);
         root.Controls.Add(header, 0, 0); root.Controls.Add(properties, 0, 1); root.Controls.Add(birthInfo, 0, 2); root.Controls.Add(split, 0, 3); root.Controls.Add(footer, 0, 4);
-        editing.Controls.Add(root); editTab.Controls.Add(editing);
+        editing.Controls.Add(root); modificationTab.Controls.Add(editing);
     }
 
     private static DataGridViewTextBoxColumn Column(string property, string header, float weight) => new()
@@ -484,9 +487,25 @@ public sealed class MainForm : Form
         if (!binding && !busy) RefreshComparison();
     }
 
+    private bool IsPlayerTab(TabPage page) => tabs.SelectedTab == editTab && playerTabs.SelectedTab == page;
+    private void ShowPlayerTab(TabPage page)
+    {
+        bool already = IsPlayerTab(page);
+        playerTabs.SelectedTab = page;
+        tabs.SelectedTab = editTab;
+        if (already) RefreshPlayerView();
+    }
+    private void RefreshPlayerView()
+    {
+        if (busy || binding || tabs.SelectedTab != editTab) return;
+        if (playerTabs.SelectedTab == previewTab) RefreshPreview();
+        if (playerTabs.SelectedTab == comparisonTab) RefreshComparison();
+        if (playerTabs.SelectedTab == historyTab) RefreshHistory();
+    }
+
     private void RefreshComparison()
     {
-        if (busy || binding || tabs.SelectedTab != comparisonTab) return;
+        if (busy || binding || !IsPlayerTab(comparisonTab)) return;
         comparison.SetContext(detail,(int)ca.Value,(int)pa.Value,HasChanges(),catalog,comparisonPool,UseItalian,
             uid => backend.Send<PlayerDetail>(new { command = "inspect", uid }));
     }
@@ -500,13 +519,13 @@ public sealed class MainForm : Form
         if (detail?.Player.Uid != first) return;
         AddComparison(first); AddComparison(second);
         comparison.SetPreferredReference(second);
-        if (tabs.SelectedTab == comparisonTab) RefreshComparison();
-        else tabs.SelectedTab = comparisonTab;
+        if (IsPlayerTab(comparisonTab)) RefreshComparison();
+        else ShowPlayerTab(comparisonTab);
     }
 
     private void RefreshHistory()
     {
-        if (busy || tabs.SelectedTab != historyTab) return;
+        if (busy || !IsPlayerTab(historyTab)) return;
         historyPanel.SetContext(detail,UseItalian,
             (uid,sources) => backend.Send<HistoryResult>(new { command = "history", uid, sources }));
     }
@@ -619,14 +638,14 @@ public sealed class MainForm : Form
     private async Task LoadPlayer(uint uid)
     {
         if (busy || !catalogByUid.TryGetValue(uid, out var row)) return;
-        if (detail?.Player.Uid == row.Uid) { tabs.SelectedTab = editTab; return; }
+        if (detail?.Player.Uid == row.Uid) { ShowPlayerTab(modificationTab); return; }
         if (!ConfirmDiscard()) return;
         SetBusy(true, L10n.Format("Text_0af5b1bce786", row.Name), determinate: true);
         try
         {
             var selected = await backend.Send<PlayerDetail>(new { command = "inspect", uid = row.Uid }, ReportProgress);
             ReportProgress(new BackendProgress { Percent = 98, Phase = L10n.Get("PlayerRendering") });
-            SetDetail(selected); tabs.SelectedTab = editTab;
+            SetDetail(selected); ShowPlayerTab(modificationTab);
             progress.Value = 100; progressText.Text = "100%";
             state.Text = L10n.Format("Text_8bef81b4f3c8", row.Name);
         }
@@ -740,7 +759,7 @@ public sealed class MainForm : Form
 
     private void RefreshPreview()
     {
-        if (!previewStale || detail is null || tabs.SelectedTab != previewTab) return;
+        if (!previewStale || detail is null || !IsPlayerTab(previewTab)) return;
         var player = detail.Player;
         var cohort = catalog.Where(other => other.Ca > 0 && (player.TeamId.HasValue ? other.TeamId == player.TeamId : player.ClubUid.HasValue && other.ClubUid == player.ClubUid)).ToList();
         double? mean = cohort.Count >= 3 ? cohort.Average(other => other.Ca) : null;

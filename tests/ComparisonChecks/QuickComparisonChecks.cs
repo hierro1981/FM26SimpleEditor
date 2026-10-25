@@ -60,6 +60,20 @@ internal static class QuickComparisonChecks
         cache[2] = players[1]; cache[3] = players[2];
         var search = (DataGridView)typeof(MainForm).GetField("players", Private)!.GetValue(main)!;
         search.DataSource = new BindingList<PlayerRow>(catalog); main.Show(); Application.DoEvents();
+        var topTabs=(TabControl)typeof(MainForm).GetField("tabs",Private)!.GetValue(main)!;
+        var playerTabs=(TabControl)typeof(MainForm).GetField("playerTabs",Private)!.GetValue(main)!;
+        check(topTabs.TabPages.Count==3 && playerTabs.TabPages.Count==4 && playerTabs.Parent==topTabs.TabPages[1] &&
+            playerTabs.TabPages[0].Text=="Modifica" && playerTabs.TabPages[1].Text=="Anteprima nel gioco" && playerTabs.TabPages[3].Text=="Storico",
+            "three main tabs contain four player subtabs including the original edit sheet");
+        var showPlayer=typeof(MainForm).GetMethod("ShowPlayerTab",Private)!;
+        showPlayer.Invoke(main,[playerTabs.TabPages[1]]);Application.DoEvents();
+        check(topTabs.SelectedIndex==1 && playerTabs.SelectedIndex==1 && All(playerTabs.TabPages[1]).OfType<PlayerPreview>().Any(p=>p.Visible),
+            "preview shortcut selects the player parent and preview child together");
+        typeof(MainForm).GetField("busy",Private)!.SetValue(main,true);
+        showPlayer.Invoke(main,[playerTabs.TabPages[3]]);Application.DoEvents();
+        check(topTabs.SelectedIndex==1 && playerTabs.SelectedIndex==3 && All(playerTabs.TabPages[3]).OfType<HistoryPanel>().Single().Visible,
+            "history is nested under the player sheet rather than left as a main tab");
+        topTabs.SelectedIndex=0;typeof(MainForm).GetField("busy",Private)!.SetValue(main,false);
         check(search.MultiSelect, "initial search supports Ctrl row selection");
         search.ClearSelection(); search.Rows[0].Selected = true; search.Rows[1].Selected = true;
         ContextClick(search, 1);
@@ -71,7 +85,7 @@ internal static class QuickComparisonChecks
         check(ReferenceEquals(typeof(ComparisonPanel).GetField("primary", Private)!.GetValue(compare), players[0]) &&
             ReferenceEquals(typeof(ComparisonPanel).GetField("other", Private)!.GetValue(compare), players[1]), "quick comparison opens both selected players across teams");
         var pool = (HashSet<uint>)typeof(MainForm).GetField("comparisonPool", Private)!.GetValue(main)!;
-        check(pool.Contains(1) && pool.Contains(2) && compare.Visible, "quick comparison adds both players to pool and opens the comparison tab");
+        check(pool.Contains(1) && pool.Contains(2) && compare.Visible && topTabs.SelectedIndex==1 && playerTabs.SelectedIndex==2, "quick comparison adds both players to pool and opens the comparison tab");
         // Reopening the pair must clear a stale search query and older reference.
         pool.Add(3);
         var query = (TextBox)typeof(ComparisonPanel).GetField("query", Private)!.GetValue(compare)!; query.Text = "not a player";

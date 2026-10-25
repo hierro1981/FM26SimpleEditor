@@ -64,6 +64,39 @@ internal static class HistoryInteractionChecks
         check(tip.OwnerDraw, "history tooltip uses custom drawing for per-attribute colors");
         check(tip.GetToolTip(chart)!.Contains("Technique: 13"), "hover works anywhere in plot height instead of tiny point targets");
         chart.SetSeries([],20,false); check(chart.PeriodDetails(0) == "" && tip.GetToolTip(chart) == "", "replacing chart clears obsolete tooltip");
+        var caHistory=new HistoryResult
+        {
+            EmbeddedAvailable=true,
+            EmbeddedPoints=[new(){Sequence=1,Source="new.fm",Attributes=new(){["passing"]=50}},new(){Sequence=2,Source="new.fm",Attributes=new(){["passing"]=55}}],
+            Points=[new(){Date="2027-09-01",Source="old.fm",Ca=88,Pa=140,Attributes=new(){["passing"]=50}},
+                    new(){Date="2028-02-10",Source="new.fm",Ca=91,Pa=140,Attributes=new(){["passing"]=55}}]
+        };
+        panel.SetContext(new(){Player=new(){Uid=90,Name="Prospect",Ca=91},Positions=[new(){Key="MC",Value=20}]},false,(_,_)=>Task.FromResult(caHistory));Application.DoEvents();
+        var caChart=All(panel).OfType<AttributeHistoryChart>().Single(c=>c.Name=="HistoryCAChart");
+        var attributeChart=All(panel).OfType<AttributeHistoryChart>().Single(c=>c.Name=="HistoryAttributeChart");
+        var chartSeries=typeof(AttributeHistoryChart).GetField("series",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!;
+        var caSeries=(List<AttributeHistoryChart.Series>)chartSeries.GetValue(caChart)!;
+        check(caChart.Visible && attributeChart.Visible && caSeries.Single().Points.Select(p=>p.Value).SequenceEqual(new[]{88,91}) &&
+            caSeries.Single().Points[0].X==new DateTime(2027,9,1).ToOADate() && caHistory.EmbeddedPoints.All(p=>p.Ca is null),
+            "CA chart uses only actual dated snapshots alongside internal attributes, without inventing monthly CA");
+        check((int)typeof(AttributeHistoryChart).GetField("maximum",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!.GetValue(caChart)! == 200 &&
+            caChart.PeriodDetails(new DateTime(2027,9,1).ToOADate()).Contains("88"),
+            "CA has an independent 200-point axis and actual-value tooltips");
+        var historyMode=All(panel).OfType<ComboBox>().Single(c=>c.Name!="HistoryRolePreset");historyMode.SelectedIndex=1;Application.DoEvents();
+        var caDelta=grid.Columns.Cast<DataGridViewColumn>().Single(c=>Equals(c.Tag,"delta:current_ability"));
+        check(grid.Rows.Count==2 && grid.Rows[0].Cells[caDelta.Index].Value is null &&
+            grid.Rows[1].Cells[caDelta.Index].Value is int growth && growth==3 && grid.Rows[1].Cells[caDelta.Index].Style.ForeColor.G>grid.Rows[1].Cells[caDelta.Index].Style.ForeColor.R,
+            "snapshot table includes coloured numeric CA growth from 88 to 91");
+        var caChoice=Enumerable.Range(0,list.Items.Count).Single(i=>list.Items[i]!.ToString()!.StartsWith("CA"));
+        list.SetItemChecked(caChoice,false);Application.DoEvents();
+        check(!caChart.Visible && attributeChart.Visible,"CA selection can be disabled while retaining attribute history");
+        list.SetItemChecked(caChoice,true);Application.DoEvents();
+        var rawToggle=All(panel).OfType<CheckBox>().Single(c=>c.Text==L10n.Get("Text_00f23f53197c"));rawToggle.Checked=true;Application.DoEvents();
+        check(((List<AttributeHistoryChart.Series>)chartSeries.GetValue(caChart)!).Single().Points.Select(p=>p.Value).SequenceEqual(new[]{88,91}),
+            "raw attribute toggle never rescales CA to attribute units");
+        panel.ClearSources();Application.DoEvents();
+        check(!caChart.Visible && ((List<AttributeHistoryChart.Series>)chartSeries.GetValue(caChart)!).Count==0,
+            "clearing the save removes obsolete CA history");
         host.Close(); L10n.SetLanguage("it");
     }
 }

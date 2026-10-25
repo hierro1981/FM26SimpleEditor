@@ -782,7 +782,7 @@ Move the editor to a writable folder to retain the selection.</value>
     <value>The save reader has exited. </value>
   </data>
   <data name="Text_49be2b3731fc" xml:space="preserve">
-    <value>4  Comparison (0)</value>
+    <value>Comparison</value>
   </data>
   <data name="Text_4c099aaccac0" xml:space="preserve">
     <value>Can play (12+)</value>
@@ -830,7 +830,7 @@ Move the editor to a writable folder to retain the selection.</value>
     <value>Active</value>
   </data>
   <data name="Text_53a436ea8c92" xml:space="preserve">
-    <value>5  History</value>
+    <value>History</value>
   </data>
   <data name="Text_53e4d698ead1" xml:space="preserve">
     <value>Wait for the current operation to finish.</value>
@@ -970,7 +970,7 @@ Excluded files: </value>
     <value>Save opened · {0:N0} players</value>
   </data>
   <data name="Text_7a436139381b" xml:space="preserve">
-    <value>4  Comparison ({0})</value>
+    <value>Comparison ({0})</value>
   </data>
   <data name="Text_7acb74dfc936" xml:space="preserve">
     <value>Right dominant</value>
@@ -1343,7 +1343,7 @@ Excluded files: </value>
     <value>Preparing dependencies…</value>
   </data>
   <data name="Text_e17d380480a5" xml:space="preserve">
-    <value>3  In-game preview</value>
+    <value>In-game preview</value>
   </data>
   <data name="Text_e17d53cc8e6c" xml:space="preserve">
     <value>Aspects with at least two available attributes show no mean gap of half a point or more: no clearly stronger style emerges.</value>
@@ -1580,7 +1580,7 @@ Hover over a position for its rating.</value>
     <value>attributes</value>
   </data>
   <data name="MySquadTab" xml:space="preserve">
-    <value>6  My squad</value>
+    <value>3  My squad</value>
   </data>
   <data name="MySquadClub" xml:space="preserve">
     <value>Managed club</value>
@@ -2356,4 +2356,8 @@ Training stars use the same calculation as the Staff page. Other stars describe 
   <data name="PlanExpiryHint" xml:space="preserve"><value>Uses the save date. Expired / &lt;3 days includes overdue contracts and those with fewer than 3 days left. The 6/12 month windows exclude overdue contracts. All includes every readable current or expired contract, excluding future starts and human managers.</value></data>
   <data name="StaffPreferSubteams" xml:space="preserve"><value>Prioritise current subteam staff</value></data>
   <data name="StaffPreferSubteamsHint" xml:space="preserve"><value>For a youth vacancy: youth staff first, then other subteams, unknown assignments and first teams. For other subteams, matching assignments come first. Column sorting applies within each priority group, before limiting results. Turn off to sort everybody together. Current assignment is shown in Job squad; it does not guarantee acceptance or change scores and stars.</value></data>
+  <data name="PlayerModificationTab" xml:space="preserve"><value>Edit</value></data>
+  <data name="HistoryCA" xml:space="preserve"><value>CA · Current ability</value></data>
+  <data name="HistoryCAHint" xml:space="preserve"><value>CA chart: actual values from compared saves, on a separate 1–200 scale. Internal attribute samples do not provide decoded historic CA.</value></data>
+  <data name="HistoryCANeedSaves" xml:space="preserve"><value>Use Add saves to compare CA at different dates.</value></data>
 </root>

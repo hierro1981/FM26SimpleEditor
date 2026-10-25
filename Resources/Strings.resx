@@ -782,7 +782,7 @@ Sposta l’editor in una cartella scrivibile per conservare la scelta.</value>
     <value>Il lettore del salvataggio si è chiuso. </value>
   </data>
   <data name="Text_49be2b3731fc" xml:space="preserve">
-    <value>4  Confronto (0)</value>
+    <value>Confronto</value>
   </data>
   <data name="Text_4c099aaccac0" xml:space="preserve">
     <value>Può giocare (12+)</value>
@@ -830,7 +830,7 @@ Sposta l’editor in una cartella scrivibile per conservare la scelta.</value>
     <value>In corso</value>
   </data>
   <data name="Text_53a436ea8c92" xml:space="preserve">
-    <value>5  Storico</value>
+    <value>Storico</value>
   </data>
   <data name="Text_53e4d698ead1" xml:space="preserve">
     <value>Attendi il completamento dell'operazione in corso.</value>
@@ -970,7 +970,7 @@ File esclusi: </value>
     <value>Salvataggio aperto · {0:N0} giocatori</value>
   </data>
   <data name="Text_7a436139381b" xml:space="preserve">
-    <value>4  Confronto ({0})</value>
+    <value>Confronto ({0})</value>
   </data>
   <data name="Text_7acb74dfc936" xml:space="preserve">
     <value>Destro dominante</value>
@@ -1343,7 +1343,7 @@ File esclusi: </value>
     <value>Preparazione delle dipendenze…</value>
   </data>
   <data name="Text_e17d380480a5" xml:space="preserve">
-    <value>3  Anteprima nel gioco</value>
+    <value>Anteprima nel gioco</value>
   </data>
   <data name="Text_e17d53cc8e6c" xml:space="preserve">
     <value>Gli aspetti con almeno due attributi disponibili non mostrano differenze medie di almeno mezzo punto: non emerge uno stile nettamente superiore.</value>
@@ -1580,7 +1580,7 @@ Passa sul punto per il valore.</value>
     <value>attributi</value>
   </data>
   <data name="MySquadTab" xml:space="preserve">
-    <value>6  La mia squadra</value>
+    <value>3  La mia squadra</value>
   </data>
   <data name="MySquadClub" xml:space="preserve">
     <value>Squadra allenata</value>
@@ -2356,4 +2356,8 @@ Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre st
   <data name="PlanExpiryHint" xml:space="preserve"><value>Usa la data del salvataggio. Scaduti / &lt;3 giorni include i contratti già scaduti e quelli con meno di 3 giorni rimasti. Le finestre 6/12 mesi escludono quelli già scaduti. Tutti include i contratti leggibili attuali o scaduti, escludendo incarichi con inizio futuro e allenatori umani.</value></data>
   <data name="StaffPreferSubteams" xml:space="preserve"><value>Privilegia staff già nelle sottosquadre</value></data>
   <data name="StaffPreferSubteamsHint" xml:space="preserve"><value>Per una destinazione giovanile: prima staff delle giovanili, poi altre sottosquadre, incarichi non identificati e prime squadre. Per le altre sottosquadre hanno precedenza gli incarichi corrispondenti. Le colonne ordinano entro ciascun gruppo, prima del limite dei risultati. Disattiva per ordinare tutti insieme. La squadra attuale compare in Squadra incarico; non garantisce l’accettazione e non modifica punteggi e stelle.</value></data>
+  <data name="PlayerModificationTab" xml:space="preserve"><value>Modifica</value></data>
+  <data name="HistoryCA" xml:space="preserve"><value>CA · Abilità attuale</value></data>
+  <data name="HistoryCAHint" xml:space="preserve"><value>Grafico CA: valori reali dei salvataggi confrontati, su scala separata 1–200. Nei campioni interni degli attributi la CA storica non è decodificata.</value></data>
+  <data name="HistoryCANeedSaves" xml:space="preserve"><value>Usa Aggiungi salvataggi per confrontare la CA a date diverse.</value></data>
 </root>

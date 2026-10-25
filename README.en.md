@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.7.4 (in development)
+# FM26 Simple Editor · v15.7.4
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -6,11 +6,11 @@
 
 🌐 **Project website:** [English](https://hierro1981.github.io/FM26SimpleEditor/en/) · [Italiano](https://hierro1981.github.io/FM26SimpleEditor/)
 
-A free **Football Manager 26** editor for Windows. Open a save, find a player and edit attributes, ability, positions and date of birth. You can also compare players, track their progress and find the best candidates for your squad’s positions and tactics.
+A free **Football Manager 26** editor for Windows. Open a save, find a player and edit attributes, ability, positions and date of birth. You can also compare players, track their progress and find the best candidates for your squad’s positions and tactics. For staff, search candidates by job or training category and assess renewals for expiring contracts.
 
 ## Download and launch
 
-Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v14.6**.
+Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v15.7.4**.
 
 - **Setup, when available in the release:** guided installation, with options to install Python and the .NET runtime if needed. Additional installations require your consent and an Internet connection.
 - **Portable ZIP:** extract the complete package into a folder and run **FM26SimpleEditor.exe**. Keep all package files together.
@@ -85,28 +85,30 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 ## Changes, newest first
 
-### v15.7.4 · in development
+### v15.7.4
+
+This release brings together staff search and renewal planning, youth-team filters, squad-type recognition and new future Best XI scenarios.
 
 - **Analysts:** planning now assesses the identified category, showing scores, stars and alternatives when attributes are complete.
 - Renewal alternatives require the same contract variant. The **Find staff** shortcut preserves that filter; search can also show all variants.
 - Exact specialisation remains explicitly unidentified. Missing required attributes are named in the assessment.
 
-### v15.7.3 · in development
+### v15.7.3
 
 - **Staff planning:** subteam comparisons show **Working with youngsters** first, with current and alternative values and a coloured difference. Scores and stars still use the selected criterion.
 
-### v15.7.2 · in development
+### v15.7.2
 
 - **Staff planning:** more compact columns sized to content, wrapping headers and **Comparison criterion** moved to the end.
 - Double-click a renewal to open **Find staff** with the same filters as the dedicated button.
 
-### v15.7.1 · in development
+### v15.7.1
 
 - Restored **U20, U18** and other identifiable squad labels in the roster selector and staff views. Unidentified additional groups are shown as **Additional squad**, with their code in the tooltip.
 - Recognition validates team records against several clubs in the same save, rather than guessing age from slot order. Consistent numeric type-code changes can be calibrated from the save.
 - Unverifiable cases retain generic labels. Planning alternatives account for the youth destination when identified.
 
-### v15.7 · in development
+### v15.7
 
 - **Find staff:** choose the destination squad, for example Manager + U20, Assistant manager + U20 or Coach + U18.
 - Adjustable **Working with youngsters** requirement for youth managers and coaches (default at least 12/20), also visible in the list. Training star formulas are unchanged.
@@ -114,24 +116,24 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Moving from a first-team job to a subteam is not automatically considered a promotion: estimated interest is capped at borderline.
 - Restored the contract reader’s squad-slot fallback when no team can be matched in the club catalogue. Conflicting records remain unidentified.
 
-### v15.6.3 · in development
+### v15.6.3
 
 - Added **Job squad** to Staff, Find staff and Staff planning, including proposed alternatives and copied assessments.
 - Identifies first team, subteam or affiliate from the contract. Readable names are preserved; unnamed groups use their slot and team ID rather than guessed U20/U18 labels.
 - Staff text search also includes the squad; tooltips expose the contract reference.
 
-### v15.6.2 · in development
+### v15.6.2
 
 - **Staff planning:** removed the club column from the renewal list and added stars beside the proposed alternative’s name.
 - **Find staff using this criterion** opens search with the same job or training category, current-job filter and assumed salary offer. Interest filtering stays active and previous search text is cleared.
 
-### v15.6.1 · in development
+### v15.6.1
 
 - **Current job stars** replace the former CA-based overall stars: specialists are assessed for the job they perform.
 - Coaches use the relevant training category; other jobs use job-specific attributes. Tooltips identify the criterion and insufficient data remains unrated.
 - Shared calculation across the staff list, search and planning default. Numeric CA remains visible.
 
-### v15.6 · in development
+### v15.6
 
 - New **My squad → Staff planning** tab: lists contracts expiring within six months and suggests renewal or assessing a replacement.
 - Compares your staff with stronger alternatives for the same job or training category, showing stars, attributes and estimated interest. Change the comparison criterion or try an assumed salary offer.
@@ -139,58 +141,58 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - More conservative interest estimates for staff still contracted to a more prestigious club: imminent expiry and an assumed pay rise cannot override the refusal risk.
 - Removed the generic closing warning from staff assessments.
 
-### v15.5.1 · in development
+### v15.5.1
 
 - Italian staff labels now use the game’s terminology for **Sports Scientist** and **Head of Sports Science**, making those jobs easier to find in recruitment and staff lists.
 
-### v15.5 · in development
+### v15.5
 
 - Switch the **Best XI** between current performance and future potential with **Future**. Both modes find the best combination for the entire tactic, using each player once.
 - More list space in **Best by tactic**: a wider future table, compact familiarity columns, and explanations moved into a dedicated tab in **Criteria and sources**.
 - The future XI uses the ranking’s experimental growth estimate: individual peaks may occur in different seasons. Missing data never produce invented values.
 
-### v15.4.2 · in development
+### v15.4.2
 
 - Corrected future tactic projections: low starting CA no longer artificially multiplies every attribute. Growth is added from the estimated CA gain, retaining the age and position model.
 - Reduced inflated future ratings; traits such as flair and determination no longer increase automatically because of spare PA.
 - Clarified the difference between the selected tactical-role score and FM Genie Scout’s best-position percentage. Future table headings wrap to distinguish estimated CA from alternative scenarios.
 
-### v15.4.1 · in development
+### v15.4.1
 
 - The future ranking in **Best by tactic** now accounts for age and uses separate goalkeeper/outfield growth curves, instead of assuming every player reaches full PA.
 - Shows **estimated future CA**, remaining growth and cautious/favourable scenarios. Future role scores and stars use the new estimate; PA remains visible as the theoretical ceiling.
 - This experimental estimate assumes adequate training and playing time; development is not guaranteed. Missing age or abilities are not invented.
 
-### v15.4 · in development
+### v15.4
 
 - **Best by tactic** now places a potential ranking alongside today’s best players for the selected slot and phase, using the same squad and loan filters.
 - Future score and stars show a conditional full-PA scenario, with current score, age and PA−CA headroom for comparison. Unknown PA remains unavailable.
 - Both tables support opening players and quick comparison; those actions always use real current data. The best-XI pitch remains based on current performance.
 
-### v15.3 · in development
+### v15.3
 
 - Read personal staff reputation (home, current and world), separately from club reputation and CA stars.
 - Show five saved job affinities: manager, assistant, coach, physio and scout. Available in staff details, recruitment columns and copied assessments; they do not guarantee interest in an offer.
 - Eight additional tactical preferences, including marking, offside and use of substitutions. Unmapped jobs and the independent tool’s percentage-rating formula remain explicitly unavailable.
 
-### v15.2.1 · in development
+### v15.2.1
 
 - Lateral moves with no clear club-reputation improvement carry a specific warning; higher assumed wages alone do not establish interest in negotiations.
 - International relocation is flagged using current employer country. High adaptability does not imply willingness to relocate, and nationality alone no longer adds a relocation penalty.
 
-### v15.2 · in development
+### v15.2
 
 - Current-job filter with **Any**, recognised jobs and **Not identified**. Works alongside the desired job or training category.
 - Clearer warning for borderline candidates at higher refusal risk; they remain visible for feedback.
 - Copied assessments now include current job, contract and wage, with shorter score formatting.
 
-### v15.1 · in development
+### v15.1
 
 - Current club reputation column and a copy icon beside each candidate’s name; overall and best-training stars moved to the end.
 
 - **Ignore interest (best overall)** disables the interest filter and orders staff by quality, including candidates likely to refuse. Estimated interest remains visible.
 
-### v15.0 · in development
+### v15.0
 
 - New **Find staff** section, by job or training category, with rankings, estimated stars and key attributes.
 - Estimated interest in the human-managed club, with explanations, borderline cases and an optional wage scenario.

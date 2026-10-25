@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.7.4 (in sviluppo)
+# FM26 Simple Editor · v15.7.4
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -6,11 +6,11 @@
 
 🌐 **Pagina del progetto:** [italiano](https://hierro1981.github.io/FM26SimpleEditor/) · [English](https://hierro1981.github.io/FM26SimpleEditor/en/)
 
-Editor gratuito per **Football Manager 26** su Windows. Apri un salvataggio, cerca un giocatore e modifica attributi, abilità, posizioni e data di nascita. Puoi anche confrontare giocatori, seguirne i progressi e trovare i più adatti ai ruoli della tua squadra e delle sue tattiche.
+Editor gratuito per **Football Manager 26** su Windows. Apri un salvataggio, cerca un giocatore e modifica attributi, abilità, posizioni e data di nascita. Puoi anche confrontare giocatori, seguirne i progressi e trovare i più adatti ai ruoli della tua squadra e delle sue tattiche. Per lo staff, cerca candidati per incarico o allenamento e valuta i rinnovi dei contratti in scadenza.
 
 ## Scarica e avvia
 
-Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione corrente è la **v14.6**.
+Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione corrente è la **v15.7.4**.
 
 - **Setup, quando presente nella release:** installazione guidata dell’editor, con opzioni per installare anche Python e il runtime .NET se necessari. Le installazioni aggiuntive richiedono il tuo consenso e una connessione Internet.
 - **ZIP portatile:** estrai tutto il contenuto in una cartella e avvia **FM26SimpleEditor.exe**. Conserva insieme tutti i file del pacchetto.
@@ -85,28 +85,30 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ## Novità, dalla versione più recente
 
-### v15.7.4 · in sviluppo
+### v15.7.4
+
+Questa release riunisce ricerca e pianificazione dello staff, filtri per le giovanili, riconoscimento delle sottosquadre e nuovi scenari per la Top 11 futura.
 
 - **Analisti:** la pianificazione valuta anche la categoria riconosciuta, mostrando punteggi, stelle e alternative quando gli attributi sono completi.
 - Per i rinnovi confronta soltanto candidati con la stessa variante contrattuale. Il passaggio a **Trova staff** conserva quel filtro; nella ricerca puoi anche scegliere tutte le varianti.
 - La specializzazione esatta rimane esplicitamente non identificata. Se mancano attributi necessari, il motivo indica quali.
 
-### v15.7.3 · in sviluppo
+### v15.7.3
 
 - **Pianificazione staff:** nel confronto per le sottosquadre, **Lavoro con i giovani** compare in prima riga con valore dello staff attuale, dell’alternativa e differenza colorata. Il punteggio e le stelle mantengono il criterio selezionato.
 
-### v15.7.2 · in sviluppo
+### v15.7.2
 
 - **Pianificazione staff:** colonne più compatte e adattate al contenuto, intestazioni su più righe e **Criterio di confronto** spostato in fondo.
 - Doppio clic su un rinnovo per aprire **Trova staff** con gli stessi criteri del pulsante dedicato.
 
-### v15.7.1 · in sviluppo
+### v15.7.1
 
 - Ripristinate le etichette **U20, U18** e degli altri gruppi riconoscibili nel selettore della rosa e nelle viste staff. I gruppi dal tipo non ancora identificato restano indicati come **Altra squadra**, con il codice nel tooltip.
 - Il riconoscimento controlla i record squadra e confronta più club nello stesso salvataggio: non assegna l’età in base all’ordine degli slot e può adattarsi a codici di tipo diversi quando i riscontri concordano.
 - I casi non verificabili mantengono l’indicazione generica. Le alternative della pianificazione tengono conto della destinazione giovanile quando è identificata.
 
-### v15.7 · in sviluppo
+### v15.7
 
 - **Trova staff:** scegli la squadra di destinazione, per esempio Allenatore + U20, Allenatore in seconda + U20 o Preparatore + U18.
 - Per allenatori e preparatori delle giovanili, filtro regolabile su **Lavoro con i giovani** (predefinito almeno 12/20), visibile anche nell’elenco. Le stelle di allenamento mantengono lo stesso calcolo.
@@ -114,24 +116,24 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - Il passaggio dalla prima squadra a una sottosquadra non viene considerato automaticamente un avanzamento: stima dell’interesse al massimo al limite.
 - Ripristinato il recupero dello slot letto dal contratto quando non si trova la squadra nel catalogo dei club. I casi con dati contraddittori restano non identificati.
 
-### v15.6.3 · in sviluppo
+### v15.6.3
 
 - Aggiunta la **Squadra incarico** in Staff, Trova staff e Pianificazione staff, comprese le alternative proposte e le valutazioni copiate.
 - Mostra prima squadra, sottosquadra o squadra affiliata in base al contratto. I nomi vengono mostrati quando leggibili; senza un nome verificato, gli altri gruppi restano indicati tramite slot e ID, senza attribuire arbitrariamente etichette U20/U18.
 - La ricerca testuale dello staff comprende anche la squadra; il tooltip riporta il riferimento del contratto.
 
-### v15.6.2 · in sviluppo
+### v15.6.2
 
 - **Pianificazione staff:** rimossa la colonna club dall’elenco dei rinnovi e aggiunte le stelle accanto al nome dell’alternativa proposta.
 - Il pulsante **Trova staff per questo criterio** apre la ricerca con lo stesso incarico o categoria di allenamento, filtro sull’incarico attuale e offerta salariale della pianificazione. L’interesse rimane attivo e la ricerca testuale precedente viene azzerata.
 
-### v15.6.1 · in sviluppo
+### v15.6.1
 
 - Le **Stelle incarico attuale** sostituiscono le precedenti stelle complessive basate sulla CA: uno specialista viene valutato per il lavoro che svolge.
 - Per i preparatori usa la categoria di allenamento pertinente; per gli altri incarichi gli attributi specifici del ruolo. Il tooltip indica il criterio e i dati insufficienti rimangono non valutati.
 - Calcolo condiviso tra elenco staff, ricerca e criterio predefinito della pianificazione. La CA numerica rimane visibile.
 
-### v15.6 · in sviluppo
+### v15.6
 
 - Nuova scheda **La mia squadra → Pianificazione staff**: mostra i contratti in scadenza entro sei mesi e suggerisce se rinnovare o valutare una sostituzione.
 - Confronta il tuo staff con alternative migliori per lo stesso incarico o categoria di allenamento, indicando stelle, attributi e interesse stimato. Puoi cambiare il criterio di confronto e ipotizzare un’offerta salariale.
@@ -139,58 +141,58 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - Stima dell’interesse più prudente per chi ha ancora un contratto con un club più prestigioso: scadenza vicina e aumento salariale ipotizzato non bastano a superare il rischio di rifiuto.
 - Rimossa la nota generica finale dalle valutazioni dello staff.
 
-### v15.5.1 · in sviluppo
+### v15.5.1
 
 - Nella ricerca e negli elenchi dello staff, **Preparatore recupero infortunati** e **Responsabile recupero infortunati** sostituiscono le precedenti etichette relative alle scienze motorie, per riconoscere più facilmente gli incarichi del gioco.
 
-### v15.5 · in sviluppo
+### v15.5
 
 - Nella **Top 11** puoi passare dal rendimento attuale al potenziale futuro con lo switch **Futura**. Anche lo scenario futuro cerca la combinazione migliore per tutta la tattica, usando ogni giocatore una sola volta.
 - Più spazio per gli elenchi in **Migliori per tattica**: tabella futura più larga, colonna familiarità compatta e spiegazioni spostate in **Criteri e fonti**, con una scheda dedicata.
 - La Top 11 futura usa la stessa stima sperimentale della classifica: confronta picchi individuali che possono arrivare in stagioni diverse. I dati mancanti non vengono sostituiti con valori inventati.
 
-### v15.4.2 · in sviluppo
+### v15.4.2
 
 - Corretta la proiezione futura per tattica: la CA bassa non amplifica più artificialmente tutti gli attributi. La crescita viene aggiunta in base ai punti di CA guadagnabili, mantenendo la stima per età e posizione.
 - Ridotte le valutazioni future eccessive; alcuni tratti, come fantasia e determinazione, non aumentano automaticamente per effetto della PA.
 - Chiarita la differenza tra punteggio del sottoruolo selezionato e percentuale della migliore posizione di FM Genie Scout. Intestazioni della tabella futura su più righe per distinguere CA stimata e scenari.
 
-### v15.4.1 · in sviluppo
+### v15.4.1
 
 - La classifica futura in **Migliori per tattica** tiene ora conto dell’età e distingue portieri e giocatori di movimento, invece di ipotizzare il raggiungimento automatico della PA.
 - Sono mostrate **CA futura stimata**, crescita residua e scenari prudente/favorevole. Punteggi e stelle futuri usano la nuova stima; la PA resta visibile come tetto teorico.
 - È una stima sperimentale che assume allenamento e minuti adeguati, non una promessa di sviluppo. Età o abilità mancanti non vengono inventate.
 
-### v15.4 · in sviluppo
+### v15.4
 
 - In **Migliori per tattica**, alla classifica attuale è affiancata quella del potenziale stimato per lo slot e la fase selezionati, con gli stessi filtri di rosa e prestiti.
 - Punteggio e stelle futuri rappresentano uno scenario a PA raggiunta; sono visibili anche punteggio attuale, età e margine PA−CA. La PA sconosciuta non viene inventata.
 - Apertura e confronto rapido disponibili in entrambe le tabelle, sempre sui dati reali attuali. Il campo Top 11 resta basato sul rendimento odierno.
 
-### v15.3 · in sviluppo
+### v15.3
 
 - Lettura della reputazione personale dello staff: nazionale, attuale e mondiale, distinta dalla reputazione del club e dalle stelle dalla CA.
 - Cinque predisposizioni d’incarico salvate: allenatore, vice, preparatore, fisioterapista e osservatore. Visibili nei dettagli, nelle colonne della ricerca e nel feedback copiato; non garantiscono disponibilità a un’offerta.
 - Otto preferenze tattiche aggiuntive, tra cui marcatura, fuorigioco e utilizzo delle sostituzioni. Gli incarichi ancora da mappare e le formule delle percentuali di valutazione restano indicati come non disponibili.
 
-### v15.2.1 · in sviluppo
+### v15.2.1
 
 - Segnalati i passaggi laterali senza un miglioramento reputazionale netto; uno stipendio ipotizzato più alto non basta a prevedere disponibilità alla trattativa.
 - Avviso sui cambi di paese basato sul club attuale. Un’adattabilità alta non implica volontà di trasferirsi e la sola nazionalità diversa non comporta più una penalità.
 
-### v15.2 · in sviluppo
+### v15.2
 
 - Filtro per incarico attuale con **Qualsiasi**, incarichi riconosciuti e **Non identificato**; combinabile con ruolo o categoria di allenamento cercati.
 - Avviso più chiaro per i candidati al limite con maggior rischio di rifiuto, che restano visibili per raccogliere feedback.
 - Riepilogo copiato arricchito con incarico, contratto e stipendio attuali; punteggi più leggibili.
 
-### v15.1 · in sviluppo
+### v15.1
 
 - Colonna reputazione del club attuale e icona copia accanto al nome di ogni candidato; stelle complessive e miglior allenamento spostati in coda.
 
 - **Ignora interesse (migliori in assoluto)** disattiva il filtro dell’interesse e ordina lo staff per qualità, includendo chi probabilmente rifiuterebbe. La stima dell’interesse resta visibile.
 
-### v15.0 · in sviluppo
+### v15.0
 
 - Nuova sezione **Trova staff**, per incarico o categoria di allenamento, con classifiche, stelle stimate e attributi principali.
 - Interesse stimato verso il club umano con motivazioni, casi al limite inclusi e scenario salariale facoltativo.

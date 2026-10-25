@@ -17,14 +17,14 @@ subteam indicator and age field. Observed examples in the supplied save:
 |---|---:|---:|---|
 | Triestina | 18 | 20 | U20 |
 | Triestina | 12 | 18 | U18 |
-| Triestina | 22 | 100 | Separate senior/reserve side |
+| Triestina | 22 | 100 | Additional squad; exact type unidentified |
 | Fiorentina | 18 / 12 | 20 / 18 | U20 / U18 |
 | Juventus | 18 / 12 | 20 / 18 | U20 / U18, despite different list slots |
 | Liverpool | 10 / 12 | 21 / 18 | U21 / U18 |
 
 A nearby flag varies between records and is not used as the squad-type code.
 Player ages are a secondary sanity check, never the classification input. An
-empty reserve team is still identifiable. The age field is **not** applied as a
+empty additional team can still be linked without assigning it an exact type. The age field is **not** applied as a
 strict registration rule: actual rules can allow over-age players.
 
 ## Structural gates
@@ -36,8 +36,8 @@ owner-linked team ID is preceded by:
 - at ID−20: two bytes read as a little-endian type code (native field width and
   meaning are not claimed recovered beyond these observations);
 - at ID−18: a 0/1 subteam indicator;
-- at ID−17: an age field, with 100 denoting the inspected senior-side context and
-  255 missing/unspecified;
+- at ID−17: an age field; 100/255 do not establish a youth age group, nor by themselves
+  an exact reserve/B/C/candidate type;
 - at ID−16: `ff`, a varying flag byte, a four-byte club index, then ten zeros;
 - at ID: exact catalogued team ID, positive identity, another four-byte identity
   field, and the observed record kind 10/11.
@@ -58,8 +58,10 @@ numeric code can still map to U20/U18 from that save's corroborating records.
 A missing-age sentinel may reuse an already corroborated mapping; a conflicting
 readable age cannot. Primary age-restricted clubs do not train youth mappings.
 
-An explicitly separate non-primary team with the senior age marker 100 gets the
-broad label **Reserves**, not an invented B/C affiliate name. Readable existing
+An explicitly separate non-primary team with age marker 100 gets the
+broad label **Additional squad**. Type 22 has too few independently named
+references to establish whether it means reserves, a candidate group or
+another side; no exact reserve/B/C label is invented. Readable existing
 team names and distinct affiliate club names retain priority in the roster.
 Unknown names retain their slot and ID. The model is per open save, cached once,
 and cannot leak a mapping from another career.

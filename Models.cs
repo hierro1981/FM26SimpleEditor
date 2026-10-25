@@ -214,7 +214,7 @@ public sealed class StaffRow
         get
         {
             if (!HasContract || !TeamId.HasValue) return L10n.Get("StaffTeamUnknown");
-            string label = TeamTypeMethod == "senior_subteam" ? L10n.Get("StaffSeniorSquad") : !string.IsNullOrWhiteSpace(TeamName) ? TeamName : TeamSlot == 0 ? L10n.Get("StaffFirstTeam") :
+            string label = TeamTypeMethod == "unclassified_subteam" ? L10n.Get("StaffAdditionalSquad") : !string.IsNullOrWhiteSpace(TeamName) ? TeamName : TeamSlot == 0 ? L10n.Get("StaffFirstTeam") :
                 TeamSlot is > 0 ? L10n.Format("StaffSubteamSlot", TeamSlot) : L10n.Get("StaffTeamUnknown");
             if (TeamSlot is null && string.IsNullOrWhiteSpace(TeamName)) label += " · ID " + TeamId;
             return TeamClubUid.HasValue && TeamClubUid != ClubUid && !string.IsNullOrWhiteSpace(TeamClubName) ? TeamClubName + " · " + label : label;

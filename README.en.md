@@ -87,7 +87,7 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 ### v15.7.1 · in development
 
-- Restored **U20, U18** and other identifiable squad labels in the roster selector and staff views. Additional senior sides are shown as **Reserves**.
+- Restored **U20, U18** and other identifiable squad labels in the roster selector and staff views. Unidentified additional groups are shown as **Additional squad**, with their code in the tooltip.
 - Recognition validates team records against several clubs in the same save, rather than guessing age from slot order. Consistent numeric type-code changes can be calibrated from the save.
 - Unverifiable cases retain generic labels. Planning alternatives account for the youth destination when identified.
 

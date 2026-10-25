@@ -2342,6 +2342,6 @@ Training stars use the same calculation as the Staff page. Other stars describe 
   <data name="StaffSquad_u20" xml:space="preserve"><value>U20</value></data>
   <data name="StaffSquad_u21" xml:space="preserve"><value>U21</value></data>
   <data name="StaffSquad_u23" xml:space="preserve"><value>U23</value></data>
-  <data name="StaffSeniorSquad" xml:space="preserve"><value>Reserves</value></data>
+  <data name="StaffAdditionalSquad" xml:space="preserve"><value>Additional squad</value></data>
   <data name="StaffTypeEvidence" xml:space="preserve"><value>Read team type: {0} · Age-limit field: {1}.</value></data>
 </root>

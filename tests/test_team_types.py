@@ -42,11 +42,11 @@ class TeamTypeTests(unittest.TestCase):
         raw=raw.replace(header(1,10),header(1,10,3,1,100))
         self.assertNotIn(11,decode_team_types(raw,clubs,mapping))
 
-    def test_senior_subteam_and_missing_age_sentinel(self):
+    def test_unclassified_subteam_and_missing_age_sentinel(self):
         raw,clubs,mapping=self.fixture()
         clubs[101].teams.extend([N(team_id=12,slot=2,is_affiliate=False),N(team_id=13,slot=3,is_affiliate=False)])
         result=decode_team_types(raw+header(1,12,22,1,100)+header(1,13,18,1,255),clubs,mapping)
-        self.assertEqual(result[12]['teamTypeMethod'],'senior_subteam')
+        self.assertEqual(result[12]['teamTypeMethod'],'unclassified_subteam')
         self.assertEqual(result[13]['teamName'],'U20')
 
     def test_unsupported_schema_is_optional_and_cache_is_per_store(self):

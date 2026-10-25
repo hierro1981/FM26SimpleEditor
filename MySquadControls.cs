@@ -56,7 +56,7 @@ public sealed class MySquadPanel : UserControl
     }
     private sealed record ScopeChoice(SquadScope Mode, uint? TeamId = null, string? Name = null, int? Slot = null, string? Kind = null)
     {
-        public override string ToString() => TeamId.HasValue ? !string.IsNullOrWhiteSpace(Name) ? (Kind == "senior_subteam" ? L10n.Get("StaffSeniorSquad") : Name) + " · ID " + TeamId :
+        public override string ToString() => TeamId.HasValue ? !string.IsNullOrWhiteSpace(Name) ? (Kind == "unclassified_subteam" ? L10n.Get("StaffAdditionalSquad") : Name) + " · ID " + TeamId :
             Slot.HasValue ? L10n.Format("MySquadTeamSlot", Slot.Value, TeamId) : L10n.Format("MySquadTeamId", TeamId) :
             L10n.Get(Mode == SquadScope.FirstTeam ? "MySquadFirst" : Mode == SquadScope.OtherTeams ? "MySquadOther" : "MySquadAll");
     }

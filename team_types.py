@@ -53,8 +53,8 @@ def decode_team_types(raw, clubs, club_uids):
         if row['sub'] == 1 and age is not None and row['age'] in (age, 255):
             name, method = f'U{age}', 'cross_club_age'
         elif row['sub'] == 1 and row['age'] == 100 and row['slot'] is not None and row['slot'] > 0:
-            # A separate senior subteam, not a claim that it is a B or C affiliate.
-            name, method = 'Riserve', 'senior_subteam'
+            # A separate team, not evidence of a reserve/B/C or youth-candidate label.
+            name, method = 'Altra squadra', 'unclassified_subteam'
         if name is not None:
             result[tid] = dict(teamName=name, teamTypeCode=row['code'],
                                teamAgeLimit=row['age'], teamTypeMethod=method)

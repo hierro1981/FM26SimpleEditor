@@ -87,7 +87,7 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ### v15.7.1 · in sviluppo
 
-- Ripristinate le etichette **U20, U18** e degli altri gruppi riconoscibili nel selettore della rosa e nelle viste staff. Le squadre senior aggiuntive sono indicate come **Riserve**.
+- Ripristinate le etichette **U20, U18** e degli altri gruppi riconoscibili nel selettore della rosa e nelle viste staff. I gruppi dal tipo non ancora identificato restano indicati come **Altra squadra**, con il codice nel tooltip.
 - Il riconoscimento controlla i record squadra e confronta più club nello stesso salvataggio: non assegna l’età in base all’ordine degli slot e può adattarsi a codici di tipo diversi quando i riscontri concordano.
 - I casi non verificabili mantengono l’indicazione generica. Le alternative della pianificazione tengono conto della destinazione giovanile quando è identificata.
 

@@ -2342,6 +2342,6 @@ Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre st
   <data name="StaffSquad_u20" xml:space="preserve"><value>U20</value></data>
   <data name="StaffSquad_u21" xml:space="preserve"><value>U21</value></data>
   <data name="StaffSquad_u23" xml:space="preserve"><value>U23</value></data>
-  <data name="StaffSeniorSquad" xml:space="preserve"><value>Riserve</value></data>
+  <data name="StaffAdditionalSquad" xml:space="preserve"><value>Altra squadra</value></data>
   <data name="StaffTypeEvidence" xml:space="preserve"><value>Tipo squadra letto: {0} · Campo limite età: {1}.</value></data>
 </root>

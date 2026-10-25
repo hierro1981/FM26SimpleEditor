@@ -12,8 +12,8 @@ internal static class StaffTeamChecks
             ContractStart="2027-01-01",ContractEnd="2029-06-30",Attributes=new(){["sports_science"]=18,["analysing_data"]=10} };
         var unknownSub = new StaffRow { HasContract=true,TeamId=102,TeamSlot=2 };
         var affiliate = new StaffRow { HasContract=true,TeamId=900,TeamSlot=0,ClubUid=2,TeamClubUid=3,TeamClubName="Club B" };
-        var reserves = new StaffRow {HasContract=true,TeamId=120,TeamSlot=3,TeamName="Riserve",TeamTypeCode=22,TeamAgeLimit=100,TeamTypeMethod="senior_subteam"};
-        check(reserves.TeamDisplay=="Riserve" && reserves.TeamTooltip.Contains("22"), "decoded senior subteam exposes its type evidence");
+        var reserves = new StaffRow {HasContract=true,TeamId=120,TeamSlot=3,TeamName="Altra squadra",TeamTypeCode=22,TeamAgeLimit=100,TeamTypeMethod="unclassified_subteam"};
+        check(reserves.TeamDisplay=="Altra squadra" && reserves.TeamTooltip.Contains("22"), "unclassified additional squad exposes its type evidence");
         var unknown = new StaffRow { HasContract=true,TeamId=999 };
         check(first.TeamDisplay=="Prima squadra" && youth.TeamDisplay=="U20", "staff contract squad uses first-team convention or a readable squad name");
         check(unknownSub.TeamDisplay.Contains("slot 2") && !unknownSub.TeamDisplay.Contains("U18") && unknown.TeamDisplay.Contains("999"),
@@ -33,7 +33,7 @@ internal static class StaffTeamChecks
         var search=All(panel).OfType<TextBox>().Single(t=>t.Name=="StaffSearch");search.Text="U20";
         check(grid.Rows.Count==1 && ((StaffRow)grid.Rows[0].DataBoundItem).Uid==2,"own-staff search includes squad names");
         L10n.SetLanguage("en");panel.SetLanguage();Application.DoEvents();
-        check(first.TeamDisplay=="First team" && reserves.TeamDisplay=="Reserves" && unknownSub.TeamDisplay.Contains("Subteam") && youth.TeamDisplay=="U20" && grid.Columns["TeamDisplay"].HeaderText=="Job squad",
+        check(first.TeamDisplay=="First team" && reserves.TeamDisplay=="Additional squad" && unknownSub.TeamDisplay.Contains("Subteam") && youth.TeamDisplay=="U20" && grid.Columns["TeamDisplay"].HeaderText=="Job squad",
             "squad language switches translate labels without translating actual team names");
         host.Close();L10n.SetLanguage("it");
     }

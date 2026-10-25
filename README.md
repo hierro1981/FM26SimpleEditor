@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.7.4
+# FM26 Simple Editor · v15.8.0 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.8.0 (in sviluppo)
+
+- **Pianificazione staff:** filtro contratti scaduti / meno di 3 giorni rimasti, meno di 6 mesi (predefinito), meno di 12 mesi oppure tutti. Le date si basano sul calendario del salvataggio.
+- Alternative migliori inizialmente ordinate per punteggio decrescente; clic sulle intestazioni per ordinare le colonne.
+- Dettagli compatti solo passando sull’icona **i** accanto al nome, per lasciare leggibili le tabelle.
 
 ### v15.7.4
 

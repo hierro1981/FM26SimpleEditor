@@ -2303,10 +2303,10 @@ Hover over a position for its rating.</value>
   <data name="PlanPendingMarket" xml:space="preserve"><value>Waiting for external candidates: advice still needs review.</value></data>
   <data name="PlanMissingDate" xml:space="preserve"><value>Save date unavailable: contract expiries cannot be calculated.</value></data>
   <data name="PlanDateMismatch" xml:space="preserve"><value>Staff and market dates differ: reload the data.</value></data>
-  <data name="PlanStatus" xml:space="preserve"><value>Save: {0} · {1}/{2} active contracts expiring within six months.</value></data>
+  <data name="PlanStatus" xml:space="preserve"><value>Save: {0} · {1}/{2} contracts in the selected expiry window.</value></data>
   <data name="PlanCoverage" xml:space="preserve"><value>Comparison covers readable club-linked staff; not all unemployed staff are included.</value></data>
   <data name="PlanAlternativeCount" xml:space="preserve"><value>Showing {0} of {1} better alternatives.</value></data>
-  <data name="PlanMethod" xml:space="preserve"><value>Read-only analysis: includes active contracts ending between the save date and six calendar months later, inclusive; excludes human managers and expired, future or unreadable contracts.
+  <data name="PlanMethod" xml:space="preserve"><value>Read-only analysis using the save date: choose expired / fewer than 3 days left, fewer than 6 months (default), fewer than 12 months, or all contracts. The 6/12 month windows include today and exclude the final date. Future starts, unreadable contracts and human managers are excluded. Hover over the i icon for details; alternatives show the best 50 by score and their columns can be sorted.
 
 Compares the same identified job using the same attributes and weights as staff search. For coaches it starts with their strongest relevant training category: this is not their training assignment read from the game. You can change the criterion for the selected person.
 
@@ -2348,4 +2348,10 @@ Training stars use the same calculation as the Staff page. Other stars describe 
   <data name="AnalystVariantContext" xml:space="preserve"><value>Analyst job variant: {0}; exact title not yet identified.</value></data>
   <data name="RecruitAnalystVariantChoice" xml:space="preserve"><value>Analyst · variant {0}</value></data>
   <data name="PlanMissingAttributes" xml:space="preserve"><value>Incomplete assessment: valid inputs are missing for {0}.</value></data>
+  <data name="PlanExpiry" xml:space="preserve"><value>Contract expiry</value></data>
+  <data name="PlanWindow_Expired" xml:space="preserve"><value>Expired / &lt;3 days</value></data>
+  <data name="PlanWindow_SixMonths" xml:space="preserve"><value>Expiring (&lt;6 months)</value></data>
+  <data name="PlanWindow_TwelveMonths" xml:space="preserve"><value>Expiring (&lt;12 months)</value></data>
+  <data name="PlanWindow_All" xml:space="preserve"><value>All</value></data>
+  <data name="PlanExpiryHint" xml:space="preserve"><value>Uses the save date. Expired / &lt;3 days includes overdue contracts and those with fewer than 3 days left. The 6/12 month windows exclude overdue contracts. All includes every readable current or expired contract, excluding future starts and human managers.</value></data>
 </root>

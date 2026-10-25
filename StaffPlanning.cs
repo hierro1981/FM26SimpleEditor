@@ -2,6 +2,7 @@ using System.Globalization;
 
 namespace FM26SimpleEditor;
 
+public enum StaffContractWindow { Expired, SixMonths, TwelveMonths, All }
 public enum StaffRenewalAdvice { Renew, CompareReplacement, VerifyAlternatives, Review }
 public sealed record StaffRenewal(StaffRow Person, DateTime End, int Days, StaffSearchProfile? Profile,
     double? Quality, double? Stars, StaffRenewalAdvice Advice, IReadOnlyList<StaffCandidate> Alternatives, bool MarketReady)
@@ -39,10 +40,18 @@ public static class StaffPlanning
     public const double MeaningfulGain = .75;
     public static DateTime? Date(string? value) => DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture,
         DateTimeStyles.None, out var date) ? date : null;
+    public static bool InWindow(DateTime end, DateTime clock, StaffContractWindow window) => window switch
+    {
+        StaffContractWindow.Expired => end < clock.AddDays(3),
+        StaffContractWindow.SixMonths => end >= clock && end < clock.AddMonths(6),
+        StaffContractWindow.TwelveMonths => end >= clock && end < clock.AddMonths(12),
+        StaffContractWindow.All => true,
+        _ => false
+    };
     public static IReadOnlyList<StaffSearchProfile> Profiles(StaffRow person) => StaffRecruitment.CurrentProfiles(person);
     public static StaffSearchProfile? DefaultProfile(StaffRow person) => StaffRecruitment.CurrentProfile(person);
     public static IReadOnlyList<StaffRenewal> Build(StaffResult own, StaffRecruitmentResult? market, long offer = 0,
-        IReadOnlyDictionary<uint, string>? choices = null)
+        IReadOnlyDictionary<uint, string>? choices = null, StaffContractWindow window = StaffContractWindow.SixMonths)
     {
         if (own.Status != "ready" || Date(own.GameDate) is not DateTime clock || !own.ClubUid.HasValue) return [];
         bool ready = market?.Status == "ready" && market.ClubUid == own.ClubUid && Date(market.GameDate) == clock;
@@ -52,7 +61,7 @@ public static class StaffPlanning
         var result = new List<StaffRenewal>();
         foreach (var person in own.Staff.Where(p => !p.IsHumanManager && p.HasContract)
             .Where(p => Date(p.ContractStart) is not DateTime start || start <= clock)
-            .Where(p => Date(p.ContractEnd) is DateTime end && end >= clock && end <= clock.AddMonths(6))
+            .Where(p => Date(p.ContractEnd) is DateTime end && InWindow(end, clock, window))
             .DistinctBy(p => (p.Uid, p.ClubUid, p.ContractEnd)))
         {
             var profile = choices is not null && choices.TryGetValue(person.Uid, out string? key)

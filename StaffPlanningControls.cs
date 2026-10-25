@@ -7,6 +7,9 @@ public sealed class StaffPlanningPanel : UserControl
     private readonly TextBox search = new() { Name = "PlanSearch", Width = 230, PlaceholderText = L10n.Get("StaffSearch") };
     private readonly NumericUpDown offer = new() { Name = "PlanOffer", Minimum = 0, Maximum = 10000000, Increment = 100, ThousandsSeparator = true, Width = 125 };
     private readonly ComboBox criterion = new() { Name = "PlanCriterion", DropDownStyle = ComboBoxStyle.DropDownList, Width = 300, DropDownWidth = 450 };
+    private readonly ComboBox expiry = new() { Name = "PlanExpiry", DropDownStyle = ComboBoxStyle.DropDownList, Width = 210, DropDownWidth = 300 };
+    private string alternativeSort = "Quality";
+    private bool alternativeDescending = true;
     private readonly Button findStaff = new() { Name = "PlanFindStaff", Text = L10n.Get("PlanFindStaff"), AutoSize = true };
     private readonly Label status = new() { Name = "PlanStatus", Dock = DockStyle.Fill, AutoSize = true, ForeColor = Color.DimGray };
     private readonly Label explanation = new() { Name = "PlanExplanation", Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(4) };
@@ -36,7 +39,7 @@ public sealed class StaffPlanningPanel : UserControl
         reload.Click += (_, _) => ReloadRequested?.Invoke();
         var method = new Button { Name = "PlanMethod", Text = L10n.Get("TacticalCriteria"), AutoSize = true };
         method.Click += (_, _) => MessageBox.Show(this, L10n.Get("PlanMethod"), L10n.Get("PlanTab"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-        tools.Controls.AddRange([search, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer, reload, method]);
+        tools.Controls.AddRange([search, new Label { Text = L10n.Get("PlanExpiry"), AutoSize = true, Margin = new Padding(6,8,0,0) }, expiry, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer, reload, method]);
         findStaff.Click += (_, _) => OpenRecruitment(Selected);
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var detail = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3 };
@@ -53,7 +56,7 @@ public sealed class StaffPlanningPanel : UserControl
         var attrGroup = new GroupBox { Dock = DockStyle.Fill, Text = L10n.Get("PlanAttributeComparison") }; attrGroup.Controls.Add(attributes);
         columns.Controls.Add(altGroup, 0, 0); columns.Controls.Add(attrGroup, 1, 0); detail.Controls.Add(columns, 0, 2);
         root.Controls.Add(detail, 0, 3); Controls.Add(root);
-        Add(list, "Name", "Text_f537c6bd038e", 190); CopyColumn(list);
+        Add(list, "Name", "Text_f537c6bd038e", 190); CopyColumn(list); InfoColumn(list);
         Add(list, "Role", "StaffRole", 230); Add(list, "Team", "StaffTeam", 210);
         Add(list, "ContractEnd", "Text_51bf843f1751", 110, true); Add(list, "Days", "PlanDays", 85, true);
         Add(list, "Recommendation", "PlanRecommendation", 240);
@@ -71,10 +74,10 @@ public sealed class StaffPlanningPanel : UserControl
         }
         list.CellDoubleClick += (_, e) =>
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name != "CopyName")
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name is not ("CopyName" or "Info"))
                 OpenRecruitment(list.Rows[e.RowIndex].DataBoundItem as StaffRenewal);
         };
-        Add(alternatives, "Name", "Text_f537c6bd038e", 180); CopyColumn(alternatives);
+        Add(alternatives, "Name", "Text_f537c6bd038e", 180); CopyColumn(alternatives); InfoColumn(alternatives);
         Add(alternatives, "Club", "StaffClub", 170); Add(alternatives, "CurrentRole", "StaffRole", 220); Add(alternatives, "Team", "StaffTeam", 210);
         Add(alternatives, "Quality", "RecruitQuality", 95, true); Add(alternatives, "RoleStars", "RecruitRoleStars", 170, true, true);
         Add(alternatives, "InterestLabel", "RecruitInterest", 220); Add(alternatives, "ClubReputation", "RecruitClubReputation", 150, true);
@@ -94,7 +97,7 @@ public sealed class StaffPlanningPanel : UserControl
         }
         list.ColumnHeaderMouseClick += (_, e) =>
         {
-            if (list.Columns[e.ColumnIndex].Name == "CopyName") return;
+            if (list.Columns[e.ColumnIndex].Name is "CopyName" or "Info") return;
             var field = list.Columns[e.ColumnIndex].Name; descending = sort == field && !descending; sort = field; RefreshRows();
         };
         list.SelectionChanged += (_, _) => { if (!binding) Details(); };
@@ -104,17 +107,30 @@ public sealed class StaffPlanningPanel : UserControl
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name == "Recommendation" && list.Rows[e.RowIndex].DataBoundItem is StaffRenewal row)
                 e.CellStyle!.ForeColor = row.Advice switch { StaffRenewalAdvice.Renew => Color.DarkGreen, StaffRenewalAdvice.CompareReplacement => Color.DarkOrange, StaffRenewalAdvice.VerifyAlternatives => Color.DarkGoldenrod, _ => Color.DimGray };
         };
-        list.CellToolTipTextNeeded += (_, e) =>
+        alternatives.ColumnHeaderMouseClick += (_, e) =>
         {
-            if (e.RowIndex < 0 || e.ColumnIndex < 0 || list.Rows[e.RowIndex].DataBoundItem is not StaffRenewal row) return;
-            e.ToolTipText = list.Columns[e.ColumnIndex].Name == "Role" ? row.Person.RoleTooltip : list.Columns[e.ColumnIndex].Name == "Team" ? row.Person.TeamTooltip :
-                list.Columns[e.ColumnIndex].Name == "ReplacementTeam" ? row.Proposed?.Person.TeamTooltip ?? "" : "";
+            var field = alternatives.Columns[e.ColumnIndex].Name;
+            if (field is "CopyName" or "Info") return;
+            alternativeDescending = alternativeSort == field ? !alternativeDescending : field is "Quality" or "RoleStars" or "ClubReputation" or "Wage";
+            alternativeSort = field; RefreshAlternatives();
         };
-        alternatives.CellToolTipTextNeeded += (_, e) =>
+        foreach (var grid in new[] { list, alternatives })
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && alternatives.Rows[e.RowIndex].DataBoundItem is StaffCandidate c)
-                e.ToolTipText = alternatives.Columns[e.ColumnIndex].Name == "CopyName" ? L10n.Get("RecruitCopyName") : c.Person.RoleTooltip + "\n" + c.Person.TeamTooltip + "\n" + string.Join("\n", c.Interest.Reasons);
-        };
+            // Native grid tooltips also appear for clipped cells. Disable those: only the i icon opens details.
+            grid.ShowCellToolTips = false;
+            grid.CellMouseEnter += (_, e) =>
+            {
+                tips.Hide(grid);
+                if (e.RowIndex < 0 || e.ColumnIndex < 0 || grid.Columns[e.ColumnIndex].Name != "Info") return;
+                string text = InfoText(grid.Rows[e.RowIndex].DataBoundItem);
+                var bounds = grid.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true);
+                tips.Show(text, grid, Math.Max(0, bounds.Left), bounds.Bottom, 20000);
+            };
+            grid.CellMouseLeave += (_, _) => tips.Hide(grid);
+            grid.MouseLeave += (_, _) => tips.Hide(grid);
+            grid.Scroll += (_, _) => tips.Hide(grid);
+        }
+        expiry.SelectedIndexChanged += (_, _) => { if (!binding) { cached = null; RefreshRows(); } };
         criterion.SelectedIndexChanged += (_, _) =>
         {
             if (binding || Selected is not StaffRenewal row || criterion.SelectedItem is not StaffSearchProfile p) return;
@@ -137,7 +153,7 @@ public sealed class StaffPlanningPanel : UserControl
     private static void Add(DataGridView grid, string field, string header, int width, bool numeric = false, bool stars = false)
     {
         var column = new DataGridViewTextBoxColumn { Name = field, DataPropertyName = field, HeaderText = L10n.Get(header), Width = width,
-            SortMode = grid.Name == "PlanList" ? DataGridViewColumnSortMode.Programmatic : DataGridViewColumnSortMode.NotSortable };
+            SortMode = grid.Name is "PlanList" or "PlanAlternatives" ? DataGridViewColumnSortMode.Programmatic : DataGridViewColumnSortMode.NotSortable };
         column.DefaultCellStyle.NullValue = "—";
         if (numeric) column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         if (stars) column.CellTemplate = new StarRatingCell();
@@ -145,6 +161,34 @@ public sealed class StaffPlanningPanel : UserControl
     }
     private static void CopyColumn(DataGridView grid) => grid.Columns.Add(new DataGridViewButtonColumn { Name = "CopyName", HeaderText = "",
         CellTemplate = new CopyNameCell(), Width = 34, Text = L10n.Get("RecruitCopyName"), UseColumnTextForButtonValue = true, SortMode = DataGridViewColumnSortMode.NotSortable });
+    private static void InfoColumn(DataGridView grid) => grid.Columns.Add(new DataGridViewTextBoxColumn
+    {
+        Name = "Info", HeaderText = "i", Width = 30, MinimumWidth = 30, ReadOnly = true,
+        SortMode = DataGridViewColumnSortMode.NotSortable,
+        DefaultCellStyle = new DataGridViewCellStyle { NullValue = "ⓘ", Alignment = DataGridViewContentAlignment.MiddleCenter, ForeColor = Color.RoyalBlue }
+    });
+    public static string InfoText(object? item)
+    {
+        IEnumerable<string> lines = item switch
+        {
+            StaffCandidate c => new[] { c.Name, c.CurrentRole + " · " + c.Team, c.InterestLabel + " (" + c.Interest.Score + ")" }
+                .Concat(c.Interest.Reasons.Take(3)),
+            StaffRenewal r => new[] { r.Name, r.Role + " · " + r.Team, r.Recommendation, r.Explanation },
+            _ => []
+        };
+        // Wrap long paragraphs rather than producing a tooltip wider than the table.
+        return string.Join("\n", lines.SelectMany(line => Wrap(line, 85)));
+    }
+    private static IEnumerable<string> Wrap(string line, int width)
+    {
+        while (line.Length > width)
+        {
+            int cut = line.LastIndexOf(' ', width);
+            if (cut < 1) cut = width;
+            yield return line[..cut]; line = line[cut..].TrimStart();
+        }
+        if (line.Length > 0) yield return line;
+    }
     public void ClearForClub(uint? uid) { clubUid = uid; cached = null; own = null; market = null; choices.Clear(); search.Clear(); RefreshRows(); }
     public void ClearStaff() { cached = null; own = null; choices.Clear(); RefreshRows(); }
     public void ClearMarket() { cached = null; market = null; RefreshRows(); }
@@ -152,15 +196,22 @@ public sealed class StaffPlanningPanel : UserControl
     public void SetMarket(StaffRecruitmentResult value) { if (value.ClubUid == clubUid) { cached = null; market = value; RefreshRows(); } }
     public void SetLanguage()
     {
-        cached = null; L10n.Apply(this); tips.SetToolTip(offer, L10n.Get("RecruitOfferHint"));
+        cached = null; L10n.Apply(this);
+        int selectedExpiry = expiry.SelectedIndex < 0 ? (int)StaffContractWindow.SixMonths : expiry.SelectedIndex;
+        binding = true; expiry.Items.Clear();
+        expiry.Items.AddRange(Enum.GetValues<StaffContractWindow>().Select(w => (object)L10n.Get("PlanWindow_" + w)).ToArray());
+        expiry.SelectedIndex = selectedExpiry; binding = false;
+        tips.SetToolTip(expiry, L10n.Get("PlanExpiryHint"));
+        tips.SetToolTip(offer, L10n.Get("RecruitOfferHint"));
         foreach (var grid in new[] { list, alternatives }) ((DataGridViewButtonColumn)grid.Columns["CopyName"]).Text = grid.Columns["CopyName"].ToolTipText = L10n.Get("RecruitCopyName");
         RefreshRows();
     }
     private void RefreshRows()
     {
         if (binding) return;
+        tips.Hide(list); tips.Hide(alternatives);
         uint? selected = Selected?.Uid;
-        var rows = cached ??= own is null ? [] : StaffPlanning.Build(own, market, (long)offer.Value, choices);
+        var rows = cached ??= own is null ? [] : StaffPlanning.Build(own, market, (long)offer.Value, choices, (StaffContractWindow)expiry.SelectedIndex);
         var filtered = rows.Where(p => string.IsNullOrWhiteSpace(search.Text) || p.Name.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Role.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Team.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Uid.ToString().Contains(search.Text.Trim()));
         object? Value(StaffRenewal p) => sort switch { "Name" => p.Name, "Role" => p.Role, "Team" => p.Team, "Days" => p.Days,
             "Recommendation" => p.Advice, "Criterion" => p.Criterion, "Quality" => p.Quality, "Stars" => p.Stars, "Wage" => p.Wage,
@@ -181,10 +232,30 @@ public sealed class StaffPlanningPanel : UserControl
         var row = Selected; binding = true; criterion.Items.Clear();
         if (row is not null) { criterion.Items.AddRange(StaffPlanning.Profiles(row.Person).Cast<object>().ToArray()); criterion.SelectedIndex = criterion.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p => p.Key == row.Profile?.Key); }
         criterion.Enabled = criterion.Items.Count > 1; findStaff.Enabled = row?.Profile is not null;
-        var candidates = row?.Alternatives.OrderByDescending(c => c.Interest.Band == StaffInterest.Likely).ThenByDescending(c => c.Quality).ThenBy(c => c.Name).Take(50).ToList() ?? [];
-        alternatives.DataSource = new BindingList<StaffCandidate>(candidates); alternatives.ClearSelection();
-        if (candidates.Count > 0) alternatives.Rows[0].Selected = true;
-        explanation.Text = row is null ? "" : row.Name + " · " + row.Team + " · " + row.Recommendation + "\n" + row.Explanation + " " + L10n.Format("PlanAlternativeCount", candidates.Count, row.BetterCount);
+        binding = false; RefreshAlternatives(); binding = true;
+        int count = alternatives.Rows.Count;
+        explanation.Text = row is null ? "" : row.Name + " · " + row.Team + " · " + row.Recommendation + "\n" + row.Explanation + " " + L10n.Format("PlanAlternativeCount", count, row.BetterCount);
+        binding = false; AttributeComparison();
+    }
+    private void RefreshAlternatives()
+    {
+        var selected = alternatives.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem as StaffCandidate;
+        // Keep the best 50 by score even when sorting another column.
+        var candidates = Selected?.Alternatives.OrderByDescending(c => c.Quality).ThenBy(c => c.Name).ThenBy(c => c.Uid).Take(50).ToArray() ?? [];
+        object? Value(StaffCandidate c) => alternativeSort switch
+        {
+            "Name" => c.Name, "Club" => c.Club, "CurrentRole" => c.CurrentRole, "Team" => c.Team,
+            "RoleStars" => c.RoleStars, "InterestLabel" => c.Interest.Band, "ClubReputation" => c.ClubReputation,
+            "Wage" => c.Wage, "MainAttributes" => c.MainAttributes, _ => c.Quality
+        };
+        var known = candidates.Where(c => Value(c) is not null);
+        var sorted = (alternativeDescending ? known.OrderByDescending(Value) : known.OrderBy(Value))
+            .ThenBy(c => c.Name).ThenBy(c => c.Uid).Concat(candidates.Where(c => Value(c) is null)).ToList();
+        binding = true; tips.Hide(alternatives);
+        alternatives.DataSource = new BindingList<StaffCandidate>(sorted); alternatives.ClearSelection();
+        foreach (DataGridViewColumn col in alternatives.Columns)
+            col.HeaderCell.SortGlyphDirection = col.Name == alternativeSort ? alternativeDescending ? SortOrder.Descending : SortOrder.Ascending : SortOrder.None;
+        if (sorted.Count > 0) alternatives.Rows[Math.Max(0, sorted.FindIndex(c => c.Uid == selected?.Uid))].Selected = true;
         binding = false; AttributeComparison();
     }
     private void AttributeComparison()

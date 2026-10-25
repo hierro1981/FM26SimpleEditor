@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.7.4
+# FM26 Simple Editor · v15.8.0 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v15.8.0 (in development)
+
+- **Staff planning:** contract filters for expired / fewer than 3 days left, fewer than 6 months (default), fewer than 12 months, or all. Dates use the save calendar.
+- Better alternatives start in descending score order; click headers to sort columns.
+- Compact details appear only when hovering over the **i** icon beside the name, keeping tables readable.
 
 ### v15.7.4
 

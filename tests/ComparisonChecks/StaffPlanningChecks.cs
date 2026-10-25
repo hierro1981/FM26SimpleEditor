@@ -80,10 +80,29 @@ internal static class StaffPlanningChecks
         var missing = Person(12); missing.HasContract = false;
         var invalid = Person(13); invalid.ContractEnd = "not a date";
         own.Staff = [current, Person(4,end:"2028-09-28"), Person(5,end:"2028-09-29"), Person(6,end:"2028-03-27"), Person(7,end:"2028-03-28"), human,future,missing,invalid];
-        check(StaffPlanning.Build(own,market).Select(p=>p.Uid).OrderBy(p=>p).SequenceEqual(new uint[]{1,4,7}),
-            "renewal window includes today and six calendar months, excludes expired, future, unreadable and human contracts");
-        own.GameDate = "2027-08-31"; own.Staff = [Person(1,end:"2028-02-29"), Person(2,end:"2028-03-01")];
+        check(StaffPlanning.Build(own,market).Select(p=>p.Uid).OrderBy(p=>p).SequenceEqual(new uint[]{1,7}),
+            "renewal window includes today and excludes six-month boundary, expired, future, unreadable and human contracts");
+        own.GameDate = "2027-08-31"; own.Staff = [Person(1,end:"2028-02-28"), Person(2,end:"2028-02-29")];
         check(StaffPlanning.Build(own,null).Single().Uid == 1, "calendar expiry handles month ends and leap years");
+        var clock = new DateTime(2028,3,28);
+        check(StaffPlanning.InWindow(clock.AddDays(-20),clock,StaffContractWindow.Expired) &&
+            StaffPlanning.InWindow(clock.AddDays(2),clock,StaffContractWindow.Expired) &&
+            !StaffPlanning.InWindow(clock.AddDays(3),clock,StaffContractWindow.Expired),
+            "expired window includes overdue and fewer than three days left, excluding exact boundary");
+        check(!StaffPlanning.InWindow(clock.AddDays(-1),clock,StaffContractWindow.SixMonths) &&
+            StaffPlanning.InWindow(clock,clock,StaffContractWindow.SixMonths) &&
+            StaffPlanning.InWindow(clock.AddMonths(6).AddDays(-1),clock,StaffContractWindow.SixMonths) &&
+            !StaffPlanning.InWindow(clock.AddMonths(6),clock,StaffContractWindow.SixMonths) &&
+            StaffPlanning.InWindow(clock.AddMonths(12).AddDays(-1),clock,StaffContractWindow.TwelveMonths) &&
+            !StaffPlanning.InWindow(clock.AddMonths(12),clock,StaffContractWindow.TwelveMonths),
+            "six and twelve month windows use strict calendar boundaries and exclude expired contracts");
+        own.GameDate="2028-03-28";
+        own.Staff=[Person(1,end:"2028-03-01"),Person(2,end:"2028-03-30"),Person(3,end:"2028-03-31"),
+            Person(4,end:"2028-12-01"),Person(5,end:"2030-01-01"),human,future,missing,invalid];
+        check(StaffPlanning.Build(own,null,window:StaffContractWindow.Expired).Select(p=>p.Uid).SequenceEqual(new uint[]{1,2}) &&
+            StaffPlanning.Build(own,null,window:StaffContractWindow.TwelveMonths).Count==3 &&
+            StaffPlanning.Build(own,null,window:StaffContractWindow.All).Count==5,
+            "all windows include only readable employee contracts and respect future-start and human exclusions");
         own.GameDate = null;
         check(StaffPlanning.Build(own,market).Count == 0, "missing save date is not replaced by the computer date");
         var coach = Person(20); coach.JobKey = "coach"; coach.JobCode = 2; coach.Attributes["coaching_technical"] = 20;
@@ -125,6 +144,45 @@ internal static class StaffPlanningChecks
             grid.Rows[0].Cells["ReplacementStars"].Value is double replacementStars && replacementStars==((StaffRenewal)grid.Rows[0].DataBoundItem).Proposed?.RoleStars,
             "renewal grid removes own-club column and shows the proposed candidate stars");
         check(!All(panel).OfType<ComboBox>().Single(c=>c.Name=="MySquadScope").Enabled, "player squad scope is disabled for staff planning");
+        var expiry = All(panel).OfType<ComboBox>().Single(c=>c.Name=="PlanExpiry");
+        check(expiry.SelectedIndex==(int)StaffContractWindow.SixMonths && expiry.Items.Count==4,
+            "planning starts with the six-month expiry filter");
+        var highest=Person(31,20,club:2);highest.ClubReputation=6308;
+        var middle=Person(32,15,club:2);middle.ClubReputation=4000;
+        var lower=Person(33,12,club:2);lower.ClubReputation=4000;
+        market.Staff=[lower,middle,highest];panel.SetRecruitmentData(market);
+        check(alts.Rows.Cast<DataGridViewRow>().Select(r=>((StaffCandidate)r.DataBoundItem).Quality).SequenceEqual(new double?[]{20,15,12}),
+            "alternatives default to score descending even when the strongest has borderline interest");
+        var headerClick=typeof(DataGridView).GetMethod("OnColumnHeaderMouseClick",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!;
+        void SortAlternative(string column) => headerClick.Invoke(alts,[new DataGridViewCellMouseEventArgs(alts.Columns[column].Index,-1,0,0,new MouseEventArgs(MouseButtons.Left,1,0,0,0))]);
+        SortAlternative("Quality");
+        check(((StaffCandidate)alts.Rows[0].DataBoundItem).Quality==12 && alts.Columns["Quality"].HeaderCell.SortGlyphDirection==SortOrder.Ascending,
+            "alternative score header toggles to numeric ascending order");
+        foreach(string column in new[]{"Name","Club","CurrentRole","Team","RoleStars","InterestLabel","ClubReputation","Wage","MainAttributes"})
+        {
+            SortAlternative(column);
+            check(alts.Columns[column].SortMode==DataGridViewColumnSortMode.Programmatic && alts.Columns[column].HeaderCell.SortGlyphDirection!=SortOrder.None,
+                "alternative column is sortable: "+column);
+        }
+        SortAlternative("Quality");
+        check(alts.Rows.Count==3 && alts.Columns["Quality"].HeaderCell.SortGlyphDirection==SortOrder.Descending,
+            "returning to score restores descending order");
+        check(!grid.ShowCellToolTips && !alts.ShowCellToolTips && grid.Columns.Contains("Info") && alts.Columns.Contains("Info") &&
+            StaffPlanningPanel.InfoText(alts.Rows[0].DataBoundItem).Split('\n').All(line=>line.Length<=85),
+            "only dedicated information cells show compact wrapped details, disabling native clipped-cell tooltips");
+        own.Staff=[current,Person(41,end:"2028-03-20"),Person(42,end:"2028-12-01"),Person(43,end:"2030-01-01")];panel.SetStaffData(own);
+        check(grid.Rows.Count==1,"default expiry filter excludes past and long contracts");
+        expiry.SelectedIndex=(int)StaffContractWindow.Expired;
+        check(grid.Rows.Count==1 && ((StaffRenewal)grid.Rows[0].DataBoundItem).Uid==41,"expiry combo shows expired staff");
+        expiry.SelectedIndex=(int)StaffContractWindow.TwelveMonths;
+        check(grid.Rows.Count==2,"expiry combo expands to twelve months");
+        expiry.SelectedIndex=(int)StaffContractWindow.All;
+        check(grid.Rows.Count==4,"expiry combo shows all employee contracts");
+        L10n.SetLanguage("en");panel.SetLanguage();
+        check(expiry.SelectedIndex==(int)StaffContractWindow.All && expiry.SelectedItem?.ToString()=="All" && grid.Rows.Count==4,
+            "language switch preserves the expiry window and translates choices");
+        L10n.SetLanguage("it");panel.SetLanguage();expiry.SelectedIndex=(int)StaffContractWindow.SixMonths;
+        own.Staff=[current];market.Staff=[better];panel.SetStaffData(own);panel.SetRecruitmentData(market);
         current.TeamSlot=1;current.TeamName="U20";current.Attributes["working_with_youngsters"]=10;
         better.Attributes["working_with_youngsters"]=16;panel.SetStaffData(own);panel.SetRecruitmentData(market);Application.DoEvents();
         check(attrs.Rows[0].Cells[0].Value?.ToString()==L10n.Get("StaffAttribute_working_with_youngsters") &&

@@ -37,11 +37,7 @@ public sealed class StaffPlanningPanel : UserControl
         var method = new Button { Name = "PlanMethod", Text = L10n.Get("TacticalCriteria"), AutoSize = true };
         method.Click += (_, _) => MessageBox.Show(this, L10n.Get("PlanMethod"), L10n.Get("PlanTab"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         tools.Controls.AddRange([search, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer, reload, method]);
-        findStaff.Click += (_, _) =>
-        {
-            if (Selected is StaffRenewal row && row.Profile is StaffSearchProfile profile)
-                FindStaffRequested?.Invoke(profile, row.Person.JobKey, (long)offer.Value, StaffSquads.TargetFor(row.Person));
-        };
+        findStaff.Click += (_, _) => OpenRecruitment(Selected);
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var detail = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3 };
         detail.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
@@ -60,9 +56,24 @@ public sealed class StaffPlanningPanel : UserControl
         Add(list, "Name", "Text_f537c6bd038e", 190); CopyColumn(list);
         Add(list, "Role", "StaffRole", 230); Add(list, "Team", "StaffTeam", 210);
         Add(list, "ContractEnd", "Text_51bf843f1751", 110, true); Add(list, "Days", "PlanDays", 85, true);
-        Add(list, "Recommendation", "PlanRecommendation", 240); Add(list, "Criterion", "PlanCriterion", 210);
+        Add(list, "Recommendation", "PlanRecommendation", 240);
         Add(list, "Quality", "RecruitQuality", 95, true); Add(list, "Stars", "RecruitRoleStars", 170, true, true);
         Add(list, "Wage", "StaffWage", 145, true); Add(list, "Replacement", "PlanBestAlternative", 190); Add(list, "ReplacementStars", "PlanReplacementStars", 180, true, true); Add(list, "ReplacementTeam", "PlanReplacementTeam", 210); Add(list, "BetterCount", "PlanBetterCount", 100, true);
+        Add(list, "Criterion", "PlanCriterion", 130);
+        list.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+        list.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
+        foreach (var (field, minimum) in new (string, int)[]
+            { ("Role",100), ("Team",80), ("ContractEnd",90), ("Days",55), ("Criterion",110),
+              ("Quality",60), ("Replacement",110), ("ReplacementTeam",80), ("BetterCount",65) })
+        {
+            list.Columns[field].MinimumWidth = minimum;
+            list.Columns[field].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+        }
+        list.CellDoubleClick += (_, e) =>
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && list.Columns[e.ColumnIndex].Name != "CopyName")
+                OpenRecruitment(list.Rows[e.RowIndex].DataBoundItem as StaffRenewal);
+        };
         Add(alternatives, "Name", "Text_f537c6bd038e", 180); CopyColumn(alternatives);
         Add(alternatives, "Club", "StaffClub", 170); Add(alternatives, "CurrentRole", "StaffRole", 220); Add(alternatives, "Team", "StaffTeam", 210);
         Add(alternatives, "Quality", "RecruitQuality", 95, true); Add(alternatives, "RoleStars", "RecruitRoleStars", 170, true, true);
@@ -113,6 +124,11 @@ public sealed class StaffPlanningPanel : UserControl
         root.SizeChanged += (_, _) => status.MaximumSize = new Size(Math.Max(100, root.ClientSize.Width - 20), 0);
         reasonScroll.SizeChanged += (_, _) => explanation.MaximumSize = new Size(Math.Max(100, reasonScroll.ClientSize.Width - 24), 0);
         L10n.Capture(this); SetLanguage();
+    }
+    private void OpenRecruitment(StaffRenewal? row)
+    {
+        if (row?.Profile is StaffSearchProfile profile)
+            FindStaffRequested?.Invoke(profile, row.Person.JobKey, (long)offer.Value, StaffSquads.TargetFor(row.Person));
     }
     private StaffRenewal? Selected => list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem as StaffRenewal;
     private static DataGridView Grid(string name) => new() { Name = name, Dock = DockStyle.Fill, ReadOnly = true, AutoGenerateColumns = false,

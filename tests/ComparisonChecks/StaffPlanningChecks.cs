@@ -117,6 +117,10 @@ internal static class StaffPlanningChecks
             "planning shows renewal advice, stronger alternatives and attribute comparison with scrolling and stars");
         check(grid.Rows[0].Cells["Team"].Value?.ToString()=="Prima squadra" && grid.Rows[0].Cells["ReplacementTeam"].Value?.ToString()=="U20" &&
             alts.Rows[0].Cells["Team"].Value?.ToString()=="U20", "planning exposes incumbent and proposed candidate squads in every list");
+        check(grid.Columns["Criterion"].DisplayIndex==grid.Columns.Count-1 &&
+            new[]{"Role","Team","ContractEnd","Days","Criterion","Quality","Replacement","BetterCount"}.All(k=>grid.Columns[k].AutoSizeMode==DataGridViewAutoSizeColumnMode.AllCellsExceptHeader) &&
+            grid.Columns["Quality"].Width<95 && grid.Columns["Days"].Width<85 && grid.Columns["Team"].Width<210,
+            "planning compacts content-sized columns and places comparison criterion last");
         check(!grid.Columns.Contains("Club") && grid.Columns["ReplacementStars"].CellTemplate is StarRatingCell &&
             grid.Rows[0].Cells["ReplacementStars"].Value is double replacementStars && replacementStars==((StaffRenewal)grid.Rows[0].DataBoundItem).Proposed?.RoleStars,
             "renewal grid removes own-club column and shows the proposed candidate stars");
@@ -155,9 +159,13 @@ internal static class StaffPlanningChecks
             recruitJob.SelectedItem!.ToString()==L10n.Get("StaffJob_coach") && recruitOffer.Value==4321 && !ignore.Checked && recruitSearch.Text.Length==0,
             "planning opens recruitment with its training criterion, current job, salary and active interest filtering, clearing stale text");
         tabs.SelectedIndex=5; criteria.SelectedIndex=criteria.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p=>p.Key=="coach");
-        button.PerformClick(); Application.DoEvents();
+        var doubleClick=typeof(DataGridView).GetMethod("OnCellDoubleClick",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!;
+        doubleClick.Invoke(grid,[new DataGridViewCellEventArgs(0,-1)]);
+        doubleClick.Invoke(grid,[new DataGridViewCellEventArgs(grid.Columns["CopyName"].Index,0)]);
+        check(tabs.SelectedIndex==5,"planning header and copy-name double clicks do not open recruitment");
+        doubleClick.Invoke(grid,[new DataGridViewCellEventArgs(grid.Columns["Name"].Index,0)]); Application.DoEvents();
         check(tabs.SelectedIndex==4 && recruitMode.SelectedIndex==0 && ((StaffSearchProfile)recruitProfile.SelectedItem!).Key=="coach",
-            "planning job criterion switches recruitment back from training to job search");
+            "planning row double click uses the same filtered job search as the dedicated button");
         tabs.SelectedIndex=5;
         panel.ClearForSave(false); Application.DoEvents();
         check(!button.Enabled, "planning search shortcut is disabled without a selected renewal");

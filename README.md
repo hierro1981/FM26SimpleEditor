@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.7.1 (in sviluppo)
+# FM26 Simple Editor · v15.7.2 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -84,6 +84,11 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v15.7.2 · in sviluppo
+
+- **Pianificazione staff:** colonne più compatte e adattate al contenuto, intestazioni su più righe e **Criterio di confronto** spostato in fondo.
+- Doppio clic su un rinnovo per aprire **Trova staff** con gli stessi criteri del pulsante dedicato.
 
 ### v15.7.1 · in sviluppo
 

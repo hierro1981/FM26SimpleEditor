@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.9.1 (in development)
+# FM26 Simple Editor · v15.9.1
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -10,7 +10,7 @@ A free **Football Manager 26** editor for Windows. Open a save, find a player an
 
 ## Download and launch
 
-Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v15.7.4**.
+Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v15.9.1**.
 
 - **Setup, when available in the release:** guided installation, with options to install Python and the .NET runtime if needed. Additional installations require your consent and an Internet connection.
 - **Portable ZIP:** extract the complete package into a folder and run **FM26SimpleEditor.exe**. Keep all package files together.
@@ -85,25 +85,25 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 ## Changes, newest first
 
-### v15.9.1 (in development)
+### v15.9.1
 
 - **Staff planning:** combine column sorts with **Ctrl/Shift+click** in the current staff and alternatives lists. Header numbers show sort priority; a regular click returns to a single column.
 - Filter current staff by **job** and **job squad** (first team, U20, U18 and readable squads). Filters combine with search and expiry and survive language changes.
 - Attribute comparisons end with five-star visualisations for both people: attribute value divided by four, separate from training ratings.
 - More compact role and job-squad columns in the alternatives, with wrapping text.
 
-### v15.9.0 (in development)
+### v15.9.0
 
 - **Edit player** now contains **Edit**, **In-game preview**, **Comparison** and **History** subtabs. Existing comparison shortcuts open the matching subtab.
 - **CA history:** select current ability alongside attributes to see a separate chart on its real 1–200 scale, with values and dates from compared saves. Use **Add saves** to build the trend. CA deltas are available in the table. Historic CA in internal attribute samples remains undecoded; no past values are inferred.
 
-### v15.8.1 (in development)
+### v15.8.1
 
 - **Youth staff alternatives:** staff already working in youth teams appear before other subteams, unknown assignments and first-team staff, even when limiting results to 50.
 - **Prioritise current subteam staff** is on by default for subteam vacancies, both in planning and staff search. Columns sort within each priority group; turn it off for a global ranking. Current assignments remain visible; scores and stars are unchanged.
 - Fixed the alternatives heading, which incorrectly claimed to prioritise interest.
 
-### v15.8.0 (in development)
+### v15.8.0
 
 - **Staff planning:** contract filters for expired / fewer than 3 days left, fewer than 6 months (default), fewer than 12 months, or all. Dates use the save calendar.
 - Better alternatives start in descending score order; click headers to sort columns.

@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.9.1 (in sviluppo)
+# FM26 Simple Editor · v15.9.1
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -10,7 +10,7 @@ Editor gratuito per **Football Manager 26** su Windows. Apri un salvataggio, cer
 
 ## Scarica e avvia
 
-Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione corrente è la **v15.7.4**.
+Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione corrente è la **v15.9.1**.
 
 - **Setup, quando presente nella release:** installazione guidata dell’editor, con opzioni per installare anche Python e il runtime .NET se necessari. Le installazioni aggiuntive richiedono il tuo consenso e una connessione Internet.
 - **ZIP portatile:** estrai tutto il contenuto in una cartella e avvia **FM26SimpleEditor.exe**. Conserva insieme tutti i file del pacchetto.
@@ -85,25 +85,25 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ## Novità, dalla versione più recente
 
-### v15.9.1 (in sviluppo)
+### v15.9.1
 
 - **Pianificazione staff:** combina gli ordinamenti con **Ctrl/Shift+clic** negli elenchi dello staff attuale e delle alternative. I numeri nelle intestazioni indicano la priorità; un clic normale torna a una sola colonna.
 - Filtra lo staff attuale per **ruolo** e **squadra incarico** (prima squadra, U20, U18 e squadre leggibili). I filtri si combinano con ricerca e scadenza e rimangono selezionati al cambio lingua.
 - Nel confronto attributi, aggiunte in coda le stelle visive per entrambe le persone: valore dell’attributo diviso quattro, distinte dalle stelle di allenamento.
 - Colonne ruolo e squadra delle alternative più compatte, con testo su più righe.
 
-### v15.9.0 (in sviluppo)
+### v15.9.0
 
 - **Modifica giocatore** raccoglie i sottotab **Modifica**, **Anteprima nel gioco**, **Confronto** e **Storico**. Le scorciatoie di confronto aprono direttamente il sottotab corretto.
 - **Storico CA:** seleziona l’abilità attuale insieme agli attributi per vedere un grafico separato sulla scala reale 1–200, con valori e date dei salvataggi confrontati. Usa **Aggiungi salvataggi** per ricostruire l’andamento. In tabella sono disponibili le variazioni CA. La CA storica dei campioni interni non è ancora decodificata; non vengono dedotti valori passati.
 
-### v15.8.1 (in sviluppo)
+### v15.8.1
 
 - **Alternative per le giovanili:** precedenza a chi lavora già nelle squadre giovanili, poi altre sottosquadre, incarichi non identificati e prime squadre, anche con il limite dei 50 risultati.
 - **Privilegia staff già nelle sottosquadre** è attivo inizialmente per le destinazioni nelle sottosquadre, sia nella pianificazione sia in Trova staff. Le colonne ordinano entro ciascun gruppo; disattivalo per una classifica globale. La squadra attuale rimane visibile; punteggi e stelle non cambiano.
 - Corretta l’intestazione delle alternative, che dichiarava erroneamente la precedenza per interesse.
 
-### v15.8.0 (in sviluppo)
+### v15.8.0
 
 - **Pianificazione staff:** filtro contratti scaduti / meno di 3 giorni rimasti, meno di 6 mesi (predefinito), meno di 12 mesi oppure tutti. Le date si basano sul calendario del salvataggio.
 - Alternative migliori inizialmente ordinate per punteggio decrescente; clic sulle intestazioni per ordinare le colonne.

@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.9.1
+# FM26 Simple Editor · v16.0.0-preview.1 (in sviluppo)
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -7,6 +7,12 @@
 🌐 **Pagina del progetto:** [italiano](https://hierro1981.github.io/FM26SimpleEditor/) · [English](https://hierro1981.github.io/FM26SimpleEditor/en/)
 
 Editor gratuito per **Football Manager 26** su Windows. Apri un salvataggio, cerca un giocatore e modifica attributi, abilità, posizioni e data di nascita. Puoi anche confrontare giocatori, seguirne i progressi e trovare i più adatti ai ruoli della tua squadra e delle sue tattiche. Per lo staff, cerca candidati per incarico o allenamento e valuta i rinnovi dei contratti in scadenza.
+
+## Supporto sperimentale FM27
+
+Il branch di sviluppo apre anche i salvataggi FM27. Modifica giocatori, rosa, tre tattiche salvate e storico interno degli attributi sono stati confrontati su un save FM26 e la sua conversione FM27, build **27.0.0+2493426**. Le altre build FM27 leggibili restano **in sola lettura**.
+
+La barra superiore segnala FM27 come sperimentale. Nella coppia fornita alcune assegnazioni staff differiscono e vanno verificate nel gioco; le sezioni staff lo segnalano. Le copie modificate superano i controlli dell’archivio e del lettore, ma la compatibilità nel gioco richiede ancora la ricarica in FM27. Il supporto FM26 rimane disponibile. Dettagli: [compatibilità FM27](docs/FM27Compatibility.md).
 
 ## Scarica e avvia
 
@@ -84,6 +90,11 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
 ## Novità, dalla versione più recente
+
+### v16.0.0-preview.1 (in sviluppo)
+
+- Aggiunto supporto sperimentale FM27, riconoscimento di gioco/build, lettori storico e tattiche specifici e sola lettura per build FM27 non provate.
+- Aggiornata la libreria di lettura con controlli di regressione FM26; le viste staff segnalano esplicitamente le assegnazioni FM27 sperimentali.
 
 ### v15.9.1
 

@@ -137,6 +137,22 @@ internal static class LocalizationChecks
         check(All(startup).OfType<Button>().Any(b => b.Text == "Install Python 3.13"), "startup preparation uses saved language before Python checks");
         using var englishMain = new MainForm("python", directory);
         check(All(englishMain).OfType<Button>().Any(b => b.Text == "Open save"), "English interface initializes without an intermediate Italian layout");
+        var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+        var setFormat=typeof(MainForm).GetMethod("SetFormat",flags)!;
+        setFormat.Invoke(englishMain,[new OpenResult { Game="FM27",Build="27.0.1+future",Experimental=true,CanSave=false }]);
+        typeof(MainForm).GetMethod("SetDetail",flags)!.Invoke(englishMain,[player]);
+        var edition=All(englishMain).OfType<Label>().Single(l=>l.Name=="SaveEdition");
+        var editPanel=(Panel)typeof(MainForm).GetField("editing",flags)!.GetValue(englishMain)!;
+        var saveButton=(Button)typeof(MainForm).GetField("save",flags)!.GetValue(englishMain)!;
+        var currentAbility=(NumericUpDown)typeof(MainForm).GetField("ca",flags)!.GetValue(englishMain)!;
+        currentAbility.Value=101;
+        check(edition.Text=="FM27 · experimental" && !editPanel.Enabled && !saveButton.Enabled,
+            "unverified FM27 builds show the experimental badge and cannot enable saving through dirty fields");
+        setFormat.Invoke(englishMain,[new OpenResult { Game="FM27",Build="27.0.0+2493426",Experimental=true,CanSave=true }]);
+        typeof(MainForm).GetMethod("SetDetail",flags)!.Invoke(englishMain,[player]);currentAbility.Value=101;
+        check(editPanel.Enabled && saveButton.Enabled,"paired FM27 build enables copy editing while retaining the experimental badge");
+        setFormat.Invoke(englishMain,[new OpenResult { Game="FM26",Build="26.3.2+2329565",CanSave=true }]);
+        check(edition.Text=="FM26","opening FM26 clears the prior FM27 experimental indicator");
         L10n.SetLanguage("it");
     }
 }

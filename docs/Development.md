@@ -6,7 +6,7 @@
 
 Applicazione C# Windows Forms, .NET 8, compatibile con Visual Studio 2026 su Windows con il carico di lavoro **Sviluppo di applicazioni desktop .NET**. Il backend locale Python richiede Python 3.12 o successivo. Aprire `FM26SimpleEditor.csproj`, compilare e avviare. Gli script e i dati necessari vengono copiati automaticamente nell’output.
 
-Le versioni delle dipendenze sono fissate in `requirements.txt`; `fmsave 0.5.11` mantiene il parser riproducibile, mentre la modifica del salvataggio è gestita dal codice dell’editor. Il controllo all’avvio installa o ripara l’ambiente dedicato quando le versioni non corrispondono. Aggiornare la libreria richiede verificare anche gli usi dei suoi moduli interni.
+Le versioni delle dipendenze sono fissate in `requirements.txt`; `fmsave 0.10.0` mantiene il parser riproducibile, mentre la modifica del salvataggio è gestita dal codice dell’editor. Il controllo all’avvio installa o ripara l’ambiente dedicato quando le versioni non corrispondono. Aggiornare la libreria richiede verificare anche gli usi dei suoi moduli interni.
 
 ```sh
 python -m pip install -r requirements.txt
@@ -85,3 +85,6 @@ Saved personal reputation, five job affinities and eight more tactical preferenc
 La classifica futura per tattica usa dalla v15.4.1 una curva per età e posizione. Metodo, coefficienti sperimentali, fonti e limiti: [PotentialSelection.md](PotentialSelection.md). / Since v15.4.1 the future tactic ranking uses age and position curves; see the linked method for assumptions, sources and limitations.
 
 Dalla v15.4.2 la proiezione degli attributi usa un incremento dai punti di CA stimati, evitando la moltiplicazione CA futura/CA attuale. / Since v15.4.2 attribute projection adds an increment from estimated CA gain, avoiding the future/current CA multiplier. See the method above for calibration limits.
+
+
+FM27 development: [compatibility and paired-save validation](FM27Compatibility.md).

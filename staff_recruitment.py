@@ -2,6 +2,7 @@
 from collections import Counter
 import warnings
 from operation_progress import report
+from save_compatibility import edition
 from staff_teams import team_index, team_fields
 from team_types import read_team_types
 from staff_reader import (PERSONALITY, PREFERENCES, values, attributes_at_block,
@@ -114,7 +115,7 @@ def read_staff_recruitment(store, club_uid, progress=None):
         counts = Counter(p['uid'] for p in candidates)
         for p in candidates:
             p['employmentCount'] = counts[p['uid']]
-        return dict(status='ready', clubUid=club_uid, clubName=club.name,
+        return dict(status='ready', clubUid=club_uid, clubName=club.name, experimental=edition(store.save.info) == 'FM27',
                     clubReputation=club.reputation, clubNationId=club.nation_id,
                     gameDate=store.save.info.game_date.isoformat(), staff=candidates,
                     readerWarnings=getattr(store, '_recruitment_warnings', []),

@@ -270,6 +270,7 @@ public sealed class StaffPlanningPanel : UserControl
         status.Text = clubUid is null ? L10n.Get("StaffSelectClub") : own is null ? L10n.Get("PlanPendingStaff") : own.Status != "ready" ? L10n.Format("StaffUnavailable", own.Error ?? "—") :
             StaffPlanning.Date(own.GameDate) is null ? L10n.Get("PlanMissingDate") : L10n.Format("PlanStatus", own.GameDate, sorted.Count, rows.Count) + " " +
             (market is null ? L10n.Get("PlanPendingMarket") : market.Status != "ready" ? L10n.Format("StaffUnavailable", market.Error ?? "—") : market.GameDate != own.GameDate ? L10n.Get("PlanDateMismatch") : L10n.Get("PlanCoverage"));
+        if (own?.Experimental == true || market?.Experimental == true) status.Text += " " + L10n.Get("FM27StaffNote");
         Details();
     }
     private void Details()

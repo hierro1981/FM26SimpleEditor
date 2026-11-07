@@ -35,6 +35,9 @@ public sealed class MainForm : Form
     private readonly HashSet<uint> comparisonPool = [];
     private readonly ContextMenuStrip comparisonMenu = new();
     private readonly Button open = new() { Text = L10n.Get("Text_96b6ef93f726"), AutoSize = true };
+    private readonly Label editionLabel = new() { Name = "SaveEdition", AutoSize = true, ForeColor = Color.DarkOrange, Margin = new Padding(8,8,0,0) };
+    private string loadedGame = "", loadedBuild = "";
+    private bool experimentalFormat, canSaveFormat = true;
     private readonly TextBox file = new() { ReadOnly = true, Dock = DockStyle.Fill };
     private readonly Button settingsButton = new() { Name = "OptionsButton", Text = L10n.Get("OptionsButton"), AutoSize = true };
     private AppSettings settings = new();
@@ -128,7 +131,7 @@ public sealed class MainForm : Form
         toolbar.Controls.Add(open, 0, 0); toolbar.Controls.Add(save, 1, 0);
         toolbar.Controls.Add(changes, 2, 0);
         var languageTools = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, WrapContents = false, Margin = Padding.Empty };
-        languageTools.Controls.AddRange([settingsButton, about]);
+        languageTools.Controls.AddRange([settingsButton, about, editionLabel]);
         toolbar.Controls.Add(languageTools, 3, 0);
         toolbar.Controls.Add(file, 0, 1); toolbar.SetColumnSpan(file, 4);
         var status = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 3, Padding = new Padding(5, 7, 5, 0) };
@@ -224,7 +227,7 @@ public sealed class MainForm : Form
             state.Text = L10n.Translate(state.Text);
             UpdatePlayerIdentity();
             if (detail is not null) birthInfo.Text = detail.BirthEditable ? L10n.Get("Text_ec60709e94bb") : L10n.Backend(detail.BirthWarning);
-            UpdatePoolLabel(); BindFields(); RebuildTeamChoices(); RefreshSearch();
+            UpdateFormatLabel(); UpdatePoolLabel(); BindFields(); RebuildTeamChoices(); RefreshSearch();
             previewStale = true; RefreshPreview(); RefreshComparison(); historyPanel.SetLanguage(UseItalian);
             Changed();
 
@@ -602,6 +605,20 @@ public sealed class MainForm : Form
         finally { SetBusy(false); }
     }
 
+    private void SetFormat(OpenResult result)
+    {
+        loadedGame = result.Game; loadedBuild = result.Build; experimentalFormat = result.Experimental; canSaveFormat = result.CanSave;
+        UpdateFormatLabel();
+    }
+
+    private void UpdateFormatLabel()
+    {
+        editionLabel.Text = loadedGame.Length == 0 ? "" : loadedGame + (experimentalFormat ? " · " + L10n.Get("ExperimentalFormat") : "");
+        editionLabel.ForeColor = experimentalFormat ? Color.DarkOrange : Color.DimGray;
+        tips.SetToolTip(editionLabel, experimentalFormat ? L10n.Format("FM27FormatNote", loadedBuild) +
+            (canSaveFormat ? "" : " " + L10n.Get("FormatReadOnly")) : loadedBuild);
+    }
+
     private async Task OpenFile()
     {
         using var dialog = new OpenFileDialog { Filter = L10n.Get("Text_b67eeb7fa174") };
@@ -613,6 +630,7 @@ public sealed class MainForm : Form
             ReportProgress(new BackendProgress { Percent = 98, Phase = L10n.Get("Text_e2d47e04db5f") });
             await Task.Yield();
             catalog = result.Players; catalogByUid = catalog.ToDictionary(player => player.Uid); file.Text = result.Source;
+            SetFormat(result);
             gameDate = DateTime.TryParseExact(result.GameDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var clock) ? clock : null;
             mySquadLoaded = false; mySquad.ClearForSave(true);
             detail = null; originalAttributes = []; originalPositions = [];
@@ -669,7 +687,7 @@ public sealed class MainForm : Form
         birthInfo.Text = selected.BirthEditable ? L10n.Get("Text_ec60709e94bb") : L10n.Backend(selected.BirthWarning);
         foreach (var field in selected.Attributes.Concat(selected.Positions)) field.PropertyChanged += FieldChanged;
         BindFields(); binding = false;
-        editing.Enabled = true; view.Enabled = true; emptyPreview.Visible = false; previewStale = true;
+        editing.Enabled = canSaveFormat; view.Enabled = true; emptyPreview.Visible = false; previewStale = true;
     }
 
     private void UpdatePlayerIdentity()
@@ -728,7 +746,7 @@ public sealed class MainForm : Form
     {
         if (binding) return;
         bool dirty = HasChanges() || attributes.IsCurrentCellDirty || positions.IsCurrentCellDirty;
-        save.Enabled = reset.Enabled = !busy && dirty;
+        save.Enabled = !busy && dirty && canSaveFormat; reset.Enabled = !busy && dirty;
         view.Enabled = !busy && detail is not null;
         compareButton.Enabled = historyButton.Enabled = !busy && detail is not null;
         caMeter.Value = (int)ca.Value; paMeter.Value = pa.Value >= 0 ? (int)pa.Value : null;
@@ -770,7 +788,7 @@ public sealed class MainForm : Form
 
     private async Task SaveFile()
     {
-        if (busy || detail is null || !FinishEdits() || !HasChanges()) return;
+        if (busy || !canSaveFormat || detail is null || !FinishEdits() || !HasChanges()) return;
         using var dialog = new SaveFileDialog { Filter = L10n.Get("Text_b67eeb7fa174"), FileName = Path.GetFileNameWithoutExtension(file.Text) + L10n.Get("ModifiedSuffix"), InitialDirectory = Path.GetDirectoryName(file.Text), OverwritePrompt = true };
         if (dialog.ShowDialog() != DialogResult.OK) return;
         SetBusy(true, L10n.Get("Text_fd2a169c6549"), determinate: true);
@@ -820,7 +838,7 @@ public sealed class MainForm : Form
         open.Enabled = settingsButton.Enabled = tabs.Enabled = !value;
         if (message is not null) state.Text = message;
         choose.Enabled = !value && players.SelectedRows.Count == 1;
-        if (detail is not null) { editing.Enabled = !value; changeBirth.Enabled = !value && detail.BirthEditable; birth.Enabled = !value && changeBirth.Checked && detail.BirthEditable; }
+        if (detail is not null) { editing.Enabled = !value && canSaveFormat; changeBirth.Enabled = !value && detail.BirthEditable; birth.Enabled = !value && changeBirth.Checked && detail.BirthEditable; }
         Changed();
     }
 

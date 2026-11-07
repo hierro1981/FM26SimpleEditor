@@ -75,7 +75,7 @@ class StaffReaderTests(unittest.TestCase):
 
     def test_empty_staff_is_a_success_and_progress_is_monotonic(self):
         store=self.store();store.save.staff=lambda:[]
-        self.assertEqual(read_my_staff(store,10),dict(status='ready',clubUid=10,staff=[],gameDate='2028-03-28'))
+        self.assertEqual(read_my_staff(store,10),dict(status='ready',clubUid=10,staff=[],experimental=False,gameDate='2028-03-28'))
         output=io.StringIO();read_my_staff(self.store(),10,ProgressReporter(output))
         events=[json.loads(line) for line in output.getvalue().splitlines()]
         self.assertEqual([e['percent'] for e in events],sorted(e['percent'] for e in events))

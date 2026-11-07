@@ -13,6 +13,7 @@ from fmsave._container import read_section
 from fmsave.readers.managed import find_managed_club_layouts, first_human_selector
 from fmsave.readers.tactics import find_tactics_layout, read_tactics_header, walk_tactic_blocks
 from operation_progress import report
+from save_compatibility import paired_fm27
 
 CODE_FILE = Path(__file__).with_name('Data') / 'saved_tactic_codes.json'
 SUPPORTED_BUILD = '26.3.2+2329565'
@@ -23,8 +24,8 @@ def read_codes():
 
 
 def compatible_layout(info):
-    if info.build != SUPPORTED_BUILD or info.section_schemas.get('tactics_man') != 26:
-        raise ValueError('Tactic decoding is only validated for FM26 26.3.2+2329565, schema 26')
+    if (info.build != SUPPORTED_BUILD and not paired_fm27(info)) or info.section_schemas.get('tactics_man') != 26:
+        raise ValueError('Tactic decoding requires a validated FM26 or paired FM27 build, schema 26')
     layout = find_tactics_layout(26, info.build)
     # Two concrete incompatibilities in the attached save: a 0b0502 taker marker
     # and a 275-byte, valid UTF-8 style label. Keep all structural/bound checks.

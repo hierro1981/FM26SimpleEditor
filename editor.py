@@ -14,6 +14,7 @@ from fmsave.readers.player_scan import window_end
 from archive_rewrite import rewrite
 from operation_progress import ProgressReporter, report, scaled
 from history_reader import embedded_history
+from save_compatibility import capabilities, require_writable
 from my_squad import read_my_squad
 from staff_reader import read_my_staff
 from staff_recruitment import read_staff_recruitment
@@ -253,7 +254,7 @@ class PlayerStore:
 
     def summary(self):
         return dict(source=str(self.path), gameDate=self.save.info.game_date.isoformat() if self.save.info.game_date else None,
-                    players=self.rows)
+                    players=self.rows, **capabilities(self.save.info))
 
     def player(self, uid):
         uid = integer(uid, 0, 4294967295, "ID interno")
@@ -345,6 +346,7 @@ class PlayerStore:
                     birthEditable=birth_at is not None, birthWarning=warning, rawPa=raw_pa, league=league)
 
     def save_player(self, request, progress=None):
+        require_writable(self.save.info)
         report(progress, 0, "Controllo dei dati modificati")
         player = self.player(request.get("uid"))
         expected_id = request.get("id")

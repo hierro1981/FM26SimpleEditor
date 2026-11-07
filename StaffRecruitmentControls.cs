@@ -210,6 +210,7 @@ public sealed class StaffRecruitmentPanel : UserControl
             (data.ReaderWarnings.Count > 0 ? " " + L10n.Get("RecruitReaderWarning") : "");
         if (data?.Status=="ready" && (targetSquad.SelectedItem as SquadChoice)?.Key is string target && target!="any")
             status.Text += " " + L10n.Format("RecruitTargetContext",StaffSquads.Label(target)) + (YouthFilterActive ? " " + L10n.Format("RecruitYouthContext",youthMinimum.Value) : "");
+        if (data?.Experimental == true) status.Text += " " + L10n.Get("FM27StaffNote");
         if (data?.Status=="ready" && Profile?.Key=="analyst") status.Text += " " + L10n.Get("AnalystCategoryNote");
         Details();
     }

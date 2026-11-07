@@ -152,6 +152,7 @@ public sealed class StaffPanel : UserControl
         status.Text = clubUid is null ? L10n.Get("StaffSelectClub") : data is null ? L10n.Get("StaffPending") :
             data.Status == "unavailable" ? L10n.Format("StaffUnavailable", data.Error ?? "—") :
             data.Status != "ready" ? L10n.Get("StaffSelectClub") : L10n.Get("StaffReadOnlyNote");
+        if (data?.Experimental == true) status.Text += " " + L10n.Get("FM27StaffNote");
         count.Text = L10n.Format("StaffCount", sorted.Count, data?.Staff.Count ?? 0);
         ShowDetails();
     }

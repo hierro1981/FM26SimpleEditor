@@ -2366,4 +2366,8 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
   <data name="PlanCurrentAttributeStars" xml:space="preserve"><value>Attributo attuale ★</value></data>
   <data name="PlanAlternativeAttributeStars" xml:space="preserve"><value>Attributo alternativa ★</value></data>
   <data name="PlanAttributeStarsHint" xml:space="preserve"><value>Scala visiva dell’attributo: valore / 4, fino a 5 stelle (20/20 = 5 stelle). Non sono stelle di allenamento né una valutazione del gioco.</value></data>
+  <data name="ExperimentalFormat" xml:space="preserve"><value>sperimentale</value></data>
+  <data name="FormatReadOnly" xml:space="preserve"><value>Questa build è in sola lettura.</value></data>
+  <data name="FM27FormatNote" xml:space="preserve"><value>FM27 {0}: supporto sperimentale verificato su una coppia di salvataggi convertiti. Le assegnazioni staff differiscono tra i file: verificane la corrispondenza nel gioco. Ricarica le copie modificate in FM27 per confermarne la compatibilità.</value></data>
+  <data name="FM27StaffNote" xml:space="preserve"><value>Staff FM27 sperimentale: verifica nel gioco gli incarichi e le assegnazioni a club/squadre prima di basarti sui suggerimenti.</value></data>
 </root>

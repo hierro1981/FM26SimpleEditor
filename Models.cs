@@ -72,6 +72,10 @@ public sealed class LeagueReference
 
 public sealed class OpenResult
 {
+    public string Game { get; set; } = "";
+    public string Build { get; set; } = "";
+    public bool Experimental { get; set; }
+    public bool CanSave { get; set; } = true;
     public string Source { get; set; } = "";
     public string? GameDate { get; set; }
     public List<PlayerRow> Players { get; set; } = [];
@@ -267,6 +271,7 @@ public sealed class StaffRow
 
 public sealed class StaffResult
 {
+    public bool Experimental { get; set; }
     public string? GameDate { get; set; }
     public string Status { get; set; } = "none";
     public uint? ClubUid { get; set; }
@@ -276,6 +281,7 @@ public sealed class StaffResult
 
 public sealed class StaffRecruitmentResult
 {
+    public bool Experimental { get; set; }
     public string Status { get; set; } = "none";
     public uint? ClubUid { get; set; }
     public string ClubName { get; set; } = "";

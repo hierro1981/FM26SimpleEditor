@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v15.9.1
+# FM26 Simple Editor · v16.0.0-preview.1 (in development)
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -7,6 +7,12 @@
 🌐 **Project website:** [English](https://hierro1981.github.io/FM26SimpleEditor/en/) · [Italiano](https://hierro1981.github.io/FM26SimpleEditor/)
 
 A free **Football Manager 26** editor for Windows. Open a save, find a player and edit attributes, ability, positions and date of birth. You can also compare players, track their progress and find the best candidates for your squad’s positions and tactics. For staff, search candidates by job or training category and assess renewals for expiring contracts.
+
+## Experimental FM27 support
+
+The development branch also opens FM27 saves. Player editing, squad reading, the three saved tactics and internal attribute history have been compared on an FM26 save and its FM27 conversion, build **27.0.0+2493426**. Other readable FM27 builds remain **read-only**.
+
+The toolbar marks FM27 as experimental. Staff club assignments differ in the supplied pair and must be checked in-game; staff suggestions carry that notice. Modified copies pass archive and reader checks, but still require loading in FM27 to establish in-game compatibility. FM26 support is retained. Details: [FM27 compatibility](docs/FM27Compatibility.md).
 
 ## Download and launch
 
@@ -84,6 +90,11 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v16.0.0-preview.1 (in development)
+
+- Added experimental FM27 support, game/build identification, edition-specific history and tactics readers, and read-only mode for untested FM27 builds.
+- Upgraded the save-reading dependency with FM26 regression tests; staff views explicitly identify experimental FM27 assignments.
 
 ### v15.9.1
 

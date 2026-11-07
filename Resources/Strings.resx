@@ -16,7 +16,7 @@
     <value>Informazioni…</value>
   </data>
   <data name="AboutDescription" xml:space="preserve">
-    <value>Editor indipendente per i salvataggi di Football Manager 26. Licenza e sorgenti nel repository.</value>
+    <value>Editor indipendente per i salvataggi di Football Manager 26 e 27. Licenza e sorgenti nel repository.</value>
   </data>
   <data name="AboutTitle" xml:space="preserve">
     <value>Informazioni su FM26 Simple Editor</value>
@@ -2368,7 +2368,7 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
   <data name="PlanAttributeStarsHint" xml:space="preserve"><value>Scala visiva dell’attributo: valore / 4, fino a 5 stelle (20/20 = 5 stelle). Non sono stelle di allenamento né una valutazione del gioco.</value></data>
   <data name="ExperimentalFormat" xml:space="preserve"><value>sperimentale</value></data>
   <data name="FormatReadOnly" xml:space="preserve"><value>Questa build è in sola lettura.</value></data>
-  <data name="FM27FormatNote" xml:space="preserve"><value>FM27 sperimentale: verificato sulla coppia di salvataggi e sulle schermate staff fornite. Restano dati contrattuali da verificare nel gioco.</value></data>
+  <data name="FM27FormatNote" xml:space="preserve"><value>Build FM27 {0} non verificata: modifica e salvataggio disabilitati. Build supportata: 27.0.0+2493426.</value></data>
   <data name="FM27StaffNote" xml:space="preserve"><value>Staff FM27 sperimentale: verifica nel gioco gli incarichi e le assegnazioni a club/squadre prima di basarti sui suggerimenti.</value></data>
   <data name="StaffJob_chairperson" xml:space="preserve"><value>Presidente</value></data>
   <data name="StaffJob_director" xml:space="preserve"><value>Dirigente</value></data>

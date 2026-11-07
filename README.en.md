@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v16.0.0-preview.2 (in development)
+# FM26 Simple Editor · v16.0.0
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -6,17 +6,17 @@
 
 🌐 **Project website:** [English](https://hierro1981.github.io/FM26SimpleEditor/en/) · [Italiano](https://hierro1981.github.io/FM26SimpleEditor/)
 
-A free **Football Manager 26** editor for Windows. Open a save, find a player and edit attributes, ability, positions and date of birth. You can also compare players, track their progress and find the best candidates for your squad’s positions and tactics. For staff, search candidates by job or training category and assess renewals for expiring contracts.
+A free **Football Manager 26 and 27** editor for Windows. Open a save, find a player and edit attributes, ability, positions and date of birth. You can also compare players, track their progress and find the best candidates for your squad’s positions and tactics. For staff, search candidates by job or training category and assess renewals for expiring contracts.
 
-## Experimental FM27 support
+## FM26 and FM27 compatibility
 
-The development branch also opens FM27 saves. Player editing, squad reading, the three saved tactics and internal attribute history have been compared on an FM26 save and its FM27 conversion, build **27.0.0+2493426**. Other readable FM27 builds remain **read-only**.
+Supports FM26 and FM27 build **27.0.0+2493426**. Player editing, squad, staff, saved tactics and attribute history have been checked; loading a modified FM27 save in the game has also been confirmed.
 
-The toolbar marks FM27 as experimental. The updated save confirms all 75 names and their squad assignments against the supplied staff screenshots. Modified copies pass archive and reader checks, but still require loading in FM27 to establish in-game compatibility. FM26 support is retained. Details: [FM27 compatibility](docs/FM27Compatibility.md).
+The build is checked when opening and before saving. Other FM27 builds, when readable, allow **viewing only**, with editing and saving disabled. Later versions require a new compatibility check. Details: [FM27 compatibility](docs/FM27Compatibility.md).
 
 ## Download and launch
 
-Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v15.9.1**.
+Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v16.0.0**.
 
 - **Setup, when available in the release:** guided installation, with options to install Python and the .NET runtime if needed. Additional installations require your consent and an Internet connection.
 - **Portable ZIP:** extract the complete package into a folder and run **FM26SimpleEditor.exe**. Keep all package files together.
@@ -91,15 +91,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 ## Changes, newest first
 
-### v16.0.0-preview.2 (in development)
+### v16.0.0
 
-- Correct FM27 titles for chairperson, directors, club doctor and head performance analyst.
-- Doctors and directors retain their explicit job squad even when salary and expiry are unavailable.
-
-### v16.0.0-preview.1
-
-- Added experimental FM27 support, game/build identification, edition-specific history and tactics readers, and read-only mode for untested FM27 builds.
-- Upgraded the save-reading dependency with FM26 regression tests; staff views explicitly identify experimental FM27 assignments.
+- **FM27 support** for build 27.0.0+2493426, retaining FM26 compatibility.
+- Player editing, squad, tactics and history available for supported FM27 saves; in-game loading of a modified copy confirmed.
+- Verified FM27 staff titles and squad assignments, including chairperson, directors, club doctor and head performance analyst.
+- Other FM27 builds disable editing and saving; viewing remains available when the file is readable.
 
 ### v15.9.1
 

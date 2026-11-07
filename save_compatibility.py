@@ -7,12 +7,12 @@ def edition(info):
 
 
 def paired_fm27(info):
-    return edition(info) == 'FM27' and info.build == FM27_PAIRED_BUILD and info.section_schemas.get('game_db') == 4000
+    return edition(info) == 'FM27' and getattr(info, 'build', '') == FM27_PAIRED_BUILD and getattr(info, 'section_schemas', {}).get('game_db') == 4000
 
 
 def capabilities(info):
     game = edition(info)
-    return dict(game=game, build=info.build, experimental=game == 'FM27',
+    return dict(game=game, build=getattr(info, 'build', ''), experimental=game == 'FM27' and not paired_fm27(info),
                 canSave=game == 'FM26' or paired_fm27(info))
 
 

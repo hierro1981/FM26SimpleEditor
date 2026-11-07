@@ -16,7 +16,7 @@
     <value>About…</value>
   </data>
   <data name="AboutDescription" xml:space="preserve">
-    <value>Independent editor for Football Manager 26 saves. License and source are available in the repository.</value>
+    <value>Independent editor for Football Manager 26 and 27 saves. License and source are available in the repository.</value>
   </data>
   <data name="AboutTitle" xml:space="preserve">
     <value>About FM26 Simple Editor</value>
@@ -2368,7 +2368,7 @@ Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses a
   <data name="PlanAttributeStarsHint" xml:space="preserve"><value>Visual attribute scale: value / 4, up to 5 stars (20/20 = 5 stars). These are not training-category stars or a game rating.</value></data>
   <data name="ExperimentalFormat" xml:space="preserve"><value>experimental</value></data>
   <data name="FormatReadOnly" xml:space="preserve"><value>This build is read-only.</value></data>
-  <data name="FM27FormatNote" xml:space="preserve"><value>Experimental FM27: checked against the paired saves and supplied staff screenshots. Some contract data still require in-game verification.</value></data>
+  <data name="FM27FormatNote" xml:space="preserve"><value>Unverified FM27 build {0}: editing and saving disabled. Supported build: 27.0.0+2493426.</value></data>
   <data name="FM27StaffNote" xml:space="preserve"><value>Experimental FM27 staff: check current jobs and club/squad assignments in-game before relying on suggestions.</value></data>
   <data name="StaffJob_chairperson" xml:space="preserve"><value>Chairperson</value></data>
   <data name="StaffJob_director" xml:space="preserve"><value>Director</value></data>

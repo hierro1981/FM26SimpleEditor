@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v16.0.0-preview.2 (in sviluppo)
+# FM26 Simple Editor · v16.0.0
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -6,17 +6,17 @@
 
 🌐 **Pagina del progetto:** [italiano](https://hierro1981.github.io/FM26SimpleEditor/) · [English](https://hierro1981.github.io/FM26SimpleEditor/en/)
 
-Editor gratuito per **Football Manager 26** su Windows. Apri un salvataggio, cerca un giocatore e modifica attributi, abilità, posizioni e data di nascita. Puoi anche confrontare giocatori, seguirne i progressi e trovare i più adatti ai ruoli della tua squadra e delle sue tattiche. Per lo staff, cerca candidati per incarico o allenamento e valuta i rinnovi dei contratti in scadenza.
+Editor gratuito per **Football Manager 26 e 27** su Windows. Apri un salvataggio, cerca un giocatore e modifica attributi, abilità, posizioni e data di nascita. Puoi anche confrontare giocatori, seguirne i progressi e trovare i più adatti ai ruoli della tua squadra e delle sue tattiche. Per lo staff, cerca candidati per incarico o allenamento e valuta i rinnovi dei contratti in scadenza.
 
-## Supporto sperimentale FM27
+## Compatibilità FM26 e FM27
 
-Il branch di sviluppo apre anche i salvataggi FM27. Modifica giocatori, rosa, tre tattiche salvate e storico interno degli attributi sono stati confrontati su un save FM26 e la sua conversione FM27, build **27.0.0+2493426**. Le altre build FM27 leggibili restano **in sola lettura**.
+Supporta FM26 e FM27, build **27.0.0+2493426**. Sono stati verificati modifica dei giocatori, rosa, staff, tattiche salvate e storico degli attributi; è stato confermato anche il caricamento nel gioco di un salvataggio FM27 modificato.
 
-La barra superiore segnala FM27 come sperimentale. Il salvataggio aggiornato conferma tutti i 75 nomi e le rispettive assegnazioni di squadra mostrate nelle schermate staff. Le copie modificate superano i controlli dell’archivio e del lettore, ma la compatibilità nel gioco richiede ancora la ricarica in FM27. Il supporto FM26 rimane disponibile. Dettagli: [compatibilità FM27](docs/FM27Compatibility.md).
+La build viene controllata all’apertura e prima del salvataggio. Per altre build FM27, se leggibili, l’editor consente **solo la consultazione** e disabilita modifica e salvataggio. Le versioni successive richiedono una nuova verifica di compatibilità. Dettagli: [compatibilità FM27](docs/FM27Compatibility.md).
 
 ## Scarica e avvia
 
-Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione corrente è la **v15.9.1**.
+Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione corrente è la **v16.0.0**.
 
 - **Setup, quando presente nella release:** installazione guidata dell’editor, con opzioni per installare anche Python e il runtime .NET se necessari. Le installazioni aggiuntive richiedono il tuo consenso e una connessione Internet.
 - **ZIP portatile:** estrai tutto il contenuto in una cartella e avvia **FM26SimpleEditor.exe**. Conserva insieme tutti i file del pacchetto.
@@ -91,15 +91,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ## Novità, dalla versione più recente
 
-### v16.0.0-preview.2 (in sviluppo)
+### v16.0.0
 
-- Corretti gli incarichi FM27 di presidente, dirigenti, medico sociale e capo analista.
-- Medico e dirigenti mostrano la squadra indicata dal loro incarico anche quando stipendio e scadenza non sono disponibili.
-
-### v16.0.0-preview.1
-
-- Aggiunto supporto sperimentale FM27, riconoscimento di gioco/build, lettori storico e tattiche specifici e sola lettura per build FM27 non provate.
-- Aggiornata la libreria di lettura con controlli di regressione FM26; le viste staff segnalano esplicitamente le assegnazioni FM27 sperimentali.
+- **Supporto FM27** per la build 27.0.0+2493426, mantenendo la compatibilità con FM26.
+- Modifica giocatori, rosa, tattiche e storico disponibili anche sui salvataggi FM27 supportati; caricamento nel gioco di una copia modificata confermato.
+- Staff FM27: incarichi e squadre verificati, inclusi presidente, dirigenti, medico sociale e capo analista.
+- Protezione per build FM27 diverse: modifica e salvataggio disabilitati, consultazione disponibile quando il file è leggibile.
 
 ### v15.9.1
 

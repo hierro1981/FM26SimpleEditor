@@ -148,9 +148,9 @@ internal static class LocalizationChecks
         currentAbility.Value=101;
         check(edition.Text=="FM27 · experimental" && !editPanel.Enabled && !saveButton.Enabled,
             "unverified FM27 builds show the experimental badge and cannot enable saving through dirty fields");
-        setFormat.Invoke(englishMain,[new OpenResult { Game="FM27",Build="27.0.0+2493426",Experimental=true,CanSave=true }]);
+        setFormat.Invoke(englishMain,[new OpenResult { Game="FM27",Build="27.0.0+2493426",Experimental=false,CanSave=true }]);
         typeof(MainForm).GetMethod("SetDetail",flags)!.Invoke(englishMain,[player]);currentAbility.Value=101;
-        check(editPanel.Enabled && saveButton.Enabled,"paired FM27 build enables copy editing while retaining the experimental badge");
+        check(editPanel.Enabled && saveButton.Enabled && edition.Text=="FM27","verified FM27 build enables copy editing without an experimental badge");
         setFormat.Invoke(englishMain,[new OpenResult { Game="FM26",Build="26.3.2+2329565",CanSave=true }]);
         check(edition.Text=="FM26","opening FM26 clears the prior FM27 experimental indicator");
         L10n.SetLanguage("it");

@@ -19,13 +19,14 @@ def history_bytes(marker):
 
 
 class FM27CompatibilityChecks(unittest.TestCase):
-    def test_exact_paired_build_has_explicit_experimental_support(self):
+    def test_exact_paired_build_has_verified_support(self):
         value=capabilities(info())
-        self.assertEqual(value,dict(game='FM27',build=FM27_PAIRED_BUILD,experimental=True,canSave=True))
+        self.assertEqual(value,dict(game='FM27',build=FM27_PAIRED_BUILD,experimental=False,canSave=True))
         require_writable(info())
 
     def test_unknown_build_or_changed_schema_never_authorises_writes(self):
-        for value in (info('27.0.1+9999999'),info(schema=4001)):
+        for value in (info('27.0.1+9999999'), info('27.0.0+2493427'), info('27.0.0+2486695'), info(schema=4001), N(game='FM27',build=FM27_PAIRED_BUILD,section_schemas={})):
+            self.assertTrue(capabilities(value)['experimental'])
             self.assertFalse(capabilities(value)['canSave'])
             with self.assertRaises(ValueError):require_writable(value)
 

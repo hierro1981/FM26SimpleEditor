@@ -1715,7 +1715,7 @@ Hover over a position for its rating.</value>
     <value>Staff reading unavailable: {0}</value>
   </data>
   <data name="StaffReadOnlyNote" xml:space="preserve">
-    <value>Read-only: staff of the whole club and its controlled affiliates; the squad filter applies only to players. Attributes use a 1–20 scale, where readable. Jobs are read from contracts where recognised; “category” means the specific title is not decoded yet. The human manager is identifiable. Preferences describe desired style, not ability. Pay uses the save’s base currency; — means unavailable. The board is not included.</value>
+    <value>Read-only: staff of the whole club and its controlled affiliates; the squad filter applies only to players. Attributes use a 1–20 scale, where readable. Jobs are read from contracts where recognised; “category” means the specific title is not decoded yet. The human manager is identifiable. Preferences describe desired style, not ability. Pay uses the save’s base currency; — means unavailable. Board members are shown when readable in the save format.</value>
   </data>
   <data name="StaffCount" xml:space="preserve">
     <value>Showing {0} of {1} people. Select a row for available details.</value>

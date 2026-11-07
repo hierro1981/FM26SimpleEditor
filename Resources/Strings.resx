@@ -1715,7 +1715,7 @@ Passa sul punto per il valore.</value>
     <value>Lettura dello staff non disponibile: {0}</value>
   </data>
   <data name="StaffReadOnlyNote" xml:space="preserve">
-    <value>Sola lettura: staff dell’intero club e delle affiliate controllate; il filtro delle rose riguarda solo i giocatori. Attributi su scala 1–20, dove leggibili. Gli incarichi vengono letti dal contratto, dove riconosciuti; «categoria» indica che la qualifica precisa non è ancora decodificata. L’allenatore umano è riconoscibile. Preferenze = stile desiderato, non capacità. Paga nella valuta base del salvataggio; — indica un dato non disponibile. La dirigenza non è inclusa.</value>
+    <value>Sola lettura: staff dell’intero club e delle affiliate controllate; il filtro delle rose riguarda solo i giocatori. Attributi su scala 1–20, dove leggibili. Gli incarichi vengono letti dal contratto, dove riconosciuti; «categoria» indica che la qualifica precisa non è ancora decodificata. L’allenatore umano è riconoscibile. Preferenze = stile desiderato, non capacità. Paga nella valuta base del salvataggio; — indica un dato non disponibile. La dirigenza viene mostrata quando il formato la rende leggibile.</value>
   </data>
   <data name="StaffCount" xml:space="preserve">
     <value>{0} persone mostrate su {1}. Seleziona una riga per i dettagli disponibili.</value>

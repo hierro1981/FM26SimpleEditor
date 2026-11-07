@@ -12,7 +12,7 @@ Editor gratuito per **Football Manager 26** su Windows. Apri un salvataggio, cer
 
 Il branch di sviluppo apre anche i salvataggi FM27. Modifica giocatori, rosa, tre tattiche salvate e storico interno degli attributi sono stati confrontati su un save FM26 e la sua conversione FM27, build **27.0.0+2493426**. Le altre build FM27 leggibili restano **in sola lettura**.
 
-La barra superiore segnala FM27 come sperimentale. Le schermate staff confermano tutti i 75 nomi letti; resta una discrepanza fra contratto e schermata per una persona. Le copie modificate superano i controlli dell’archivio e del lettore, ma la compatibilità nel gioco richiede ancora la ricarica in FM27. Il supporto FM26 rimane disponibile. Dettagli: [compatibilità FM27](docs/FM27Compatibility.md).
+La barra superiore segnala FM27 come sperimentale. Il salvataggio aggiornato conferma tutti i 75 nomi e le rispettive assegnazioni di squadra mostrate nelle schermate staff. Le copie modificate superano i controlli dell’archivio e del lettore, ma la compatibilità nel gioco richiede ancora la ricarica in FM27. Il supporto FM26 rimane disponibile. Dettagli: [compatibilità FM27](docs/FM27Compatibility.md).
 
 ## Scarica e avvia
 

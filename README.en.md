@@ -12,7 +12,7 @@ A free **Football Manager 26** editor for Windows. Open a save, find a player an
 
 The development branch also opens FM27 saves. Player editing, squad reading, the three saved tactics and internal attribute history have been compared on an FM26 save and its FM27 conversion, build **27.0.0+2493426**. Other readable FM27 builds remain **read-only**.
 
-The toolbar marks FM27 as experimental. Staff screenshots confirm all 75 names read; one person has a contract/screenshot discrepancy. Modified copies pass archive and reader checks, but still require loading in FM27 to establish in-game compatibility. FM26 support is retained. Details: [FM27 compatibility](docs/FM27Compatibility.md).
+The toolbar marks FM27 as experimental. The updated save confirms all 75 names and their squad assignments against the supplied staff screenshots. Modified copies pass archive and reader checks, but still require loading in FM27 to establish in-game compatibility. FM26 support is retained. Details: [FM27 compatibility](docs/FM27Compatibility.md).
 
 ## Download and launch
 

@@ -2320,8 +2320,8 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
   <data name="StaffTeam" xml:space="preserve"><value>Squadra incarico</value></data>
   <data name="StaffTeamUnknown" xml:space="preserve"><value>Squadra non identificata</value></data>
   <data name="StaffSubteamSlot" xml:space="preserve"><value>Sottosquadra · slot {0}</value></data>
-  <data name="StaffTeamContext" xml:space="preserve"><value>Squadra del contratto: {0} · ID squadra: {1}</value></data>
-  <data name="StaffTeamNote" xml:space="preserve"><value>Riferimento alla squadra nel contratto letto, distinto dall’assegnazione degli allenamenti. U20/U18 e altri gruppi vengono identificati dai record squadra, controllando club, ID e coerenza del tipo su più club. In assenza di riscontri sufficienti resta lo slot generico; lo slot da solo non determina l’età.</value></data>
+  <data name="StaffTeamContext" xml:space="preserve"><value>Squadra incarico: {0} · ID squadra: {1}</value></data>
+  <data name="StaffTeamNote" xml:space="preserve"><value>Riferimento alla squadra nel contratto o nell’incarico senza contratto letto (FM27), distinto dall’assegnazione degli allenamenti. U20/U18 e altri gruppi vengono identificati dai record squadra, controllando club, ID e coerenza del tipo su più club. In assenza di riscontri sufficienti resta lo slot generico; lo slot da solo non determina l’età.</value></data>
   <data name="PlanReplacementTeam" xml:space="preserve"><value>Squadra alternativa proposta</value></data>
   <data name="StaffFirstTeam" xml:space="preserve"><value>Prima squadra</value></data>
   <data name="StaffSquad_any" xml:space="preserve"><value>Qualsiasi</value></data>
@@ -2368,6 +2368,14 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
   <data name="PlanAttributeStarsHint" xml:space="preserve"><value>Scala visiva dell’attributo: valore / 4, fino a 5 stelle (20/20 = 5 stelle). Non sono stelle di allenamento né una valutazione del gioco.</value></data>
   <data name="ExperimentalFormat" xml:space="preserve"><value>sperimentale</value></data>
   <data name="FormatReadOnly" xml:space="preserve"><value>Questa build è in sola lettura.</value></data>
-  <data name="FM27FormatNote" xml:space="preserve"><value>FM27 {0}: supporto sperimentale verificato su una coppia di salvataggi convertiti. Le assegnazioni staff differiscono tra i file: verificane la corrispondenza nel gioco. Ricarica le copie modificate in FM27 per confermarne la compatibilità.</value></data>
+  <data name="FM27FormatNote" xml:space="preserve"><value>FM27 sperimentale: verificato sulla coppia di salvataggi e sulle schermate staff fornite. Restano dati contrattuali da verificare nel gioco.</value></data>
   <data name="FM27StaffNote" xml:space="preserve"><value>Staff FM27 sperimentale: verifica nel gioco gli incarichi e le assegnazioni a club/squadre prima di basarti sui suggerimenti.</value></data>
+  <data name="StaffJob_chairperson" xml:space="preserve"><value>Presidente</value></data>
+  <data name="StaffJob_director" xml:space="preserve"><value>Dirigente</value></data>
+  <data name="StaffJob_head_performance_analyst" xml:space="preserve"><value>Capo analista delle performance</value></data>
+  <data name="StaffJob_fm27_coach" xml:space="preserve"><value>Collaboratore tecnico</value></data>
+  <data name="StaffJob_fm27_goalkeeping_coach" xml:space="preserve"><value>Allenatore dei portieri</value></data>
+  <data name="StaffJob_fm27_club_doctor" xml:space="preserve"><value>Medico sociale</value></data>
+  <data name="StaffJob_fm27_head_sports_science" xml:space="preserve"><value>Capo preparatore recupero infortunati</value></data>
+  <data name="StaffJob_fm27_performance_analyst" xml:space="preserve"><value>Analista delle performance</value></data>
 </root>

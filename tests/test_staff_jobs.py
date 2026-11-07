@@ -25,6 +25,7 @@ class StaffJobTests(unittest.TestCase):
                              'contract_e38': 0, 'contract_e39': 0, 'contract_type': 1})
         decoder = NS(_find_chain_records=lambda *args: ([tag], [record]))
         reader = StaffJobReader.__new__(StaffJobReader)
+        reader.fm27 = False
         reader.layout = STAFF
         reader.clock = dt.date(2026, 10, 21)
         reader.decoder = decoder

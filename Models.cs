@@ -210,6 +210,8 @@ public sealed class StaffRow
     public int? TeamTypeCode { get; set; }
     public int? TeamAgeLimit { get; set; }
     public string? TeamTypeMethod { get; set; }
+    public string? TeamAssignmentSource { get; set; }
+    [JsonIgnore] public bool HasTeamAssignment => TeamId.HasValue && (HasContract || TeamAssignmentSource == "role");
     public string? TeamName { get; set; }
     public uint? TeamClubUid { get; set; }
     public string? TeamClubName { get; set; }
@@ -217,7 +219,7 @@ public sealed class StaffRow
     {
         get
         {
-            if (!HasContract || !TeamId.HasValue) return L10n.Get("StaffTeamUnknown");
+            if (!HasTeamAssignment) return L10n.Get("StaffTeamUnknown");
             string label = TeamTypeMethod == "unclassified_subteam" ? L10n.Get("StaffAdditionalSquad") : !string.IsNullOrWhiteSpace(TeamName) ? TeamName : TeamSlot == 0 ? L10n.Get("StaffFirstTeam") :
                 TeamSlot is > 0 ? L10n.Format("StaffSubteamSlot", TeamSlot) : L10n.Get("StaffTeamUnknown");
             if (TeamSlot is null && string.IsNullOrWhiteSpace(TeamName)) label += " · ID " + TeamId;
@@ -235,6 +237,7 @@ public sealed class StaffRow
     public bool HasContract { get; set; }
     public int? JobCode { get; set; }
     public string? JobKey { get; set; }
+    public string? JobTitleKey { get; set; }
     public bool JobFamilyOnly { get; set; }
     public bool IsPlayerJob { get; set; }
     public long? Wage { get; set; }
@@ -253,7 +256,7 @@ public sealed class StaffRow
         get
         {
             if (IsHumanManager) return L10n.Get("StaffHuman");
-            string key = "StaffJob_" + JobKey;
+            string key = "StaffJob_" + (JobTitleKey ?? JobKey);
             if (!JobCode.HasValue || string.IsNullOrEmpty(JobKey) || !L10n.Keys.Contains(key)) return L10n.Get("StaffUnknownRole");
             string label = L10n.Get(key);
             if (JobFamilyOnly) label = L10n.Format("StaffJobFamilyFormat", label);
@@ -261,7 +264,7 @@ public sealed class StaffRow
         }
     }
     [JsonIgnore] public string RoleTooltip => StaffRecruitment.AnalystJob(this) is int code ?
-        L10n.Format("AnalystVariantContext", code) + " " + L10n.Get("AnalystCategoryNote") : JobFamilyOnly ? L10n.Get("StaffJobFamilyNote") : "";
+        L10n.Format("AnalystVariantContext", code) + (JobFamilyOnly ? " " + L10n.Get("AnalystCategoryNote") : "") : JobFamilyOnly ? L10n.Get("StaffJobFamilyNote") : "";
     [JsonIgnore] public string ContractDisplay => L10n.Get(HasContract ? "StaffContractFound" : "StaffContractMissing");
     [JsonIgnore] public string BirthDisplay => DisplayDate(Birth);
     [JsonIgnore] public string ContractStartDisplay => DisplayDate(ContractStart);

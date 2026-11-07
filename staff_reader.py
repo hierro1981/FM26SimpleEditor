@@ -157,13 +157,14 @@ def read_my_staff(store, club_uid, progress=None):
                 preferences = values(person.preferences, PREFERENCES)
                 reputation = {}
                 job = {}
+                block = None
                 if native_layout is not None:
                     block = native_staff_block(store.raw, person, native_layout)
                     attributes.update(attributes_at_block(store.raw, block, native_layout))
                     reputation = reputation_at_block(store.raw, block, native_layout)
                     preferences.update(preferences_at_block(store.raw, block, native_layout))
-                    if block is not None and job_reader is not None:
-                        job = job_reader.read(person, block[0])
+                if job_reader is not None:
+                    job = job_reader.read(person, block[0] if block else None)
                 result.append(dict(
                     uid=person.uid, id=person.unique_id, name=person.name or str(person.uid),
                     clubUid=person.club_uid, clubName=person.club_name,
@@ -178,7 +179,7 @@ def read_my_staff(store, club_uid, progress=None):
                     pa=ability.potential if ability else None,
                     personality=values(person.personality, PERSONALITY),
                     attributes=attributes,
-                    preferences=preferences, reputation=reputation, **team_fields(person, teams), **job))
+                    preferences=preferences, reputation=reputation, **team_fields(person, teams, allow_role_team=edition(store.save.info) == "FM27"), **job))
             if person.club_uid in associated or (index + 1) % 1000 == 0 or index + 1 == len(decoded):
                 report(progress, 10 + 90 * (index + 1) / max(1, len(decoded)),
                        'Preparazione elenco dello staff', index + 1, len(decoded), 'persone')

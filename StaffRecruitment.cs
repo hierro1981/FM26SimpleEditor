@@ -88,7 +88,7 @@ public static class StaffRecruitment
     }
     public static double? CurrentStars(StaffRow person) => CurrentProfile(person) is StaffSearchProfile profile ? Stars(person, profile) : null;
     public static string CurrentStarsTooltip(StaffRow person) =>
-        (CurrentProfile(person) is StaffSearchProfile profile ? profile.Label + "\n" : "") + L10n.Get("StaffCurrentRoleStarsNote") + (AnalystJob(person).HasValue ? "\n" + L10n.Get("AnalystCategoryNote") : "");
+        (CurrentProfile(person) is StaffSearchProfile profile ? profile.Label + "\n" : "") + L10n.Get("StaffCurrentRoleStarsNote") + (AnalystJob(person).HasValue && person.JobFamilyOnly ? "\n" + L10n.Get("AnalystCategoryNote") : "");
     public static int? Attribute(StaffRow person, string key) => person.Attributes.TryGetValue(key, out int n) && n is >= 1 and <= 20 ? n : null;
     public static double? Quality(StaffRow person, StaffSearchProfile profile)
     {
@@ -124,7 +124,7 @@ public static class StaffRecruitment
             reasons.Add(L10n.Format("RecruitPersonalReputation", person.Reputation.GetValueOrDefault("home"), person.CurrentReputation, person.Reputation.GetValueOrDefault("world")));
         else reasons.Add(L10n.Get("RecruitPersonalReputationMissing"));
         if (AnalystJob(person) is int analystCode)
-            reasons.Add(L10n.Format("AnalystVariantContext", analystCode) + " " + L10n.Get("AnalystCategoryNote"));
+            reasons.Add(L10n.Format("AnalystVariantContext", analystCode) + (person.JobFamilyOnly ? " " + L10n.Get("AnalystCategoryNote") : ""));
         if (JobPreference(person, profile) is int preference)
             reasons.Add(L10n.Format("RecruitJobPreference", L10n.Get("StaffJob_" + DesiredJob(profile)), preference));
         if (expired) { score += 12; reasons.Add(L10n.Get("RecruitExpired")); }

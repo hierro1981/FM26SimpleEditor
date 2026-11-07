@@ -63,3 +63,38 @@ class FM27CompatibilityChecks(unittest.TestCase):
 
     def test_invalid_marker_rejected(self):
         with self.assertRaises(ValueError):find_history(history_bytes(1),record_marker=0)
+
+
+class FM27StaffScreenChecks(unittest.TestCase):
+    def test_screen_verified_titles_keep_recruitment_categories(self):
+        from staff_jobs import fm27_job_fields, job_fields
+        self.assertEqual(fm27_job_fields(62)['jobKey'],'analyst')
+        self.assertEqual(fm27_job_fields(62)['jobTitleKey'],'head_performance_analyst')
+        self.assertFalse(fm27_job_fields(62)['jobFamilyOnly'])
+        self.assertEqual(fm27_job_fields(60)['jobTitleKey'],'fm27_performance_analyst')
+        self.assertEqual(fm27_job_fields(2)['jobKey'],'coach')
+        self.assertTrue(job_fields(62)['jobFamilyOnly'])  # FM26 remains category-only.
+        self.assertNotIn('jobTitleKey',job_fields(62))
+
+    def test_board_and_medical_roles_are_not_invented_employment(self):
+        from staff_jobs import fm27_job_fields, StaffJobReader
+        reader=StaffJobReader.__new__(StaffJobReader);reader.fm27=True
+        for code,key in [(4,'chairperson'),(6,'director'),(38,'doctor')]:
+            person=N(is_human_manager=False,has_contract=False,job=N(raw=code))
+            fields=reader.read(person,None)
+            self.assertEqual(fields['jobKey'],key)
+            self.assertFalse(fields['jobFamilyOnly'])
+            self.assertNotIn('wage',fields)
+        self.assertEqual(reader.read(N(is_human_manager=False,has_contract=False,job=None),None),{})
+        self.assertEqual(fm27_job_fields(254),{})
+
+    def test_no_contract_role_uses_only_an_explicit_catalogued_team(self):
+        from staff_teams import team_fields
+        context={'teamSlot':0,'teamName':None,'teamClubUid':1,'teamClubName':'Synthetic'}
+        person=N(has_contract=False,team_id=100,job=N(raw=6))
+        self.assertEqual(team_fields(person,{100:context},allow_role_team=True),dict(context,teamAssignmentSource='role'))
+        self.assertEqual(team_fields(person,{100:context}),{})
+        self.assertEqual(team_fields(person,{100:None},allow_role_team=True),{})
+        self.assertEqual(team_fields(person,{},allow_role_team=True),{})
+        person.job=None
+        self.assertEqual(team_fields(person,{100:context},allow_role_team=True),{})

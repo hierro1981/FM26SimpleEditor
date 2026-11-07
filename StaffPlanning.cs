@@ -31,7 +31,7 @@ public sealed record StaffRenewal(StaffRow Person, DateTime End, int Days, Staff
             var missing = Profile?.Weights.Keys.Where(k => StaffRecruitment.Attribute(Person,k) is null).ToArray() ?? [];
             if (Advice == StaffRenewalAdvice.Review && missing.Length > 0)
                 text = L10n.Format("PlanMissingAttributes", string.Join(", ", missing.Select(k=>L10n.Get("StaffAttribute_"+k))));
-            return text + (StaffRecruitment.AnalystJob(Person).HasValue ? " " + L10n.Get("AnalystCategoryNote") : "");
+            return text + (StaffRecruitment.AnalystJob(Person).HasValue && Person.JobFamilyOnly ? " " + L10n.Get("AnalystCategoryNote") : "");
         }
     }
 }

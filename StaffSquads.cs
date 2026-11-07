@@ -11,21 +11,21 @@ public static class StaffSquads
     public static bool Youth(string key) => key == "youth" || Regex.IsMatch(key, "^u(18|19|20|21|23)$");
     public static string? AgeGroup(StaffRow person)
     {
-        if (!person.HasContract || string.IsNullOrWhiteSpace(person.TeamName)) return null;
+        if (!person.HasTeamAssignment || string.IsNullOrWhiteSpace(person.TeamName)) return null;
         var match = Regex.Match(person.TeamName, @"(?:^|\W)(?:u|under)[\s-]*(18|19|20|21|23)(?:\W|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         return match.Success ? "u" + match.Groups[1].Value : null;
     }
     private static bool Affiliate(StaffRow person) => person.TeamClubUid.HasValue && person.TeamClubUid != person.ClubUid;
-    public static string TargetFor(StaffRow person) => !person.HasContract || !person.TeamId.HasValue ? "any" :
+    public static string TargetFor(StaffRow person) => !person.HasTeamAssignment || !person.TeamId.HasValue ? "any" :
         AgeGroup(person) ?? (Affiliate(person) ? "subteam" : person.TeamSlot == 0 ? "first" : person.TeamSlot is > 0 ? "subteam" : "any");
     public static bool Matches(StaffRow person, string filter) => filter switch
     {
         "any" => true,
-        "unknown" => !person.HasContract || !person.TeamId.HasValue || person.TeamSlot is null && string.IsNullOrWhiteSpace(person.TeamName),
-        "first" => person.HasContract && person.TeamId.HasValue && person.TeamSlot == 0 && AgeGroup(person) is null && !Affiliate(person),
-        "subteam" => person.HasContract && person.TeamId.HasValue && (person.TeamSlot is > 0 || AgeGroup(person) is not null || Affiliate(person)),
+        "unknown" => !person.HasTeamAssignment || !person.TeamId.HasValue || person.TeamSlot is null && string.IsNullOrWhiteSpace(person.TeamName),
+        "first" => person.HasTeamAssignment && person.TeamId.HasValue && person.TeamSlot == 0 && AgeGroup(person) is null && !Affiliate(person),
+        "subteam" => person.HasTeamAssignment && person.TeamId.HasValue && (person.TeamSlot is > 0 || AgeGroup(person) is not null || Affiliate(person)),
         "youth" => AgeGroup(person) is not null,
-        "reserves" => person.HasContract && person.TeamId.HasValue && Regex.IsMatch(person.TeamName ?? (Affiliate(person) ? person.TeamClubName : null) ?? "", @"(?:^|\W)(?:B|C|II|reserves|riserve)(?:\W|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant),
+        "reserves" => person.HasTeamAssignment && person.TeamId.HasValue && Regex.IsMatch(person.TeamName ?? (Affiliate(person) ? person.TeamClubName : null) ?? "", @"(?:^|\W)(?:B|C|II|reserves|riserve)(?:\W|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant),
         _ => Youth(filter) && AgeGroup(person) == filter
     };
     public static bool SubteamTarget(string target) => Targets.Contains(target) && target is not ("any" or "first");

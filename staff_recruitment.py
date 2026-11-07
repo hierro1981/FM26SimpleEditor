@@ -88,8 +88,8 @@ def recruitment_pool(store, progress=None):
             personality=values(person.personality, PERSONALITY), attributes=attributes,
             preferences={**values(person.preferences, PREFERENCES), **preferences_at_block(store.raw, block, layout)},
             reputation=reputation_at_block(store.raw, block, layout),
-            **team_fields(person, teams),
-            **(jobs.read(person, block[0]) if block is not None else {})))
+            **team_fields(person, teams, allow_role_team=edition(store.save.info) == "FM27"),
+            **jobs.read(person, block[0] if block else None)))
         if (i+1) % 500 == 0 or i+1 == len(people):
             report(progress, 40+50*(i+1)/max(1,len(people)), 'Preparazione candidati staff', i+1, len(people), 'persone')
     # Keep all employment rows: interest uses the strongest current employer,

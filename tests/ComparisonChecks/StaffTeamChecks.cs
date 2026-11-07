@@ -21,6 +21,15 @@ internal static class StaffTeamChecks
         check(affiliate.TeamDisplay=="Club B · Prima squadra" && !new StaffRow {TeamId=100,TeamSlot=0}.TeamDisplay.Contains("Prima"),
             "affiliate owner is distinguished and an unreadable contract never implies a first-team assignment");
         check(youth.TeamTooltip.Contains("101") && youth.TeamTooltip.Contains("lo slot da solo"), "staff squad tooltip exposes provenance and unmapped age-group limits");
+        var director=new StaffRow { Uid=1000,ClubUid=2,HasContract=false,TeamId=100,TeamSlot=0,TeamAssignmentSource="role",JobCode=6,JobKey="director" };
+        check(director.HasTeamAssignment && director.TeamDisplay=="Prima squadra" && StaffSquads.Matches(director,"first") &&
+            !StaffSquads.Matches(director,"unknown") && director.RoleDisplay=="Dirigente" && director.Wage is null,
+            "FM27 unpaid director retains explicit role/team evidence without inventing salary or a paid contract");
+        var chiefAnalyst=new StaffRow { JobKey="analyst",JobTitleKey="head_performance_analyst",JobCode=62,JobFamilyOnly=false,
+            Attributes=new(){["analysing_data"]=15,["tactical_knowledge"]=14,["judging_ability"]=13} };
+        check(chiefAnalyst.RoleDisplay=="Capo analista delle performance" && StaffRecruitment.AnalystJob(chiefAnalyst)==62 &&
+            StaffRecruitment.CurrentProfile(chiefAnalyst)?.Key=="analyst" && !chiefAnalyst.RoleTooltip.Contains(L10n.Get("AnalystCategoryNote")),
+            "FM27 chief analyst has the verified title and retains the shared scoring/variant filter");
         var data = new StaffRecruitmentResult {Status="ready",ClubUid=1,ClubReputation=6000,GameDate="2028-03-28",Staff=[first,youth]};
         var profile=StaffRecruitment.Roles.Single(p=>p.Key=="sports_scientist");
         check(StaffRecruitment.Rank(data,profile,search:"U20").Single().Uid==2 && StaffRecruitment.Rank(data,profile,search:"101").Single().Uid==2,

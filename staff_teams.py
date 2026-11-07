@@ -25,13 +25,19 @@ def team_index(clubs, types=None):
     return result
 
 
-def team_fields(person, teams):
+def team_fields(person, teams, allow_role_team=False):
     tid = getattr(person, 'team_id', None)
-    if not person.has_contract or type(tid) is not int:
+    role_team = allow_role_team and getattr(person, 'job', None) is not None
+    if not (person.has_contract or role_team) or type(tid) is not int:
         return {}
     # No inference from job title, listed club, department lists or nationality.
     if tid in teams:
-        return teams[tid] or {}  # Keep explicit conflicting mappings unknown.
+        known = teams[tid]
+        if known is None:
+            return {}  # Keep explicit conflicting mappings unknown.
+        return {**known, **({'teamAssignmentSource': 'role'} if not person.has_contract else {})}
+    if not person.has_contract:
+        return {}
     slot = getattr(person, 'team_slot', None)
     name = getattr(person, 'team_name', None)
     fallback = {}

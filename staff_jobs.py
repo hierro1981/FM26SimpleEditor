@@ -5,6 +5,7 @@ See docs/StaffJobs.md for the native serializer and category evidence.
 """
 import struct
 from bisect import bisect_right
+from save_compatibility import edition
 
 # Native job codes; the low bit adds the player/employee dual role.
 # Keep the family label where the native category is known but the detailed
@@ -71,11 +72,30 @@ def job_fields(code):
                 isPlayerJob=bool(code & 1))
 
 
+def fm27_job_fields(code):
+    """FM27 titles supported by the public job record and supplied staff screens."""
+    fields = job_fields(code)
+    if type(code) is not int or not 0 <= code <= 255:
+        return {}
+    base = code & 254
+    if base in (4, 6):
+        return dict(jobCode=code, jobKey='chairperson' if base == 4 else 'director',
+                    jobFamilyOnly=False, isPlayerJob=bool(code & 1))
+    if base in (38, 60, 62) and fields:
+        fields['jobFamilyOnly'] = False
+    titles = {2: 'fm27_coach', 34: 'fm27_goalkeeping_coach', 38: 'fm27_club_doctor',
+              40: 'fm27_head_sports_science', 60: 'fm27_performance_analyst', 62: 'head_performance_analyst'}
+    if base in titles and fields:
+        fields['jobTitleKey'] = titles[base]
+    return fields
+
+
 class StaffJobReader:
     def __init__(self, store):
         from fmsave.readers.staff import find_staff_layouts
         from fmsave.readers.contracts import build_contract_decoder
         self.store = store
+        self.fm27 = edition(store.save.info) == "FM27"
         self.clock = store.save.info.game_date
         layouts = find_staff_layouts(store.save.info.section_schemas, store.save.info.build)
         self.layout = layouts.staff
@@ -89,6 +109,23 @@ class StaffJobReader:
 
     def read(self, person, header):
         from fmsave._errors import CorruptSaveError
+        if self.fm27:
+            # FM27 also stores current club roles without paid contract terms.
+            # Do not require an ability block to expose its independently decoded role.
+            if person.is_human_manager:
+                return {}
+            code = getattr(getattr(person, 'job', None), 'raw', None)
+            fields = fm27_job_fields(code)
+            if fields and header is not None and person.has_contract:
+                try:
+                    preferences = self._read(person, header).get('jobPreferences')
+                    if preferences:
+                        fields['jobPreferences'] = preferences
+                except (CorruptSaveError, ValueError, IndexError, struct.error):
+                    pass
+            return fields
+        if header is None:
+            return {}
         if person.is_human_manager or not person.has_contract or person.team_id is None:
             return {}
         if (person.contract_start is not None and person.contract_start > self.clock

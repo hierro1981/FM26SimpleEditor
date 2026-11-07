@@ -2320,8 +2320,8 @@ Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses a
   <data name="StaffTeam" xml:space="preserve"><value>Job squad</value></data>
   <data name="StaffTeamUnknown" xml:space="preserve"><value>Squad not identified</value></data>
   <data name="StaffSubteamSlot" xml:space="preserve"><value>Subteam · slot {0}</value></data>
-  <data name="StaffTeamContext" xml:space="preserve"><value>Contract squad: {0} · Team ID: {1}</value></data>
-  <data name="StaffTeamNote" xml:space="preserve"><value>Team reference in the readable contract, separate from training assignments. U20/U18 and other groups are identified from team records, checking club, ID and consistent types across several clubs. Without sufficient evidence, the generic slot remains; slot order alone does not establish age.</value></data>
+  <data name="StaffTeamContext" xml:space="preserve"><value>Job squad: {0} · Team ID: {1}</value></data>
+  <data name="StaffTeamNote" xml:space="preserve"><value>Team reference in the readable contract or FM27 role without paid contract terms, separate from training assignments. U20/U18 and other groups are identified from team records, checking club, ID and consistent types across several clubs. Without sufficient evidence, the generic slot remains; slot order alone does not establish age.</value></data>
   <data name="PlanReplacementTeam" xml:space="preserve"><value>Proposed alternative squad</value></data>
   <data name="StaffFirstTeam" xml:space="preserve"><value>First team</value></data>
   <data name="StaffSquad_any" xml:space="preserve"><value>Any</value></data>
@@ -2368,6 +2368,14 @@ Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses a
   <data name="PlanAttributeStarsHint" xml:space="preserve"><value>Visual attribute scale: value / 4, up to 5 stars (20/20 = 5 stars). These are not training-category stars or a game rating.</value></data>
   <data name="ExperimentalFormat" xml:space="preserve"><value>experimental</value></data>
   <data name="FormatReadOnly" xml:space="preserve"><value>This build is read-only.</value></data>
-  <data name="FM27FormatNote" xml:space="preserve"><value>FM27 {0}: experimental support checked on a converted save pair. Staff assignments differ between files; verify them in-game. Reload modified copies in FM27 to confirm compatibility.</value></data>
+  <data name="FM27FormatNote" xml:space="preserve"><value>Experimental FM27: checked against the paired saves and supplied staff screenshots. Some contract data still require in-game verification.</value></data>
   <data name="FM27StaffNote" xml:space="preserve"><value>Experimental FM27 staff: check current jobs and club/squad assignments in-game before relying on suggestions.</value></data>
+  <data name="StaffJob_chairperson" xml:space="preserve"><value>Chairperson</value></data>
+  <data name="StaffJob_director" xml:space="preserve"><value>Director</value></data>
+  <data name="StaffJob_head_performance_analyst" xml:space="preserve"><value>Head performance analyst</value></data>
+  <data name="StaffJob_fm27_coach" xml:space="preserve"><value>Coach</value></data>
+  <data name="StaffJob_fm27_goalkeeping_coach" xml:space="preserve"><value>Goalkeeping coach</value></data>
+  <data name="StaffJob_fm27_club_doctor" xml:space="preserve"><value>Club doctor</value></data>
+  <data name="StaffJob_fm27_head_sports_science" xml:space="preserve"><value>Head of sports science</value></data>
+  <data name="StaffJob_fm27_performance_analyst" xml:space="preserve"><value>Performance analyst</value></data>
 </root>

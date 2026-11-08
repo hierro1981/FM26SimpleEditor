@@ -109,7 +109,7 @@ public sealed class MainForm : Form
         this.configurationDirectory = configurationDirectory ?? AppContext.BaseDirectory;
         backend = new BackendClient(pythonExecutable);
         settings = AppSettings.Load(this.configurationDirectory) with { Language = L10n.Language };
-        SquadSelection.ResultLimit = settings.RecommendationCount;
+        SquadSelection.ResultLimit = settings.RecommendationCount; UiNotes.Show = settings.ShowNotes; mySquad.SetLanguage();
         using var iconStream = typeof(MainForm).Assembly.GetManifestResourceStream("FM26SimpleEditor.App.ico");
         if (iconStream is not null) Icon = new Icon(iconStream);
         Text = AppInfo.Title;
@@ -220,7 +220,7 @@ public sealed class MainForm : Form
                     L10n.Get("ConfigWarning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            settings = selected; SquadSelection.ResultLimit = selected.RecommendationCount;
+            settings = selected; SquadSelection.ResultLimit = selected.RecommendationCount; UiNotes.Show = selected.ShowNotes;
             L10n.SetLanguage(selected.Language);
             L10n.Apply(this);
             options.SetLanguage(UseItalian); mySquad.SetLanguage();
@@ -462,7 +462,7 @@ public sealed class MainForm : Form
         var text = teamSearch.Text.Trim();
         binding = true; team.BeginUpdate(); team.Items.Clear();
         team.Items.Add(text.Length > 0 ? L10n.Get("Text_0fb09ab452aa") : L10n.Get("Text_452ac98b053e"));
-        team.Items.AddRange(allTeams.Where(name => text.Length == 0 || name.Contains(text, StringComparison.OrdinalIgnoreCase)).OrderBy(name => name, Labels.Comparer(UseItalian)).Cast<object>().ToArray());
+        team.Items.AddRange(allTeams.Where(name => text.Length == 0 || TextSearch.Contains(name, text)).OrderBy(name => name, Labels.Comparer(UseItalian)).Cast<object>().ToArray());
         int selectedIndex = selected is null ? -1 : team.Items.IndexOf(selected);
         team.SelectedIndex = selectedIndex > 0 ? selectedIndex : 0;
         team.EndUpdate(); binding = false; QueueSearch();

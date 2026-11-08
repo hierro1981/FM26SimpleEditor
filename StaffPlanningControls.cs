@@ -258,7 +258,7 @@ public sealed class StaffPlanningPanel : UserControl
         var rows = cached ??= own is null ? [] : StaffPlanning.Build(own, market, (long)offer.Value, choices, (StaffContractWindow)expiry.SelectedIndex);
         string role = (roleFilter.SelectedItem as FilterChoice)?.Key ?? "", team = (teamFilter.SelectedItem as FilterChoice)?.Key ?? "";
         var filtered = rows.Where(p => (role.Length == 0 || RoleKey(p.Person) == role) && (team.Length == 0 || TeamKey(p.Person) == team))
-            .Where(p => string.IsNullOrWhiteSpace(search.Text) || p.Name.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Role.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Team.Contains(search.Text.Trim(), StringComparison.CurrentCultureIgnoreCase) || p.Uid.ToString().Contains(search.Text.Trim()));
+            .Where(p => string.IsNullOrWhiteSpace(search.Text) || TextSearch.Contains(p.Name, search.Text.Trim()) || TextSearch.Contains(p.Role, search.Text.Trim()) || TextSearch.Contains(p.Team, search.Text.Trim()) || p.Uid.ToString().Contains(search.Text.Trim()));
         object? Value(StaffRenewal p, string field) => field switch { "Name" => p.Name, "Role" => p.Role, "Team" => p.Team, "Days" => p.Days,
             "Recommendation" => p.Advice, "Criterion" => p.Criterion, "Quality" => p.Quality, "Stars" => p.Stars, "Wage" => p.Wage, "Ca" => p.Ca, "Pa" => p.Pa,
             "Replacement" => p.Replacement, "ReplacementStars" => p.ReplacementStars, "ReplacementTeam" => p.ReplacementTeam, "BetterCount" => p.BetterCount, _ => p.End };

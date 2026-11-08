@@ -1,4 +1,5 @@
 """Local FM26 editor service. JSON lines are ASCII-safe on Windows."""
+import unicodedata
 import datetime as dt
 import calendar
 import json
@@ -19,6 +20,10 @@ from my_squad import read_my_squad
 from staff_reader import read_my_staff
 from staff_recruitment import read_staff_recruitment
 from tactics_reader import read_my_tactics
+
+
+def search_fold(value):
+    return ''.join(c for c in unicodedata.normalize('NFD', str(value).casefold()) if unicodedata.category(c) != 'Mn')
 
 
 def integer(value, minimum, maximum, label):
@@ -68,9 +73,9 @@ def add_months(date, months):
 
 
 def search_rows(rows, request, clock):
-    text = str(request.get("text") or "").strip().casefold()
+    text = search_fold(str(request.get("text") or "").strip())
     exact_team = str(request.get("teamExact") or "").strip()
-    contains_team = str(request.get("teamContains") or "").strip().casefold()
+    contains_team = search_fold(str(request.get("teamContains") or "").strip())
     loan_team = request.get("loanTeam") or "playing"
     if loan_team not in {"playing", "owner"}:
         raise ValueError("Squadra di riferimento dei prestiti non riconosciuta")
@@ -110,9 +115,9 @@ def search_rows(rows, request, clock):
         team = team_name(row)
         if exact_team and team != exact_team:
             return False
-        if not exact_team and contains_team and contains_team not in team.casefold():
+        if not exact_team and contains_team and contains_team not in search_fold(team):
             return False
-        if text and not any(text in str(value).casefold() for value in (row["name"], team, row["uid"], row["id"] if row["id"] is not None else "")):
+        if text and not any(text in search_fold(value) for value in (row["name"], team, row["uid"], row["id"] if row["id"] is not None else "")):
             return False
         if any(row[field] is None or not low <= row[field] <= high for field, low, high in ranges):
             return False

@@ -81,7 +81,7 @@ public sealed class SearchablePlayerPicker : UserControl
     {
         string text = search.Text.Trim();
         uint? highlighted = (results.SelectedItem as PlayerChoice)?.Uid ?? SelectedItem?.Uid;
-        var filtered = items.Where(item => text.Length==0 || item.SearchText.Contains(text,StringComparison.OrdinalIgnoreCase) || item.Label.Contains(text,StringComparison.OrdinalIgnoreCase)).ToList();
+        var filtered = items.Where(item => text.Length==0 || TextSearch.Contains(item.SearchText, text) || TextSearch.Contains(item.Label, text)).ToList();
         results.BeginUpdate(); results.Items.Clear(); results.Items.AddRange(filtered.Cast<object>().ToArray());
         int index = filtered.FindIndex(item => item.Uid==highlighted);
         results.SelectedIndex = filtered.Count==0 ? -1 : index>=0 ? index : 0;

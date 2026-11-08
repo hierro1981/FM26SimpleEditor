@@ -133,7 +133,7 @@ public sealed class ComparisonPanel : UserControl
             var text = query.Text.Trim();
             var choices = catalog.Where(row => row.Uid != p.Uid &&
                 (source.SelectedIndex == 1 ? pool.Contains(row.Uid) : p.TeamId.HasValue ? row.TeamId == p.TeamId : p.ClubUid.HasValue && row.ClubUid == p.ClubUid) &&
-                (text.Length == 0 || row.Name.Contains(text, StringComparison.OrdinalIgnoreCase) || row.Uid.ToString().Contains(text) || (row.Id?.ToString() ?? "").Contains(text)))
+                (text.Length == 0 || TextSearch.Contains(row.Name, text) || row.Uid.ToString().Contains(text) || (row.Id?.ToString() ?? "").Contains(text)))
                 .OrderBy(row => PositionScheme.Rank(row.MainPosition)).ThenBy(row => row.Name, Labels.Comparer(italian)).ToList();
             candidates.SetItems(choices.Select(row => new PlayerChoice(row.Uid,
                 $"{Labels.PositionCode(row.MainPosition, italian)} · {row.Name} · {row.Team}",

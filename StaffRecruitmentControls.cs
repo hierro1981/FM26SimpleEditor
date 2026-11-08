@@ -23,6 +23,8 @@ public sealed class StaffRecruitmentPanel : UserControl
     private readonly CheckBox ignoreInterest = new() { Name = "RecruitIgnoreInterest", Text = L10n.Get("RecruitIgnoreInterest"), AutoSize = true };
     private readonly TextBox search = new() { Name = "RecruitSearch", Width = 230, PlaceholderText = L10n.Get("StaffSearch") };
     private readonly Label status = new() { AutoSize = true, ForeColor = Color.DimGray, Dock = DockStyle.Fill };
+    private readonly Button notesInfo = new() { Name="RecruitNotesInfo", Text="ⓘ", Width=32, Height=30, Dock=DockStyle.Right };
+    private TableLayoutPanel? detailLayout;
     private readonly Label reason = new() { Name = "RecruitReasons", AutoSize = true, Dock = DockStyle.Top, Padding = new Padding(6) };
     private readonly DataGridView list = Grid("RecruitList");
     private readonly DataGridView attributes = Grid("RecruitAttributes");
@@ -72,9 +74,10 @@ public sealed class StaffRecruitmentPanel : UserControl
         lower.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); lower.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); lower.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         var left = new GroupBox { Dock = DockStyle.Fill, Text = L10n.Get("RecruitDetail") };
         var details = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2 };
+        detailLayout = details;
         details.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); details.RowStyles.Add(new RowStyle(SizeType.Percent, 50)); details.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
         var reasons = new Panel { Name = "RecruitReasonScroll", Dock = DockStyle.Fill, AutoScroll = true };
-        reasons.Controls.Add(reason); details.Controls.Add(reasons, 0, 0); details.Controls.Add(attributes, 0, 1); left.Controls.Add(details);
+        reasons.Controls.Add(reason); reasons.Controls.Add(notesInfo); details.Controls.Add(reasons, 0, 0); details.Controls.Add(attributes, 0, 1); left.Controls.Add(details);
         reasons.SizeChanged += (_, _) => reason.MaximumSize = new Size(Math.Max(80, reasons.ClientSize.Width - 24), 0);
         var right = new GroupBox { Dock = DockStyle.Fill, Text = L10n.Get("StaffCoachingStars") }; right.Controls.Add(coaching);
         lower.Controls.Add(left, 0, 0); lower.Controls.Add(right, 1, 0); root.Controls.Add(lower, 0, 3); Controls.Add(root);
@@ -172,8 +175,20 @@ public sealed class StaffRecruitmentPanel : UserControl
         youthMinimum.Enabled = YouthFilterActive;
         preferSubteams.Enabled = StaffSquads.SubteamTarget((targetSquad.SelectedItem as SquadChoice)?.Key ?? "any");
     }
+    private void UpdateNotes()
+    {
+        notesInfo.Visible = !UiNotes.Show;
+        if (detailLayout is not null)
+        {
+            detailLayout.RowStyles[0].SizeType = UiNotes.Show ? SizeType.Percent : SizeType.Absolute;
+            detailLayout.RowStyles[0].Height = UiNotes.Show ? 50 : 44;
+            detailLayout.RowStyles[1].SizeType = SizeType.Percent;
+            detailLayout.RowStyles[1].Height = UiNotes.Show ? 50 : 100;
+        }
+    }
     public void SetLanguage()
     {
+        UpdateNotes();
         L10n.Apply(this); int selected = Math.Max(0, mode.SelectedIndex); string job = (currentJob.SelectedItem as JobChoice)?.Key ?? ""; int? variant=(currentJob.SelectedItem as JobChoice)?.Variant; binding = true;
         string target=(targetSquad.SelectedItem as SquadChoice)?.Key ?? "any", current=(currentSquad.SelectedItem as SquadChoice)?.Key ?? "any";
         targetSquad.Items.Clear(); targetSquad.Items.AddRange(StaffSquads.Targets.Select(k=>(object)new SquadChoice(k)).ToArray());
@@ -228,6 +243,8 @@ public sealed class StaffRecruitmentPanel : UserControl
         if (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem is not StaffCandidate c) return;
         reason.Text = c.Name + " · " + c.Team + " · " + c.Interest.Label + "\n" + string.Join("\n", c.Interest.Reasons);
         if (c.Profile.Key == "doctor") reason.Text += "\n" + L10n.Get("RecruitDoctorMissing");
+        string fullNotes = reason.Text; tips.SetToolTip(notesInfo, fullNotes); notesInfo.AccessibleDescription = fullNotes;
+        if (!UiNotes.Show) reason.Text = c.Name + " · " + c.Team + " · " + c.Interest.Label;
         foreach (var w in c.Profile.Weights.OrderByDescending(w => w.Value))
             attributes.Rows.Add(L10n.Get("StaffAttribute_" + w.Key), StaffRecruitment.Attribute(c.Person, w.Key)?.ToString(L10n.Culture) ?? "—");
         foreach (var pair in c.Person.Reputation.Where(p => p.Value is >= 1 and <= 10000))

@@ -320,7 +320,7 @@ public sealed class MySquadPanel : UserControl
     {
         var members = Members;
         string text = search.Text.Trim();
-        var rows = members.Select(p => p.Player).Where(p => text.Length == 0 || p.Name.Contains(text, StringComparison.CurrentCultureIgnoreCase) ||
+        var rows = members.Select(p => p.Player).Where(p => text.Length == 0 || TextSearch.Contains(p.Name, text) ||
             p.Uid.ToString(CultureInfo.InvariantCulture).Contains(text) || p.Id?.ToString(CultureInfo.InvariantCulture).Contains(text) == true).ToArray();
         object? Value(PlayerRow p) => sortField switch
         {

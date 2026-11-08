@@ -123,9 +123,9 @@ public sealed class StaffPanel : UserControl
     {
         var selected = Selected;
         string text = search.Text.Trim();
-        var rows = (data?.Staff ?? []).Where(p => data!.Status == "ready" && (text.Length == 0 || p.Name.Contains(text, StringComparison.CurrentCultureIgnoreCase) ||
-            p.RoleDisplay.Contains(text, StringComparison.CurrentCultureIgnoreCase) || p.TeamDisplay.Contains(text, StringComparison.CurrentCultureIgnoreCase) || p.TeamId?.ToString().Contains(text) == true ||
-            p.ClubName.Contains(text, StringComparison.CurrentCultureIgnoreCase) || p.ListedClubName?.Contains(text, StringComparison.CurrentCultureIgnoreCase) == true ||
+        var rows = (data?.Staff ?? []).Where(p => data!.Status == "ready" && (text.Length == 0 || TextSearch.Contains(p.Name, text) ||
+            TextSearch.Contains(p.RoleDisplay, text) || TextSearch.Contains(p.TeamDisplay, text) || p.TeamId?.ToString().Contains(text) == true ||
+            TextSearch.Contains(p.ClubName, text) || TextSearch.Contains(p.ListedClubName, text) ||
             p.Uid.ToString(CultureInfo.InvariantCulture).Contains(text) || p.Id?.ToString(CultureInfo.InvariantCulture).Contains(text) == true)).ToArray();
         object? Value(StaffRow p) => sortField switch
         {

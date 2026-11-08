@@ -84,6 +84,10 @@ internal static class LocalizationChecks
         L10n.SetLanguage("it");
         using var main = new MainForm("python", directory); main.Show(); Application.DoEvents();
         check(!All(main).OfType<ComboBox>().Any(c => c.Name == "LanguageSelector") && All(main).OfType<Button>().Any(b => b.Name == "OptionsButton"), "main toolbar exposes options instead of inline language selector");
+        check(TextSearch.Contains("Daniel Hernández", "HERNANDEZ") && TextSearch.Contains("André", "andre") &&
+            TextSearch.Contains("e\u0301", "é") && !TextSearch.Contains("Hernández", "Moreno"), "accent-insensitive name search");
+        AppSettings.Save(directory, new AppSettings("it", 10, false));
+        check(!AppSettings.Load(directory).ShowNotes, "compact notes option persists");
         void SetOptions(string language, int count = 10) => typeof(MainForm).GetMethod("ApplySettings", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.Invoke(main, [new AppSettings(language, count)]);
         using (var dialog = new OptionsForm(new AppSettings("en", 23)))
         {

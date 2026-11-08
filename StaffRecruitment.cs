@@ -211,7 +211,7 @@ public static class StaffRecruitment
             .Select(p => new StaffCandidate(p, profile, Quality(p, profile), StaffSquads.ForTarget(Estimate(p, profile, data, offeredWage), p, targetSquad),
                 CoachingStars.Calculate(p).Where(c => c.Score.HasValue).OrderByDescending(c => c.Score).FirstOrDefault()))
             .Where(c => (ignoreInterest || c.Interest.Band != StaffInterest.Unlikely) &&
-                (string.IsNullOrWhiteSpace(search) || c.Name.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Club.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.CurrentRole.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Team.Contains(search, StringComparison.CurrentCultureIgnoreCase) || c.Person.TeamId?.ToString().Contains(search) == true || c.Person.Uid.ToString().Contains(search) || c.Person.Id?.ToString().Contains(search) == true))
+                (string.IsNullOrWhiteSpace(search) || TextSearch.Contains(c.Name, search) || TextSearch.Contains(c.Club, search) || TextSearch.Contains(c.CurrentRole, search) || TextSearch.Contains(c.Team, search) || c.Person.TeamId?.ToString().Contains(search) == true || c.Person.Uid.ToString().Contains(search) || c.Person.Id?.ToString().Contains(search) == true))
             .OrderBy(c => StaffSquads.AssignmentPriority(c.Person, targetSquad)).ThenByDescending(c => c.Quality.HasValue).ThenByDescending(c => c.Quality).ThenByDescending(c => ignoreInterest ? 0 : c.Interest.Score).ThenBy(c => c.Name).ThenBy(c => c.Person.Uid).ToArray();
     }
 }

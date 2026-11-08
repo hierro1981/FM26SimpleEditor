@@ -175,7 +175,7 @@ public static class StaffRecruitment
         }
         // Conservative screening rule, not a decoded FM negotiation cooldown.
         // Do not let prestige, salary or imminent expiry cancel a recent signature.
-        if (current && clock.HasValue && start.HasValue && start.Value > clock.Value.AddMonths(-6))
+        if (current && clock.HasValue && start.HasValue && start.Value > clock.Value.AddMonths(-3))
         {
             score = Math.Min(score, -21);
             band = StaffInterest.Unlikely;

@@ -20,8 +20,8 @@ internal static class StaffRecruitmentChecks
         var savedStaff = data.Staff; data.Staff = [recent];
         check(StaffRecruitment.Rank(data,scout).Count == 0 && StaffRecruitment.Rank(data,scout,ignoreInterest:true).Count == 1,
             "recent signings are excluded from replacements but remain visible when ignoring interest");
-        recent.ContractStart = "2027-09-04";
-        check(StaffRecruitment.Estimate(recent,scout,data).Band != StaffInterest.Unlikely, "six-month boundary is eligible again");
+        recent.ContractStart = "2027-12-04";
+        check(StaffRecruitment.Estimate(recent,scout,data).Band != StaffInterest.Unlikely, "three-month boundary is eligible again");
         recent.ContractStart = null;
         check(StaffRecruitment.Estimate(recent,scout,data).Band != StaffInterest.Unlikely, "missing start date does not invent a recent renewal");
         data.Staff = savedStaff;

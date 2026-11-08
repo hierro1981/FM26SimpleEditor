@@ -91,6 +91,12 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ## Novità, dalla versione più recente
 
+### v16.1.0 (in sviluppo)
+
+- Ricerca e pianificazione includono anche profili staff recuperati senza club rilevato dalla build FM27 verificata, con disponibilità da controllare nel gioco. Non vengono inventati incarichi precedenti.
+- Ritiro programmato: i casi decodificati sono esclusi dalle alternative plausibili. Gli altri stati di ritiro restano non verificati.
+- Filtro manuale Lavoro con i giovani e soglia prudenziale di 3 mesi per firme recenti.
+
 ### v16.0.0
 
 - **Supporto FM27** per la build 27.0.0+2493426, mantenendo la compatibilità con FM26.

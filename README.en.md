@@ -91,6 +91,12 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 ## Changes, newest first
 
+### v16.1.0 (in development)
+
+- Search and planning include recovered profiles without detected clubs on the verified FM27 build; availability requires in-game checking. Previous jobs are not invented.
+- Decoded scheduled retirements are excluded from plausible alternatives. Other retirement states remain unverified.
+- Manual Working with youngsters filter and conservative three-month recent-signature screening.
+
 ### v16.0.0
 
 - **FM27 support** for build 27.0.0+2493426, retaining FM26 compatibility.

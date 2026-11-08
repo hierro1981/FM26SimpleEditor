@@ -2148,7 +2148,7 @@ Passa sul punto per il valore.</value>
     <value>{0} · mostrati {1} di {2} candidati · {3} persone leggibili nel database.</value>
   </data>
   <data name="RecruitCoverage" xml:space="preserve">
-    <value>Include sempre i casi al limite e incerti; esclude il tuo staff. Copertura limitata allo staff collegato ai club: non è un elenco completo dei disoccupati. Interesse euristico, non probabilità né garanzia di trattativa.</value>
+    <value>Include casi al limite e incerti; esclude il tuo staff. Nella build FM27 verificata recupera anche profili senza club rilevato: disponibilità e incarichi nazionali da verificare. Copertura non completa. Interesse euristico, non garanzia di trattativa.</value>
   </data>
   <data name="RecruitQualityHint" xml:space="preserve">
     <value>Incarichi: media ponderata degli attributi indicati; stelle = punteggio / 4, arrotondato a mezza stella. Pesi del tool, non formula ufficiale. Allenamento: stessa formula delle stelle già usata nello staff. Dati mancanti = —, senza sostituzioni con CA.</value>
@@ -2304,7 +2304,7 @@ Passa sul punto per il valore.</value>
   <data name="PlanMissingDate" xml:space="preserve"><value>Data del salvataggio non disponibile: impossibile calcolare le scadenze.</value></data>
   <data name="PlanDateMismatch" xml:space="preserve"><value>Le date dello staff e del mercato non coincidono: ricarica i dati.</value></data>
   <data name="PlanStatus" xml:space="preserve"><value>Salvataggio: {0} · {1}/{2} contratti nella finestra di scadenza selezionata.</value></data>
-  <data name="PlanCoverage" xml:space="preserve"><value>Confronto sullo staff leggibile dei club; non comprende tutti gli svincolati.</value></data>
+  <data name="PlanCoverage" xml:space="preserve"><value>Include staff dei club e profili FM27 recuperati senza club rilevato. Questi ultimi sono alternative da verificare, non sostituti confermati. Copertura non completa.</value></data>
   <data name="PlanAlternativeCount" xml:space="preserve"><value>Mostrate {0} di {1} alternative migliori.</value></data>
   <data name="PlanMethod" xml:space="preserve"><value>Analisi in sola lettura sulla data del salvataggio: scegli scaduti / meno di 3 giorni rimasti, meno di 6 mesi (predefinito), meno di 12 mesi oppure tutti i contratti. Le finestre 6/12 mesi includono oggi ed escludono la data finale. Sono esclusi incarichi con inizio futuro, contratti illeggibili e allenatori umani. Passa sopra l’icona i per i dettagli; le alternative mostrano i migliori 50 per punteggio e le colonne si possono ordinare.
 
@@ -2379,4 +2379,7 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
   <data name="StaffJob_fm27_head_sports_science" xml:space="preserve"><value>Capo preparatore recupero infortunati</value></data>
   <data name="StaffJob_fm27_performance_analyst" xml:space="preserve"><value>Analista delle performance</value></data>
   <data name="RecruitRecentSignature" xml:space="preserve"><value>Contratto iniziato negli ultimi 3 mesi: escluso prudenzialmente dalle alternative plausibili per possibile firma o rinnovo recente. Soglia dell’editor, non durata ufficiale del blocco FM. La data d’inizio non prova da sola un rinnovo.</value></data>
+<data name="RecruitNoClubRecord" xml:space="preserve"><value>Nessun club rilevato</value></data>
+<data name="RecruitNoClubEvidence" xml:space="preserve"><value>Profilo recuperato senza incarico di club rilevato. Possibile svincolato o incarico in nazionale; disponibilità, preferenze di ruolo e stato di ritiro non integralmente decodificati. Da verificare nel gioco.</value></data>
+<data name="RecruitRetirement" xml:space="preserve"><value>Ritiro programmato letto: {0}. Escluso dalle alternative plausibili.</value></data>
 </root>

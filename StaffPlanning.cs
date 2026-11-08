@@ -79,8 +79,8 @@ public static class StaffPlanning
                 int? analystCode = StaffRecruitment.AnalystJob(person);
                 string rankKey = profile.Key + "|" + target + "|" + analystCode;
                 if (!ranks.TryGetValue(rankKey, out var ranked))
-                    ranks[rankKey] = ranked = StaffRecruitment.Rank(market!, profile, offer, currentJob: person.JobKey, targetSquad: target, currentJobCode: analystCode)
-                        .Where(c => !ownIds.Contains(c.Uid) && StaffRecruitment.CanAssessCurrent(c.Person)).ToArray();
+                    ranks[rankKey] = ranked = StaffRecruitment.Rank(market!, profile, offer, currentJob: person.JobKey, targetSquad: target, currentJobCode: analystCode, includeUnassigned: true)
+                        .Where(c => !ownIds.Contains(c.Uid) && (c.Person.NoClubRecord || StaffRecruitment.CanAssessCurrent(c.Person))).ToArray();
                 alternatives = ranked.Where(c => c.Quality is double q && q >= quality.Value + MeaningfulGain).ToArray();
             }
             var advice = !ready || !quality.HasValue ? StaffRenewalAdvice.Review :

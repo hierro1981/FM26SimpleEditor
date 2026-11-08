@@ -55,7 +55,9 @@ def recruitment_pool(store, progress=None):
         warnings.simplefilter('always')
         people = list(store.save.staff())
     store._recruitment_warnings = [str(w.message) for w in caught]
-    report(progress, 25, 'Indicizzazione degli attributi dello staff')
+    from recovered_staff import recover_staff
+    recovered = recover_staff(store, {p.uid for p in people}, progress)
+    report(progress, 30, 'Indicizzazione degli attributi dello staff')
     blocks, layout = indexed_blocks(store)
     from staff_jobs import StaffJobReader
     jobs = StaffJobReader(store)
@@ -94,6 +96,7 @@ def recruitment_pool(store, progress=None):
             report(progress, 40+50*(i+1)/max(1,len(people)), 'Preparazione candidati staff', i+1, len(people), 'persone')
     # Keep all employment rows: interest uses the strongest current employer,
     # and own-club exclusion considers every row of a multiply-employed person.
+    result.extend(recovered)
     store._recruitment_pool = result
     return result
 

@@ -230,6 +230,8 @@ public sealed class StaffRow
     public int? NationId { get; set; }
     public int? ClubNationId { get; set; }
     public int? ClubReputation { get; set; }
+    public bool NoClubRecord { get; set; }
+    public string? RetirementDate { get; set; }
     public int EmploymentCount { get; set; }
     public int? Age { get; set; }
     public string? Birth { get; set; }

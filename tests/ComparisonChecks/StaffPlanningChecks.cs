@@ -54,6 +54,17 @@ internal static class StaffPlanningChecks
         var row = StaffPlanning.Build(own, market).Single();
         check(row.Advice == StaffRenewalAdvice.CompareReplacement && row.Quality == 10 && row.Alternatives.Single().Quality == 12 && row.BestPlausible?.Uid == 2,
             "renewal advice compares same-job quality with a stronger plausible recruit");
+        var recovered = Person(99, 18, club:0); recovered.NoClubRecord=true;
+        recovered.HasContract=false; recovered.JobKey=null; recovered.JobCode=null;
+        recovered.ClubReputation=null; recovered.TeamId=null; market.Staff=[recovered];
+        var recoveredPlan=StaffPlanning.Build(own,market).Single();
+        check(recoveredPlan.Alternatives.Single().Uid==99 && recoveredPlan.Advice==StaffRenewalAdvice.VerifyAlternatives,
+            "recovered profiles without known current jobs enter planning as uncertain alternatives");
+        recovered.RetirementDate="2028-07-09";
+        check(StaffPlanning.Build(own,market).Single().Alternatives.Count==0 &&
+            StaffRecruitment.Rank(market,profile,ignoreInterest:true).Single().Interest.Band==StaffInterest.Unlikely,
+            "scheduled retirement excludes recovered replacement but remains inspectable via ignore-interest");
+        market.Staff=[better];
         var borderlineTop = Person(30,20,club:2); borderlineTop.ClubReputation=6308;
         market.Staff=[borderlineTop,better]; var proposed = StaffPlanning.Build(own,market).Single();
         check(proposed.Proposed?.Uid==better.Uid && proposed.Replacement==better.Name && proposed.ReplacementStars==proposed.Proposed.RoleStars &&

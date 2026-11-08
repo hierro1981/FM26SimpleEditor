@@ -2148,7 +2148,7 @@ Hover over a position for its rating.</value>
     <value>{0} · showing {1} of {2} candidates · {3} readable people in the database.</value>
   </data>
   <data name="RecruitCoverage" xml:space="preserve">
-    <value>Borderline and uncertain cases are always included; your staff is excluded. Coverage is limited to staff linked to clubs, not a complete list of unemployed staff. Interest is a heuristic, not a probability or a guarantee of negotiations.</value>
+    <value>Includes borderline and uncertain candidates; excludes your staff. The verified FM27 build also recovers profiles with no detected club: availability and national jobs require checking. Coverage is incomplete. Interest is heuristic, not a negotiation guarantee.</value>
   </data>
   <data name="RecruitQualityHint" xml:space="preserve">
     <value>Jobs: weighted average of the displayed attributes; stars = score / 4, rounded to half a star. Tool weights, not an official formula. Training: the same coaching-star formula as the staff view. Missing data = —, without substituting CA.</value>
@@ -2304,7 +2304,7 @@ Hover over a position for its rating.</value>
   <data name="PlanMissingDate" xml:space="preserve"><value>Save date unavailable: contract expiries cannot be calculated.</value></data>
   <data name="PlanDateMismatch" xml:space="preserve"><value>Staff and market dates differ: reload the data.</value></data>
   <data name="PlanStatus" xml:space="preserve"><value>Save: {0} · {1}/{2} contracts in the selected expiry window.</value></data>
-  <data name="PlanCoverage" xml:space="preserve"><value>Comparison covers readable club-linked staff; not all unemployed staff are included.</value></data>
+  <data name="PlanCoverage" xml:space="preserve"><value>Includes club staff and recovered FM27 profiles with no detected club. Recovered profiles are alternatives to verify, not confirmed replacements. Coverage is incomplete.</value></data>
   <data name="PlanAlternativeCount" xml:space="preserve"><value>Showing {0} of {1} better alternatives.</value></data>
   <data name="PlanMethod" xml:space="preserve"><value>Read-only analysis using the save date: choose expired / fewer than 3 days left, fewer than 6 months (default), fewer than 12 months, or all contracts. The 6/12 month windows include today and exclude the final date. Future starts, unreadable contracts and human managers are excluded. Hover over the i icon for details; alternatives show the best 50 by score and their columns can be sorted.
 
@@ -2379,4 +2379,7 @@ Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses a
   <data name="StaffJob_fm27_head_sports_science" xml:space="preserve"><value>Head of sports science</value></data>
   <data name="StaffJob_fm27_performance_analyst" xml:space="preserve"><value>Performance analyst</value></data>
   <data name="RecruitRecentSignature" xml:space="preserve"><value>Contract started within the last 3 months: conservatively excluded from plausible alternatives because of a possible recent signing or renewal. This is an editor threshold, not the official FM cooldown. The start date alone does not prove a renewal.</value></data>
+<data name="RecruitNoClubRecord" xml:space="preserve"><value>No club detected</value></data>
+<data name="RecruitNoClubEvidence" xml:space="preserve"><value>Recovered profile without a detected club job. May be unattached or hold a national-team job; availability, role preferences and retirement status are not fully decoded. Check in game.</value></data>
+<data name="RecruitRetirement" xml:space="preserve"><value>Decoded scheduled retirement: {0}. Excluded from plausible alternatives.</value></data>
 </root>

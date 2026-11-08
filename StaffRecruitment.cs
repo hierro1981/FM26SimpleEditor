@@ -19,7 +19,7 @@ public sealed record StaffCandidate(StaffRow Person, StaffSearchProfile Profile,
     public string Name => Person.Name;
     public uint Uid => Person.Uid;
     public uint? PublicId => Person.Id;
-    public string Club => Person.ClubName;
+    public string Club => Person.NoClubRecord ? L10n.Get("RecruitNoClubRecord") : Person.ClubName;
     public int? ClubReputation => Person.ClubReputation is >= 1 and <= 10000 ? Person.ClubReputation : null;
     public string CurrentRole => Person.RoleDisplay;
     public string Team => Person.TeamDisplay;
@@ -181,19 +181,30 @@ public static class StaffRecruitment
             band = StaffInterest.Unlikely;
             reasons.Add(L10n.Get("RecruitRecentSignature"));
         }
+        if (person.NoClubRecord)
+        {
+            reasons.Add(L10n.Get("RecruitNoClubEvidence"));
+            band = StaffInterest.Uncertain;
+        }
+        if (Date(person.RetirementDate) is DateTime retirement)
+        {
+            reasons.Add(L10n.Format("RecruitRetirement", retirement.ToString("dd/MM/yyyy")));
+            band = StaffInterest.Unlikely;
+            score = Math.Min(score, -21);
+        }
         return new(band, score, reasons, noClearUpgrade);
     }
-    public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "", string? currentJob = null, string targetSquad = "any", string currentSquad = "any", int minimumYouthWork = 12, int? currentJobCode = null)
+    public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "", string? currentJob = null, string targetSquad = "any", string currentSquad = "any", int minimumYouthWork = 12, int? currentJobCode = null, bool includeUnassigned = false)
     {
         if (data.Status != "ready") return [];
         // Avoid treating the easiest of two concurrent employers as the only job to leave.
         return data.Staff.Where(p => !p.IsHumanManager && p.ClubUid != data.ClubUid)
             .GroupBy(p => p.Uid).Select(g => g.OrderByDescending(p => p.ClubReputation ?? int.MaxValue).ThenByDescending(p => p.Wage).First())
             .Where(p => profile.Key != "doctor" || p.JobKey == "doctor")
-            .Where(p => string.IsNullOrEmpty(currentJob) || (currentJob == "__unknown"
+            .Where(p => includeUnassigned && p.NoClubRecord || string.IsNullOrEmpty(currentJob) || (currentJob == "__unknown"
                 ? !p.JobCode.HasValue || !Roles.Any(r => r.Key == p.JobKey)
                 : p.JobCode.HasValue && p.JobKey == currentJob))
-            .Where(p => !currentJobCode.HasValue || currentJobCode is >= 0 and <= 255 && AnalystJob(p) == (currentJobCode.Value & 254))
+            .Where(p => includeUnassigned && p.NoClubRecord || !currentJobCode.HasValue || currentJobCode is >= 0 and <= 255 && AnalystJob(p) == (currentJobCode.Value & 254))
             .Where(p => StaffSquads.Matches(p, currentSquad))
             .Where(p => !StaffSquads.Youth(targetSquad) || !StaffSquads.UsesYouthWork(profile) ||
                 Attribute(p, "working_with_youngsters") is int youth && youth >= Math.Clamp(minimumYouthWork, 1, 20))

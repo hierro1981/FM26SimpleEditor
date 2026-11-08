@@ -2382,4 +2382,5 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
 <data name="RecruitNoClubRecord" xml:space="preserve"><value>Nessun club rilevato</value></data>
 <data name="RecruitNoClubEvidence" xml:space="preserve"><value>Profilo recuperato senza incarico di club rilevato. Possibile svincolato o incarico in nazionale; disponibilità, preferenze di ruolo e stato di ritiro non integralmente decodificati. Da verificare nel gioco.</value></data>
 <data name="RecruitRetirement" xml:space="preserve"><value>Ritiro programmato letto: {0}. Escluso dalle alternative plausibili.</value></data>
+<data name="RecruitIncludeRecovered" xml:space="preserve"><value>Includi senza club (incarico da verificare)</value></data>
 </root>

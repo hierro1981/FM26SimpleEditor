@@ -15,6 +15,7 @@ public sealed class StaffRecruitmentPanel : UserControl
     private readonly ComboBox targetSquad = new() { Name="RecruitTargetSquad", DropDownStyle=ComboBoxStyle.DropDownList, Width=160 };
     private readonly ComboBox currentSquad = new() { Name="RecruitCurrentSquad", DropDownStyle=ComboBoxStyle.DropDownList, Width=160 };
     private readonly CheckBox filterYouth = new() { Name="RecruitFilterYouth", AutoSize=true };
+    private readonly CheckBox includeRecovered = new() { Name="RecruitIncludeRecovered", AutoSize=true, Checked=true };
     private readonly NumericUpDown youthMinimum = new() { Name="RecruitYouthMinimum", Minimum=1, Maximum=20, Value=12, Width=55 };
     private readonly NumericUpDown offer = new() { Name = "RecruitWage", Minimum = 0, Maximum = 10000000, Increment = 100, ThousandsSeparator = true, Width = 125 };
     private readonly NumericUpDown limit = new() { Name = "RecruitLimit", Minimum = 10, Maximum = 500, Value = 50, Increment = 10, Width = 65 };
@@ -65,7 +66,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         var currentSquadTools = new FlowLayoutPanel { AutoSize=true, WrapContents=false, Margin=Padding.Empty };
         currentSquadTools.Controls.AddRange([new Label {Text=L10n.Get("RecruitCurrentSquad"),AutoSize=true,Margin=new Padding(6,8,0,0)},currentSquad]);
         tools.Controls.AddRange([mode, profile, currentJobTools, squadTools, currentSquadTools, new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer,
-            new Label { Text = L10n.Get("RecruitLimit"), AutoSize = true, Margin = new Padding(6,8,0,0) }, limit, preferSubteams, ignoreInterest, search, reload, copy]);
+            new Label { Text = L10n.Get("RecruitLimit"), AutoSize = true, Margin = new Padding(6,8,0,0) }, limit, preferSubteams, includeRecovered, ignoreInterest, search, reload, copy]);
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var lower = new TableLayoutPanel { Name = "RecruitDetailColumns", Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
         lower.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); lower.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50)); lower.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
@@ -122,6 +123,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         targetSquad.SelectedIndexChanged += (_, _) => { if (!binding) { UpdateYouthFilter(); RefreshRows(); } };
         preferSubteams.CheckedChanged += (_, _) => { if (!binding) RefreshRows(); };
         currentSquad.SelectedIndexChanged += (_, _) => { if (!binding) RefreshRows(); };
+        includeRecovered.CheckedChanged += (_, _) => { if (!binding) RefreshRows(); };
         filterYouth.CheckedChanged += (_, _) => { if (!binding) { UpdateYouthFilter(); RefreshRows(); } };
         youthMinimum.ValueChanged += (_, _) => { if (!binding) RefreshRows(); };
         currentJob.SelectedIndexChanged += (_, _) => { if (!binding) RefreshRows(); };
@@ -165,6 +167,7 @@ public sealed class StaffRecruitmentPanel : UserControl
     private bool YouthFilterActive => filterYouth.Checked || Profile is not null && StaffSquads.Youth((targetSquad.SelectedItem as SquadChoice)?.Key ?? "any") && StaffSquads.UsesYouthWork(Profile);
     private void UpdateYouthFilter()
     {
+        includeRecovered.Text = L10n.Get("RecruitIncludeRecovered");
         filterYouth.Text = L10n.Get("RecruitYouthMinimum");
         youthMinimum.Enabled = YouthFilterActive;
         preferSubteams.Enabled = StaffSquads.SubteamTarget((targetSquad.SelectedItem as SquadChoice)?.Key ?? "any");
@@ -196,7 +199,8 @@ public sealed class StaffRecruitmentPanel : UserControl
     {
         if (binding) return;
         uint? uid = (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem as StaffCandidate)?.Person.Uid;
-        var ranked = data is null || Profile is null ? [] : StaffRecruitment.Rank(data, Profile, (long)offer.Value, ignoreInterest.Checked, search.Text.Trim(), (currentJob.SelectedItem as JobChoice)?.Key, (targetSquad.SelectedItem as SquadChoice)?.Key ?? "any", (currentSquad.SelectedItem as SquadChoice)?.Key ?? "any", (int)youthMinimum.Value, (currentJob.SelectedItem as JobChoice)?.Variant);
+        var ranked = data is null || Profile is null ? [] : StaffRecruitment.Rank(data, Profile, (long)offer.Value, ignoreInterest.Checked, search.Text.Trim(), (currentJob.SelectedItem as JobChoice)?.Key, (targetSquad.SelectedItem as SquadChoice)?.Key ?? "any", (currentSquad.SelectedItem as SquadChoice)?.Key ?? "any", (int)youthMinimum.Value, (currentJob.SelectedItem as JobChoice)?.Variant, includeUnassigned: includeRecovered.Checked);
+        if (!includeRecovered.Checked) ranked = ranked.Where(c => !c.Person.NoClubRecord).ToArray();
         if (filterYouth.Checked) ranked = ranked.Where(c => c.YouthWork is int value && value >= (int)youthMinimum.Value).ToArray();
         object? Value(StaffCandidate c) => sort switch { "CurrentReputation" => c.CurrentReputation, "JobPreference" => c.JobPreference, "ClubReputation" => c.ClubReputation, "PublicId" => c.PublicId, "Uid" => c.Uid, "InterestLabel" => c.Interest.Band == StaffInterest.Likely ? 3 : c.Interest.Band == StaffInterest.Borderline ? 2 : c.Interest.Band == StaffInterest.Uncertain ? 1 : 0,
             "YouthWork" => c.YouthWork, "RoleStars" => c.RoleStars, "CurrentRoleStars" => c.CurrentRoleStars, "TrainingStars" => c.TrainingStars, "Wage" => c.Wage, "Age" => c.Age, "Ca" => c.Ca,

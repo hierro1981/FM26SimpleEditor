@@ -2382,4 +2382,5 @@ Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses a
 <data name="RecruitNoClubRecord" xml:space="preserve"><value>No club detected</value></data>
 <data name="RecruitNoClubEvidence" xml:space="preserve"><value>Recovered profile without a detected club job. May be unattached or hold a national-team job; availability, role preferences and retirement status are not fully decoded. Check in game.</value></data>
 <data name="RecruitRetirement" xml:space="preserve"><value>Decoded scheduled retirement: {0}. Excluded from plausible alternatives.</value></data>
+<data name="RecruitIncludeRecovered" xml:space="preserve"><value>Include no-club profiles (job unverified)</value></data>
 </root>

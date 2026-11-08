@@ -2378,4 +2378,5 @@ Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses a
   <data name="StaffJob_fm27_club_doctor" xml:space="preserve"><value>Club doctor</value></data>
   <data name="StaffJob_fm27_head_sports_science" xml:space="preserve"><value>Head of sports science</value></data>
   <data name="StaffJob_fm27_performance_analyst" xml:space="preserve"><value>Performance analyst</value></data>
+  <data name="RecruitRecentSignature" xml:space="preserve"><value>Contract started within the last 6 months: conservatively excluded from plausible alternatives because of a possible recent signing or renewal. This is an editor threshold, not the official FM cooldown. The start date alone does not prove a renewal.</value></data>
 </root>

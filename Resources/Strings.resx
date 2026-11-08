@@ -2378,4 +2378,5 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
   <data name="StaffJob_fm27_club_doctor" xml:space="preserve"><value>Medico sociale</value></data>
   <data name="StaffJob_fm27_head_sports_science" xml:space="preserve"><value>Capo preparatore recupero infortunati</value></data>
   <data name="StaffJob_fm27_performance_analyst" xml:space="preserve"><value>Analista delle performance</value></data>
+  <data name="RecruitRecentSignature" xml:space="preserve"><value>Contratto iniziato negli ultimi 6 mesi: escluso prudenzialmente dalle alternative plausibili per possibile firma o rinnovo recente. Soglia dell’editor, non durata ufficiale del blocco FM. La data d’inizio non prova da sola un rinnovo.</value></data>
 </root>

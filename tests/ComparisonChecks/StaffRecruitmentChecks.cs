@@ -14,6 +14,17 @@ internal static class StaffRecruitmentChecks
         L10n.SetLanguage("it");
         var scout = StaffRecruitment.Roles.Single(r => r.Key == "scout");
         var data = new StaffRecruitmentResult { Status = "ready", ClubUid = 1, ClubName = "Destination", ClubReputation = 5000, GameDate = "2028-03-04" };
+        var recent = Person(99, 1000); recent.ContractStart = "2028-03-01";
+        check(StaffRecruitment.Estimate(recent,scout,data,100000).Band == StaffInterest.Unlikely,
+            "recent signature blocks plausibility even with a large prestige and salary gain");
+        var savedStaff = data.Staff; data.Staff = [recent];
+        check(StaffRecruitment.Rank(data,scout).Count == 0 && StaffRecruitment.Rank(data,scout,ignoreInterest:true).Count == 1,
+            "recent signings are excluded from replacements but remain visible when ignoring interest");
+        recent.ContractStart = "2027-09-04";
+        check(StaffRecruitment.Estimate(recent,scout,data).Band != StaffInterest.Unlikely, "six-month boundary is eligible again");
+        recent.ContractStart = null;
+        check(StaffRecruitment.Estimate(recent,scout,data).Band != StaffInterest.Unlikely, "missing start date does not invent a recent renewal");
+        data.Staff = savedStaff;
         var good = Person(1); var poor = Person(2,5000,5); var tooHigh = Person(3,10000,20); var own = Person(4); own.ClubUid = 1;
         var human = Person(5); human.IsHumanManager = true;
         data.Staff = [poor, good, tooHigh, own, human];

@@ -173,6 +173,14 @@ public static class StaffRecruitment
             band = StaffInterest.Unlikely;
             reasons.Add(L10n.Get("RecruitPrestigeBarrier"));
         }
+        // Conservative screening rule, not a decoded FM negotiation cooldown.
+        // Do not let prestige, salary or imminent expiry cancel a recent signature.
+        if (current && clock.HasValue && start.HasValue && start.Value > clock.Value.AddMonths(-6))
+        {
+            score = Math.Min(score, -21);
+            band = StaffInterest.Unlikely;
+            reasons.Add(L10n.Get("RecruitRecentSignature"));
+        }
         return new(band, score, reasons, noClearUpgrade);
     }
     public static IReadOnlyList<StaffCandidate> Rank(StaffRecruitmentResult data, StaffSearchProfile profile, long offeredWage = 0, bool ignoreInterest = false, string search = "", string? currentJob = null, string targetSquad = "any", string currentSquad = "any", int minimumYouthWork = 12, int? currentJobCode = null)

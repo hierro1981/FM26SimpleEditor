@@ -91,6 +91,11 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 ## Changes, newest first
 
+### v16.1.1 (in development)
+
+- Accent-insensitive and case-insensitive name and team search.
+- Option to compact notes in staff search, training stars and position rankings; details remain available by hovering over the information symbol.
+
 ### v16.1.0 (in development)
 
 - Search and planning include recovered profiles without detected clubs on the verified FM27 build; availability requires in-game checking. Previous jobs are not invented.

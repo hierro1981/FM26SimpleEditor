@@ -352,7 +352,10 @@ public sealed class MySquadPanel : UserControl
         ranking.ClearSelection(); openRanked.Enabled = false;
         roleTips.SetToolTip(role, TargetTip(SelectedTargets[0]));
         roleTips.SetToolTip(secondRole, secondaryPosition is null ? L10n.Get("TacticalSelectSecond") : TargetTip(SelectedTargets[1]));
-        advice.Text = string.Join(" + ", SelectedTargets.Select(TacticalRoles.Label)) + "\n" + L10n.Format("MySquadRankingInfo", best.Count, members.Count) + "\n" + L10n.Get("MySquadMethod") + (SelectedTargets.Any(t => t.RoleId is not null) ? "\n" + L10n.Get("TacticalEstimateShort") : "");
+        string summary = string.Join(" + ", SelectedTargets.Select(TacticalRoles.Label)) + "\n" + L10n.Format("MySquadRankingInfo", best.Count, members.Count);
+        string explanation = L10n.Get("MySquadMethod") + (SelectedTargets.Any(t => t.RoleId is not null) ? "\n" + L10n.Get("TacticalEstimateShort") : "");
+        advice.Text = summary + (UiNotes.Show ? "\n" + explanation : "  ⓘ");
+        roleTips.SetToolTip(advice, explanation); advice.AccessibleDescription = explanation;
     }
     private static string TargetTip(SquadTarget target) => TacticalRoles.Label(target) + "\n" + L10n.Get("TacticalEstimateShort") + "\n" +
         string.Join("\n", TacticalRoles.Weights(target).OrderByDescending(f => f.Value).ThenBy(f => Labels.Attribute(f.Key, L10n.IsItalian)).Select(f => Labels.Attribute(f.Key, L10n.IsItalian) + " ×" + f.Value));

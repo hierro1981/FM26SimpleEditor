@@ -91,6 +91,11 @@ Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocato
 
 ## Novità, dalla versione più recente
 
+### v16.1.1 (in sviluppo)
+
+- Ricerca di nomi e squadre indipendente da accenti e maiuscole.
+- Opzione per compattare le note nella ricerca staff, nelle stelle di allenamento e nelle classifiche per posizione; i dettagli restano consultabili passando sopra il simbolo informativo.
+
 ### v16.1.0 (in sviluppo)
 
 - Ricerca e pianificazione includono anche profili staff recuperati senza club rilevato dalla build FM27 verificata, con disponibilità da controllare nel gioco. Non vengono inventati incarichi precedenti.

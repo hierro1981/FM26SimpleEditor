@@ -116,6 +116,13 @@ internal static class StaffRecruitmentChecks
         check(grid.Rows.Count==2 && grid.ReadOnly && grid.ScrollBars==ScrollBars.Both && grid.Columns["RoleStars"].CellTemplate is StarRatingCell, "recruitment UI shows sortable scrollable candidate and suitability-star columns");
         check(grid.Columns.Contains("Team") && grid.Columns["Team"].SortMode==DataGridViewColumnSortMode.Programmatic,
             "recruitment exposes the current contract squad as a sortable column");
+        UiNotes.Show=false; panel.SetLanguage(); Application.DoEvents();
+        var notesButton=All(panel).OfType<Button>().Single(b=>b.Name=="RecruitNotesInfo");
+        var compactReason=All(panel).OfType<Label>().Single(l=>l.Name=="RecruitReasons");
+        check(notesButton.Visible && !string.IsNullOrEmpty(notesButton.AccessibleDescription) && !compactReason.Text.Contains('\n'),
+            "compact notes retain full accessible detail and release space");
+        UiNotes.Show=true; panel.SetLanguage(); Application.DoEvents();
+        check(!notesButton.Visible && compactReason.Text.Contains('\n'), "expanded notes are restored immediately");
         var mode=All(panel).OfType<ComboBox>().Single(c=>c.Name=="RecruitMode");mode.SelectedIndex=1;Application.DoEvents();
         var choice=All(panel).OfType<ComboBox>().Single(c=>c.Name=="RecruitProfile");
         check(choice.Items.Count==9 && grid.Rows.Count==2, "training mode offers every shared training category");

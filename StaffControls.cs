@@ -6,6 +6,8 @@ namespace FM26SimpleEditor;
 public sealed class StaffPanel : UserControl
 {
     private readonly TextBox search = new() { Name = "StaffSearch", Dock = DockStyle.Fill, PlaceholderText = L10n.Get("StaffSearch") };
+    private readonly ToolTip noteTips = new() { AutoPopDelay = 30000 };
+    private readonly Label coachingNote = new() { AutoSize = true, Dock = DockStyle.Fill, ForeColor = Color.DimGray, Text = L10n.Get("StaffCoachingEstimate") };
     private readonly Label status = new() { Name = "StaffStatus", AutoSize = true, ForeColor = Color.DimGray };
     private readonly Label count = new() { Name = "StaffCount", AutoSize = true };
     private readonly DataGridView list = Grid("StaffList");
@@ -29,7 +31,6 @@ public sealed class StaffPanel : UserControl
         tools.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); tools.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         var reload = new Button { Text = L10n.Get("StaffReload"), AutoSize = true };
         reload.Click += (_, _) => ReloadRequested?.Invoke(); tools.Controls.Add(search, 0, 0); tools.Controls.Add(reload, 1, 0);
-        var coachingNote = new Label { AutoSize = true, Dock = DockStyle.Fill, ForeColor = Color.DimGray, Text = L10n.Get("StaffCoachingEstimate") };
         var coachingPanel = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2 };
         coachingPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         coachingPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize)); coachingPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
@@ -112,7 +113,8 @@ public sealed class StaffPanel : UserControl
         if (result.ClubUid != clubUid) return; // Ignore stale results from another club/save.
         data = result; RefreshRows();
     }
-    public void SetLanguage() { L10n.Apply(this); list.Columns["CurrentRoleStars"].ToolTipText = L10n.Get("StaffCurrentRoleStarsNote"); RefreshRows(); }
+    protected override void Dispose(bool disposing) { if (disposing) noteTips.Dispose(); base.Dispose(disposing); }
+    public void SetLanguage() { L10n.Apply(this); coachingNote.Text = UiNotes.Show ? L10n.Get("StaffCoachingEstimate") : "ⓘ"; noteTips.SetToolTip(coachingNote, L10n.Get("StaffCoachingEstimate")); coachingNote.AccessibleDescription = L10n.Get("StaffCoachingEstimate"); list.Columns["CurrentRoleStars"].ToolTipText = L10n.Get("StaffCurrentRoleStarsNote"); RefreshRows(); }
     public void SortBy(string field)
     {
         if (!list.Columns.Contains(field)) return;

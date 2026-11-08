@@ -186,7 +186,7 @@ public static class StaffRecruitment
             reasons.Add(L10n.Get("RecruitNoClubEvidence"));
             band = StaffInterest.Uncertain;
         }
-        if (person.NoClubRecord && person.PossibleBoardReference)
+        if ((person.NoClubRecord && person.PossibleBoardReference) || person.JobKey == "chairperson" || person.JobKey == "director")
         {
             reasons.Add(L10n.Get("RecruitPossibleBoardReference"));
             score = Math.Min(score, -21);

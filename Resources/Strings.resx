@@ -2384,5 +2384,5 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
 <data name="RecruitRetirement" xml:space="preserve"><value>Ritiro programmato letto: {0}. Escluso dalle alternative plausibili.</value></data>
 <data name="RecruitIncludeRecovered" xml:space="preserve"><value>Includi senza club (incarico da verificare)</value></data>
 <data name="OptionsShowNotes" xml:space="preserve"><value>Mostra note esplicative</value></data>
-<data name="RecruitPossibleBoardReference" xml:space="preserve"><value>Il profilo contiene un possibile riferimento dirigenziale collegato a un club: l’incarico attuale non è verificato. Escluso prudenzialmente dalle alternative plausibili; resta visibile con Ignora interesse.</value></data>
+<data name="RecruitPossibleBoardReference" xml:space="preserve"><value>Il profilo indica un incarico dirigenziale oppure un possibile riferimento dirigenziale di club: nel secondo caso l’incarico attuale non è verificato. Escluso prudenzialmente dalle alternative plausibili; resta visibile con Ignora interesse.</value></data>
 </root>

@@ -30,6 +30,10 @@ internal static class StaffRecruitmentChecks
         data.Staff=[possibleBoard];
         check(StaffRecruitment.Rank(data,scout).Count==0 && StaffRecruitment.Rank(data,scout,ignoreInterest:true).Single().Interest.Reasons.Any(r=>r.Contains("dirigenziale")),
             "possible board reference is excluded conservatively and remains available when ignoring interest");
+        var knownBoard=Person(97); knownBoard.JobKey="chairperson"; knownBoard.JobCode=4;
+        data.Staff=[knownBoard];
+        check(StaffRecruitment.Rank(data,scout).Count==0 && StaffRecruitment.Rank(data,scout,ignoreInterest:true).Count==1,
+            "identified board members are excluded from plausible staff candidates but remain inspectable");
         var good = Person(1); var poor = Person(2,5000,5); var tooHigh = Person(3,10000,20); var own = Person(4); own.ClubUid = 1;
         var human = Person(5); human.IsHumanManager = true;
         data.Staff = [poor, good, tooHigh, own, human];

@@ -25,6 +25,11 @@ internal static class StaffRecruitmentChecks
         recent.ContractStart = null;
         check(StaffRecruitment.Estimate(recent,scout,data).Band != StaffInterest.Unlikely, "missing start date does not invent a recent renewal");
         data.Staff = savedStaff;
+        var possibleBoard=Person(98); possibleBoard.NoClubRecord=true; possibleBoard.PossibleBoardReference=true;
+        possibleBoard.ClubUid=0; possibleBoard.HasContract=false; possibleBoard.JobCode=null; possibleBoard.JobKey=null;
+        data.Staff=[possibleBoard];
+        check(StaffRecruitment.Rank(data,scout).Count==0 && StaffRecruitment.Rank(data,scout,ignoreInterest:true).Single().Interest.Reasons.Any(r=>r.Contains("dirigenziale")),
+            "possible board reference is excluded conservatively and remains available when ignoring interest");
         var good = Person(1); var poor = Person(2,5000,5); var tooHigh = Person(3,10000,20); var own = Person(4); own.ClubUid = 1;
         var human = Person(5); human.IsHumanManager = true;
         data.Staff = [poor, good, tooHigh, own, human];

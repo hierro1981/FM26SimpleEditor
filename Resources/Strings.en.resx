@@ -2384,4 +2384,5 @@ Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses a
 <data name="RecruitRetirement" xml:space="preserve"><value>Decoded scheduled retirement: {0}. Excluded from plausible alternatives.</value></data>
 <data name="RecruitIncludeRecovered" xml:space="preserve"><value>Include no-club profiles (job unverified)</value></data>
 <data name="OptionsShowNotes" xml:space="preserve"><value>Show explanatory notes</value></data>
+<data name="RecruitPossibleBoardReference" xml:space="preserve"><value>The profile contains a possible club board reference; the current job is unverified. Conservatively excluded from plausible alternatives and still available with Ignore interest.</value></data>
 </root>

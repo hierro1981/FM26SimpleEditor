@@ -15,6 +15,8 @@ public sealed class StaffPlanningPanel : UserControl
     private readonly ComboBox teamFilter = new() { Name = "PlanTeamFilter", DropDownStyle = ComboBoxStyle.DropDownList, Width = 145, DropDownWidth = 300 };
     private readonly CheckBox preferSubteams = new() { Name = "PlanPreferSubteams", Text = L10n.Get("StaffPreferSubteams"), AutoSize = true, Checked = true };
     private readonly Button findStaff = new() { Name = "PlanFindStaff", Text = L10n.Get("PlanFindStaff"), AutoSize = true };
+    private readonly Label sortHint = new() { Name="PlanSortHint", AutoSize=true, ForeColor=Color.DimGray, Margin=new Padding(6,8,0,0) };
+    private readonly Button noteInfo = new() { Name="PlanNotesInfo", Text="ⓘ", Width=32, Height=30, Dock=DockStyle.Right };
     private readonly Label status = new() { Name = "PlanStatus", Dock = DockStyle.Fill, AutoSize = true, ForeColor = Color.DimGray };
     private readonly Label explanation = new() { Name = "PlanExplanation", Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(4) };
     private readonly DataGridView list = Grid("PlanList");
@@ -44,17 +46,17 @@ public sealed class StaffPlanningPanel : UserControl
         tools.Controls.AddRange([search, new Label { Text = L10n.Get("PlanExpiry"), AutoSize = true, Margin = new Padding(6,8,0,0) }, expiry,
             new Label { Text = L10n.Get("StaffRole"), AutoSize = true, Margin = new Padding(6,8,0,0) }, roleFilter,
             new Label { Text = L10n.Get("StaffTeam"), AutoSize = true, Margin = new Padding(6,8,0,0) }, teamFilter,
-            new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer, reload, method, new Label { Text = L10n.Get("PlanMultiSortHint"), AutoSize = true, ForeColor = Color.DimGray, Margin = new Padding(6,8,0,0) }]);
+            new Label { Text = L10n.Get("RecruitOffer"), AutoSize = true, Margin = new Padding(6,8,0,0) }, offer, reload, method, sortHint]);
         findStaff.Click += (_, _) => OpenRecruitment(Selected);
         root.Controls.Add(tools, 0, 0); root.Controls.Add(status, 0, 1); root.Controls.Add(list, 0, 2);
         var detail = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3 };
         detail.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-        detail.RowStyles.Add(new RowStyle(SizeType.AutoSize)); detail.RowStyles.Add(new RowStyle(SizeType.Percent, 25)); detail.RowStyles.Add(new RowStyle(SizeType.Percent, 75));
+        detail.RowStyles.Add(new RowStyle(SizeType.AutoSize)); detail.RowStyles.Add(new RowStyle(SizeType.AutoSize)); detail.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         var profileTools = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, WrapContents = true };
         profileTools.Controls.AddRange([new Label { Text = L10n.Get("PlanCriterion"), AutoSize = true, Margin = new Padding(6,8,0,0) }, criterion, findStaff, preferSubteams]);
         detail.Controls.Add(profileTools, 0, 0);
-        var reasonScroll = new Panel { Name = "PlanReasonScroll", Dock = DockStyle.Fill, AutoScroll = true };
-        reasonScroll.Controls.Add(explanation); detail.Controls.Add(reasonScroll, 0, 1);
+        var reasonScroll = new Panel { Name = "PlanReasonScroll", Dock = DockStyle.Fill, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
+        reasonScroll.Controls.Add(explanation); reasonScroll.Controls.Add(noteInfo); detail.Controls.Add(reasonScroll, 0, 1);
         var columns = new TableLayoutPanel { Name = "PlanDetailColumns", Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
         columns.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65)); columns.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35)); columns.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         var altGroup = new GroupBox { Dock = DockStyle.Fill, Text = L10n.Get("PlanAlternatives") }; altGroup.Controls.Add(alternatives);
@@ -237,6 +239,8 @@ public sealed class StaffPlanningPanel : UserControl
     public void SetMarket(StaffRecruitmentResult value) { if (value.ClubUid == clubUid) { cached = null; market = value; RefreshRows(); } }
     public void SetLanguage()
     {
+        sortHint.Text = L10n.Get("PlanMultiSortHint"); sortHint.Visible = UiNotes.Show;
+        noteInfo.Visible = !UiNotes.Show; tips.SetToolTip(list, L10n.Get("PlanMultiSortHint"));
         cached = null; L10n.Apply(this);
         int selectedExpiry = expiry.SelectedIndex < 0 ? (int)StaffContractWindow.SixMonths : expiry.SelectedIndex;
         binding = true; expiry.Items.Clear();
@@ -269,7 +273,8 @@ public sealed class StaffPlanningPanel : UserControl
         binding = false;
         status.Text = clubUid is null ? L10n.Get("StaffSelectClub") : own is null ? L10n.Get("PlanPendingStaff") : own.Status != "ready" ? L10n.Format("StaffUnavailable", own.Error ?? "—") :
             StaffPlanning.Date(own.GameDate) is null ? L10n.Get("PlanMissingDate") : L10n.Format("PlanStatus", own.GameDate, sorted.Count, rows.Count) + " " +
-            (market is null ? L10n.Get("PlanPendingMarket") : market.Status != "ready" ? L10n.Format("StaffUnavailable", market.Error ?? "—") : market.GameDate != own.GameDate ? L10n.Get("PlanDateMismatch") : L10n.Get("PlanCoverage"));
+            (market is null ? L10n.Get("PlanPendingMarket") : market.Status != "ready" ? L10n.Format("StaffUnavailable", market.Error ?? "—") : market.GameDate != own.GameDate ? L10n.Get("PlanDateMismatch") : UiNotes.Show ? L10n.Get("PlanCoverage") : "");
+        tips.SetToolTip(status, L10n.Get("PlanCoverage"));
         if (own?.Experimental == true || market?.Experimental == true) status.Text += " " + L10n.Get("FM27StaffNote");
         Details();
     }
@@ -281,7 +286,10 @@ public sealed class StaffPlanningPanel : UserControl
         criterion.Enabled = criterion.Items.Count > 1; findStaff.Enabled = row?.Profile is not null;
         binding = false; RefreshAlternatives(); binding = true;
         int count = alternatives.Rows.Count;
-        explanation.Text = row is null ? "" : row.Name + " · " + row.Team + " · " + row.Recommendation + "\n" + row.Explanation + " " + L10n.Format("PlanAlternativeCount", count, row.BetterCount);
+        string explanationDetail = row?.Explanation ?? "";
+        tips.SetToolTip(noteInfo, explanationDetail); noteInfo.AccessibleDescription = explanationDetail;
+        explanation.Text = row is null ? "" : row.Name + " · " + row.Team + " · " + row.Recommendation + " · " +
+            L10n.Format("PlanAlternativeCount", count, row.BetterCount) + (UiNotes.Show ? "\n" + explanationDetail : "");
         binding = false; AttributeComparison();
     }
     private void RefreshAlternatives()

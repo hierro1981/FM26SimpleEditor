@@ -25,6 +25,26 @@ def retirement_dates(raw, selectors):
     return {selector: next(iter(values)) for selector, values in dates.items() if len(values) == 1}
 
 
+
+def possible_board_reference(raw, ability_at, club_index):
+    """A possible board reference, not proof of the current employer or job."""
+    at = ability_at + 70
+    if at < 0 or at + 29 > len(raw):
+        return None
+    club, team = struct.unpack_from('<II', raw, at)
+    if bytes(raw[at+8:at+28]) != bytes.fromhex('00000000ffffffffffffffff0000000001006c07'):
+        return None
+    job = raw[at+28]
+    if job not in (4, 6):
+        return None
+    mapping = club_index.team_to_club.get(team)
+    if mapping is None:
+        mapping = club_index.affiliate_team_to_club.get(team)
+    if mapping is None or mapping[0] != club or club not in club_index.club_by_uid:
+        return None
+    return job
+
+
 def recover_staff(store, employed_uids, progress=None):
     if not paired_fm27(store.save.info):
         return []
@@ -49,8 +69,9 @@ def recover_staff(store, employed_uids, progress=None):
     counts = Counter(uid for _, uid, _ in hits)
     boundaries = sorted({h for h, _, _ in hits} | {
         at + store.records.layout.pindex_offset for at in store.records.record_offsets})
+    club_index = store.save._context.club_index()
     decoder = build_person_block_decoder(layouts.person_blocks, store.save._context.name_pools(),
-        store.save._context.club_index(), store.save.info.game_date, str(store.path))
+        club_index, store.save.info.game_date, str(store.path))
     result = []
     selectors = {}
     for header, uid, block in hits:
@@ -76,6 +97,7 @@ def recover_staff(store, employed_uids, progress=None):
             birth=birth.isoformat() if birth else None, age=person[native._PERSON_AGE],
             nationId=person[native._PERSON_NATION_ID], clubUid=0, clubName='',
             hasContract=False, isHumanManager=False, noClubRecord=True,
+            possibleBoardReference=possible_board_reference(raw, ability_at, club_index) is not None,
             ca=block.ability.current, pa=block.ability.potential,
             attributes=attributes, personality=values(personality, PERSONALITY),
             reputation=reputation_at_block(raw, (header, ability_at), layout),

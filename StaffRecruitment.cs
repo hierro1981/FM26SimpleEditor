@@ -186,6 +186,12 @@ public static class StaffRecruitment
             reasons.Add(L10n.Get("RecruitNoClubEvidence"));
             band = StaffInterest.Uncertain;
         }
+        if (person.NoClubRecord && person.PossibleBoardReference)
+        {
+            reasons.Add(L10n.Get("RecruitPossibleBoardReference"));
+            score = Math.Min(score, -21);
+            band = StaffInterest.Unlikely;
+        }
         if (Date(person.RetirementDate) is DateTime retirement)
         {
             reasons.Add(L10n.Format("RecruitRetirement", retirement.ToString("dd/MM/yyyy")));

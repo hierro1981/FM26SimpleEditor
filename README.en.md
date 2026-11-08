@@ -93,6 +93,9 @@ Open **Options** to choose **Italiano** or **English** and the number of positio
 
 ### v16.1.1 (in development)
 
+- More compact staff planning: explanations follow the notes setting and leave more room for alternatives.
+- Recovered profiles with possible board references are conservatively excluded from plausible candidates but remain accessible with Ignore interest.
+
 - Accent-insensitive and case-insensitive name and team search.
 - Option to compact notes in staff search, training stars and position rankings; details remain available by hovering over the information symbol.
 

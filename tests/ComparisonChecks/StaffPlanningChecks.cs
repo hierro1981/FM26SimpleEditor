@@ -220,6 +220,15 @@ internal static class StaffPlanningChecks
             "alternatives use compact role and team columns without clipping their text");
         var sortColumn=typeof(StaffPlanningPanel).GetMethod("SortColumn",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!;
         var planning=All(panel).OfType<StaffPlanningPanel>().Single();
+        UiNotes.Show=false; planning.SetLanguage(); Application.DoEvents();
+        var explanation = All(planning).OfType<Label>().Single(l=>l.Name=="PlanExplanation");
+        var note = All(planning).OfType<Button>().Single(b=>b.Name=="PlanNotesInfo");
+        var reasonPanel = All(planning).OfType<Panel>().Single(c=>c.Name=="PlanReasonScroll");
+        var detailLayout = (TableLayoutPanel)reasonPanel.Parent!;
+        check(note.Visible && !string.IsNullOrWhiteSpace(note.AccessibleDescription) && !explanation.Text.Contains('\n') &&
+            detailLayout.RowStyles[1].SizeType==SizeType.AutoSize, "compact planning notes preserve the summary and use content-sized space");
+        UiNotes.Show=true; planning.SetLanguage(); Application.DoEvents();
+        check(!note.Visible && explanation.Text.Contains('\n'), "full planning notes return immediately");
         sortColumn.Invoke(planning,[alts,alts.Columns["CurrentRole"].Index,false]);
         sortColumn.Invoke(planning,[alts,alts.Columns["Quality"].Index,true]);
         check(alts.Columns["CurrentRole"].HeaderText.EndsWith("[1]") && alts.Columns["Quality"].HeaderText.EndsWith("[2]") &&

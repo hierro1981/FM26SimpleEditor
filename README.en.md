@@ -80,7 +80,9 @@ Where available, internal history works from the open save alone. Reconstructed 
 
 ### Language and updates
 
-Open **Options** to choose **Italiano** or **English** and the number of position/tactic recommendations (10 by default). Your choice is remembered automatically. **About** shows the editor version and lets you check for updates with a link to the release.
+Choose your language on first launch. French and German are partially translated; untranslated text appears in English.
+
+Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch** and the number of position/tactic recommendations (10 by default). Your choice is remembered automatically. **About** shows the editor version and lets you check for updates with a link to the release.
 
 ## Compatibility and limitations
 

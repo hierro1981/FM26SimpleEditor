@@ -80,7 +80,9 @@ Quando disponibile, lo storico interno funziona con il solo salvataggio aperto. 
 
 ### Lingua e aggiornamenti
 
-Apri **Opzioni** per scegliere **Italiano** o **English** e il numero di giocatori consigliati per posizione o tattica (10 predefiniti). La scelta viene ricordata automaticamente. La finestra **Informazioni** mostra la versione dell’editor e consente di verificare la presenza di aggiornamenti con un collegamento alla release.
+Al primo avvio puoi scegliere la lingua. Francese e tedesco sono disponibili con traduzione parziale: i testi non ancora tradotti appaiono in inglese.
+
+Apri **Opzioni** per scegliere **Italiano**, **English**, **Français** o **Deutsch** e il numero di giocatori consigliati per posizione o tattica (10 predefiniti). La scelta viene ricordata automaticamente. La finestra **Informazioni** mostra la versione dell’editor e consente di verificare la presenza di aggiornamenti con un collegamento alla release.
 
 ## Compatibilità e limiti
 

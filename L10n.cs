@@ -16,19 +16,21 @@ public static class L10n
     private static List<(string Key, Regex Pattern, int Fields)>? backendPatterns;
     public static string Language { get; private set; } = "it";
     public static bool IsItalian => Language == "it";
-    public static CultureInfo Culture => CultureInfo.GetCultureInfo(IsItalian ? "it-IT" : "en-GB");
+    public static CultureInfo Culture => CultureInfo.GetCultureInfo(Language switch { "fr" => "fr-FR", "de" => "de-DE", "en" => "en-GB", _ => "it-IT" });
     public static void SetLanguage(string language)
     {
         Language = language == "en" ? "en" : "it";
         CultureInfo.CurrentUICulture = CultureInfo.DefaultThreadCurrentUICulture = Culture;
         CultureInfo.CurrentCulture = CultureInfo.DefaultThreadCurrentCulture = Culture;
     }
-    public static string Get(string key, bool? italian = null) => Resources.GetString(key,
-        CultureInfo.GetCultureInfo((italian ?? IsItalian) ? "it" : "en")) ?? throw new MissingManifestResourceException(key);
+    private static string Lookup(string key, string language) => Resources.GetString(key, CultureInfo.GetCultureInfo(language)) ?? throw new MissingManifestResourceException(key);
+    // Existing callers pass false for the selected non-Italian language.
+    private static string Resolve(bool? italian) => italian is null ? Language : italian.Value ? "it" : Language is "fr" or "de" ? Language : "en";
+    public static string Get(string key, bool? italian = null) => Lookup(key, Resolve(italian));
     public static string Format(string key, params object?[] arguments) => FormatIn(IsItalian, key, arguments);
     public static string FormatIn(bool italian, string key, params object?[] arguments)
     {
-        string text = string.Format(CultureInfo.GetCultureInfo(italian ? "it-IT" : "en-GB"), Get(key, italian), arguments);
+        string text = string.Format(italian ? CultureInfo.GetCultureInfo("it-IT") : (Language is "fr" or "de" ? Culture : CultureInfo.GetCultureInfo("en-GB")), Get(key, italian), arguments);
         if (Formatted.Count > 4096) Formatted.Clear();
         Formatted[text] = (key, arguments);
         return text;
@@ -41,8 +43,8 @@ public static class L10n
         {
             reverse = new(StringComparer.Ordinal);
             foreach (string key in Keys)
-                foreach (bool it in new[] { true, false })
-                    if (!Get(key, it).Contains('{')) reverse.TryAdd(Get(key, it), key);
+                foreach (string language in new[] { "it", "en", "fr", "de" })
+                    if (!Lookup(key, language).Contains('{')) reverse.TryAdd(Lookup(key, language), key);
         }
         return reverse.GetValueOrDefault(text);
     }
@@ -58,7 +60,7 @@ public static class L10n
         void Add(Func<string> read, Action<string> write)
         {
             string? key = KeyFor(read());
-            if (key is not null) bindings.Add(it => { if (read() == Get(key, true) || read() == Get(key, false)) write(Get(key, it)); });
+            if (key is not null) bindings.Add(it => { if (new[] { "it", "en", "fr", "de" }.Any(language => read() == Lookup(key, language))) write(Get(key, it)); });
         }
         if (root is not TextBoxBase && root is not ComboBox && root is not ListControl) Add(() => root.Text, value => root.Text = value);
         Add(() => root.AccessibleName ?? "", value => root.AccessibleName = value);
@@ -70,7 +72,7 @@ public static class L10n
             {
                 int index = i;
                 if (combo.Items[index] is string caption && KeyFor(caption) is string key)
-                    bindings.Add(it => { if (index < combo.Items.Count && combo.Items[index] is string old && (old == Get(key, true) || old == Get(key, false))) combo.Items[index] = Get(key, it); });
+                    bindings.Add(it => { if (index < combo.Items.Count && combo.Items[index] is string old && new[] { "it", "en", "fr", "de" }.Any(language => old == Lookup(key, language))) combo.Items[index] = Get(key, it); });
             }
         if (root is DataGridView grid)
             foreach (DataGridViewColumn column in grid.Columns) Add(() => column.HeaderText, value => column.HeaderText = value);

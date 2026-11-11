@@ -1,0 +1,444 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+  <data name="Attribute_acceleration" xml:space="preserve">
+    <value>Antritt</value>
+  </data>
+  <data name="Attribute_aerial_reach" xml:space="preserve">
+    <value>Sprunghöhe</value>
+  </data>
+  <data name="Attribute_aggression" xml:space="preserve">
+    <value>Aggressivität</value>
+  </data>
+  <data name="Attribute_agility" xml:space="preserve">
+    <value>Beweglichkeit</value>
+  </data>
+  <data name="Attribute_anticipation" xml:space="preserve">
+    <value>Antizipation</value>
+  </data>
+  <data name="Attribute_balance" xml:space="preserve">
+    <value>Balance</value>
+  </data>
+  <data name="Attribute_bravery" xml:space="preserve">
+    <value>Mut</value>
+  </data>
+  <data name="Attribute_command_of_area" xml:space="preserve">
+    <value>Strafraumbeherrschung</value>
+  </data>
+  <data name="Attribute_communication" xml:space="preserve">
+    <value>Kommunikation</value>
+  </data>
+  <data name="Attribute_composure" xml:space="preserve">
+    <value>Nervenstärke</value>
+  </data>
+  <data name="Attribute_concentration" xml:space="preserve">
+    <value>Konzentration</value>
+  </data>
+  <data name="Attribute_consistency" xml:space="preserve">
+    <value>Konstanz</value>
+  </data>
+  <data name="Attribute_corners" xml:space="preserve">
+    <value>Ecken</value>
+  </data>
+  <data name="Attribute_crossing" xml:space="preserve">
+    <value>Flanken</value>
+  </data>
+  <data name="Attribute_decisions" xml:space="preserve">
+    <value>Entscheidungen</value>
+  </data>
+  <data name="Attribute_determination" xml:space="preserve">
+    <value>Zielstrebigkeit</value>
+  </data>
+  <data name="Attribute_dirtiness" xml:space="preserve">
+    <value>Härte</value>
+  </data>
+  <data name="Attribute_dribbling" xml:space="preserve">
+    <value>Dribbling</value>
+  </data>
+  <data name="Attribute_eccentricity" xml:space="preserve">
+    <value>Exzentrik</value>
+  </data>
+  <data name="Attribute_finishing" xml:space="preserve">
+    <value>Abschluss</value>
+  </data>
+  <data name="Attribute_first_touch" xml:space="preserve">
+    <value>Ballannahme</value>
+  </data>
+  <data name="Attribute_flair" xml:space="preserve">
+    <value>Kreativität</value>
+  </data>
+  <data name="Attribute_free_kick_taking" xml:space="preserve">
+    <value>Freistöße</value>
+  </data>
+  <data name="Attribute_handling" xml:space="preserve">
+    <value>Fangsicherheit</value>
+  </data>
+  <data name="Attribute_heading" xml:space="preserve">
+    <value>Kopfballtechnik</value>
+  </data>
+  <data name="Attribute_important_matches" xml:space="preserve">
+    <value>Wichtige Spiele</value>
+  </data>
+  <data name="Attribute_injury_proneness" xml:space="preserve">
+    <value>Verletzungsanfälligkeit</value>
+  </data>
+  <data name="Attribute_jumping_reach" xml:space="preserve">
+    <value>Sprunghöhe</value>
+  </data>
+  <data name="Attribute_kicking" xml:space="preserve">
+    <value>Abschläge</value>
+  </data>
+  <data name="Attribute_leadership" xml:space="preserve">
+    <value>Führungsqualität</value>
+  </data>
+  <data name="Attribute_left_foot" xml:space="preserve">
+    <value>Linker Fuß</value>
+  </data>
+  <data name="Attribute_long_shots" xml:space="preserve">
+    <value>Weitschüsse</value>
+  </data>
+  <data name="Attribute_long_throws" xml:space="preserve">
+    <value>Weite Einwürfe</value>
+  </data>
+  <data name="Attribute_marking" xml:space="preserve">
+    <value>Deckung</value>
+  </data>
+  <data name="Attribute_natural_fitness" xml:space="preserve">
+    <value>Natürliche Fitness</value>
+  </data>
+  <data name="Attribute_off_the_ball" xml:space="preserve">
+    <value>Ohne Ball</value>
+  </data>
+  <data name="Attribute_one_on_ones" xml:space="preserve">
+    <value>Eins gegen eins</value>
+  </data>
+  <data name="Attribute_pace" xml:space="preserve">
+    <value>Schnelligkeit</value>
+  </data>
+  <data name="Attribute_passing" xml:space="preserve">
+    <value>Passen</value>
+  </data>
+  <data name="Attribute_penalty_taking" xml:space="preserve">
+    <value>Elfmeter</value>
+  </data>
+  <data name="Attribute_positioning" xml:space="preserve">
+    <value>Stellungsspiel</value>
+  </data>
+  <data name="Attribute_punching" xml:space="preserve">
+    <value>Fausten</value>
+  </data>
+  <data name="Attribute_reflexes" xml:space="preserve">
+    <value>Reflexe</value>
+  </data>
+  <data name="Attribute_right_foot" xml:space="preserve">
+    <value>Rechter Fuß</value>
+  </data>
+  <data name="Attribute_rushing_out" xml:space="preserve">
+    <value>Herauslaufen</value>
+  </data>
+  <data name="Attribute_stamina" xml:space="preserve">
+    <value>Ausdauer</value>
+  </data>
+  <data name="Attribute_strength" xml:space="preserve">
+    <value>Kraft</value>
+  </data>
+  <data name="Attribute_tackling" xml:space="preserve">
+    <value>Zweikampf</value>
+  </data>
+  <data name="Attribute_teamwork" xml:space="preserve">
+    <value>Teamwork</value>
+  </data>
+  <data name="Attribute_technique" xml:space="preserve">
+    <value>Technik</value>
+  </data>
+  <data name="Attribute_throwing" xml:space="preserve">
+    <value>Abwürfe</value>
+  </data>
+  <data name="Attribute_versatility" xml:space="preserve">
+    <value>Vielseitigkeit</value>
+  </data>
+  <data name="Attribute_vision" xml:space="preserve">
+    <value>Übersicht</value>
+  </data>
+  <data name="Attribute_work_rate" xml:space="preserve">
+    <value>Einsatzfreude</value>
+  </data>
+  <data name="Group_feet" xml:space="preserve">
+    <value>Füße</value>
+  </data>
+  <data name="Group_goalkeeping" xml:space="preserve">
+    <value>Torwart</value>
+  </data>
+  <data name="Group_hidden" xml:space="preserve">
+    <value>Versteckt</value>
+  </data>
+  <data name="Group_mental" xml:space="preserve">
+    <value>Mental</value>
+  </data>
+  <data name="Group_other" xml:space="preserve">
+    <value>Sonstige</value>
+  </data>
+  <data name="Group_physical" xml:space="preserve">
+    <value>Physis</value>
+  </data>
+  <data name="Group_technical" xml:space="preserve">
+    <value>Technik</value>
+  </data>
+  <data name="Position_AMC" xml:space="preserve">
+    <value>Offensives Mittelfeld Zentrum</value>
+  </data>
+  <data name="Position_AML" xml:space="preserve">
+    <value>Offensives Mittelfeld links</value>
+  </data>
+  <data name="Position_AMR" xml:space="preserve">
+    <value>Offensives Mittelfeld rechts</value>
+  </data>
+  <data name="Position_DC" xml:space="preserve">
+    <value>Innenverteidiger</value>
+  </data>
+  <data name="Position_DL" xml:space="preserve">
+    <value>Linker Verteidiger</value>
+  </data>
+  <data name="Position_DM" xml:space="preserve">
+    <value>Defensives Mittelfeld</value>
+  </data>
+  <data name="Position_DR" xml:space="preserve">
+    <value>Rechter Verteidiger</value>
+  </data>
+  <data name="Position_GK" xml:space="preserve">
+    <value>Torwart</value>
+  </data>
+  <data name="Position_MC" xml:space="preserve">
+    <value>Zentrales Mittelfeld</value>
+  </data>
+  <data name="Position_ML" xml:space="preserve">
+    <value>Linkes Mittelfeld</value>
+  </data>
+  <data name="Position_MR" xml:space="preserve">
+    <value>Rechtes Mittelfeld</value>
+  </data>
+  <data name="Position_STC" xml:space="preserve">
+    <value>Stürmer</value>
+  </data>
+  <data name="Position_SW" xml:space="preserve">
+    <value>Libero</value>
+  </data>
+  <data name="Position_WBL" xml:space="preserve">
+    <value>Linker Flügelverteidiger</value>
+  </data>
+  <data name="Position_WBR" xml:space="preserve">
+    <value>Rechter Flügelverteidiger</value>
+  </data>
+  <data name="StaffAttribute_adaptability" xml:space="preserve">
+    <value>Anpassungsfähigkeit (gleicher Wert wie Persönlichkeit)</value>
+  </data>
+  <data name="StaffAttribute_coaching" xml:space="preserve">
+    <value>Allgemeines Training</value>
+  </data>
+  <data name="StaffAttribute_coaching_goalkeeping" xml:space="preserve">
+    <value>Torwarttraining</value>
+  </data>
+  <data name="StaffAttribute_judging_ability" xml:space="preserve">
+    <value>Spielerbeurteilung</value>
+  </data>
+  <data name="StaffAttribute_judging_potential" xml:space="preserve">
+    <value>Potenzialbeurteilung</value>
+  </data>
+  <data name="StaffAttribute_motivating" xml:space="preserve">
+    <value>Motivationsfähigkeit</value>
+  </data>
+  <data name="StaffAttribute_physiotherapy" xml:space="preserve">
+    <value>Physiotherapie</value>
+  </data>
+  <data name="StaffAttribute_tactical_knowledge" xml:space="preserve">
+    <value>Taktisches Wissen</value>
+  </data>
+  <data name="StaffAttribute_coaching_attacking" xml:space="preserve">
+    <value>Angriffstraining</value>
+  </data>
+  <data name="StaffAttribute_coaching_defending" xml:space="preserve">
+    <value>Verteidigungstraining</value>
+  </data>
+  <data name="StaffAttribute_coaching_fitness" xml:space="preserve">
+    <value>Fitnesstraining</value>
+  </data>
+  <data name="StaffAttribute_coaching_possession" xml:space="preserve">
+    <value>Ballbesitztraining</value>
+  </data>
+  <data name="StaffAttribute_coaching_technical" xml:space="preserve">
+    <value>Techniktraining</value>
+  </data>
+  <data name="StaffAttribute_coaching_tactical" xml:space="preserve">
+    <value>Taktiktraining</value>
+  </data>
+  <data name="StaffAttribute_goalkeeping_handling" xml:space="preserve">
+    <value>Torwart: Fangsicherheit</value>
+  </data>
+  <data name="StaffAttribute_goalkeeping_distribution" xml:space="preserve">
+    <value>Torwart: Spieleröffnung</value>
+  </data>
+  <data name="StaffAttribute_analysing_data" xml:space="preserve">
+    <value>Datenanalyse</value>
+  </data>
+  <data name="StaffAttribute_sports_science" xml:space="preserve">
+    <value>Sportwissenschaft</value>
+  </data>
+  <data name="StaffAttribute_eccentricity" xml:space="preserve">
+    <value>Exzentrik</value>
+  </data>
+  <data name="StaffAttribute_negotiating" xml:space="preserve">
+    <value>Verhandlungsgeschick</value>
+  </data>
+  <data name="StaffAttribute_judging_staff_ability" xml:space="preserve">
+    <value>Mitarbeiterbeurteilung</value>
+  </data>
+  <data name="StaffAttribute_discipline" xml:space="preserve">
+    <value>Autorität / Disziplin</value>
+  </data>
+  <data name="StaffAttribute_determination" xml:space="preserve">
+    <value>Zielstrebigkeit</value>
+  </data>
+  <data name="StaffAttribute_working_with_youngsters" xml:space="preserve">
+    <value>Arbeit mit jungen Spielern</value>
+  </data>
+  <data name="StaffAttribute_man_management" xml:space="preserve">
+    <value>Menschenführung</value>
+  </data>
+  <data name="StaffAttribute_coaching_set_pieces" xml:space="preserve">
+    <value>Standardsituationen</value>
+  </data>
+  <data name="StaffJob_coach" xml:space="preserve">
+    <value>Trainer</value>
+  </data>
+  <data name="StaffJob_director_of_football" xml:space="preserve">
+    <value>Sportdirektor</value>
+  </data>
+  <data name="StaffJob_physio" xml:space="preserve">
+    <value>Physiotherapeut</value>
+  </data>
+  <data name="StaffJob_scout" xml:space="preserve">
+    <value>Scout</value>
+  </data>
+  <data name="StaffJob_manager" xml:space="preserve">
+    <value>Cheftrainer</value>
+  </data>
+  <data name="StaffJob_assistant_manager" xml:space="preserve">
+    <value>Co-Trainer</value>
+  </data>
+  <data name="StaffJob_set_piece_coach" xml:space="preserve">
+    <value>Standardtrainer</value>
+  </data>
+  <data name="StaffJob_fitness_coach" xml:space="preserve">
+    <value>Fitnesstrainer</value>
+  </data>
+  <data name="StaffJob_goalkeeping_coach" xml:space="preserve">
+    <value>Torwarttrainer</value>
+  </data>
+  <data name="StaffJob_doctor" xml:space="preserve">
+    <value>Arzt</value>
+  </data>
+  <data name="StaffJob_head_sports_science" xml:space="preserve">
+    <value>Leiter Sportwissenschaft</value>
+  </data>
+  <data name="StaffJob_chief_scout" xml:space="preserve">
+    <value>Chefscout</value>
+  </data>
+  <data name="StaffJob_sports_scientist" xml:space="preserve">
+    <value>Sportwissenschaftler</value>
+  </data>
+  <data name="StaffJob_head_physio" xml:space="preserve">
+    <value>Leitender Physiotherapeut</value>
+  </data>
+  <data name="StaffJob_analyst" xml:space="preserve">
+    <value>Analyst</value>
+  </data>
+  <data name="StaffJob_head_youth_development" xml:space="preserve">
+    <value>Nachwuchsleiter</value>
+  </data>
+  <data name="StaffJob_head_player_development" xml:space="preserve">
+    <value>Leiter Spielerentwicklung</value>
+  </data>
+  <data name="StaffJob_technical_director" xml:space="preserve">
+    <value>Technischer Direktor</value>
+  </data>
+  <data name="StaffJob_chairperson" xml:space="preserve">
+    <value>Präsident</value>
+  </data>
+  <data name="StaffJob_director" xml:space="preserve">
+    <value>Vorstandsmitglied</value>
+  </data>
+  <data name="StaffJob_head_performance_analyst" xml:space="preserve">
+    <value>Chefleistungsanalyst</value>
+  </data>
+  <data name="StaffJob_fm27_coach" xml:space="preserve">
+    <value>Trainer</value>
+  </data>
+  <data name="StaffJob_fm27_goalkeeping_coach" xml:space="preserve">
+    <value>Torwarttrainer</value>
+  </data>
+  <data name="StaffJob_fm27_club_doctor" xml:space="preserve">
+    <value>Vereinsarzt</value>
+  </data>
+  <data name="StaffJob_fm27_head_sports_science" xml:space="preserve">
+    <value>Leiter Sportwissenschaft</value>
+  </data>
+  <data name="StaffJob_fm27_performance_analyst" xml:space="preserve">
+    <value>Leistungsanalyst</value>
+  </data>
+  <data name="PositionCode_AMC" xml:space="preserve">
+    <value>AMC</value>
+  </data>
+  <data name="PositionCode_AML" xml:space="preserve">
+    <value>AML</value>
+  </data>
+  <data name="PositionCode_AMR" xml:space="preserve">
+    <value>AMR</value>
+  </data>
+  <data name="PositionCode_DC" xml:space="preserve">
+    <value>DC</value>
+  </data>
+  <data name="PositionCode_DL" xml:space="preserve">
+    <value>DL</value>
+  </data>
+  <data name="PositionCode_DM" xml:space="preserve">
+    <value>DM</value>
+  </data>
+  <data name="PositionCode_DR" xml:space="preserve">
+    <value>DR</value>
+  </data>
+  <data name="PositionCode_GK" xml:space="preserve">
+    <value>GK</value>
+  </data>
+  <data name="PositionCode_MC" xml:space="preserve">
+    <value>MC</value>
+  </data>
+  <data name="PositionCode_ML" xml:space="preserve">
+    <value>ML</value>
+  </data>
+  <data name="PositionCode_MR" xml:space="preserve">
+    <value>MR</value>
+  </data>
+  <data name="PositionCode_STC" xml:space="preserve">
+    <value>STC</value>
+  </data>
+  <data name="PositionCode_SW" xml:space="preserve">
+    <value>SW</value>
+  </data>
+  <data name="PositionCode_WBL" xml:space="preserve">
+    <value>WBL</value>
+  </data>
+  <data name="PositionCode_WBR" xml:space="preserve">
+    <value>WBR</value>
+  </data>
+</root>

@@ -1,4 +1,4 @@
-# FM26 Simple Editor · v16.0.0
+# FM26 Simple Editor · v16.2.0
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -10,13 +10,15 @@ A free **Football Manager 26 and 27** editor for Windows. Open a save, find a pl
 
 ## FM26 and FM27 compatibility
 
+**v16.2.0:** also supports **27.0.1+2494687** using fmsave 0.12.2. Saving and tactics are enabled; technical checks passed, but in-game loading has not yet been confirmed for this build. Internal history and staff recovery coverage differ between builds. The in-game validation below concerns 27.0.0.
+
 Supports FM26 and FM27 build **27.0.0+2493426**. Player editing, squad, staff, saved tactics and attribute history have been checked; loading a modified FM27 save in the game has also been confirmed.
 
 The build is checked when opening and before saving. Other FM27 builds, when readable, allow **viewing only**, with editing and saving disabled. Later versions require a new compatibility check. Details: [FM27 compatibility](docs/FM27Compatibility.md).
 
 ## Download and launch
 
-Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v16.0.0**.
+Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v16.2.0**.
 
 - **Setup, when available in the release:** guided installation, with options to install Python and the .NET runtime if needed. Additional installations require your consent and an Internet connection.
 - **Portable ZIP:** extract the complete package into a folder and run **FM26SimpleEditor.exe**. Keep all package files together.
@@ -93,7 +95,14 @@ Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch
 
 ## Changes, newest first
 
-### v16.1.1 (in development)
+### v16.2.0
+
+- Support for FM27 **27.0.1+2494687**: player reading, editing and saving, and three saved tactics. Later builds remain guarded. In-game loading of a modified save from this new build has not yet been confirmed.
+- Staff search: fixed recovery of profiles without a detected club on the new build; **Any** job criterion, name search and **Results = 0** to display all matching results. Your own club staff remain excluded from candidates.
+- Language selection on first launch and in Options: Italian, English, French and German. French and German are partial (266 entries each); missing text appears in English.
+- Save library updated to fmsave 0.12.2.
+
+### v16.1.1
 
 - More compact staff planning: explanations follow the notes setting and leave more room for alternatives.
 - Recovered profiles with possible board references are conservatively excluded from plausible candidates but remain accessible with Ignore interest.
@@ -101,7 +110,7 @@ Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch
 - Accent-insensitive and case-insensitive name and team search.
 - Option to compact notes in staff search, training stars and position rankings; details remain available by hovering over the information symbol.
 
-### v16.1.0 (in development)
+### v16.1.0
 
 - Search and planning include recovered profiles without detected clubs on the verified FM27 build; availability requires in-game checking. Previous jobs are not invented.
 - Decoded scheduled retirements are excluded from plausible alternatives. Other retirement states remain unverified.

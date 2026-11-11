@@ -1,5 +1,9 @@
 # FM27 compatibility / Compatibilità FM27
 
+## v16.2.0 update
+
+Build `27.0.1+2494687`, schemas game_db 4000 / tactics_man 26: player writes and tactics enabled with fmsave 0.12.2. Three tactics of eleven positions decoded; a controlled edit changes exactly two database bytes, preserving 81 other sections. In-game loading is not yet confirmed. Recovered staff now enabled for this exact build; internal history remains restricted to the earlier paired build. Future builds stay read-only.
+
 ## Italiano
 
 Supporto disponibile nella v16.0.0, dopo la verifica nelle preview, con `fmsave==0.10.0`. FM26 rimane supportato. La build FM27 confrontata è `27.0.0+2493426`, mentre upstream registra `27.0.0+2486695` e tratta quella più recente come non verificata. Non viene eliminata la verifica upstream degli schemi né registrata artificiosamente una build come ufficialmente supportata.

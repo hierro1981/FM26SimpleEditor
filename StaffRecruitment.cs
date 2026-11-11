@@ -4,7 +4,7 @@ namespace FM26SimpleEditor;
 
 public sealed record StaffSearchProfile(string Key, IReadOnlyDictionary<string, int> Weights, string? CategoryKey = null)
 {
-    public string Label => CategoryKey is null ? L10n.Get("StaffJob_" + Key) : L10n.Get("CoachingCategory_" + CategoryKey);
+    public string Label => Key == "__all" ? L10n.Get("RecruitAnyJob") : CategoryKey is null ? L10n.Get("StaffJob_" + Key) : L10n.Get("CoachingCategory_" + CategoryKey);
     public override string ToString() => Label;
 }
 public enum StaffInterest { Likely, Borderline, Uncertain, Unlikely }
@@ -42,6 +42,7 @@ public sealed record StaffCandidate(StaffRow Person, StaffSearchProfile Profile,
 // Transparent shortlist heuristics. No official FM acceptance or job-rating formula is claimed.
 public static class StaffRecruitment
 {
+    public static StaffSearchProfile AllRoles { get; } = new("__all", new Dictionary<string, int>());
     private static StaffSearchProfile Role(string key, params (string Key, int Weight)[] fields) => new(key, fields.ToDictionary(f => f.Key, f => f.Weight));
     public static IReadOnlyList<StaffSearchProfile> Roles { get; } = Array.AsReadOnly<StaffSearchProfile>([
         Role("manager", ("tactical_knowledge",3), ("man_management",3), ("judging_ability",2), ("motivating",2)),
@@ -214,8 +215,9 @@ public static class StaffRecruitment
             .Where(p => StaffSquads.Matches(p, currentSquad))
             .Where(p => !StaffSquads.Youth(targetSquad) || !StaffSquads.UsesYouthWork(profile) ||
                 Attribute(p, "working_with_youngsters") is int youth && youth >= Math.Clamp(minimumYouthWork, 1, 20))
-            .Select(p => new StaffCandidate(p, profile, Quality(p, profile), StaffSquads.ForTarget(Estimate(p, profile, data, offeredWage), p, targetSquad),
-                CoachingStars.Calculate(p).Where(c => c.Score.HasValue).OrderByDescending(c => c.Score).FirstOrDefault()))
+            .Select(p => (Person: p, Profile: profile.Key == "__all" ? CurrentProfile(p) ?? AllRoles : profile))
+            .Select(x => new StaffCandidate(x.Person, x.Profile, Quality(x.Person, x.Profile), StaffSquads.ForTarget(Estimate(x.Person, x.Profile, data, offeredWage), x.Person, targetSquad),
+                CoachingStars.Calculate(x.Person).Where(c => c.Score.HasValue).OrderByDescending(c => c.Score).FirstOrDefault()))
             .Where(c => (ignoreInterest || c.Interest.Band != StaffInterest.Unlikely) &&
                 (string.IsNullOrWhiteSpace(search) || TextSearch.Contains(c.Name, search) || TextSearch.Contains(c.Club, search) || TextSearch.Contains(c.CurrentRole, search) || TextSearch.Contains(c.Team, search) || c.Person.TeamId?.ToString().Contains(search) == true || c.Person.Uid.ToString().Contains(search) || c.Person.Id?.ToString().Contains(search) == true))
             .OrderBy(c => StaffSquads.AssignmentPriority(c.Person, targetSquad)).ThenByDescending(c => c.Quality.HasValue).ThenByDescending(c => c.Quality).ThenByDescending(c => ignoreInterest ? 0 : c.Interest.Score).ThenBy(c => c.Name).ThenBy(c => c.Person.Uid).ToArray();

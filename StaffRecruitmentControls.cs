@@ -150,6 +150,7 @@ public sealed class StaffRecruitmentPanel : UserControl
     {
         var previous = Profile?.Key; binding = true; profile.Items.Clear();
         profile.Items.AddRange((mode.SelectedIndex == 1 ? StaffRecruitment.Training : StaffRecruitment.Roles).Cast<object>().ToArray());
+        if (mode.SelectedIndex == 0) profile.Items.Add(StaffRecruitment.AllRoles);
         profile.SelectedIndex = Math.Max(0, profile.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p => p.Key == previous)); binding = false; UpdateYouthFilter();
     }
     // Set all linked filters together so stale search settings cannot hide the requested job.
@@ -159,6 +160,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         mode.SelectedIndex = selected.CategoryKey is null ? 0 : 1;
         profile.Items.Clear();
         profile.Items.AddRange((selected.CategoryKey is null ? StaffRecruitment.Roles : StaffRecruitment.Training).Cast<object>().ToArray());
+        if (selected.CategoryKey is null) profile.Items.Add(StaffRecruitment.AllRoles);
         profile.SelectedIndex = Math.Max(0, profile.Items.Cast<StaffSearchProfile>().ToList().FindIndex(p => p.Key == selected.Key));
         currentJob.SelectedIndex = Math.Max(0, currentJob.Items.Cast<JobChoice>().ToList().FindIndex(c => c.Key == job && c.Variant == (job == "analyst" ? analystCode & 254 : null)));
         offer.Value = Math.Clamp((decimal)wage, offer.Minimum, offer.Maximum);

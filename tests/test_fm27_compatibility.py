@@ -25,10 +25,18 @@ class FM27CompatibilityChecks(unittest.TestCase):
         require_writable(info())
 
     def test_unknown_build_or_changed_schema_never_authorises_writes(self):
-        for value in (info('27.0.1+2494687'), info('27.0.1+9999999'), info('27.0.0+2493427'), info('27.0.0+2486695'), info(schema=4001), N(game='FM27',build=FM27_PAIRED_BUILD,section_schemas={})):
+        for value in (info('27.0.1+9999999'), info('27.0.0+2493427'), info('27.0.0+2486695'), info(schema=4001), info('27.0.1+2494687',4001), N(game='FM27',build=FM27_PAIRED_BUILD,section_schemas={})):
             self.assertTrue(capabilities(value)['experimental'])
             self.assertFalse(capabilities(value)['canSave'])
             with self.assertRaises(ValueError):require_writable(value)
+
+    def test_2701_write_and_tactics_are_explicitly_enabled(self):
+        value = info('27.0.1+2494687')
+        self.assertTrue(capabilities(value)['canSave'])
+        self.assertTrue(capabilities(value)['experimental'])
+        self.assertFalse(paired_fm27(value))
+        require_writable(value)
+        self.assertEqual(compatible_layout(value).slot_tag, bytes.fromhex('440002'))
 
     def test_fm26_write_support_is_preserved(self):
         value=N(game='FM26',build='26.3.2+2329565',section_schemas={'game_db':4000})

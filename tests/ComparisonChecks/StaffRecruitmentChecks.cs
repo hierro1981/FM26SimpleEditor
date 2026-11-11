@@ -101,6 +101,8 @@ internal static class StaffRecruitmentChecks
             "newly read profile facts do not invent an acceptance formula or missing affinity values");
         data.Staff=[good,poor];
         check(StaffRecruitment.Rank(data,scout,search:"Person 2").Single().Uid==2, "recruitment search uses actual candidate identity");
+        check(StaffRecruitment.Rank(data,StaffRecruitment.AllRoles,ignoreInterest:true,search:"Person 2").Single().Uid==2,
+            "all-roles search still filters by candidate name");
         foreach(var category in StaffRecruitment.Training)
         {
             var row=StaffRecruitment.Rank(data,category).First();

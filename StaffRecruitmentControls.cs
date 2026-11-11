@@ -18,7 +18,7 @@ public sealed class StaffRecruitmentPanel : UserControl
     private readonly CheckBox includeRecovered = new() { Name="RecruitIncludeRecovered", AutoSize=true, Checked=true };
     private readonly NumericUpDown youthMinimum = new() { Name="RecruitYouthMinimum", Minimum=1, Maximum=20, Value=12, Width=55 };
     private readonly NumericUpDown offer = new() { Name = "RecruitWage", Minimum = 0, Maximum = 10000000, Increment = 100, ThousandsSeparator = true, Width = 125 };
-    private readonly NumericUpDown limit = new() { Name = "RecruitLimit", Minimum = 10, Maximum = 500, Value = 50, Increment = 10, Width = 65 };
+    private readonly NumericUpDown limit = new() { Name = "RecruitLimit", Minimum = 0, Maximum = 1000000, Value = 50, Increment = 10, Width = 65 };
     private readonly CheckBox preferSubteams = new() { Name = "RecruitPreferSubteams", Text = L10n.Get("StaffPreferSubteams"), AutoSize = true, Checked = true };
     private readonly CheckBox ignoreInterest = new() { Name = "RecruitIgnoreInterest", Text = L10n.Get("RecruitIgnoreInterest"), AutoSize = true };
     private readonly TextBox search = new() { Name = "RecruitSearch", Width = 230, PlaceholderText = L10n.Get("StaffSearch") };
@@ -226,7 +226,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         int Priority(StaffCandidate c) => preferSubteams.Checked ? StaffSquads.AssignmentPriority(c.Person, destination) : 0;
         var known = ranked.Where(c => Value(c) is not null);
         var rows = (descending ? known.OrderByDescending(Value) : known.OrderBy(Value)).ThenBy(c => c.Name).ThenBy(c => c.Person.Uid)
-            .Concat(ranked.Where(c => Value(c) is null)).OrderBy(Priority).Take((int)limit.Value).ToList();
+            .Concat(ranked.Where(c => Value(c) is null)).OrderBy(Priority).Take(limit.Value == 0 ? int.MaxValue : (int)limit.Value).ToList();
         list.DataSource = new BindingList<StaffCandidate>(rows); list.ClearSelection();
         foreach (DataGridViewColumn column in list.Columns) column.HeaderCell.SortGlyphDirection = column.Name == sort ? descending ? SortOrder.Descending : SortOrder.Ascending : SortOrder.None;
         if (rows.Count > 0) list.Rows[Math.Max(0, rows.FindIndex(c => c.Person.Uid == uid))].Selected = true;

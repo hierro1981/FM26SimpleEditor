@@ -441,4 +441,373 @@
   <data name="PositionCode_WBR" xml:space="preserve">
     <value>WBR</value>
   </data>
+  <data name="AboutButton" xml:space="preserve">
+    <value>À propos…</value>
+  </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>À propos de FM26 Simple Editor</value>
+  </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>Éditeur indépendant de sauvegardes Football Manager 26 et 27. Licence et code source disponibles dans le dépôt.</value>
+  </data>
+  <data name="CheckUpdates" xml:space="preserve">
+    <value>Rechercher des mises à jour</value>
+  </data>
+  <data name="CheckingUpdates" xml:space="preserve">
+    <value>Recherche de la dernière version sur GitHub…</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>Langue :</value>
+  </data>
+  <data name="OptionsButton" xml:space="preserve">
+    <value>Options…</value>
+  </data>
+  <data name="OptionsTitle" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="OptionsCancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="OptionsSave" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="OptionsShowNotes" xml:space="preserve">
+    <value>Afficher les notes explicatives</value>
+  </data>
+  <data name="RecommendationCountLabel" xml:space="preserve">
+    <value>Joueurs suggérés par position</value>
+  </data>
+  <data name="ConfigWarning" xml:space="preserve">
+    <value>Configuration non enregistrée</value>
+  </data>
+  <data name="CopyPlayerName" xml:space="preserve">
+    <value>Copier le nom du joueur</value>
+  </data>
+  <data name="CopyPublicId" xml:space="preserve">
+    <value>Copier l’identifiant public</value>
+  </data>
+  <data name="CopyInternalId" xml:space="preserve">
+    <value>Copier l’identifiant interne</value>
+  </data>
+  <data name="PlayerName" xml:space="preserve">
+    <value>Nom du joueur</value>
+  </data>
+  <data name="PublicId" xml:space="preserve">
+    <value>Identifiant public</value>
+  </data>
+  <data name="InternalId" xml:space="preserve">
+    <value>Identifiant interne</value>
+  </data>
+  <data name="PublicIdValue" xml:space="preserve">
+    <value>Identifiant public : {0}</value>
+  </data>
+  <data name="InternalIdValue" xml:space="preserve">
+    <value>Identifiant interne : {0}</value>
+  </data>
+  <data name="CopiedToClipboard" xml:space="preserve">
+    <value>Copié dans le presse-papiers.</value>
+  </data>
+  <data name="ClipboardTitle" xml:space="preserve">
+    <value>Copier dans le presse-papiers</value>
+  </data>
+  <data name="MySquadTab" xml:space="preserve">
+    <value>3  Mon équipe</value>
+  </data>
+  <data name="MySquadClub" xml:space="preserve">
+    <value>Club entraîné</value>
+  </data>
+  <data name="MySquadSearch" xml:space="preserve">
+    <value>Rechercher dans l’effectif par nom ou identifiant</value>
+  </data>
+  <data name="MySquadRoster" xml:space="preserve">
+    <value>Effectif</value>
+  </data>
+  <data name="MySquadBest" xml:space="preserve">
+    <value>Meilleurs joueurs par position</value>
+  </data>
+  <data name="MySquadScore" xml:space="preserve">
+    <value>Note /20</value>
+  </data>
+  <data name="MySquadFamiliarity" xml:space="preserve">
+    <value>Aisance /20</value>
+  </data>
+  <data name="MySquadFirst" xml:space="preserve">
+    <value>Équipe première uniquement</value>
+  </data>
+  <data name="MySquadOther" xml:space="preserve">
+    <value>Autres équipes</value>
+  </data>
+  <data name="MySquadAll" xml:space="preserve">
+    <value>Tous les joueurs</value>
+  </data>
+  <data name="MySquadReload" xml:space="preserve">
+    <value>Actualiser l’effectif</value>
+  </data>
+  <data name="StaffTab" xml:space="preserve">
+    <value>Personnel</value>
+  </data>
+  <data name="StaffSearch" xml:space="preserve">
+    <value>Rechercher le personnel par nom, club ou identifiant</value>
+  </data>
+  <data name="StaffReload" xml:space="preserve">
+    <value>Actualiser le personnel</value>
+  </data>
+  <data name="StaffRole" xml:space="preserve">
+    <value>Fonction</value>
+  </data>
+  <data name="StaffClub" xml:space="preserve">
+    <value>Club du contrat / du personnel</value>
+  </data>
+  <data name="StaffBirth" xml:space="preserve">
+    <value>Date de naissance</value>
+  </data>
+  <data name="StaffWage" xml:space="preserve">
+    <value>Salaire hebdomadaire (devise de base)</value>
+  </data>
+  <data name="StaffContract" xml:space="preserve">
+    <value>Contrat</value>
+  </data>
+  <data name="StaffContractFound" xml:space="preserve">
+    <value>Trouvé</value>
+  </data>
+  <data name="StaffContractMissing" xml:space="preserve">
+    <value>Non trouvé</value>
+  </data>
+  <data name="StaffContractStart" xml:space="preserve">
+    <value>Début du contrat</value>
+  </data>
+  <data name="StaffGroup" xml:space="preserve">
+    <value>Groupe</value>
+  </data>
+  <data name="StaffValue" xml:space="preserve">
+    <value>Valeur /20</value>
+  </data>
+  <data name="StaffPersonality" xml:space="preserve">
+    <value>Personnalité</value>
+  </data>
+  <data name="StaffPreferences" xml:space="preserve">
+    <value>Préférences</value>
+  </data>
+  <data name="StaffAttributes" xml:space="preserve">
+    <value>Attributs décodés</value>
+  </data>
+  <data name="StaffUnknownRole" xml:space="preserve">
+    <value>Non identifié</value>
+  </data>
+  <data name="StaffHuman" xml:space="preserve">
+    <value>Entraîneur humain</value>
+  </data>
+  <data name="StaffLoading" xml:space="preserve">
+    <value>Chargement du personnel</value>
+  </data>
+  <data name="StaffLoaded" xml:space="preserve">
+    <value>Liste du personnel actualisée</value>
+  </data>
+  <data name="StaffLoadError" xml:space="preserve">
+    <value>Impossible de charger le personnel</value>
+  </data>
+  <data name="RecruitTab" xml:space="preserve">
+    <value>Rechercher du personnel</value>
+  </data>
+  <data name="RecruitLoad" xml:space="preserve">
+    <value>Charger / actualiser les candidats</value>
+  </data>
+  <data name="RecruitRoles" xml:space="preserve">
+    <value>Fonctions</value>
+  </data>
+  <data name="RecruitTraining" xml:space="preserve">
+    <value>Entraînement</value>
+  </data>
+  <data name="RecruitOffer" xml:space="preserve">
+    <value>Salaire envisagé / semaine</value>
+  </data>
+  <data name="RecruitLimit" xml:space="preserve">
+    <value>Résultats (0 = tous)</value>
+  </data>
+  <data name="RecruitCurrentRole" xml:space="preserve">
+    <value>Fonction actuelle</value>
+  </data>
+  <data name="RecruitRoleStars" xml:space="preserve">
+    <value>Aptitude estimée ★</value>
+  </data>
+  <data name="RecruitQuality" xml:space="preserve">
+    <value>Note /20</value>
+  </data>
+  <data name="RecruitInterest" xml:space="preserve">
+    <value>Intérêt estimé</value>
+  </data>
+  <data name="RecruitBestTraining" xml:space="preserve">
+    <value>Meilleur entraînement ★</value>
+  </data>
+  <data name="RecruitAttributes" xml:space="preserve">
+    <value>Attributs principaux</value>
+  </data>
+  <data name="RecruitDetail" xml:space="preserve">
+    <value>Candidat : raisons et attributs</value>
+  </data>
+  <data name="RecruitLoading" xml:space="preserve">
+    <value>Recherche de candidats…</value>
+  </data>
+  <data name="RecruitLoaded" xml:space="preserve">
+    <value>Candidats chargés</value>
+  </data>
+  <data name="RecruitInterest_Likely" xml:space="preserve">
+    <value>Intérêt plausible</value>
+  </data>
+  <data name="RecruitInterest_Borderline" xml:space="preserve">
+    <value>Limite / à vérifier dans le jeu</value>
+  </data>
+  <data name="RecruitInterest_Uncertain" xml:space="preserve">
+    <value>Informations insuffisantes</value>
+  </data>
+  <data name="RecruitInterest_Unlikely" xml:space="preserve">
+    <value>Peu probable</value>
+  </data>
+  <data name="RecruitIgnoreInterest" xml:space="preserve">
+    <value>Ignorer l’intérêt (meilleurs au total)</value>
+  </data>
+  <data name="RecruitCopyName" xml:space="preserve">
+    <value>Copier le nom</value>
+  </data>
+  <data name="RecruitAnyJob" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="RecruitNoClubRecord" xml:space="preserve">
+    <value>Aucun club détecté</value>
+  </data>
+  <data name="RecruitIncludeRecovered" xml:space="preserve">
+    <value>Inclure les profils sans club (fonction non vérifiée)</value>
+  </data>
+  <data name="PlanTab" xml:space="preserve">
+    <value>Planification du personnel</value>
+  </data>
+  <data name="PlanDays" xml:space="preserve">
+    <value>Jours restants</value>
+  </data>
+  <data name="PlanCriterion" xml:space="preserve">
+    <value>Critère de comparaison</value>
+  </data>
+  <data name="PlanRecommendation" xml:space="preserve">
+    <value>Conseil de prolongation</value>
+  </data>
+  <data name="PlanBestAlternative" xml:space="preserve">
+    <value>Alternative à évaluer</value>
+  </data>
+  <data name="PlanBetterCount" xml:space="preserve">
+    <value>Meilleures alternatives</value>
+  </data>
+  <data name="PlanCurrent" xml:space="preserve">
+    <value>Personnel actuel</value>
+  </data>
+  <data name="PlanAlternative" xml:space="preserve">
+    <value>Alternative</value>
+  </data>
+  <data name="PlanGain" xml:space="preserve">
+    <value>Différence</value>
+  </data>
+  <data name="PlanExpiry" xml:space="preserve">
+    <value>Échéance du contrat</value>
+  </data>
+  <data name="PlanWindow_Expired" xml:space="preserve">
+    <value>Expiré / &lt;3 jours</value>
+  </data>
+  <data name="PlanWindow_SixMonths" xml:space="preserve">
+    <value>Échéance &lt;6 mois</value>
+  </data>
+  <data name="PlanWindow_TwelveMonths" xml:space="preserve">
+    <value>Échéance &lt;12 mois</value>
+  </data>
+  <data name="PlanWindow_All" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="PlayerModificationTab" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="TacticsTab" xml:space="preserve">
+    <value>Meilleurs par tactique</value>
+  </data>
+  <data name="TacticalPhaseIP" xml:space="preserve">
+    <value>Avec le ballon</value>
+  </data>
+  <data name="TacticalPhaseOP" xml:space="preserve">
+    <value>Sans le ballon</value>
+  </data>
+  <data name="TacticalCriteria" xml:space="preserve">
+    <value>Critères et sources</value>
+  </data>
+  <data name="TacticalWeight" xml:space="preserve">
+    <value>Poids</value>
+  </data>
+  <data name="TacticsBoth" xml:space="preserve">
+    <value>Les deux phases</value>
+  </data>
+  <data name="TacticsUnknownRole" xml:space="preserve">
+    <value>Rôle non reconnu</value>
+  </data>
+  <data name="TacticsLoading" xml:space="preserve">
+    <value>Lecture des tactiques…</value>
+  </data>
+  <data name="TacticsLoaded" xml:space="preserve">
+    <value>Tactiques chargées</value>
+  </data>
+  <data name="TacticsCurrentRanking" xml:space="preserve">
+    <value>Meilleurs actuellement</value>
+  </data>
+  <data name="LineupFutureToggle" xml:space="preserve">
+    <value>Avenir</value>
+  </data>
+  <data name="HistoryCA" xml:space="preserve">
+    <value>CA · Niveau actuel</value>
+  </data>
+  <data name="HistoryAutomaticRole" xml:space="preserve">
+    <value>Position principale</value>
+  </data>
+  <data name="Importance_1" xml:space="preserve">
+    <value>Essentiel</value>
+  </data>
+  <data name="Importance_2" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="Importance_3" xml:space="preserve">
+    <value>Utile</value>
+  </data>
+  <data name="StaffTeam" xml:space="preserve">
+    <value>Équipe d’affectation</value>
+  </data>
+  <data name="StaffFirstTeam" xml:space="preserve">
+    <value>Équipe première</value>
+  </data>
+  <data name="StaffTeamUnknown" xml:space="preserve">
+    <value>Équipe non identifiée</value>
+  </data>
+  <data name="StaffSquad_any" xml:space="preserve">
+    <value>Toutes</value>
+  </data>
+  <data name="StaffSquad_first" xml:space="preserve">
+    <value>Équipe première</value>
+  </data>
+  <data name="StaffSquad_subteam" xml:space="preserve">
+    <value>Équipes secondaires</value>
+  </data>
+  <data name="StaffSquad_reserves" xml:space="preserve">
+    <value>Réserve / B</value>
+  </data>
+  <data name="StaffSquad_youth" xml:space="preserve">
+    <value>Équipes de jeunes</value>
+  </data>
+  <data name="StaffSquad_unknown" xml:space="preserve">
+    <value>Non identifiée</value>
+  </data>
+  <data name="RecruitTargetSquad" xml:space="preserve">
+    <value>Équipe de destination</value>
+  </data>
+  <data name="RecruitCurrentSquad" xml:space="preserve">
+    <value>Équipe actuelle</value>
+  </data>
+  <data name="RecruitYouthMinimum" xml:space="preserve">
+    <value>Travail avec les jeunes ≥</value>
+  </data>
 </root>

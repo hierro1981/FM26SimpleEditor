@@ -19,11 +19,13 @@ public static class L10n
     public static CultureInfo Culture => CultureInfo.GetCultureInfo(Language switch { "fr" => "fr-FR", "de" => "de-DE", "en" => "en-GB", _ => "it-IT" });
     public static void SetLanguage(string language)
     {
-        Language = language == "en" ? "en" : "it";
+        Language = language is "it" or "en" or "fr" or "de" ? language : "it";
         CultureInfo.CurrentUICulture = CultureInfo.DefaultThreadCurrentUICulture = Culture;
         CultureInfo.CurrentCulture = CultureInfo.DefaultThreadCurrentCulture = Culture;
     }
-    private static string Lookup(string key, string language) => Resources.GetString(key, CultureInfo.GetCultureInfo(language)) ?? throw new MissingManifestResourceException(key);
+    private static string Lookup(string key, string language) =>
+        (language is "fr" or "de" ? Resources.GetResourceSet(CultureInfo.GetCultureInfo(language), true, false)?.GetString(key) : Resources.GetString(key, CultureInfo.GetCultureInfo(language)))
+        ?? Resources.GetString(key, CultureInfo.GetCultureInfo("en")) ?? throw new MissingManifestResourceException(key);
     // Existing callers pass false for the selected non-Italian language.
     private static string Resolve(bool? italian) => italian is null ? Language : italian.Value ? "it" : Language is "fr" or "de" ? Language : "en";
     public static string Get(string key, bool? italian = null) => Lookup(key, Resolve(italian));

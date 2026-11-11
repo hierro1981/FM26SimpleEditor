@@ -13,8 +13,8 @@ public sealed class OptionsForm : Form
         AutoScaleMode = AutoScaleMode.Dpi; FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterParent; MinimizeBox = MaximizeBox = false;
         ClientSize = new Size(510, 225);
-        language.Items.AddRange([new LanguageChoice("it", "Italiano"), new LanguageChoice("en", "English")]);
-        language.SelectedIndex = settings.Language == "en" ? 1 : 0;
+        language.Items.AddRange([new LanguageChoice("it", "Italiano"), new LanguageChoice("en", "English"), new LanguageChoice("fr", "Français"), new LanguageChoice("de", "Deutsch")]);
+        language.SelectedIndex = settings.Language switch { "en" => 1, "fr" => 2, "de" => 3, _ => 0 };
         count.Value = Math.Clamp(settings.RecommendationCount, 1, 100);
         notes.Text = L10n.Get("OptionsShowNotes"); notes.Checked = settings.ShowNotes;
         var root = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(14), ColumnCount = 2, RowCount = 5 };

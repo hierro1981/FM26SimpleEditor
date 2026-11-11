@@ -12,7 +12,7 @@ public sealed record AppSettings(string Language = "it", int RecommendationCount
             using var doc = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory, FileName)));
             return doc.RootElement.ValueKind == JsonValueKind.Object &&
                 doc.RootElement.TryGetProperty("language", out var value) && value.ValueKind == JsonValueKind.String &&
-                value.GetString() is "it" or "en";
+                value.GetString() is "it" or "en" or "fr" or "de";
         }
         catch (Exception exc) when (exc is IOException or UnauthorizedAccessException or JsonException) { return false; }
     }
@@ -24,7 +24,7 @@ public sealed record AppSettings(string Language = "it", int RecommendationCount
             if (document.RootElement.ValueKind == JsonValueKind.Object)
             {
                 var root = document.RootElement;
-                string language = root.TryGetProperty("language", out var value) && value.ValueKind == JsonValueKind.String && value.GetString() == "en" ? "en" : "it";
+                string language = root.TryGetProperty("language", out var value) && value.ValueKind == JsonValueKind.String && value.GetString() is "it" or "en" or "fr" or "de" ? value.GetString()! : "it";
                 int count = root.TryGetProperty("recommendationCount", out var number) && number.ValueKind == JsonValueKind.Number && number.TryGetInt32(out int n) && n is >= 1 and <= 100 ? n : 10;
                 bool notes = !root.TryGetProperty("showNotes", out var nvalue) || nvalue.ValueKind != JsonValueKind.False;
                 return new(language, count, notes);
@@ -38,7 +38,7 @@ public sealed record AppSettings(string Language = "it", int RecommendationCount
     {
         string language = settings.Language;
         if (settings.RecommendationCount is < 1 or > 100) throw new ArgumentOutOfRangeException(nameof(settings));
-        if (language is not ("it" or "en")) throw new ArgumentException("Unsupported language", nameof(language));
+        if (language is not ("it" or "en" or "fr" or "de")) throw new ArgumentException("Unsupported language", nameof(language));
         Directory.CreateDirectory(directory);
         string destination = Path.Combine(directory, FileName);
         string temporary = destination + "." + Guid.NewGuid().ToString("N") + ".tmp";

@@ -2109,7 +2109,7 @@ Hover over a position for its rating.</value>
     <value>0 = no offer specified. Weekly amount in the save’s base currency, like the decoded wage. This is an estimation scenario, not an offer to the game.</value>
   </data>
   <data name="RecruitLimit" xml:space="preserve">
-    <value>Results</value>
+    <value>Results (0 = all)</value>
   </data>
   <data name="RecruitUnlikely" xml:space="preserve">
     <value>Include unlikely candidates</value>

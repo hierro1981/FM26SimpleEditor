@@ -2109,7 +2109,7 @@ Passa sul punto per il valore.</value>
     <value>0 = offerta non specificata. Importo settimanale nella valuta base del salvataggio, come lo stipendio letto. È uno scenario per la stima, non un’offerta al gioco.</value>
   </data>
   <data name="RecruitLimit" xml:space="preserve">
-    <value>Risultati</value>
+    <value>Risultati (0 = tutti)</value>
   </data>
   <data name="RecruitUnlikely" xml:space="preserve">
     <value>Includi anche i poco interessati</value>

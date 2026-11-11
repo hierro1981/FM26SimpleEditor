@@ -21,6 +21,12 @@ internal static class LocalizationChecks
             if (string.IsNullOrEmpty(it) || string.IsNullOrEmpty(en) || !a.SequenceEqual(b)) throw new InvalidOperationException("Resource parity: " + key);
         }
         check(true, "all resource translations preserve format placeholders");
+        L10n.SetLanguage("fr");
+        check(L10n.Get("OptionsSave") == "Enregistrer" && L10n.Culture.Name == "fr-FR", "French resources and culture are active");
+        L10n.SetLanguage("de");
+        check(L10n.Get("OptionsSave") == "Speichern" && Labels.Attribute("technique", false) == "Technik", "German dynamic attribute labels use selected resources");
+        check(L10n.Get("HistoryCANeedSaves") == "Use Add saves to compare CA at different dates.", "missing German text falls back to English");
+        L10n.SetLanguage("it");
         string directory = Path.Combine(Path.GetTempPath(), "FM26-languages-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(directory);
         try
@@ -29,7 +35,7 @@ internal static class LocalizationChecks
             using (var initial = new InitialLanguageForm())
             {
                 var selector = All(initial).OfType<ComboBox>().Single(c => c.Name == "InitialLanguage");
-                check(selector.Items.Count == 2 && initial.Language == "it", "first-run language dialog offers supported languages");
+                check(selector.Items.Count == 4 && initial.Language == "it", "first-run language dialog offers supported languages");
                 selector.SelectedIndex = 1;
                 check(initial.Language == "en", "first-run language dialog returns English");
             }
@@ -52,8 +58,13 @@ internal static class LocalizationChecks
             check(AppSettings.Load(directory).Language == "it" && !AppSettings.HasLanguage(directory), "malformed configuration requests a valid language");
             File.WriteAllText(Path.Combine(directory, AppSettings.FileName), "{\"language\":42}");
             check(AppSettings.Load(directory).Language == "it", "invalid configuration field type falls back safely");
-            File.WriteAllText(Path.Combine(directory, AppSettings.FileName), "{\"language\":\"fr\"}");
+            File.WriteAllText(Path.Combine(directory, AppSettings.FileName), "{\"language\":\"xx\"}");
             check(AppSettings.Load(directory).Language == "it", "unsupported stored language falls back safely");
+            foreach (string code in new[] { "fr", "de" })
+            {
+                AppSettings.Save(directory, code);
+                check(AppSettings.HasLanguage(directory) && AppSettings.Load(directory).Language == code, "new language preference persists: " + code);
+            }
             AppSettings.Save(directory, "it");
             check(Directory.GetFiles(directory, "*.tmp").Length == 0, "atomic configuration save leaves no temporary file");
             bool denied = false;

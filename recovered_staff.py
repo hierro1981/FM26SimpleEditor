@@ -7,7 +7,7 @@ import re
 import struct
 from bisect import bisect_right
 from collections import Counter
-from save_compatibility import paired_fm27
+from save_compatibility import writable_fm27
 
 
 def retirement_dates(raw, selectors):
@@ -46,7 +46,7 @@ def possible_board_reference(raw, ability_at, club_index):
 
 
 def recover_staff(store, employed_uids, progress=None):
-    if not paired_fm27(store.save.info):
+    if not writable_fm27(store.save.info):
         return []
     import fmsave.readers.staff as native
     from fmsave.readers.persons import build_person_block_decoder

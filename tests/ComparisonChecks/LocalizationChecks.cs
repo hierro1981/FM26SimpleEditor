@@ -25,10 +25,19 @@ internal static class LocalizationChecks
         Directory.CreateDirectory(directory);
         try
         {
+            check(!AppSettings.HasLanguage(directory), "first startup requests a language when no configuration exists");
+            using (var initial = new InitialLanguageForm())
+            {
+                var selector = All(initial).OfType<ComboBox>().Single(c => c.Name == "InitialLanguage");
+                check(selector.Items.Count == 2 && initial.Language == "it", "first-run language dialog offers supported languages");
+                selector.SelectedIndex = 1;
+                check(initial.Language == "en", "first-run language dialog returns English");
+            }
             check(AppSettings.Load(directory).Language == "it", "missing configuration defaults to Italian");
             check(AppSettings.Load(directory).RecommendationCount == 10, "missing recommendation count defaults to ten");
             AppSettings.Save(directory, new AppSettings("en", 23));
             check(AppSettings.Load(directory) == new AppSettings("en", 23), "all options round trip together");
+            check(AppSettings.HasLanguage(directory), "stored language avoids first-run prompt");
             AppSettings.Save(directory, "en");
             check(AppSettings.Load(directory).RecommendationCount == 23, "language-only compatibility save retains recommendation count");
             foreach (string invalidCount in new[] { "0", "101", "-2", "1.5", "null", "\"ten\"" })
@@ -40,7 +49,7 @@ internal static class LocalizationChecks
             check(AppSettings.Load(directory) == new AppSettings("en", 10), "old language-only configuration remains compatible");
             check(AppSettings.Load(directory).Language == "en" && JsonDocument.Parse(File.ReadAllText(Path.Combine(directory, AppSettings.FileName))).RootElement.GetProperty("language").GetString() == "en", "language preference round-trips through local JSON");
             File.WriteAllText(Path.Combine(directory, AppSettings.FileName), "{broken");
-            check(AppSettings.Load(directory).Language == "it", "malformed configuration does not block startup");
+            check(AppSettings.Load(directory).Language == "it" && !AppSettings.HasLanguage(directory), "malformed configuration requests a valid language");
             File.WriteAllText(Path.Combine(directory, AppSettings.FileName), "{\"language\":42}");
             check(AppSettings.Load(directory).Language == "it", "invalid configuration field type falls back safely");
             File.WriteAllText(Path.Combine(directory, AppSettings.FileName), "{\"language\":\"fr\"}");

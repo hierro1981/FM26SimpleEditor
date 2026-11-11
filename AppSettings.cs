@@ -5,6 +5,17 @@ namespace FM26SimpleEditor;
 public sealed record AppSettings(string Language = "it", int RecommendationCount = 10, bool ShowNotes = true)
 {
     public const string FileName = "FM26SimpleEditor.config.json";
+    public static bool HasLanguage(string directory)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory, FileName)));
+            return doc.RootElement.ValueKind == JsonValueKind.Object &&
+                doc.RootElement.TryGetProperty("language", out var value) && value.ValueKind == JsonValueKind.String &&
+                value.GetString() is "it" or "en";
+        }
+        catch (Exception exc) when (exc is IOException or UnauthorizedAccessException or JsonException) { return false; }
+    }
     public static AppSettings Load(string directory)
     {
         try

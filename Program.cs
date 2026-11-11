@@ -9,7 +9,19 @@ internal static class Program
     private static void Main()
     {
         ApplicationConfiguration.Initialize();
-        L10n.SetLanguage(AppSettings.Load(AppContext.BaseDirectory).Language);
+        string configDirectory = AppContext.BaseDirectory;
+        if (!AppSettings.HasLanguage(configDirectory))
+        {
+            using var language = new InitialLanguageForm();
+            if (language.ShowDialog() != DialogResult.OK) return;
+            try { AppSettings.Save(configDirectory, language.Language); }
+            catch (Exception exc) when (exc is IOException or UnauthorizedAccessException)
+            {
+                MessageBox.Show(exc.Message, "Configuration", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+        }
+        L10n.SetLanguage(AppSettings.Load(configDirectory).Language);
         using var setup = new RuntimeSetupForm();
         if (setup.ShowDialog() != DialogResult.OK || setup.PythonExecutable is null) return;
         Application.Run(new MainForm(setup.PythonExecutable));

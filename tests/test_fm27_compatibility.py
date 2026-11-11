@@ -25,7 +25,7 @@ class FM27CompatibilityChecks(unittest.TestCase):
         require_writable(info())
 
     def test_unknown_build_or_changed_schema_never_authorises_writes(self):
-        for value in (info('27.0.1+9999999'), info('27.0.0+2493427'), info('27.0.0+2486695'), info(schema=4001), N(game='FM27',build=FM27_PAIRED_BUILD,section_schemas={})):
+        for value in (info('27.0.1+2494687'), info('27.0.1+9999999'), info('27.0.0+2493427'), info('27.0.0+2486695'), info(schema=4001), N(game='FM27',build=FM27_PAIRED_BUILD,section_schemas={})):
             self.assertTrue(capabilities(value)['experimental'])
             self.assertFalse(capabilities(value)['canSave'])
             with self.assertRaises(ValueError):require_writable(value)

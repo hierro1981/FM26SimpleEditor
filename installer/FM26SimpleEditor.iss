@@ -1,5 +1,5 @@
 #ifndef AppVersion
-  #define AppVersion "16.2.0"
+  #define AppVersion "16.2.1"
 #endif
 #ifndef PublishDir
   #define PublishDir "..\artifacts\publish"
@@ -7,14 +7,14 @@
 
 [Setup]
 AppId={{9318D1E2-F728-4F26-82EA-48B7D3C5AA61}
-AppName=FM26 Simple Editor
+AppName=FM Simple Editor
 AppVersion={#AppVersion}
 AppPublisher=hierro1981
 AppPublisherURL=https://github.com/hierro1981/FM26SimpleEditor
 AppSupportURL=https://github.com/hierro1981/FM26SimpleEditor/issues
 AppUpdatesURL=https://github.com/hierro1981/FM26SimpleEditor/releases
 DefaultDirName={localappdata}\Programs\FM26SimpleEditor
-DefaultGroupName=FM26 Simple Editor
+DefaultGroupName=FM Simple Editor
 PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
@@ -59,11 +59,11 @@ Source: "{#PublishDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 Source: "Install-Prerequisites.ps1"; DestDir: "{app}\installer"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\FM26 Simple Editor"; Filename: "{app}\FM26SimpleEditor.exe"
-Name: "{autodesktop}\FM26 Simple Editor"; Filename: "{app}\FM26SimpleEditor.exe"; Tasks: desktopicon
+Name: "{group}\FM Simple Editor"; Filename: "{app}\FM26SimpleEditor.exe"
+Name: "{autodesktop}\FM Simple Editor"; Filename: "{app}\FM26SimpleEditor.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\FM26SimpleEditor.exe"; Description: "{cm:LaunchProgram,FM26 Simple Editor}"; Flags: nowait postinstall skipifsilent; Check: PrerequisitesSucceeded
+Filename: "{app}\FM26SimpleEditor.exe"; Description: "{cm:LaunchProgram,FM Simple Editor}"; Flags: nowait postinstall skipifsilent; Check: PrerequisitesSucceeded
 
 [Code]
 var

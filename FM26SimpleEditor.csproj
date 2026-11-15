@@ -2,7 +2,9 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <ApplicationIcon>Assets\App.ico</ApplicationIcon>
-    <Version>16.2.0</Version>
+    <Version>16.2.1</Version>
+    <Product>FM Simple Editor</Product>
+    <Title>FM Simple Editor</Title>
     <NeutralLanguage>it</NeutralLanguage>
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>

@@ -1,5 +1,10 @@
 # Changelog
 
+## v16.2.1
+
+- **FM Simple Editor** è il nuovo nome dell’app e del sito / New application and website name.
+- Nuovo sito / New website: https://fmeditor.ramaya.org/.
+
 ### v16.2.0
 
 - Supporto della build FM27 **27.0.1+2494687**: lettura, modifica e salvataggio dei giocatori e lettura delle tre tattiche. Le build successive restano protette. Il caricamento nel gioco di questa nuova build modificata non è ancora confermato.

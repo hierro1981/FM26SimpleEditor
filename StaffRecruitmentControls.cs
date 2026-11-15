@@ -52,7 +52,7 @@ public sealed class StaffRecruitmentPanel : UserControl
         copy.Click += (_, _) =>
         {
             if (list.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault()?.DataBoundItem is not StaffCandidate c || data is null) return;
-            Clipboard.SetText($"FM26 Simple Editor {typeof(StaffRecruitmentPanel).Assembly.GetName().Version} | {data.GameDate}\n" +
+            Clipboard.SetText($"FM Simple Editor {typeof(StaffRecruitmentPanel).Assembly.GetName().Version} | {data.GameDate}\n" +
                 $"{data.ClubName} ({data.ClubUid}) | {c.Name} ({c.Person.Id} / {c.Person.Uid}) | {c.Profile.Label} · {StaffSquads.Label((targetSquad.SelectedItem as SquadChoice)?.Key ?? "any")}\n" +
                 $"{c.RoleStars} ★ | {c.Quality?.ToString("0.00", L10n.Culture) ?? "—"}/20 | {c.Interest.Label} ({c.Interest.Score})\n" +
                 L10n.Format("RecruitFeedbackContext", c.CurrentRole, c.Club, c.Person.ContractEndDisplay, c.Wage?.ToString("N0", L10n.Culture) ?? "—") + "\n" +

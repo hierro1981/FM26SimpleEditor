@@ -26,7 +26,7 @@ public sealed class AboutForm : Form
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         for (int i = 0; i < 6; i++) root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        root.Controls.Add(new Label { Text = "FM26 Simple Editor", AutoSize = true, Font = new Font(Font, FontStyle.Bold) }, 0, 0);
+        root.Controls.Add(new Label { Text = "FM Simple Editor", AutoSize = true, Font = new Font(Font, FontStyle.Bold) }, 0, 0);
         root.Controls.Add(new Label { Text = L10n.Format("InstalledVersion", AppInfo.Version.ToString(3)), AutoSize = true }, 0, 1);
         root.Controls.Add(new Label { Text = L10n.Get("AboutDescription"), AutoSize = true, MaximumSize = new Size(535, 0), Margin = new Padding(3, 10, 3, 10) }, 0, 2);
         var repository = new LinkLabel { Text = AppInfo.RepositoryUrl, AutoSize = true };

@@ -19,7 +19,7 @@
     <value>Independent editor for Football Manager 26 and 27 saves. License and source are available in the repository.</value>
   </data>
   <data name="AboutTitle" xml:space="preserve">
-    <value>About FM26 Simple Editor</value>
+    <value>About FM Simple Editor</value>
   </data>
   <data name="Attribute_acceleration" xml:space="preserve">
     <value>Acceleration</value>
@@ -945,7 +945,7 @@ Excluded files: </value>
     <value>Contract</value>
   </data>
   <data name="Text_72a1409756a3" xml:space="preserve">
-    <value>FM26 Simple Editor · Startup preparation</value>
+    <value>FM Simple Editor · Startup preparation</value>
   </data>
   <data name="Text_72cbceadc06a" xml:space="preserve">
     <value>The verified Python runtime is no longer available. Restart the editor to repeat setup. </value>

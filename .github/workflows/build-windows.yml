@@ -94,7 +94,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "Source archive failed." }
           $commit = git rev-parse HEAD
           @(
-            "FM26 Simple Editor - Windows x64",
+            "FM Simple Editor - Windows x64",
             "Commit: $commit",
             "Source: $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/tree/$commit",
             "",

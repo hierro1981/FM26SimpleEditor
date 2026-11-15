@@ -10,7 +10,7 @@ public static class AppInfo
 {
     public const string RepositoryUrl = "https://github.com/hierro1981/FM26SimpleEditor";
     public static Version Version { get; } = new(typeof(AppInfo).Assembly.GetName().Version!.ToString(3));
-    public static string Title => "FM26 Simple Editor · v" + Version.ToString(3);
+    public static string Title => "FM Simple Editor · v" + Version.ToString(3);
 }
 public sealed class UpdateChecker
 {

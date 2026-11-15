@@ -1,10 +1,10 @@
-# FM26 Simple Editor · v16.2.0
+# FM Simple Editor · v16.2.1
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
 [Italiano](README.md)
 
-🌐 **Project website:** [English](https://hierro1981.github.io/FM26SimpleEditor/en/) · [Italiano](https://hierro1981.github.io/FM26SimpleEditor/)
+🌐 **Project website:** [English](https://fmeditor.ramaya.org/en/) · [Italiano](https://fmeditor.ramaya.org/)
 
 A free **Football Manager 26 and 27** editor for Windows. Open a save, find a player and edit attributes, ability, positions and date of birth. You can also compare players, track their progress and find the best candidates for your squad’s positions and tactics. For staff, search candidates by job or training category and assess renewals for expiring contracts.
 
@@ -94,6 +94,11 @@ Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v16.2.1 (in development)
+
+- Renamed to **FM Simple Editor**, reflecting support for multiple Football Manager versions.
+- Project website moved to **https://fmeditor.ramaya.org/**.
 
 ### v16.2.0
 

@@ -445,7 +445,7 @@
     <value>Über…</value>
   </data>
   <data name="AboutTitle" xml:space="preserve">
-    <value>Über FM26 Simple Editor</value>
+    <value>Über FM Simple Editor</value>
   </data>
   <data name="AboutDescription" xml:space="preserve">
     <value>Unabhängiger Editor für Spielstände von Football Manager 26 und 27. Lizenz und Quellcode sind im Repository verfügbar.</value>

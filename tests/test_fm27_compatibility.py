@@ -38,6 +38,23 @@ class FM27CompatibilityChecks(unittest.TestCase):
         require_writable(value)
         self.assertEqual(compatible_layout(value).slot_tag, bytes.fromhex('440002'))
 
+    def test_271_optional_readers_are_enabled_only_for_checked_build_and_schema(self):
+        from save_compatibility import writable_fm27, history_fm27
+        value = info('27.1.0+2505117')
+        self.assertTrue(writable_fm27(value))
+        self.assertTrue(history_fm27(value))
+        self.assertFalse(paired_fm27(value))
+        self.assertEqual(compatible_layout(value).slot_tag, bytes.fromhex('440002'))
+        store=N(save=N(info=value),raw=history_bytes(2),path='synthetic.fm',offsets=lambda p:(0,len(history_bytes(2))))
+        self.assertEqual(len(embedded_history(store,N(name='Synthetic'))[0]),2)
+        for changed in (info('27.1.0+2505118'), info('27.2.0+9999999'), info('27.1.0+2505117',4001)):
+            self.assertFalse(writable_fm27(changed))
+            self.assertFalse(history_fm27(changed))
+            with self.assertRaises(ValueError): compatible_layout(changed)
+            self.assertEqual(embedded_history(N(save=N(info=changed)),N())[0],[])
+        value.section_schemas['tactics_man']=27
+        with self.assertRaises(ValueError):compatible_layout(value)
+
     def test_fm26_write_support_is_preserved(self):
         value=N(game='FM26',build='26.3.2+2329565',section_schemas={'game_db':4000})
         self.assertTrue(capabilities(value)['canSave'])

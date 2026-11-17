@@ -10,13 +10,13 @@ Editor gratuito per **Football Manager 26 e 27** su Windows. Apri un salvataggio
 
 ## Compatibilità FM26 e FM27
 
-FM Simple Editor **16.3.0** supporta **Football Manager 26 e Football Manager 27, inclusa la versione 27.1.0** e usa fmsave **0.12.6**. Lettura e modifica dei giocatori sono disponibili; il caricamento nel gioco di una copia modificata di FM27 27.1.0 è stato confermato dall’utilizzatore.
+FM Simple Editor **16.3.1** supporta **Football Manager 26 e Football Manager 27, inclusa la versione 27.1.0** e usa fmsave **0.12.6**. Lettura e modifica dei giocatori sono disponibili; il caricamento nel gioco di una copia modificata di FM27 27.1.0 è stato confermato dall’utilizzatore.
 
 In **La mia squadra → Finanze** puoi leggere e modificare il **saldo corrente** del club, nella valuta base del salvataggio, creando una nuova copia verificata. Budget trasferimenti e stipendi non sono modificabili. La modifica del saldo è stata verificata mediante risalvataggio e rilettura tecnica, non ancora con una verifica dedicata nel gioco.
 
 Il salvataggio resta abilitato anche sulle versioni non ancora verificate, con avvisi e controlli sui dati e sull’integrità della copia. Questo non garantisce compatibilità con ogni aggiornamento futuro.
 
-**Limiti su FM27 27.1.0:** lettura automatica delle tattiche, storico interno degli attributi e recupero aggiuntivo dei profili staff senza club non sono attualmente abilitati. Restano disponibili la rosa, lo staff leggibile, i migliori per posizione e lo storico ottenuto confrontando più salvataggi. Le funzioni basate sulle tattiche richiedono una tattica decodificabile.
+**Funzioni disponibili:** sono disponibili anche le tattiche salvate con ruoli e sottoruoli, i migliori per tattica e la Top 11 attuale/futura, lo storico interno degli attributi quando presente e il recupero aggiuntivo dello staff senza club rilevato. Le date dei campioni interni restano ricostruite; la CA storica richiede il confronto tra salvataggi. Un profilo senza club rilevato non prova che sia disoccupato o disponibile.
 
 ## Scarica e avvia
 
@@ -98,6 +98,12 @@ Apri **Opzioni** per scegliere **Italiano**, **English**, **Français** o **Deut
 ## Storico delle release
 
 Le voci seguenti descrivono le funzionalità al momento di ciascun rilascio; per il supporto attuale consulta la sezione di compatibilità iniziale.
+
+### v16.3.1
+
+- Ripristinati i migliori per tattica e la Top 11 attuale/futura su FM27 27.1.0.
+- Riabilitati lo storico interno degli attributi, quando presente, e il recupero aggiuntivo dei profili staff senza club rilevato.
+- Corretta la lettura dello staff con la libreria aggiornata.
 
 ### v16.3.0
 
@@ -368,3 +374,4 @@ Il progetto C# Windows Forms è compatibile con **Visual Studio 2026**. Per comp
 ## Licenza
 
 Distribuito con licenza [GNU GPL v3](LICENSE). Football Manager è un marchio di Sports Interactive e SEGA; questo progetto è indipendente e non ufficiale.
+

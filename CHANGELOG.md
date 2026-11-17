@@ -1,5 +1,12 @@
 # Changelog
 
+### v16.3.1
+
+- Ripristinati i migliori per tattica e la Top 11 attuale/futura su FM27 27.1.0.
+- Riabilitati lo storico interno degli attributi, quando presente, e il recupero aggiuntivo dello staff senza club rilevato.
+- Corretta la compatibilità del recupero staff con fmsave 0.12.6.
+- Aggiornati README e sito con le funzioni effettivamente disponibili.
+
 ### v16.3.0
 
 - FM27 **27.1.0+2505117**: libreria fmsave aggiornata a **0.12.6**; lettura verificata e caricamento della copia modificata confermato dall’utilizzatore.

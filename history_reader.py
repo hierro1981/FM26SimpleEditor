@@ -1,9 +1,9 @@
-"""Read-only experimental FM26 26.3.2 attribute-history reader.
+"""Read-only experimental attribute-history reader for validated FM26/FM27 builds.
 
 Sample dates and the 21-byte record tail are intentionally left undecoded.
 """
 import struct
-from save_compatibility import paired_fm27
+from save_compatibility import history_fm27
 
 ATTRIBUTE_ORDER = ('aerial_reach', 'command_of_area', 'communication', 'eccentricity', 'handling', 'kicking', 'reflexes', 'rushing_out', 'punching', 'throwing', 'one_on_ones', 'crossing', 'dribbling', 'finishing', 'heading', 'long_shots', 'long_throws', 'marking', 'passing', 'penalty_taking', 'free_kick_taking', 'tackling', 'technique', 'first_touch', 'corners', 'aggression', 'anticipation', 'bravery', 'vision', 'decisions', 'determination', 'flair', 'leadership', 'off_the_ball', 'positioning', 'teamwork', 'work_rate', 'composure', 'concentration', 'acceleration', 'agility', 'balance', 'pace', 'stamina', 'strength', 'jumping_reach', 'natural_fitness')
 RECORD_BYTES = 69
@@ -39,7 +39,7 @@ def find_history(window, record_marker=1):
 
 
 def embedded_history(store, player):
-    fm27 = paired_fm27(store.save.info)
+    fm27 = history_fm27(store.save.info)
     if (not str(store.save.info.build).startswith("26.3.2+") and not fm27) or store.save.info.section_schemas.get("game_db") != 4000:
         return [], "Storico interno non disponibile: formato non ancora validato per questa build."
     start, end = store.offsets(player)

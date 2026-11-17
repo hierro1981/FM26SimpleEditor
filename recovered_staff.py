@@ -1,7 +1,7 @@
 """Conservative FM27 discovery of profiles missing from club employment rows.
 
 No-club-record is evidence of reader coverage, not proof of unemployment.
-Only the paired build is scanned. No jobs, national roles or wages are guessed.
+Only explicitly validated FM27 builds are scanned. No jobs, national roles or wages are guessed.
 """
 import re
 import struct
@@ -69,6 +69,9 @@ def recover_staff(store, employed_uids, progress=None):
     counts = Counter(uid for _, uid, _ in hits)
     boundaries = sorted({h for h, _, _ in hits} | {
         at + store.records.layout.pindex_offset for at in store.records.record_offsets})
+    ambiguous_headers = frozenset(
+        store.records.record_offsets[position] + store.records.layout.pindex_offset
+        for position in store.records.ambiguous_positions)
     club_index = store.save._context.club_index()
     decoder = build_person_block_decoder(layouts.person_blocks, store.save._context.name_pools(),
         club_index, store.save.info.game_date, str(store.path))
@@ -80,7 +83,7 @@ def recover_staff(store, employed_uids, progress=None):
         position = bisect_right(boundaries, header)
         following = boundaries[position] if position < len(boundaries) else None
         person_id = struct.unpack_from('<I', raw, header)[0]
-        closing = native._closing_header(raw, person_id, header, uid, following, layout)
+        closing = native._closing_header(raw, person_id, header, uid, following, layout, ambiguous_headers)
         if closing is None:
             continue
         start, end = native._person_block_window(raw, header, None, closing[0], layout)

@@ -10,11 +10,13 @@ Editor gratuito per **Football Manager 26 e 27** su Windows. Apri un salvataggio
 
 ## Compatibilità FM26 e FM27
 
-**v16.2.0:** supporta anche **27.0.1+2494687**, con fmsave 0.12.2. Per questa build salvataggio e tattiche sono abilitati; le verifiche tecniche sono passate, mentre il caricamento nel gioco non è ancora confermato. Storico interno e recupero staff possono avere copertura diversa tra le build. Le informazioni seguenti sulla verifica nel gioco si riferiscono a 27.0.0.
+FM Simple Editor **16.3.0** supporta **Football Manager 26 e Football Manager 27, inclusa la versione 27.1.0** e usa fmsave **0.12.6**. Lettura e modifica dei giocatori sono disponibili; il caricamento nel gioco di una copia modificata di FM27 27.1.0 è stato confermato dall’utilizzatore.
 
-Supporta FM26 e FM27, build **27.0.0+2493426**. Sono stati verificati modifica dei giocatori, rosa, staff, tattiche salvate e storico degli attributi; è stato confermato anche il caricamento nel gioco di un salvataggio FM27 modificato.
+In **La mia squadra → Finanze** puoi leggere e modificare il **saldo corrente** del club, nella valuta base del salvataggio, creando una nuova copia verificata. Budget trasferimenti e stipendi non sono modificabili. La modifica del saldo è stata verificata mediante risalvataggio e rilettura tecnica, non ancora con una verifica dedicata nel gioco.
 
-Il salvataggio rimane abilitato anche sulle build non verificate, con avvisi e controlli di integrità. Alcuni lettori opzionali possono restare indisponibili. Dettagli: [compatibilità FM27](docs/FM27Compatibility.md).
+Il salvataggio resta abilitato anche sulle versioni non ancora verificate, con avvisi e controlli sui dati e sull’integrità della copia. Questo non garantisce compatibilità con ogni aggiornamento futuro.
+
+**Limiti su FM27 27.1.0:** lettura automatica delle tattiche, storico interno degli attributi e recupero aggiuntivo dei profili staff senza club non sono attualmente abilitati. Restano disponibili la rosa, lo staff leggibile, i migliori per posizione e lo storico ottenuto confrontando più salvataggi. Le funzioni basate sulle tattiche richiedono una tattica decodificabile.
 
 ## Scarica e avvia
 
@@ -62,7 +64,7 @@ Puoi anche aggiungere giocatori all’elenco di confronto; ogni giocatore aperto
 - **Rosa:** elenco ordinato inizialmente per posizione e abilità attuale.
 - **Migliori per posizione:** seleziona posizione e sottoruolo per vedere un numero configurabile di candidati (10 predefiniti). Con **Ctrl/Shift+clic** sul campo puoi richiedere due posizioni; un secondo selettore permette anche due sottoruoli differenti nella stessa posizione.
 - **Migliori per tattica:** scegli una tattica della prima squadra e uno slot nei campi affiancati. Valuta i candidati per la fase in possesso, non in possesso o entrambe, con i sottoruoli effettivi della tattica. Il filtro della rosa si applica anche a questi suggerimenti.
-- **Staff:** consulta incarichi, identità, contratti, abilità, personalità, preferenze e 25 attributi professionali aggiuntivi su scala 1–20, dove leggibili. Puoi cercare anche per incarico. È una vista in sola lettura; «categoria» segnala quando non è ancora riconosciuta la qualifica specifica.
+- **Staff:** consulta incarichi, identità, contratti, abilità, personalità, preferenze e attributi professionali aggiuntivi su scala 1–20, dove leggibili. Puoi cercare anche per incarico. È una vista in sola lettura; «categoria» segnala quando non è ancora riconosciuta la qualifica specifica.
 
 I suggerimenti richiedono dati completi e una familiarità sufficiente nelle posizioni richieste. Quando scegli entrambe le fasi, un giocatore deve poter ricoprire entrambe. Un ruolo non riconosciuto non produce una raccomandazione generica al suo posto.
 
@@ -93,7 +95,9 @@ Apri **Opzioni** per scegliere **Italiano**, **English**, **Français** o **Deut
 - Stelle, punteggi e suggerimenti sono **stime dell’editor**: non riproducono la valutazione ufficiale dello staff del gioco e non prevedono il rendimento in partita. Usa **Criteri e fonti** per vedere su cosa si basa un suggerimento.
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
-## Novità, dalla versione più recente
+## Storico delle release
+
+Le voci seguenti descrivono le funzionalità al momento di ciascun rilascio; per il supporto attuale consulta la sezione di compatibilità iniziale.
 
 ### v16.3.0
 

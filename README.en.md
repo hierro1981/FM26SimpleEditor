@@ -10,11 +10,13 @@ A free **Football Manager 26 and 27** editor for Windows. Open a save, find a pl
 
 ## FM26 and FM27 compatibility
 
-**v16.2.0:** also supports **27.0.1+2494687** using fmsave 0.12.2. Saving and tactics are enabled; technical checks passed, but in-game loading has not yet been confirmed for this build. Internal history and staff recovery coverage differ between builds. The in-game validation below concerns 27.0.0.
+FM Simple Editor **16.3.0** supports **Football Manager 26 and Football Manager 27, including version 27.1.0**, using fmsave **0.12.6**. Player reading and editing are available; the user confirmed loading a modified FM27 27.1.0 save in the game.
 
-Supports FM26 and FM27 build **27.0.0+2493426**. Player editing, squad, staff, saved tactics and attribute history have been checked; loading a modified FM27 save in the game has also been confirmed.
+In **My squad → Finances**, view and edit the club’s **current balance** in the save’s base currency, writing a verified new copy. Transfer and wage budgets are not editable. Balance editing has been checked by saving and reopening the copy; a dedicated in-game check of the balance change has not yet been confirmed.
 
-Saving remains enabled on unverified builds with warnings and integrity checks. Some optional readers may remain unavailable. Details: [FM27 compatibility](docs/FM27Compatibility.md).
+Saving remains enabled on unverified versions, with data and copy-integrity checks and warnings. This does not guarantee compatibility with every future update.
+
+**FM27 27.1.0 limitations:** automatic tactic reading, internal attribute history and additional recovery of no-club staff profiles are not currently enabled. Squad data, readable staff, best-by-position rankings and history from comparing multiple saves remain available. Tactic-based features require a decodable tactic.
 
 ## Download and launch
 
@@ -62,7 +64,7 @@ Players can also be added to the comparison list; every opened player is added a
 - **Squad list:** initially sorted by position, then current ability.
 - **Best by position:** select a position and tactical role to see a configurable number of candidates (10 by default). **Ctrl/Shift+click** on the pitch requests two positions; a second selector also supports different roles in the same position.
 - **Best by tactic:** choose a first-team tactic and a slot on the paired pitches. Assess candidates for in possession, out of possession or both, using the tactic’s actual roles. The squad filter also applies to these recommendations.
-- **Staff:** view readable jobs, identity, contracts, ability, personality, preferences and 20 additional professional attributes on a 1–20 scale. You can also search by job. This is read only; “category” indicates that the specific title is not decoded yet.
+- **Staff:** view readable jobs, identity, contracts, ability, personality, preferences and additional professional attributes on a 1–20 scale. You can also search by job. This is read only; “category” indicates that the specific title is not decoded yet.
 
 Recommendations require complete data and sufficient familiarity in every requested position. Selecting both phases requires players to cover both. An unrecognised role does not produce a generic recommendation in its place.
 

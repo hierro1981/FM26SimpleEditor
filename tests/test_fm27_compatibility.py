@@ -24,11 +24,11 @@ class FM27CompatibilityChecks(unittest.TestCase):
         self.assertEqual(value,dict(game='FM27',build=FM27_PAIRED_BUILD,experimental=False,canSave=True))
         require_writable(info())
 
-    def test_unknown_build_or_changed_schema_never_authorises_writes(self):
-        for value in (info('27.0.1+9999999'), info('27.0.0+2493427'), info('27.0.0+2486695'), info(schema=4001), info('27.0.1+2494687',4001), N(game='FM27',build=FM27_PAIRED_BUILD,section_schemas={})):
+    def test_unknown_build_or_changed_schema_keeps_saving_enabled(self):
+        for value in (info('27.1.0+2505117'), info('27.9.0+9999999'), info('27.0.1+9999999'), info('27.0.0+2493427'), info('27.0.0+2486695'), info(schema=4001), info('27.0.1+2494687',4001), N(game='FM27',build=FM27_PAIRED_BUILD,section_schemas={})):
             self.assertTrue(capabilities(value)['experimental'])
-            self.assertFalse(capabilities(value)['canSave'])
-            with self.assertRaises(ValueError):require_writable(value)
+            self.assertTrue(capabilities(value)['canSave'])
+            require_writable(value)
 
     def test_2701_write_and_tactics_are_explicitly_enabled(self):
         value = info('27.0.1+2494687')

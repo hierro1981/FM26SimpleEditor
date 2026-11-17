@@ -1,4 +1,4 @@
-"""Edition-specific capabilities. A matching schema alone never authorises writes."""
+"""Build metadata and optional-reader gates; saving is never blocked by build version."""
 FM27_PAIRED_BUILD = '27.0.0+2493426'
 FM27_ADDITIONAL_BUILDS = {'27.0.1+2494687'}
 
@@ -19,9 +19,9 @@ def writable_fm27(info):
 def capabilities(info):
     game = edition(info)
     return dict(game=game, build=getattr(info, 'build', ''), experimental=game == 'FM27' and not paired_fm27(info),
-                canSave=game == 'FM26' or writable_fm27(info))
+                canSave=True)
 
 
 def require_writable(info):
-    if not capabilities(info)['canSave']:
-        raise ValueError('FM27: questa build è disponibile solo in lettura; la scrittura non è stata verificata.')
+    """Unknown builds do not block saving; all data and archive checks still apply."""
+    return None

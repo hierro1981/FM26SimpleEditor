@@ -14,7 +14,7 @@ Editor gratuito per **Football Manager 26 e 27** su Windows. Apri un salvataggio
 
 Supporta FM26 e FM27, build **27.0.0+2493426**. Sono stati verificati modifica dei giocatori, rosa, staff, tattiche salvate e storico degli attributi; è stato confermato anche il caricamento nel gioco di un salvataggio FM27 modificato.
 
-La build viene controllata all’apertura e prima del salvataggio. Per altre build FM27, se leggibili, l’editor consente **solo la consultazione** e disabilita modifica e salvataggio. Le versioni successive richiedono una nuova verifica di compatibilità. Dettagli: [compatibilità FM27](docs/FM27Compatibility.md).
+Il salvataggio rimane abilitato anche sulle build non verificate, con avvisi e controlli di integrità. Alcuni lettori opzionali possono restare indisponibili. Dettagli: [compatibilità FM27](docs/FM27Compatibility.md).
 
 ## Scarica e avvia
 

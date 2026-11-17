@@ -14,7 +14,7 @@ A free **Football Manager 26 and 27** editor for Windows. Open a save, find a pl
 
 Supports FM26 and FM27 build **27.0.0+2493426**. Player editing, squad, staff, saved tactics and attribute history have been checked; loading a modified FM27 save in the game has also been confirmed.
 
-The build is checked when opening and before saving. Other FM27 builds, when readable, allow **viewing only**, with editing and saving disabled. Later versions require a new compatibility check. Details: [FM27 compatibility](docs/FM27Compatibility.md).
+Saving remains enabled on unverified builds with warnings and integrity checks. Some optional readers may remain unavailable. Details: [FM27 compatibility](docs/FM27Compatibility.md).
 
 ## Download and launch
 

@@ -813,4 +813,226 @@
   <data name="ClubBalance" xml:space="preserve">
     <value>Aktueller Kontostand (Basiswährung): {0}</value>
   </data>
+  <data name="Backend_09b72ae804a3" xml:space="preserve">
+    <value>Wählen Sie einen anderen Namen als den Originalspielstand</value>
+  </data>
+  <data name="Backend_0cc0f3d3bbda" xml:space="preserve">
+    <value>Unbekannter Befehl</value>
+  </data>
+  <data name="Backend_11e1cd687b57" xml:space="preserve">
+    <value>Die Quelldatei wurde geändert: vor dem Bearbeiten erneut öffnen</value>
+  </data>
+  <data name="Backend_12de4a7715f3" xml:space="preserve">
+    <value>Datenbank wird entpackt</value>
+  </data>
+  <data name="Backend_1e7449b17734" xml:space="preserve">
+    <value>Geprüfte Kopie wird bestätigt</value>
+  </data>
+  <data name="Backend_24030e06360f" xml:space="preserve">
+    <value>{0}: Geben Sie eine ganze Zahl von {1} bis {2} ein</value>
+  </data>
+  <data name="Backend_26a8f664352e" xml:space="preserve">
+    <value>Falsche Größe für {0}</value>
+  </data>
+  <data name="Backend_28560f6b7673" xml:space="preserve">
+    <value>Liga nicht verfügbar: keine eindeutig lesbare Spielklasse</value>
+  </data>
+  <data name="Backend_2adc055fcabd" xml:space="preserve">
+    <value>{0} · {1} Mannschaften · Spielklasse aus der Tabelle abgeleitet</value>
+  </data>
+  <data name="Backend_2bb024429a45" xml:space="preserve">
+    <value>Originalabschnitte werden geprüft</value>
+  </data>
+  <data name="Backend_2ff6f2173a2e" xml:space="preserve">
+    <value>Datensatz zu groß: Verlauf konnte nicht sicher erkannt werden.</value>
+  </data>
+  <data name="Backend_383f1944e088" xml:space="preserve">
+    <value>Ungültige Anzahl von Werten: {0}</value>
+  </data>
+  <data name="Backend_39eb7e3f6d7d" xml:space="preserve">
+    <value>Laden abgeschlossen</value>
+  </data>
+  <data name="Backend_3c1ebe07013f" xml:space="preserve">
+    <value>Doppelte interne IDs im Spielstand</value>
+  </data>
+  <data name="Backend_3d4bcacb4b33" xml:space="preserve">
+    <value>Wählen Sie höchstens 20 Spielstände gleichzeitig</value>
+  </data>
+  <data name="Backend_436d246215ad" xml:space="preserve">
+    <value>Spielerkatalog wird vorbereitet</value>
+  </data>
+  <data name="Backend_44e25b45b45c" xml:space="preserve">
+    <value>Spieler im geöffneten Spielstand nicht gefunden</value>
+  </data>
+  <data name="Backend_45d0da93d376" xml:space="preserve">
+    <value>Prüfung des gespeicherten Spielers fehlgeschlagen</value>
+  </data>
+  <data name="Backend_4a51ee9ef872" xml:space="preserve">
+    <value>Kopfzeile und Index des Spielstands werden gelesen</value>
+  </data>
+  <data name="Backend_4abc4ab7d608" xml:space="preserve">
+    <value>Spieler ausgelesen</value>
+  </data>
+  <data name="Backend_4d801a51a17d" xml:space="preserve">
+    <value>Öffnen Sie zuerst einen Spielstand</value>
+  </data>
+  <data name="Backend_4e7eb99985ee" xml:space="preserve">
+    <value>Spieldatum nicht lesbar: Verlaufspunkt ausgeschlossen</value>
+  </data>
+  <data name="Backend_514dde22a4d1" xml:space="preserve">
+    <value>Abschnitte</value>
+  </data>
+  <data name="Backend_52274cd8fdd5" xml:space="preserve">
+    <value>Unbenannte Spielklasse</value>
+  </data>
+  <data name="Backend_565a3a4e4618" xml:space="preserve">
+    <value>Interner Verlauf nicht verfügbar: Format für diesen Build noch nicht geprüft.</value>
+  </data>
+  <data name="Backend_57d9b5223fe3" xml:space="preserve">
+    <value>Datum nicht bearbeitbar: Personendatensatz nicht eindeutig</value>
+  </data>
+  <data name="Backend_58bbacc3a1bb" xml:space="preserve">
+    <value>Archiv neu aufgebaut und geprüft</value>
+  </data>
+  <data name="Backend_58e7aa96e623" xml:space="preserve">
+    <value>Mehrere mögliche Folgen: interner Verlauf nicht eindeutig.</value>
+  </data>
+  <data name="Backend_5a62c699f750" xml:space="preserve">
+    <value>Vollständige Prüfung des gespeicherten Index fehlgeschlagen</value>
+  </data>
+  <data name="Backend_5ba255bc705b" xml:space="preserve">
+    <value>Unbekannte Sortierspalte</value>
+  </data>
+  <data name="Backend_635c01ec93aa" xml:space="preserve">
+    <value>Datenbank ist nicht genau einmal im Index enthalten</value>
+  </data>
+  <data name="Backend_67b64ece975d" xml:space="preserve">
+    <value>Geburtsdatum nicht verfügbar</value>
+  </data>
+  <data name="Backend_6a21ce94bd9f" xml:space="preserve">
+    <value>Komprimierte Datenbank wird geprüft</value>
+  </data>
+  <data name="Backend_6b8788e53241" xml:space="preserve">
+    <value>Liga nicht verfügbar: {0}</value>
+  </data>
+  <data name="Backend_6e6078bcaeb5" xml:space="preserve">
+    <value>Alle Indexeinträge werden neu aufgebaut</value>
+  </data>
+  <data name="Backend_730c2d2773c2" xml:space="preserve">
+    <value>Geburtsdatum muss zwischen 1850 und dem Spieldatum liegen</value>
+  </data>
+  <data name="Backend_7cdece04f0c5" xml:space="preserve">
+    <value>Index unvollständig oder mehrdeutig: Eintragszahl stimmt nicht mit den Dateiabschnitten überein</value>
+  </data>
+  <data name="Backend_7f33bc39d3c7" xml:space="preserve">
+    <value>Änderungen werden auf die Datenbankkopie angewendet</value>
+  </data>
+  <data name="Backend_8be7fcbe5ed4" xml:space="preserve">
+    <value>Unbekannte Position</value>
+  </data>
+  <data name="Backend_8cfc1ddac578" xml:space="preserve">
+    <value>Ungültiger Index für {0}. Verwenden Sie einen funktionierenden Originalspielstand.</value>
+  </data>
+  <data name="Backend_8d2b92cc38f3" xml:space="preserve">
+    <value>Name oder Geburtsdatum abweichend: möglicherweise ein anderer Spieler</value>
+  </data>
+  <data name="Backend_8d70b44232b5" xml:space="preserve">
+    <value>Spieler und gespeicherte Felder werden geprüft</value>
+  </data>
+  <data name="Backend_8fc2a279f332" xml:space="preserve">
+    <value>Quellarchiv wird gelesen</value>
+  </data>
+  <data name="Backend_9a39dc6b7ab7" xml:space="preserve">
+    <value>Abweichendes Geburtsdatum: Abgleich anhand öffentlicher ID, interner ID und Name.</value>
+  </data>
+  <data name="Backend_9a8ef833a359" xml:space="preserve">
+    <value>Datenbankabschnitt stimmt nicht mit dem gelesenen Index überein</value>
+  </data>
+  <data name="Backend_a35fc8140ecc" xml:space="preserve">
+    <value>Ungültige Sortierrichtung</value>
+  </data>
+  <data name="Backend_a531bdc20289" xml:space="preserve">
+    <value>{0} interne Stichproben · 47 sichtbare Attribute · experimenteller Leser. X-Achse: Reihenfolge; einzelne Datumswerte nicht ausgelesen. Vermutlich monatliche Stichproben ohne zugeordneten Kalender. Historische CA/PA, Füße und versteckte Attribute fehlen.</value>
+  </data>
+  <data name="Backend_a61a542e89ab" xml:space="preserve">
+    <value>Originaldatum stimmt nicht mit dem Datensatz überein</value>
+  </data>
+  <data name="Backend_a707e2bea40a" xml:space="preserve">
+    <value>Umgekehrter Wertebereich: {0}</value>
+  </data>
+  <data name="Backend_a726eda3af72" xml:space="preserve">
+    <value>Geänderte Daten werden geprüft</value>
+  </data>
+  <data name="Backend_ac1a2814298e" xml:space="preserve">
+    <value>Spieldatum zur Berechnung des Vertragsendes fehlt</value>
+  </data>
+  <data name="Backend_b1575da9083c" xml:space="preserve">
+    <value>Öffentliche ID stimmt nicht mit dem ausgewählten Spieler überein</value>
+  </data>
+  <data name="Backend_b365fe776b43" xml:space="preserve">
+    <value>Spielstand geprüft</value>
+  </data>
+  <data name="Backend_ba7dac805fc8" xml:space="preserve">
+    <value>Tatsächliche Werte der ausgewählten Spielstände zum jeweiligen Spieldatum.</value>
+  </data>
+  <data name="Backend_bb7aca5d3969" xml:space="preserve">
+    <value>Wettbewerbs-ID {0}</value>
+  </data>
+  <data name="Backend_bf89efb91de6" xml:space="preserve">
+    <value>Identität nicht eindeutig geprüft (ID, Name und Geburtsdatum)</value>
+  </data>
+  <data name="Backend_c03d94f8e86b" xml:space="preserve">
+    <value>Gespeicherte Kopie wird erneut geöffnet und geprüft</value>
+  </data>
+  <data name="Backend_c4e2228823ed" xml:space="preserve">
+    <value>Prüfung der Datenbankkomprimierung fehlgeschlagen</value>
+  </data>
+  <data name="Backend_c9c906e8256a" xml:space="preserve">
+    <value>Spieler</value>
+  </data>
+  <data name="Backend_cbf024701e97" xml:space="preserve">
+    <value>Alle Prüfungen der Kopie abgeschlossen</value>
+  </data>
+  <data name="Backend_cd3b6f390799" xml:space="preserve">
+    <value>Kopie wird geschrieben</value>
+  </data>
+  <data name="Backend_ce8415b670e8" xml:space="preserve">
+    <value>Unbekannter Fuß- oder Leihfilter</value>
+  </data>
+  <data name="Backend_d38631385501" xml:space="preserve">
+    <value>Unbekannter Vertragsstatus</value>
+  </data>
+  <data name="Backend_d55baabc8bc3" xml:space="preserve">
+    <value>Datenbank wird komprimiert</value>
+  </data>
+  <data name="Backend_d6546a6a217e" xml:space="preserve">
+    <value>Abschnitte der Kopie werden geprüft</value>
+  </data>
+  <data name="Backend_d6aea8b8be5f" xml:space="preserve">
+    <value>Spielstand wurde auf dem Datenträger geändert: erneut öffnen</value>
+  </data>
+  <data name="Backend_da8568aa5e71" xml:space="preserve">
+    <value>Unbekannte Bezugsmannschaft für Leihspieler</value>
+  </data>
+  <data name="Backend_ddaaa98e8024" xml:space="preserve">
+    <value>Spielerdatensätze werden gesucht</value>
+  </data>
+  <data name="Backend_e0c7e71e757e" xml:space="preserve">
+    <value>Spieler, Identitäten und Verträge werden ausgelesen</value>
+  </data>
+  <data name="Backend_e4bc452e9d4b" xml:space="preserve">
+    <value>Keine interne Folge erkannt (mindestens 2 Stichproben erforderlich).</value>
+  </data>
+  <data name="Backend_e4ddc6ab5c88" xml:space="preserve">
+    <value>Katalog geprüft</value>
+  </data>
+  <data name="Backend_e6dc88cbcb4a" xml:space="preserve">
+    <value>Wählen Sie einen neuen Namen für die geänderte Kopie</value>
+  </data>
+  <data name="Backend_f311744bc36c" xml:space="preserve">
+    <value>Gespeicherte Abschnitte werden vollständig geprüft</value>
+  </data>
+  <data name="Backend_f8e2b6726d8b" xml:space="preserve">
+    <value>Änderung hat die Länge der Datenbank verändert</value>
+  </data>
 </root>

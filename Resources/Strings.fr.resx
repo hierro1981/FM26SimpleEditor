@@ -813,4 +813,226 @@
   <data name="ClubBalance" xml:space="preserve">
     <value>Solde actuel (devise de base) : {0}</value>
   </data>
+  <data name="Backend_09b72ae804a3" xml:space="preserve">
+    <value>Choisissez un nom différent de la sauvegarde originale</value>
+  </data>
+  <data name="Backend_0cc0f3d3bbda" xml:space="preserve">
+    <value>Commande inconnue</value>
+  </data>
+  <data name="Backend_11e1cd687b57" xml:space="preserve">
+    <value>Le fichier source a changé : rouvrez-le avant de le modifier</value>
+  </data>
+  <data name="Backend_12de4a7715f3" xml:space="preserve">
+    <value>Décompression de la base de données</value>
+  </data>
+  <data name="Backend_1e7449b17734" xml:space="preserve">
+    <value>Confirmation de la copie vérifiée</value>
+  </data>
+  <data name="Backend_24030e06360f" xml:space="preserve">
+    <value>{0} : saisissez un entier de {1} à {2}</value>
+  </data>
+  <data name="Backend_26a8f664352e" xml:space="preserve">
+    <value>Taille incorrecte pour {0}</value>
+  </data>
+  <data name="Backend_28560f6b7673" xml:space="preserve">
+    <value>Championnat indisponible : aucune division lisible identifiée sans ambiguïté</value>
+  </data>
+  <data name="Backend_2adc055fcabd" xml:space="preserve">
+    <value>{0} · {1} équipes · division déduite du classement</value>
+  </data>
+  <data name="Backend_2bb024429a45" xml:space="preserve">
+    <value>Vérification des sections originales</value>
+  </data>
+  <data name="Backend_2ff6f2173a2e" xml:space="preserve">
+    <value>Enregistrement trop volumineux : historique non identifié de manière fiable.</value>
+  </data>
+  <data name="Backend_383f1944e088" xml:space="preserve">
+    <value>Nombre de valeurs invalide : {0}</value>
+  </data>
+  <data name="Backend_39eb7e3f6d7d" xml:space="preserve">
+    <value>Chargement terminé</value>
+  </data>
+  <data name="Backend_3c1ebe07013f" xml:space="preserve">
+    <value>Identifiants internes dupliqués dans la sauvegarde</value>
+  </data>
+  <data name="Backend_3d4bcacb4b33" xml:space="preserve">
+    <value>Sélectionnez au maximum 20 sauvegardes à la fois</value>
+  </data>
+  <data name="Backend_436d246215ad" xml:space="preserve">
+    <value>Préparation du catalogue des joueurs</value>
+  </data>
+  <data name="Backend_44e25b45b45c" xml:space="preserve">
+    <value>Joueur introuvable dans la sauvegarde ouverte</value>
+  </data>
+  <data name="Backend_45d0da93d376" xml:space="preserve">
+    <value>Échec de la vérification du joueur enregistré</value>
+  </data>
+  <data name="Backend_4a51ee9ef872" xml:space="preserve">
+    <value>Lecture de l’en-tête et de l’index de sauvegarde</value>
+  </data>
+  <data name="Backend_4abc4ab7d608" xml:space="preserve">
+    <value>Joueurs décodés</value>
+  </data>
+  <data name="Backend_4d801a51a17d" xml:space="preserve">
+    <value>Ouvrez d’abord une sauvegarde</value>
+  </data>
+  <data name="Backend_4e7eb99985ee" xml:space="preserve">
+    <value>Date du jeu illisible : point historique exclu</value>
+  </data>
+  <data name="Backend_514dde22a4d1" xml:space="preserve">
+    <value>sections</value>
+  </data>
+  <data name="Backend_52274cd8fdd5" xml:space="preserve">
+    <value>Division sans nom</value>
+  </data>
+  <data name="Backend_565a3a4e4618" xml:space="preserve">
+    <value>Historique interne indisponible : format non validé pour cette version.</value>
+  </data>
+  <data name="Backend_57d9b5223fe3" xml:space="preserve">
+    <value>Date non modifiable : enregistrement de personne ambigu</value>
+  </data>
+  <data name="Backend_58bbacc3a1bb" xml:space="preserve">
+    <value>Archive reconstruite et vérifiée</value>
+  </data>
+  <data name="Backend_58e7aa96e623" xml:space="preserve">
+    <value>Plusieurs séquences possibles : historique interne ambigu.</value>
+  </data>
+  <data name="Backend_5a62c699f750" xml:space="preserve">
+    <value>Échec de la vérification complète de l’index enregistré</value>
+  </data>
+  <data name="Backend_5ba255bc705b" xml:space="preserve">
+    <value>Colonne de tri inconnue</value>
+  </data>
+  <data name="Backend_635c01ec93aa" xml:space="preserve">
+    <value>La base de données n’apparaît pas exactement une fois dans l’index</value>
+  </data>
+  <data name="Backend_67b64ece975d" xml:space="preserve">
+    <value>Date de naissance indisponible</value>
+  </data>
+  <data name="Backend_6a21ce94bd9f" xml:space="preserve">
+    <value>Vérification de la base de données compressée</value>
+  </data>
+  <data name="Backend_6b8788e53241" xml:space="preserve">
+    <value>Championnat indisponible : {0}</value>
+  </data>
+  <data name="Backend_6e6078bcaeb5" xml:space="preserve">
+    <value>Reconstruction de toutes les entrées de l’index</value>
+  </data>
+  <data name="Backend_730c2d2773c2" xml:space="preserve">
+    <value>La naissance doit être comprise entre 1850 et la date du jeu</value>
+  </data>
+  <data name="Backend_7cdece04f0c5" xml:space="preserve">
+    <value>Index incomplet ou ambigu : le nombre d’entrées ne correspond pas aux sections du fichier</value>
+  </data>
+  <data name="Backend_7f33bc39d3c7" xml:space="preserve">
+    <value>Application des modifications à la copie de la base</value>
+  </data>
+  <data name="Backend_8be7fcbe5ed4" xml:space="preserve">
+    <value>Position inconnue</value>
+  </data>
+  <data name="Backend_8cfc1ddac578" xml:space="preserve">
+    <value>Index invalide pour {0}. Utilisez une sauvegarde originale fonctionnelle.</value>
+  </data>
+  <data name="Backend_8d2b92cc38f3" xml:space="preserve">
+    <value>Nom ou naissance différents : il s’agit peut-être d’un autre joueur</value>
+  </data>
+  <data name="Backend_8d70b44232b5" xml:space="preserve">
+    <value>Vérification du joueur et des champs enregistrés</value>
+  </data>
+  <data name="Backend_8fc2a279f332" xml:space="preserve">
+    <value>Lecture de l’archive source</value>
+  </data>
+  <data name="Backend_9a39dc6b7ab7" xml:space="preserve">
+    <value>Naissance différente : correspondance par identifiants public et interne et nom.</value>
+  </data>
+  <data name="Backend_9a8ef833a359" xml:space="preserve">
+    <value>La section de la base ne correspond pas à l’index lu</value>
+  </data>
+  <data name="Backend_a35fc8140ecc" xml:space="preserve">
+    <value>Sens du tri invalide</value>
+  </data>
+  <data name="Backend_a531bdc20289" xml:space="preserve">
+    <value>{0} échantillons internes · 47 attributs visibles · lecture expérimentale. Axe X : ordre des échantillons ; dates individuelles non décodées. Les échantillons semblent mensuels, sans calendrier attribué. CA/PA historiques, pieds et attributs cachés indisponibles.</value>
+  </data>
+  <data name="Backend_a61a542e89ab" xml:space="preserve">
+    <value>La date originale ne correspond pas à l’enregistrement</value>
+  </data>
+  <data name="Backend_a707e2bea40a" xml:space="preserve">
+    <value>Intervalle inversé : {0}</value>
+  </data>
+  <data name="Backend_a726eda3af72" xml:space="preserve">
+    <value>Contrôle des données modifiées</value>
+  </data>
+  <data name="Backend_ac1a2814298e" xml:space="preserve">
+    <value>Date du jeu indisponible pour calculer l’échéance</value>
+  </data>
+  <data name="Backend_b1575da9083c" xml:space="preserve">
+    <value>L’identifiant public ne correspond pas au joueur sélectionné</value>
+  </data>
+  <data name="Backend_b365fe776b43" xml:space="preserve">
+    <value>Sauvegarde vérifiée</value>
+  </data>
+  <data name="Backend_ba7dac805fc8" xml:space="preserve">
+    <value>Valeurs réelles des sauvegardes sélectionnées à leurs dates respectives.</value>
+  </data>
+  <data name="Backend_bb7aca5d3969" xml:space="preserve">
+    <value>Identifiant de compétition {0}</value>
+  </data>
+  <data name="Backend_bf89efb91de6" xml:space="preserve">
+    <value>Identité non vérifiée sans ambiguïté (identifiant, nom et naissance)</value>
+  </data>
+  <data name="Backend_c03d94f8e86b" xml:space="preserve">
+    <value>Réouverture et contrôle de la copie enregistrée</value>
+  </data>
+  <data name="Backend_c4e2228823ed" xml:space="preserve">
+    <value>Échec de la vérification de compression de la base</value>
+  </data>
+  <data name="Backend_c9c906e8256a" xml:space="preserve">
+    <value>joueurs</value>
+  </data>
+  <data name="Backend_cbf024701e97" xml:space="preserve">
+    <value>Tous les contrôles de la copie sont terminés</value>
+  </data>
+  <data name="Backend_cd3b6f390799" xml:space="preserve">
+    <value>Écriture de la copie</value>
+  </data>
+  <data name="Backend_ce8415b670e8" xml:space="preserve">
+    <value>Filtre de pied ou de prêt inconnu</value>
+  </data>
+  <data name="Backend_d38631385501" xml:space="preserve">
+    <value>Statut de contrat inconnu</value>
+  </data>
+  <data name="Backend_d55baabc8bc3" xml:space="preserve">
+    <value>Compression de la base de données</value>
+  </data>
+  <data name="Backend_d6546a6a217e" xml:space="preserve">
+    <value>Vérification des sections de la copie</value>
+  </data>
+  <data name="Backend_d6aea8b8be5f" xml:space="preserve">
+    <value>La sauvegarde a changé sur le disque : rouvrez-la</value>
+  </data>
+  <data name="Backend_da8568aa5e71" xml:space="preserve">
+    <value>Équipe de référence des prêts inconnue</value>
+  </data>
+  <data name="Backend_ddaaa98e8024" xml:space="preserve">
+    <value>Recherche des enregistrements des joueurs</value>
+  </data>
+  <data name="Backend_e0c7e71e757e" xml:space="preserve">
+    <value>Décodage des joueurs, identités et contrats</value>
+  </data>
+  <data name="Backend_e4bc452e9d4b" xml:space="preserve">
+    <value>Aucune séquence interne reconnue (au moins 2 échantillons nécessaires).</value>
+  </data>
+  <data name="Backend_e4ddc6ab5c88" xml:space="preserve">
+    <value>Catalogue vérifié</value>
+  </data>
+  <data name="Backend_e6dc88cbcb4a" xml:space="preserve">
+    <value>Choisissez un nouveau nom pour la copie modifiée</value>
+  </data>
+  <data name="Backend_f311744bc36c" xml:space="preserve">
+    <value>Vérification complète des sections enregistrées</value>
+  </data>
+  <data name="Backend_f8e2b6726d8b" xml:space="preserve">
+    <value>La modification a changé la longueur de la base</value>
+  </data>
 </root>

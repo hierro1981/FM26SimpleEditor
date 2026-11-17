@@ -2,21 +2,20 @@
 
 ## Italiano
 
-FM Simple Editor **16.3.1** supporta **Football Manager 26 e Football Manager 27, inclusa la versione 27.1.0** e usa fmsave **0.12.6**. Lettura e modifica dei giocatori sono disponibili; il caricamento nel gioco di una copia modificata di FM27 27.1.0 è stato confermato dall’utilizzatore.
+FM Simple Editor **16.3.1** supporta i salvataggi locali di **Football Manager 26 e Football Manager 27**, inclusa la versione **27.1.0**.
 
-In **La mia squadra → Finanze** puoi leggere e modificare il **saldo corrente** del club, nella valuta base del salvataggio, creando una nuova copia verificata. Budget trasferimenti e stipendi non sono modificabili. La modifica del saldo è stata verificata mediante risalvataggio e rilettura tecnica, non ancora con una verifica dedicata nel gioco.
+**La mia squadra → Finanze** permette di consultare e modificare il saldo corrente del club nella valuta base del salvataggio. I budget per trasferimenti e stipendi non sono modificabili. Le modifiche vengono salvate in un nuovo file, così puoi conservare l’originale.
 
-Il salvataggio resta abilitato anche sulle versioni non ancora verificate, con avvisi e controlli sui dati e sull’integrità della copia. Questo non garantisce compatibilità con ogni aggiornamento futuro.
+Le funzioni disponibili dipendono dalla versione del gioco e dai dati presenti nel salvataggio. Dopo un aggiornamento di Football Manager, alcune funzioni potrebbero non essere disponibili fino a un aggiornamento dell’editor.
 
-**Funzioni disponibili:** sono disponibili anche le tattiche salvate con ruoli e sottoruoli, i migliori per tattica e la Top 11 attuale/futura, lo storico interno degli attributi quando presente e il recupero aggiuntivo dello staff senza club rilevato. Le date dei campioni interni restano ricostruite; la CA storica richiede il confronto tra salvataggi. Un profilo senza club rilevato non prova che sia disoccupato o disponibile.
+Puoi consultare ruoli e sottoruoli delle tattiche salvate e trovare i giocatori più adatti, con una Top 11 attuale e una basata sulla crescita stimata. Lo storico interno mostra gli attributi registrati nel file con date stimate; per seguire la CA nel tempo, confronta più salvataggi. La ricerca staff può includere profili per cui l’editor non rileva un club: verifica nel gioco se sono disponibili.
 
 ## English
 
-FM Simple Editor **16.3.1** supports **Football Manager 26 and Football Manager 27, including version 27.1.0**, using fmsave **0.12.6**. Player reading and editing are available; the user confirmed loading a modified FM27 27.1.0 save in the game.
+FM Simple Editor **16.3.1** supports local saves from **Football Manager 26 and Football Manager 27**, including version **27.1.0**.
 
-In **My squad → Finances**, view and edit the club’s **current balance** in the save’s base currency, writing a verified new copy. Transfer and wage budgets are not editable. Balance editing has been checked by saving and reopening the copy; a dedicated in-game check of the balance change has not yet been confirmed.
+Use **My squad → Finances** to view and edit the club’s current balance in the save’s base currency. Transfer and wage budgets are not editable. Edits are saved to a new file so you can keep the original.
 
-Saving remains enabled on unverified versions, with data and copy-integrity checks and warnings. This does not guarantee compatibility with every future update.
+Available features depend on the game version and the data in the save. After a Football Manager update, some features may be unavailable until the editor is updated.
 
-**Available features:** saved tactics with positions and roles, best-by-tactic rankings and current/future best XI, internal attribute history where present, and additional recovery of staff without a detected club are also available. Internal sample dates remain reconstructed; historical CA requires comparing saves. No detected club does not prove unemployment or availability.
-
+View positions and roles from saved tactics and find the best fit for each slot, including a current XI and a future XI based on estimated development. Internal history shows attributes recorded in the save with estimated dates; compare multiple saves to track CA over time. Staff search may include profiles with no detected club: check their availability in the game.

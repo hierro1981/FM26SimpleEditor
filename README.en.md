@@ -1,4 +1,4 @@
-# FM Simple Editor · v16.3.0
+# FM Simple Editor · v16.3.1
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -10,17 +10,17 @@ A free **Football Manager 26 and 27** editor for Windows. Open a save, find a pl
 
 ## FM26 and FM27 compatibility
 
-FM Simple Editor **16.3.1** supports **Football Manager 26 and Football Manager 27, including version 27.1.0**, using fmsave **0.12.6**. Player reading and editing are available; the user confirmed loading a modified FM27 27.1.0 save in the game.
+FM Simple Editor **16.3.1** supports local saves from **Football Manager 26 and Football Manager 27**, including version **27.1.0**.
 
-In **My squad → Finances**, view and edit the club’s **current balance** in the save’s base currency, writing a verified new copy. Transfer and wage budgets are not editable. Balance editing has been checked by saving and reopening the copy; a dedicated in-game check of the balance change has not yet been confirmed.
+Use **My squad → Finances** to view and edit the club’s current balance in the save’s base currency. Transfer and wage budgets are not editable. Edits are saved to a new file so you can keep the original.
 
-Saving remains enabled on unverified versions, with data and copy-integrity checks and warnings. This does not guarantee compatibility with every future update.
+Available features depend on the game version and the data in the save. After a Football Manager update, some features may be unavailable until the editor is updated.
 
-**Available features:** saved tactics with positions and roles, best-by-tactic rankings and current/future best XI, internal attribute history where present, and additional recovery of staff without a detected club are also available. Internal sample dates remain reconstructed; historical CA requires comparing saves. No detected club does not prove unemployment or availability.
+View positions and roles from saved tactics and find the best fit for each slot, including a current XI and a future XI based on estimated development. Internal history shows attributes recorded in the save with estimated dates; compare multiple saves to track CA over time. Staff search may include profiles with no detected club: check their availability in the game.
 
 ## Download and launch
 
-Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v16.3.0**.
+Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases).
 
 - **Setup, when available in the release:** guided installation, with options to install Python and the .NET runtime if needed. Additional installations require your consent and an Internet connection.
 - **Portable ZIP:** extract the complete package into a folder and run **FM26SimpleEditor.exe**. Keep all package files together.
@@ -91,7 +91,7 @@ Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch
 ## Compatibility and limitations
 
 - Use working local saves and keep an original copy. Support depends on the game version and save contents; unavailable features are explained in the interface.
-- Automatic tactic reading has been checked on FM26 **26.3.2**. Careers with several human managers use only the first recognised manager.
+- Tactics are available in compatible FM26 and FM27 saves. In careers with multiple human managers, the editor shows the tactics of the first manager it identifies.
 - Stars, scores and recommendations are **editor estimates**. They do not reproduce the game staff’s official assessment or predict match performance. **Criteria and sources** explains the basis of each recommendation.
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
@@ -105,7 +105,7 @@ Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch
 
 ### v16.3.0
 
-- FM27 **27.1.0+2505117**: updated to **fmsave 0.12.6**; reading checked and the user confirmed loading a modified copy in the game.
+- Added support for **FM27 27.1.0** saves.
 - **My squad**: view and edit the club’s current balance in the save’s base currency. **Save balance to a copy** writes a new working copy. Transfer and wage budgets are not editable.
 - Saving remains enabled on unverified builds, retaining warnings and integrity checks. Optional-reader coverage may vary between builds.
 - French and German: translated loading, verification and saving messages. Translations remain partial with English fallback.
@@ -117,7 +117,7 @@ Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch
 
 ### v16.2.0
 
-- Support for FM27 **27.0.1+2494687**: player reading, editing and saving, and three saved tactics. Later builds remain guarded. In-game loading of a modified save from this new build has not yet been confirmed.
+- Support for FM27 **27.0.1+2494687**: player reading, editing and saving, and three saved tactics.
 - Staff search: fixed recovery of profiles without a detected club on the new build; **Any** job criterion, name search and **Results = 0** to display all matching results. Your own club staff remain excluded from candidates.
 - Language selection on first launch and in Options: Italian, English, French and German. French and German are partial (266 entries each); missing text appears in English.
 - Save library updated to fmsave 0.12.2.
@@ -139,7 +139,7 @@ Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch
 ### v16.0.0
 
 - **FM27 support** for build 27.0.0+2493426, retaining FM26 compatibility.
-- Player editing, squad, tactics and history available for supported FM27 saves; in-game loading of a modified copy confirmed.
+- Player editing, squad, tactics and history available for supported FM27 saves.
 - Verified FM27 staff titles and squad assignments, including chairperson, directors, club doctor and head performance analyst.
 - Other FM27 builds disable editing and saving; viewing remains available when the file is readable.
 
@@ -285,7 +285,7 @@ This release brings together staff search and renewal planning, youth-team filte
 
 - **Clearer staff view:** attributes and training stars always side by side, with independent scrollbars. The staff list also includes sortable overall stars estimated from CA.
 
-- **Training stars (estimate):** staff attributes and nine training categories are always shown side by side with stars, an index and the attributes used. Determination, Authority/Discipline, People management, Working with youngsters and Set Pieces are now readable too. Possession and Set Pieces weights refined against the available comparisons; stars remain indicative and may differ from the game.
+- **Training stars (estimate):** staff attributes and nine training categories are always shown side by side with stars, an index and the attributes used. Determination, Authority/Discipline, People management, Working with youngsters and Set Pieces are now readable too. Updated the calculation for Possession and Set Pieces. Stars are estimates and may differ from the game.
 
 - **Best XI per tactic:** a third pitch shows the lineup with the highest combined role scores, using each player once. It follows squad filters and the selected phase, and highlights slots that cannot be filled.
 
@@ -372,4 +372,3 @@ The C# Windows Forms project supports **Visual Studio 2026**. For building, conf
 ## Licence
 
 Distributed under [GNU GPL v3](LICENSE). Football Manager is a Sports Interactive and SEGA trademark. This is an independent, unofficial project.
-

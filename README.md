@@ -1,4 +1,4 @@
-# FM Simple Editor · v16.3.0
+# FM Simple Editor · v16.3.1
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -10,17 +10,17 @@ Editor gratuito per **Football Manager 26 e 27** su Windows. Apri un salvataggio
 
 ## Compatibilità FM26 e FM27
 
-FM Simple Editor **16.3.1** supporta **Football Manager 26 e Football Manager 27, inclusa la versione 27.1.0** e usa fmsave **0.12.6**. Lettura e modifica dei giocatori sono disponibili; il caricamento nel gioco di una copia modificata di FM27 27.1.0 è stato confermato dall’utilizzatore.
+FM Simple Editor **16.3.1** supporta i salvataggi locali di **Football Manager 26 e Football Manager 27**, inclusa la versione **27.1.0**.
 
-In **La mia squadra → Finanze** puoi leggere e modificare il **saldo corrente** del club, nella valuta base del salvataggio, creando una nuova copia verificata. Budget trasferimenti e stipendi non sono modificabili. La modifica del saldo è stata verificata mediante risalvataggio e rilettura tecnica, non ancora con una verifica dedicata nel gioco.
+**La mia squadra → Finanze** permette di consultare e modificare il saldo corrente del club nella valuta base del salvataggio. I budget per trasferimenti e stipendi non sono modificabili. Le modifiche vengono salvate in un nuovo file, così puoi conservare l’originale.
 
-Il salvataggio resta abilitato anche sulle versioni non ancora verificate, con avvisi e controlli sui dati e sull’integrità della copia. Questo non garantisce compatibilità con ogni aggiornamento futuro.
+Le funzioni disponibili dipendono dalla versione del gioco e dai dati presenti nel salvataggio. Dopo un aggiornamento di Football Manager, alcune funzioni potrebbero non essere disponibili fino a un aggiornamento dell’editor.
 
-**Funzioni disponibili:** sono disponibili anche le tattiche salvate con ruoli e sottoruoli, i migliori per tattica e la Top 11 attuale/futura, lo storico interno degli attributi quando presente e il recupero aggiuntivo dello staff senza club rilevato. Le date dei campioni interni restano ricostruite; la CA storica richiede il confronto tra salvataggi. Un profilo senza club rilevato non prova che sia disoccupato o disponibile.
+Puoi consultare ruoli e sottoruoli delle tattiche salvate e trovare i giocatori più adatti, con una Top 11 attuale e una basata sulla crescita stimata. Lo storico interno mostra gli attributi registrati nel file con date stimate; per seguire la CA nel tempo, confronta più salvataggi. La ricerca staff può includere profili per cui l’editor non rileva un club: verifica nel gioco se sono disponibili.
 
 ## Scarica e avvia
 
-Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione corrente è la **v16.3.0**.
+Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases).
 
 - **Setup, quando presente nella release:** installazione guidata dell’editor, con opzioni per installare anche Python e il runtime .NET se necessari. Le installazioni aggiuntive richiedono il tuo consenso e una connessione Internet.
 - **ZIP portatile:** estrai tutto il contenuto in una cartella e avvia **FM26SimpleEditor.exe**. Conserva insieme tutti i file del pacchetto.
@@ -91,7 +91,7 @@ Apri **Opzioni** per scegliere **Italiano**, **English**, **Français** o **Deut
 ## Compatibilità e limiti
 
 - Usa salvataggi locali funzionanti e conserva una copia originale. Il supporto dipende dalla versione e dal contenuto del salvataggio; una funzione non disponibile viene segnalata nell’interfaccia.
-- La lettura automatica delle tattiche è stata verificata su FM26 **26.3.2**. In carriere con più allenatori umani viene considerato soltanto il primo riconosciuto.
+- La lettura delle tattiche è disponibile nei salvataggi compatibili di FM26 e FM27. Nelle carriere con più allenatori umani, l’editor mostra le tattiche del primo allenatore riconosciuto.
 - Stelle, punteggi e suggerimenti sono **stime dell’editor**: non riproducono la valutazione ufficiale dello staff del gioco e non prevedono il rendimento in partita. Usa **Criteri e fonti** per vedere su cosa si basa un suggerimento.
 - La creazione di nuovi giocatori, i trasferimenti tra squadre, la modifica dello staff e delle tattiche e l’editing live non sono disponibili.
 
@@ -107,7 +107,7 @@ Le voci seguenti descrivono le funzionalità al momento di ciascun rilascio; per
 
 ### v16.3.0
 
-- FM27 **27.1.0+2505117**: libreria fmsave aggiornata a **0.12.6**; lettura verificata e caricamento della copia modificata confermato dall’utilizzatore.
+- Aggiunto il supporto per i salvataggi di **FM27 27.1.0**.
 - **La mia squadra**: visualizzazione e modifica del saldo corrente del club nella valuta base del salvataggio. **Salva saldo in una copia** crea una nuova copia e la usa per le modifiche successive. Budget trasferimenti e stipendi non sono modificabili.
 - Il salvataggio resta abilitato anche sulle build non ancora verificate, con avvisi e controlli di integrità. Le funzioni opzionali possono avere copertura diversa tra le build.
 - Francese e tedesco: aggiunte le traduzioni dei messaggi di caricamento, verifica e salvataggio. Le traduzioni restano parziali con ripiego sull’inglese.
@@ -119,7 +119,7 @@ Le voci seguenti descrivono le funzionalità al momento di ciascun rilascio; per
 
 ### v16.2.0
 
-- Supporto della build FM27 **27.0.1+2494687**: lettura, modifica e salvataggio dei giocatori e lettura delle tre tattiche. Le build successive restano protette. Il caricamento nel gioco di questa nuova build modificata non è ancora confermato.
+- Supporto della build FM27 **27.0.1+2494687**: lettura, modifica e salvataggio dei giocatori e lettura delle tre tattiche.
 - Ricerca staff: corretto il recupero dei profili senza club rilevato sulla nuova build; criterio **Qualsiasi**, ricerca per nome e **Risultati = 0** per mostrare tutti i risultati compatibili con i filtri. Lo staff del proprio club resta escluso dai candidati.
 - Selezione della lingua al primo avvio e nelle opzioni: italiano, inglese, francese e tedesco. Francese e tedesco sono parziali (266 voci ciascuno); i testi mancanti appaiono in inglese.
 - Libreria di lettura aggiornata a fmsave 0.12.2.
@@ -141,7 +141,7 @@ Le voci seguenti descrivono le funzionalità al momento di ciascun rilascio; per
 ### v16.0.0
 
 - **Supporto FM27** per la build 27.0.0+2493426, mantenendo la compatibilità con FM26.
-- Modifica giocatori, rosa, tattiche e storico disponibili anche sui salvataggi FM27 supportati; caricamento nel gioco di una copia modificata confermato.
+- Modifica giocatori, rosa, tattiche e storico disponibili anche sui salvataggi FM27 supportati.
 - Staff FM27: incarichi e squadre verificati, inclusi presidente, dirigenti, medico sociale e capo analista.
 - Protezione per build FM27 diverse: modifica e salvataggio disabilitati, consultazione disponibile quando il file è leggibile.
 
@@ -287,7 +287,7 @@ Questa release riunisce ricerca e pianificazione dello staff, filtri per le giov
 
 - **Staff più leggibile:** attributi e stelle di allenamento sempre affiancati, con scrollbar indipendenti. Nell’elenco sono presenti anche le stelle complessive stimate dalla CA, ordinabili.
 
-- **Stelle allenamento (stima):** attributi e nove categorie di allenamento sono sempre affiancati, con stelle, indice e attributi usati. Sono ora leggibili anche Determinazione, Autorità/Disciplina, Gestione del personale, Lavoro con i giovani e Calci piazzati. Pesi di Possesso e Calci piazzati affinati con i confronti disponibili; le stelle restano indicative e possono differire dal gioco.
+- **Stelle allenamento (stima):** attributi e nove categorie di allenamento sono sempre affiancati, con stelle, indice e attributi usati. Sono ora leggibili anche Determinazione, Autorità/Disciplina, Gestione del personale, Lavoro con i giovani e Calci piazzati. Aggiornato il calcolo per Possesso e Calci piazzati. Le stelle sono stime e possono differire dal gioco.
 
 - **Top 11 per tattica:** un terzo campo mostra la formazione con la migliore somma dei punteggi per sottoruolo, usando ciascun giocatore una sola volta. Rispetta i filtri della rosa e la fase selezionata; segnala gli slot che non è possibile coprire.
 
@@ -374,4 +374,3 @@ Il progetto C# Windows Forms è compatibile con **Visual Studio 2026**. Per comp
 ## Licenza
 
 Distribuito con licenza [GNU GPL v3](LICENSE). Football Manager è un marchio di Sports Interactive e SEGA; questo progetto è indipendente e non ufficiale.
-

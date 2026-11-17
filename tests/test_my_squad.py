@@ -29,7 +29,7 @@ class MySquadTests(unittest.TestCase):
     def test_exact_team_ids_include_affiliate_but_exclude_loans_and_name_matches(self):
         result=read_my_squad(self.store())
         self.assertEqual(result['status'],'ready')
-        self.assertEqual(result['clubs'][0],dict(clubUid=10,clubName='Club',managerName='Human',firstTeamId=100,teamIds=[100,101,900],teams=[dict(teamId=100,slot=0,name=None),dict(teamId=101,slot=1,name=None),dict(teamId=900,slot=2,name=None)]))
+        self.assertEqual(result['clubs'][0],dict(clubUid=10,clubName='Club',balance=None,managerName='Human',firstTeamId=100,teamIds=[100,101,900],teams=[dict(teamId=100,slot=0,name=None),dict(teamId=101,slot=1,name=None),dict(teamId=900,slot=2,name=None)]))
         self.assertEqual([p['player']['uid'] for p in result['players']],[1,2,3])
         self.assertTrue(result['firstHumanOnly'])
 

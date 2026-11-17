@@ -810,4 +810,7 @@
   <data name="RecruitYouthMinimum" xml:space="preserve">
     <value>Travail avec les jeunes ≥</value>
   </data>
+  <data name="ClubBalance" xml:space="preserve">
+    <value>Solde actuel (devise de base) : {0}</value>
+  </data>
 </root>

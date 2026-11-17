@@ -810,4 +810,7 @@
   <data name="RecruitYouthMinimum" xml:space="preserve">
     <value>Arbeit mit jungen Spielern ≥</value>
   </data>
+  <data name="ClubBalance" xml:space="preserve">
+    <value>Aktueller Kontostand (Basiswährung): {0}</value>
+  </data>
 </root>

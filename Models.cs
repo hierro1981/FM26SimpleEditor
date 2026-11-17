@@ -177,6 +177,7 @@ public sealed class BackendProgress
 
 public sealed class ManagedSquad
 {
+    public long? Balance { get; set; }
     public uint ClubUid { get; set; }
     public string ClubName { get; set; } = "";
     public string? ManagerName { get; set; }

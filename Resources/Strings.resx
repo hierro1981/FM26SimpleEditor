@@ -1861,25 +1861,63 @@ Passa sul punto per il valore.</value>
   <data name="TacticalMethod" xml:space="preserve">
     <value>Sports Interactive indica familiarità nella posizione e attributi del ruolo come fattori di idoneità; nelle fonti consultate non è pubblicata la formula numerica. Questi profili e pesi sono valutazioni dell’editor, non dati ufficiali di idoneità. Profilo generico: pesi 3/2/1 del report per posizione. Sottoruolo: attributi di enfasi ×3, supporto ×2 e restanti attributi della posizione ×1. Si usa la media ponderata dei valori visibili 1–20; occorrono tutti i dati e familiarità ≥12/20. Due selezioni: media dei due punteggi, con idoneità richiesta in entrambe. Stelle = punteggio/4, arrotondate a mezza stella; CA e PA non alterano il punteggio. Nomi inglesi e disponibilità derivano dal catalogo di riferimento FM26; le traduzioni italiane sono descrittive.</value>
   </data>
-  <data name="QuickComparePair" xml:space="preserve"><value>Confronta i due giocatori selezionati</value></data>
-  <data name="TacticsTab" xml:space="preserve"><value>Migliori per tattica</value></data>
-  <data name="TacticsBoth" xml:space="preserve"><value>Entrambe le fasi</value></data>
-  <data name="TacticsUnknownRole" xml:space="preserve"><value>Sottoruolo non riconosciuto</value></data>
-  <data name="TacticsUnavailable" xml:space="preserve"><value>Tattiche non disponibili: {0}</value></data>
-  <data name="TacticsEmpty" xml:space="preserve"><value>Apri un salvataggio e seleziona una squadra gestita per leggere le tattiche.</value></data>
-  <data name="TacticsCannotRank" xml:space="preserve"><value>Posizione o sottoruolo non riconosciuto nella fase selezionata: suggerimenti non disponibili.</value></data>
-  <data name="TacticsMethod" xml:space="preserve"><value>Fino a {0} giocatori della rosa filtrata, con familiarità almeno 12/20 in ogni posizione richiesta. Per entrambe le fasi si usa la media dei due profili. Punteggio e stelle sono stime dell’editor, non la valutazione ufficiale del gioco.</value></data>
-  <data name="TacticsLoading" xml:space="preserve"><value>Lettura delle tattiche della squadra…</value></data>
-  <data name="TacticsLoaded" xml:space="preserve"><value>Tattiche caricate</value></data>
-  <data name="TacticsLoadError" xml:space="preserve"><value>Impossibile leggere le tattiche</value></data>
-  <data name="OptionsButton" xml:space="preserve"><value>Opzioni…</value></data>
-  <data name="OptionsTitle" xml:space="preserve"><value>Opzioni</value></data>
-  <data name="RecommendationCountLabel" xml:space="preserve"><value>Giocatori suggeriti per posizione</value></data>
-  <data name="RecommendationCountHint" xml:space="preserve"><value>Da 1 a 100, predefinito 10. Vale per Migliori per posizione e Migliori per tattica.</value></data>
-  <data name="OptionsCancel" xml:space="preserve"><value>Annulla</value></data>
-  <data name="OptionsSave" xml:space="preserve"><value>Salva</value></data>
-  <data name="IncludeOutgoingLoans" xml:space="preserve"><value>Includi giocatori dati in prestito</value></data>
-  <data name="IncludeOutgoingLoansHint" xml:space="preserve"><value>Include i giocatori di proprietà del club che giocano altrove, nella prima squadra o in tutte le squadre. Non assegna loro una sotto-squadra non verificata.</value></data>
+  <data name="QuickComparePair" xml:space="preserve">
+    <value>Confronta i due giocatori selezionati</value>
+  </data>
+  <data name="TacticsTab" xml:space="preserve">
+    <value>Migliori per tattica</value>
+  </data>
+  <data name="TacticsBoth" xml:space="preserve">
+    <value>Entrambe le fasi</value>
+  </data>
+  <data name="TacticsUnknownRole" xml:space="preserve">
+    <value>Sottoruolo non riconosciuto</value>
+  </data>
+  <data name="TacticsUnavailable" xml:space="preserve">
+    <value>Tattiche non disponibili: {0}</value>
+  </data>
+  <data name="TacticsEmpty" xml:space="preserve">
+    <value>Apri un salvataggio e seleziona una squadra gestita per leggere le tattiche.</value>
+  </data>
+  <data name="TacticsCannotRank" xml:space="preserve">
+    <value>Posizione o sottoruolo non riconosciuto nella fase selezionata: suggerimenti non disponibili.</value>
+  </data>
+  <data name="TacticsMethod" xml:space="preserve">
+    <value>Fino a {0} giocatori della rosa filtrata, con familiarità almeno 12/20 in ogni posizione richiesta. Per entrambe le fasi si usa la media dei due profili. Punteggio e stelle sono stime dell’editor, non la valutazione ufficiale del gioco.</value>
+  </data>
+  <data name="TacticsLoading" xml:space="preserve">
+    <value>Lettura delle tattiche della squadra…</value>
+  </data>
+  <data name="TacticsLoaded" xml:space="preserve">
+    <value>Tattiche caricate</value>
+  </data>
+  <data name="TacticsLoadError" xml:space="preserve">
+    <value>Impossibile leggere le tattiche</value>
+  </data>
+  <data name="OptionsButton" xml:space="preserve">
+    <value>Opzioni…</value>
+  </data>
+  <data name="OptionsTitle" xml:space="preserve">
+    <value>Opzioni</value>
+  </data>
+  <data name="RecommendationCountLabel" xml:space="preserve">
+    <value>Giocatori suggeriti per posizione</value>
+  </data>
+  <data name="RecommendationCountHint" xml:space="preserve">
+    <value>Da 1 a 100, predefinito 10. Vale per Migliori per posizione e Migliori per tattica.</value>
+  </data>
+  <data name="OptionsCancel" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="OptionsSave" xml:space="preserve">
+    <value>Salva</value>
+  </data>
+  <data name="IncludeOutgoingLoans" xml:space="preserve">
+    <value>Includi giocatori dati in prestito</value>
+  </data>
+  <data name="IncludeOutgoingLoansHint" xml:space="preserve">
+    <value>Include i giocatori di proprietà del club che giocano altrove, nella prima squadra o in tutte le squadre. Non assegna loro una sotto-squadra non verificata.</value>
+  </data>
   <data name="StaffAttribute_coaching" xml:space="preserve">
     <value>Allenamento generale</value>
   </data>
@@ -2225,88 +2263,251 @@ Passa sul punto per il valore.</value>
   <data name="Backend_RecruitPrepare" xml:space="preserve">
     <value>Preparazione candidati staff</value>
   </data>
-  <data name="RecruitReaderWarning" xml:space="preserve"><value>Il lettore ha segnalato record incompleti o non associabili: l’elenco dei candidati potrebbe essere incompleto.</value></data>
-  <data name="RecruitIgnoreInterest" xml:space="preserve"><value>Ignora interesse (migliori in assoluto)</value></data>
-  <data name="RecruitIgnoreInterestHint" xml:space="preserve"><value>Disattiva il filtro e usa la qualità come ordinamento iniziale, includendo anche chi probabilmente rifiuterebbe. La stima resta visibile ma non decide la classifica. Sono sempre esclusi il tuo staff e l’allenatore umano.</value></data>
-  <data name="RecruitInterestOff" xml:space="preserve"><value>Filtro interesse disattivato: classifica per qualità.</value></data>
-  <data name="RecruitCopyName" xml:space="preserve"><value>Copia nome</value></data>
-  <data name="RecruitClubReputation" xml:space="preserve"><value>Reputazione club attuale</value></data>
-  <data name="RecruitAnyJob" xml:space="preserve"><value>Qualsiasi</value></data>
-  <data name="RecruitInterest_BorderlineRisk" xml:space="preserve"><value>Al limite · rischio rifiuto elevato</value></data>
-  <data name="RecruitPrestigeRisk" xml:space="preserve"><value>Passaggio a un club sensibilmente meno prestigioso senza offerta salariale specificata: rischio di rifiuto elevato, da verificare nel gioco.</value></data>
-  <data name="RecruitFeedbackContext" xml:space="preserve"><value>Incarico attuale: {0} · Club attuale: {1} · Contratto fino al: {2} · Stipendio attuale: {3}/settimana (valuta base)</value></data>
-  <data name="RecruitNoOffer" xml:space="preserve"><value>Offerta salariale non specificata (0 nel selettore).</value></data>
-  <data name="RecruitInterest_Lateral" xml:space="preserve"><value>Al limite · miglioramento non evidente</value></data>
-  <data name="RecruitNoClearUpgrade" xml:space="preserve"><value>Il confronto tra club non mostra un miglioramento reputazionale netto. Il modello considera prudenzialmente insufficiente un vantaggio inferiore al 10%: non è una soglia ufficiale del gioco. Ruolo, campionato e reputazione personale possono cambiare la risposta. Uno stipendio più alto non garantisce l’avvio della trattativa.</value></data>
-  <data name="RecruitRelocationUnknown" xml:space="preserve"><value>Il club attuale e la destinazione sono in paesi diversi: disponibilità al trasferimento non verificata. Il paese del club non prova la residenza; anche un’adattabilità alta non dimostra che la persona voglia spostarsi.</value></data>
-  <data name="StaffReputation" xml:space="preserve"><value>Reputazione personale /10000</value></data>
-  <data name="StaffReputation_home" xml:space="preserve"><value>Nazionale</value></data>
-  <data name="StaffReputation_current" xml:space="preserve"><value>Attuale</value></data>
-  <data name="StaffReputation_world" xml:space="preserve"><value>Mondiale</value></data>
-  <data name="StaffPersonalReputation" xml:space="preserve"><value>Reputazione personale attuale</value></data>
-  <data name="StaffJobPreferences" xml:space="preserve"><value>Predisposizioni incarico /20</value></data>
-  <data name="StaffJobPreferenceScore" xml:space="preserve"><value>Predisposizione incarico /20</value></data>
-  <data name="StaffJobPreferencesNote" xml:space="preserve"><value>Valori salvati corrispondenti ai Roles dei profili indipendenti: al momento verificati allenatore, vice, preparatore, fisioterapista e osservatore. Distinti da abilità, incarico attuale, percentuali di valutazione e disponibilità a trattare. Nelle categorie tecniche/tattiche il confronto usa l’incarico Preparatore. — = dato non disponibile o incarico non ancora mappato.</value></data>
-  <data name="RecruitPersonalReputation" xml:space="preserve"><value>Reputazione personale letta: nazionale {0}, attuale {1}, mondiale {2} (scala /10000). Non viene convertita in una soglia di accettazione.</value></data>
-  <data name="RecruitPersonalReputationMissing" xml:space="preserve"><value>Reputazione personale non disponibile per questo profilo.</value></data>
-  <data name="RecruitJobPreference" xml:space="preserve"><value>Predisposizione salvata per {0}: {1}/20. Non equivale al punteggio di abilità né garantisce disponibilità per questo incarico o club.</value></data>
-  <data name="StaffPreference_free_roles" xml:space="preserve"><value>Ruoli liberi</value></data>
-  <data name="StaffPreference_marking" xml:space="preserve"><value>Marcatura</value></data>
-  <data name="StaffPreference_offside" xml:space="preserve"><value>Fuorigioco</value></data>
-  <data name="StaffPreference_relaxation" xml:space="preserve"><value>Rilassamento</value></data>
-  <data name="StaffPreference_use_playmaker" xml:space="preserve"><value>Utilizzo del regista</value></data>
-  <data name="StaffPreference_use_substitutions" xml:space="preserve"><value>Utilizzo delle sostituzioni</value></data>
-  <data name="StaffPreference_intensity" xml:space="preserve"><value>Intensità</value></data>
-  <data name="StaffPreference_tactical_flair" xml:space="preserve"><value>Brillantezza</value></data>
-  <data name="TacticsCurrentRanking" xml:space="preserve"><value>Migliori oggi</value></data>
-  <data name="TacticsPotentialRanking" xml:space="preserve"><value>Crescita raggiungibile · stima per età</value></data>
-  <data name="TacticsPotentialScore" xml:space="preserve"><value>Stima futura /20</value></data>
-  <data name="TacticsPotentialStars" xml:space="preserve"><value>Stelle future stimate</value></data>
-  <data name="TacticsCurrentScore" xml:space="preserve"><value>Oggi /20</value></data>
-  <data name="TacticsHeadroom" xml:space="preserve"><value>Crescita CA stimata</value></data>
-  <data name="TacticsPotentialNote" xml:space="preserve"><value>A destra: crescita stimata per lo slot selezionato, considerando età e posizione. Non è la percentuale di FM Genie Scout né una garanzia di sviluppo.</value></data>
-  <data name="TacticsPotentialMethod" xml:space="preserve"><value>Stima sperimentale dell’editor, non formula di FM o FM Genie Scout. La CA futura usa una curva per età, distinta per portieri e movimento, con rallentamento vicino alla PA. Ogni punto di CA guadagnabile aggiunge circa 0,065 punti agli attributi su scala 1–20, con limite a 20: gli attributi NON vengono moltiplicati per il rapporto fra CA futura e attuale. Gli attributi indipendenti dalla CA restano invariati in questa proiezione. Poi si applicano i pesi dei sottoruoli della tattica selezionata, non la migliore posizione percentuale di Genie. Scenari prudente/favorevole: ritmo di crescita ±30%, non intervalli statistici. Si assumono allenamento e minuti adeguati; personalità, infortuni, strutture, storico e declino non sono valutati. Familiarità e posizioni restano attuali. Apri e Confronta usano i dati reali.</value></data>
-  <data name="TacticsPotentialMissing" xml:space="preserve"><value>Stima non disponibile: servono CA e PA note su scala 1–200, età valida (14–60 anni) e almeno una posizione leggibile con familiarità ≥12. Il massimo di un intervallo PA non viene sostituito. Restano consultabili i dati attuali.</value></data>
-  <data name="TacticsFutureCa" xml:space="preserve"><value>CA futura stimata</value></data>
-  <data name="TacticsFutureRange" xml:space="preserve"><value>CA prudente–favorevole</value></data>
-  <data name="TacticsGrowthDetail" xml:space="preserve"><value>Età: {0} · curva: {1}. CA {2} → stima {3}; scenari {4}–{5}; PA teorica {6}.</value></data>
-  <data name="TacticsGrowthKeeper" xml:space="preserve"><value>portiere</value></data>
-  <data name="TacticsGrowthOutfield" xml:space="preserve"><value>movimento</value></data>
-  <data name="LineupFutureToggle" xml:space="preserve"><value>Futura</value></data>
-  <data name="LineupFutureTitle" xml:space="preserve"><value>Top 11 futura · {0}</value></data>
-  <data name="LineupFutureSummary" xml:space="preserve"><value>Top 11 futura: {0}/{1} slot coperti · Totale {2} · Media {3}/20.</value></data>
-  <data name="LineupFutureMethod" xml:space="preserve"><value>La Top 11 futura usa gli stessi punteggi della classifica futura e assegna ogni giocatore a un solo slot, massimizzando copertura e punteggio globale dell’intera rosa filtrata. Senza età, CA/PA o attributi leggibili non viene inventata una stima. È uno scenario sperimentale dei picchi individuali, che possono arrivare in stagioni diverse, non una formazione prevista per una stessa data. La curva assume condizioni favorevoli e può sovrastimare la crescita: non è una previsione individuale affidabile né una garanzia di raggiungere la PA.</value></data>
-  <data name="LineupFutureNoCandidate" xml:space="preserve"><value>Nessun giocatore idoneo ha una stima futura disponibile: servono età, CA/PA, attributi e familiarità sufficienti.</value></data>
-  <data name="TacticsSelectionCriteria" xml:space="preserve"><value>Criteri di selezione</value></data>
-  <data name="TacticsAttributeWeights" xml:space="preserve"><value>Attributi e pesi</value></data>
-  <data name="RecruitPrestigeBarrier" xml:space="preserve"><value>Il club attuale è più prestigioso della destinazione: probabile rifiuto per mancato passo avanti. Con contratto attivo, il modello prudenziale non lascia che scadenza vicina o aumento salariale compensino questo ostacolo; non è una regola ufficiale del gioco.</value></data>
-  <data name="PlanTab" xml:space="preserve"><value>Pianificazione staff</value></data>
-  <data name="PlanDays" xml:space="preserve"><value>Giorni rimasti</value></data>
-  <data name="PlanCriterion" xml:space="preserve"><value>Criterio di confronto</value></data>
-  <data name="PlanRecommendation" xml:space="preserve"><value>Consiglio rinnovo</value></data>
-  <data name="PlanBestAlternative" xml:space="preserve"><value>Alternativa da valutare</value></data>
-  <data name="PlanBetterCount" xml:space="preserve"><value>Alternative migliori</value></data>
-  <data name="PlanAlternatives" xml:space="preserve"><value>Alternative migliori · massimo 50</value></data>
-  <data name="PlanAttributeComparison" xml:space="preserve"><value>Confronto attributi · seleziona un’alternativa</value></data>
-  <data name="PlanCurrent" xml:space="preserve"><value>In rosa</value></data>
-  <data name="PlanAlternative" xml:space="preserve"><value>Alternativa</value></data>
-  <data name="PlanGain" xml:space="preserve"><value>Differenza</value></data>
-  <data name="PlanAdvice_Renew" xml:space="preserve"><value>Rinnovo consigliato</value></data>
-  <data name="PlanAdvice_CompareReplacement" xml:space="preserve"><value>Valuta una sostituzione</value></data>
-  <data name="PlanAdvice_VerifyAlternatives" xml:space="preserve"><value>Rinnova / verifica alternative</value></data>
-  <data name="PlanAdvice_Review" xml:space="preserve"><value>Da verificare</value></data>
-  <data name="PlanReason_Renew" xml:space="preserve"><value>Nel bacino letto non emergono alternative significativamente migliori e potenzialmente interessate per il criterio selezionato. Il rinnovo è consigliato in base alla qualità tecnica; richieste salariali e necessità della squadra restano da valutare.</value></data>
-  <data name="PlanReason_CompareReplacement" xml:space="preserve"><value>Esiste almeno un’alternativa con interesse stimato plausibile e un vantaggio di almeno 0,75/20 nel criterio selezionato. Valuta la trattativa prima di rinunciare al rinnovo: l’accettazione non è garantita.</value></data>
-  <data name="PlanReason_VerifyAlternatives" xml:space="preserve"><value>Le alternative migliori hanno interesse al limite o non verificabile. Mantieni aperta l’opzione rinnovo e controlla prima la disponibilità nel gioco.</value></data>
-  <data name="PlanReason_Review" xml:space="preserve"><value>Mancano una valutazione completa dell’incarico o dati del mercato della stessa data: non viene suggerito di rinunciare al rinnovo.</value></data>
-  <data name="PlanPendingStaff" xml:space="preserve"><value>Caricamento dello staff della squadra…</value></data>
-  <data name="PlanPendingMarket" xml:space="preserve"><value>In attesa dei candidati esterni: consigli ancora da verificare.</value></data>
-  <data name="PlanMissingDate" xml:space="preserve"><value>Data del salvataggio non disponibile: impossibile calcolare le scadenze.</value></data>
-  <data name="PlanDateMismatch" xml:space="preserve"><value>Le date dello staff e del mercato non coincidono: ricarica i dati.</value></data>
-  <data name="PlanStatus" xml:space="preserve"><value>Salvataggio: {0} · {1}/{2} contratti nella finestra di scadenza selezionata.</value></data>
-  <data name="PlanCoverage" xml:space="preserve"><value>Include staff dei club e profili FM27 recuperati senza club rilevato. Questi ultimi sono alternative da verificare, non sostituti confermati. Copertura non completa.</value></data>
-  <data name="PlanAlternativeCount" xml:space="preserve"><value>Mostrate {0} di {1} alternative migliori.</value></data>
-  <data name="PlanMethod" xml:space="preserve"><value>Analisi in sola lettura sulla data del salvataggio: scegli scaduti / meno di 3 giorni rimasti, meno di 6 mesi (predefinito), meno di 12 mesi oppure tutti i contratti. Le finestre 6/12 mesi includono oggi ed escludono la data finale. Sono esclusi incarichi con inizio futuro, contratti illeggibili e allenatori umani. Passa sopra l’icona i per i dettagli; le alternative mostrano i migliori 50 per punteggio e le colonne si possono ordinare.
+  <data name="RecruitReaderWarning" xml:space="preserve">
+    <value>Il lettore ha segnalato record incompleti o non associabili: l’elenco dei candidati potrebbe essere incompleto.</value>
+  </data>
+  <data name="RecruitIgnoreInterest" xml:space="preserve">
+    <value>Ignora interesse (migliori in assoluto)</value>
+  </data>
+  <data name="RecruitIgnoreInterestHint" xml:space="preserve">
+    <value>Disattiva il filtro e usa la qualità come ordinamento iniziale, includendo anche chi probabilmente rifiuterebbe. La stima resta visibile ma non decide la classifica. Sono sempre esclusi il tuo staff e l’allenatore umano.</value>
+  </data>
+  <data name="RecruitInterestOff" xml:space="preserve">
+    <value>Filtro interesse disattivato: classifica per qualità.</value>
+  </data>
+  <data name="RecruitCopyName" xml:space="preserve">
+    <value>Copia nome</value>
+  </data>
+  <data name="RecruitClubReputation" xml:space="preserve">
+    <value>Reputazione club attuale</value>
+  </data>
+  <data name="RecruitAnyJob" xml:space="preserve">
+    <value>Qualsiasi</value>
+  </data>
+  <data name="RecruitInterest_BorderlineRisk" xml:space="preserve">
+    <value>Al limite · rischio rifiuto elevato</value>
+  </data>
+  <data name="RecruitPrestigeRisk" xml:space="preserve">
+    <value>Passaggio a un club sensibilmente meno prestigioso senza offerta salariale specificata: rischio di rifiuto elevato, da verificare nel gioco.</value>
+  </data>
+  <data name="RecruitFeedbackContext" xml:space="preserve">
+    <value>Incarico attuale: {0} · Club attuale: {1} · Contratto fino al: {2} · Stipendio attuale: {3}/settimana (valuta base)</value>
+  </data>
+  <data name="RecruitNoOffer" xml:space="preserve">
+    <value>Offerta salariale non specificata (0 nel selettore).</value>
+  </data>
+  <data name="RecruitInterest_Lateral" xml:space="preserve">
+    <value>Al limite · miglioramento non evidente</value>
+  </data>
+  <data name="RecruitNoClearUpgrade" xml:space="preserve">
+    <value>Il confronto tra club non mostra un miglioramento reputazionale netto. Il modello considera prudenzialmente insufficiente un vantaggio inferiore al 10%: non è una soglia ufficiale del gioco. Ruolo, campionato e reputazione personale possono cambiare la risposta. Uno stipendio più alto non garantisce l’avvio della trattativa.</value>
+  </data>
+  <data name="RecruitRelocationUnknown" xml:space="preserve">
+    <value>Il club attuale e la destinazione sono in paesi diversi: disponibilità al trasferimento non verificata. Il paese del club non prova la residenza; anche un’adattabilità alta non dimostra che la persona voglia spostarsi.</value>
+  </data>
+  <data name="StaffReputation" xml:space="preserve">
+    <value>Reputazione personale /10000</value>
+  </data>
+  <data name="StaffReputation_home" xml:space="preserve">
+    <value>Nazionale</value>
+  </data>
+  <data name="StaffReputation_current" xml:space="preserve">
+    <value>Attuale</value>
+  </data>
+  <data name="StaffReputation_world" xml:space="preserve">
+    <value>Mondiale</value>
+  </data>
+  <data name="StaffPersonalReputation" xml:space="preserve">
+    <value>Reputazione personale attuale</value>
+  </data>
+  <data name="StaffJobPreferences" xml:space="preserve">
+    <value>Predisposizioni incarico /20</value>
+  </data>
+  <data name="StaffJobPreferenceScore" xml:space="preserve">
+    <value>Predisposizione incarico /20</value>
+  </data>
+  <data name="StaffJobPreferencesNote" xml:space="preserve">
+    <value>Valori salvati corrispondenti ai Roles dei profili indipendenti: al momento verificati allenatore, vice, preparatore, fisioterapista e osservatore. Distinti da abilità, incarico attuale, percentuali di valutazione e disponibilità a trattare. Nelle categorie tecniche/tattiche il confronto usa l’incarico Preparatore. — = dato non disponibile o incarico non ancora mappato.</value>
+  </data>
+  <data name="RecruitPersonalReputation" xml:space="preserve">
+    <value>Reputazione personale letta: nazionale {0}, attuale {1}, mondiale {2} (scala /10000). Non viene convertita in una soglia di accettazione.</value>
+  </data>
+  <data name="RecruitPersonalReputationMissing" xml:space="preserve">
+    <value>Reputazione personale non disponibile per questo profilo.</value>
+  </data>
+  <data name="RecruitJobPreference" xml:space="preserve">
+    <value>Predisposizione salvata per {0}: {1}/20. Non equivale al punteggio di abilità né garantisce disponibilità per questo incarico o club.</value>
+  </data>
+  <data name="StaffPreference_free_roles" xml:space="preserve">
+    <value>Ruoli liberi</value>
+  </data>
+  <data name="StaffPreference_marking" xml:space="preserve">
+    <value>Marcatura</value>
+  </data>
+  <data name="StaffPreference_offside" xml:space="preserve">
+    <value>Fuorigioco</value>
+  </data>
+  <data name="StaffPreference_relaxation" xml:space="preserve">
+    <value>Rilassamento</value>
+  </data>
+  <data name="StaffPreference_use_playmaker" xml:space="preserve">
+    <value>Utilizzo del regista</value>
+  </data>
+  <data name="StaffPreference_use_substitutions" xml:space="preserve">
+    <value>Utilizzo delle sostituzioni</value>
+  </data>
+  <data name="StaffPreference_intensity" xml:space="preserve">
+    <value>Intensità</value>
+  </data>
+  <data name="StaffPreference_tactical_flair" xml:space="preserve">
+    <value>Brillantezza</value>
+  </data>
+  <data name="TacticsCurrentRanking" xml:space="preserve">
+    <value>Migliori oggi</value>
+  </data>
+  <data name="TacticsPotentialRanking" xml:space="preserve">
+    <value>Crescita raggiungibile · stima per età</value>
+  </data>
+  <data name="TacticsPotentialScore" xml:space="preserve">
+    <value>Stima futura /20</value>
+  </data>
+  <data name="TacticsPotentialStars" xml:space="preserve">
+    <value>Stelle future stimate</value>
+  </data>
+  <data name="TacticsCurrentScore" xml:space="preserve">
+    <value>Oggi /20</value>
+  </data>
+  <data name="TacticsHeadroom" xml:space="preserve">
+    <value>Crescita CA stimata</value>
+  </data>
+  <data name="TacticsPotentialNote" xml:space="preserve">
+    <value>A destra: crescita stimata per lo slot selezionato, considerando età e posizione. Non è la percentuale di FM Genie Scout né una garanzia di sviluppo.</value>
+  </data>
+  <data name="TacticsPotentialMethod" xml:space="preserve">
+    <value>Stima sperimentale dell’editor, non formula di FM o FM Genie Scout. La CA futura usa una curva per età, distinta per portieri e movimento, con rallentamento vicino alla PA. Ogni punto di CA guadagnabile aggiunge circa 0,065 punti agli attributi su scala 1–20, con limite a 20: gli attributi NON vengono moltiplicati per il rapporto fra CA futura e attuale. Gli attributi indipendenti dalla CA restano invariati in questa proiezione. Poi si applicano i pesi dei sottoruoli della tattica selezionata, non la migliore posizione percentuale di Genie. Scenari prudente/favorevole: ritmo di crescita ±30%, non intervalli statistici. Si assumono allenamento e minuti adeguati; personalità, infortuni, strutture, storico e declino non sono valutati. Familiarità e posizioni restano attuali. Apri e Confronta usano i dati reali.</value>
+  </data>
+  <data name="TacticsPotentialMissing" xml:space="preserve">
+    <value>Stima non disponibile: servono CA e PA note su scala 1–200, età valida (14–60 anni) e almeno una posizione leggibile con familiarità ≥12. Il massimo di un intervallo PA non viene sostituito. Restano consultabili i dati attuali.</value>
+  </data>
+  <data name="TacticsFutureCa" xml:space="preserve">
+    <value>CA futura stimata</value>
+  </data>
+  <data name="TacticsFutureRange" xml:space="preserve">
+    <value>CA prudente–favorevole</value>
+  </data>
+  <data name="TacticsGrowthDetail" xml:space="preserve">
+    <value>Età: {0} · curva: {1}. CA {2} → stima {3}; scenari {4}–{5}; PA teorica {6}.</value>
+  </data>
+  <data name="TacticsGrowthKeeper" xml:space="preserve">
+    <value>portiere</value>
+  </data>
+  <data name="TacticsGrowthOutfield" xml:space="preserve">
+    <value>movimento</value>
+  </data>
+  <data name="LineupFutureToggle" xml:space="preserve">
+    <value>Futura</value>
+  </data>
+  <data name="LineupFutureTitle" xml:space="preserve">
+    <value>Top 11 futura · {0}</value>
+  </data>
+  <data name="LineupFutureSummary" xml:space="preserve">
+    <value>Top 11 futura: {0}/{1} slot coperti · Totale {2} · Media {3}/20.</value>
+  </data>
+  <data name="LineupFutureMethod" xml:space="preserve">
+    <value>La Top 11 futura usa gli stessi punteggi della classifica futura e assegna ogni giocatore a un solo slot, massimizzando copertura e punteggio globale dell’intera rosa filtrata. Senza età, CA/PA o attributi leggibili non viene inventata una stima. È uno scenario sperimentale dei picchi individuali, che possono arrivare in stagioni diverse, non una formazione prevista per una stessa data. La curva assume condizioni favorevoli e può sovrastimare la crescita: non è una previsione individuale affidabile né una garanzia di raggiungere la PA.</value>
+  </data>
+  <data name="LineupFutureNoCandidate" xml:space="preserve">
+    <value>Nessun giocatore idoneo ha una stima futura disponibile: servono età, CA/PA, attributi e familiarità sufficienti.</value>
+  </data>
+  <data name="TacticsSelectionCriteria" xml:space="preserve">
+    <value>Criteri di selezione</value>
+  </data>
+  <data name="TacticsAttributeWeights" xml:space="preserve">
+    <value>Attributi e pesi</value>
+  </data>
+  <data name="RecruitPrestigeBarrier" xml:space="preserve">
+    <value>Il club attuale è più prestigioso della destinazione: probabile rifiuto per mancato passo avanti. Con contratto attivo, il modello prudenziale non lascia che scadenza vicina o aumento salariale compensino questo ostacolo; non è una regola ufficiale del gioco.</value>
+  </data>
+  <data name="PlanTab" xml:space="preserve">
+    <value>Pianificazione staff</value>
+  </data>
+  <data name="PlanDays" xml:space="preserve">
+    <value>Giorni rimasti</value>
+  </data>
+  <data name="PlanCriterion" xml:space="preserve">
+    <value>Criterio di confronto</value>
+  </data>
+  <data name="PlanRecommendation" xml:space="preserve">
+    <value>Consiglio rinnovo</value>
+  </data>
+  <data name="PlanBestAlternative" xml:space="preserve">
+    <value>Alternativa da valutare</value>
+  </data>
+  <data name="PlanBetterCount" xml:space="preserve">
+    <value>Alternative migliori</value>
+  </data>
+  <data name="PlanAlternatives" xml:space="preserve">
+    <value>Alternative migliori · massimo 50</value>
+  </data>
+  <data name="PlanAttributeComparison" xml:space="preserve">
+    <value>Confronto attributi · seleziona un’alternativa</value>
+  </data>
+  <data name="PlanCurrent" xml:space="preserve">
+    <value>In rosa</value>
+  </data>
+  <data name="PlanAlternative" xml:space="preserve">
+    <value>Alternativa</value>
+  </data>
+  <data name="PlanGain" xml:space="preserve">
+    <value>Differenza</value>
+  </data>
+  <data name="PlanAdvice_Renew" xml:space="preserve">
+    <value>Rinnovo consigliato</value>
+  </data>
+  <data name="PlanAdvice_CompareReplacement" xml:space="preserve">
+    <value>Valuta una sostituzione</value>
+  </data>
+  <data name="PlanAdvice_VerifyAlternatives" xml:space="preserve">
+    <value>Rinnova / verifica alternative</value>
+  </data>
+  <data name="PlanAdvice_Review" xml:space="preserve">
+    <value>Da verificare</value>
+  </data>
+  <data name="PlanReason_Renew" xml:space="preserve">
+    <value>Nel bacino letto non emergono alternative significativamente migliori e potenzialmente interessate per il criterio selezionato. Il rinnovo è consigliato in base alla qualità tecnica; richieste salariali e necessità della squadra restano da valutare.</value>
+  </data>
+  <data name="PlanReason_CompareReplacement" xml:space="preserve">
+    <value>Esiste almeno un’alternativa con interesse stimato plausibile e un vantaggio di almeno 0,75/20 nel criterio selezionato. Valuta la trattativa prima di rinunciare al rinnovo: l’accettazione non è garantita.</value>
+  </data>
+  <data name="PlanReason_VerifyAlternatives" xml:space="preserve">
+    <value>Le alternative migliori hanno interesse al limite o non verificabile. Mantieni aperta l’opzione rinnovo e controlla prima la disponibilità nel gioco.</value>
+  </data>
+  <data name="PlanReason_Review" xml:space="preserve">
+    <value>Mancano una valutazione completa dell’incarico o dati del mercato della stessa data: non viene suggerito di rinunciare al rinnovo.</value>
+  </data>
+  <data name="PlanPendingStaff" xml:space="preserve">
+    <value>Caricamento dello staff della squadra…</value>
+  </data>
+  <data name="PlanPendingMarket" xml:space="preserve">
+    <value>In attesa dei candidati esterni: consigli ancora da verificare.</value>
+  </data>
+  <data name="PlanMissingDate" xml:space="preserve">
+    <value>Data del salvataggio non disponibile: impossibile calcolare le scadenze.</value>
+  </data>
+  <data name="PlanDateMismatch" xml:space="preserve">
+    <value>Le date dello staff e del mercato non coincidono: ricarica i dati.</value>
+  </data>
+  <data name="PlanStatus" xml:space="preserve">
+    <value>Salvataggio: {0} · {1}/{2} contratti nella finestra di scadenza selezionata.</value>
+  </data>
+  <data name="PlanCoverage" xml:space="preserve">
+    <value>Include staff dei club e profili FM27 recuperati senza club rilevato. Questi ultimi sono alternative da verificare, non sostituti confermati. Copertura non completa.</value>
+  </data>
+  <data name="PlanAlternativeCount" xml:space="preserve">
+    <value>Mostrate {0} di {1} alternative migliori.</value>
+  </data>
+  <data name="PlanMethod" xml:space="preserve">
+    <value>Analisi in sola lettura sulla data del salvataggio: scegli scaduti / meno di 3 giorni rimasti, meno di 6 mesi (predefinito), meno di 12 mesi oppure tutti i contratti. Le finestre 6/12 mesi includono oggi ed escludono la data finale. Sono esclusi incarichi con inizio futuro, contratti illeggibili e allenatori umani. Passa sopra l’icona i per i dettagli; le alternative mostrano i migliori 50 per punteggio e le colonne si possono ordinare.
 
 Confronta lo stesso incarico riconosciuto, con gli stessi attributi e pesi della ricerca staff. Per i preparatori parte dalla categoria di allenamento migliore tra quelle pertinenti: non è l’assegnazione agli allenamenti letta dal gioco. Puoi cambiare criterio per la persona selezionata.
 
@@ -2314,75 +2515,219 @@ Un’alternativa deve migliorare il punteggio di almeno 0,75/20: è una scelta d
 
 Le stelle di allenamento usano lo stesso calcolo della pagina Staff. Le altre stelle descrivono l’idoneità all’incarico, non la CA complessiva. Il confronto riguarda il criterio selezionato: non ottimizza tutta la distribuzione degli allenamenti; uno stesso candidato può essere suggerito per più rinnovi. Richieste economiche e posti disponibili non sono verificati. Nessun contratto viene modificato.
 
-Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio o ne inverte il verso mantenendone la priorità. [1], [2] indicano la precedenza. Se attiva, la preferenza per incarichi nelle sottosquadre resta prioritaria. I filtri ruolo e squadra incarico agiscono sull’elenco dello staff attuale, non sul bacino delle alternative. Le stelle degli attributi mostrano semplicemente valore/4 su una scala di cinque stelle.</value></data>
-  <data name="PlanFindStaff" xml:space="preserve"><value>Trova staff per questo criterio</value></data>
-  <data name="PlanReplacementStars" xml:space="preserve"><value>Stelle alternativa proposta</value></data>
-  <data name="StaffTeam" xml:space="preserve"><value>Squadra incarico</value></data>
-  <data name="StaffTeamUnknown" xml:space="preserve"><value>Squadra non identificata</value></data>
-  <data name="StaffSubteamSlot" xml:space="preserve"><value>Sottosquadra · slot {0}</value></data>
-  <data name="StaffTeamContext" xml:space="preserve"><value>Squadra incarico: {0} · ID squadra: {1}</value></data>
-  <data name="StaffTeamNote" xml:space="preserve"><value>Riferimento alla squadra nel contratto o nell’incarico senza contratto letto (FM27), distinto dall’assegnazione degli allenamenti. U20/U18 e altri gruppi vengono identificati dai record squadra, controllando club, ID e coerenza del tipo su più club. In assenza di riscontri sufficienti resta lo slot generico; lo slot da solo non determina l’età.</value></data>
-  <data name="PlanReplacementTeam" xml:space="preserve"><value>Squadra alternativa proposta</value></data>
-  <data name="StaffFirstTeam" xml:space="preserve"><value>Prima squadra</value></data>
-  <data name="StaffSquad_any" xml:space="preserve"><value>Qualsiasi</value></data>
-  <data name="StaffSquad_first" xml:space="preserve"><value>Prima squadra</value></data>
-  <data name="StaffSquad_subteam" xml:space="preserve"><value>Sottosquadre</value></data>
-  <data name="StaffSquad_reserves" xml:space="preserve"><value>Riserve / B</value></data>
-  <data name="StaffSquad_youth" xml:space="preserve"><value>Giovanili</value></data>
-  <data name="StaffSquad_unknown" xml:space="preserve"><value>Non identificata</value></data>
-  <data name="RecruitTargetSquad" xml:space="preserve"><value>Squadra destinazione</value></data>
-  <data name="RecruitCurrentSquad" xml:space="preserve"><value>Squadra attuale</value></data>
-  <data name="RecruitYouthMinimum" xml:space="preserve"><value>Giovani ≥</value></data>
-  <data name="RecruitSquadHelp" xml:space="preserve"><value>La destinazione indica l’incarico che cerchi: scegli per esempio Allenatore + U20 o Preparatore + U18. Il filtro squadra attuale usa soltanto l’associazione leggibile nel contratto: uno slot senza nome non prova che si tratti di U20/U18.</value></data>
-  <data name="RecruitYouthHelp" xml:space="preserve"><value>Per allenatori e preparatori delle giovanili richiede il valore minimo di Lavoro con i giovani (predefinito 12/20). Non cambia le stelle di allenamento e non garantisce interesse. Non viene applicato a incarichi medici o amministrativi.</value></data>
-  <data name="RecruitTargetContext" xml:space="preserve"><value>Destinazione: {0}.</value></data>
-  <data name="RecruitYouthContext" xml:space="preserve"><value>Lavoro con i giovani minimo: {0}/20.</value></data>
-  <data name="RecruitSquadInterestNote" xml:space="preserve"><value>Ricerca per {0}: disponibilità per questa sottosquadra non letta dal salvataggio. La capacità di lavorare con i giovani è distinta dall’interesse a trattare.</value></data>
-  <data name="RecruitFirstToSubteam" xml:space="preserve"><value>Incarico attuale in prima squadra: il passaggio a una sottosquadra non viene considerato automaticamente un avanzamento; interesse al massimo al limite.</value></data>
-  <data name="StaffSquad_u18" xml:space="preserve"><value>U18</value></data>
-  <data name="StaffSquad_u19" xml:space="preserve"><value>U19</value></data>
-  <data name="StaffSquad_u20" xml:space="preserve"><value>U20</value></data>
-  <data name="StaffSquad_u21" xml:space="preserve"><value>U21</value></data>
-  <data name="StaffSquad_u23" xml:space="preserve"><value>U23</value></data>
-  <data name="StaffAdditionalSquad" xml:space="preserve"><value>Altra squadra</value></data>
-  <data name="StaffTypeEvidence" xml:space="preserve"><value>Tipo squadra letto: {0} · Campo limite età: {1}.</value></data>
-  <data name="AnalystCategoryNote" xml:space="preserve"><value>Valutazione generica della categoria Analista, non di una specializzazione identificata. Per i rinnovi si confrontano solo candidati con la stessa variante contrattuale.</value></data>
-  <data name="AnalystVariantContext" xml:space="preserve"><value>Variante dell’incarico analista: {0}; nome esatto non ancora identificato.</value></data>
-  <data name="RecruitAnalystVariantChoice" xml:space="preserve"><value>Analista · variante {0}</value></data>
-  <data name="PlanMissingAttributes" xml:space="preserve"><value>Valutazione incompleta: mancano attributi validi per {0}.</value></data>
-  <data name="PlanExpiry" xml:space="preserve"><value>Scadenza contratto</value></data>
-  <data name="PlanWindow_Expired" xml:space="preserve"><value>Scaduti / &lt;3 giorni</value></data>
-  <data name="PlanWindow_SixMonths" xml:space="preserve"><value>In scadenza (&lt;6 mesi)</value></data>
-  <data name="PlanWindow_TwelveMonths" xml:space="preserve"><value>Quasi in scadenza (&lt;12 mesi)</value></data>
-  <data name="PlanWindow_All" xml:space="preserve"><value>Tutti</value></data>
-  <data name="PlanExpiryHint" xml:space="preserve"><value>Usa la data del salvataggio. Scaduti / &lt;3 giorni include i contratti già scaduti e quelli con meno di 3 giorni rimasti. Le finestre 6/12 mesi escludono quelli già scaduti. Tutti include i contratti leggibili attuali o scaduti, escludendo incarichi con inizio futuro e allenatori umani.</value></data>
-  <data name="StaffPreferSubteams" xml:space="preserve"><value>Privilegia staff già nelle sottosquadre</value></data>
-  <data name="StaffPreferSubteamsHint" xml:space="preserve"><value>Per una destinazione giovanile: prima staff delle giovanili, poi altre sottosquadre, incarichi non identificati e prime squadre. Per le altre sottosquadre hanno precedenza gli incarichi corrispondenti. Le colonne ordinano entro ciascun gruppo, prima del limite dei risultati. Disattiva per ordinare tutti insieme. La squadra attuale compare in Squadra incarico; non garantisce l’accettazione e non modifica punteggi e stelle.</value></data>
-  <data name="PlayerModificationTab" xml:space="preserve"><value>Modifica</value></data>
-  <data name="HistoryCA" xml:space="preserve"><value>CA · Abilità attuale</value></data>
-  <data name="HistoryCAHint" xml:space="preserve"><value>Grafico CA: valori reali dei salvataggi confrontati, su scala separata 1–200. Nei campioni interni degli attributi la CA storica non è decodificata.</value></data>
-  <data name="HistoryCANeedSaves" xml:space="preserve"><value>Usa Aggiungi salvataggi per confrontare la CA a date diverse.</value></data>
-  <data name="PlanMultiSortHint" xml:space="preserve"><value>Ctrl/Shift + clic: aggiungi colonne di ordinamento</value></data>
-  <data name="PlanCurrentAttributeStars" xml:space="preserve"><value>Attributo attuale ★</value></data>
-  <data name="PlanAlternativeAttributeStars" xml:space="preserve"><value>Attributo alternativa ★</value></data>
-  <data name="PlanAttributeStarsHint" xml:space="preserve"><value>Scala visiva dell’attributo: valore / 4, fino a 5 stelle (20/20 = 5 stelle). Non sono stelle di allenamento né una valutazione del gioco.</value></data>
-  <data name="ExperimentalFormat" xml:space="preserve"><value>sperimentale</value></data>
-  <data name="FormatReadOnly" xml:space="preserve"><value>Questa build è in sola lettura.</value></data>
-  <data name="FM27FormatNote" xml:space="preserve"><value>Build FM27 {0} non verificata: modifica e salvataggio disabilitati. Build supportata: 27.0.0+2493426.</value></data>
-  <data name="FM27StaffNote" xml:space="preserve"><value>Staff FM27 sperimentale: verifica nel gioco gli incarichi e le assegnazioni a club/squadre prima di basarti sui suggerimenti.</value></data>
-  <data name="StaffJob_chairperson" xml:space="preserve"><value>Presidente</value></data>
-  <data name="StaffJob_director" xml:space="preserve"><value>Dirigente</value></data>
-  <data name="StaffJob_head_performance_analyst" xml:space="preserve"><value>Capo analista delle performance</value></data>
-  <data name="StaffJob_fm27_coach" xml:space="preserve"><value>Collaboratore tecnico</value></data>
-  <data name="StaffJob_fm27_goalkeeping_coach" xml:space="preserve"><value>Allenatore dei portieri</value></data>
-  <data name="StaffJob_fm27_club_doctor" xml:space="preserve"><value>Medico sociale</value></data>
-  <data name="StaffJob_fm27_head_sports_science" xml:space="preserve"><value>Capo preparatore recupero infortunati</value></data>
-  <data name="StaffJob_fm27_performance_analyst" xml:space="preserve"><value>Analista delle performance</value></data>
-  <data name="RecruitRecentSignature" xml:space="preserve"><value>Contratto iniziato negli ultimi 3 mesi: escluso prudenzialmente dalle alternative plausibili per possibile firma o rinnovo recente. Soglia dell’editor, non durata ufficiale del blocco FM. La data d’inizio non prova da sola un rinnovo.</value></data>
-<data name="RecruitNoClubRecord" xml:space="preserve"><value>Nessun club rilevato</value></data>
-<data name="RecruitNoClubEvidence" xml:space="preserve"><value>Profilo recuperato senza incarico di club rilevato. Possibile svincolato o incarico in nazionale; disponibilità, preferenze di ruolo e stato di ritiro non integralmente decodificati. Da verificare nel gioco.</value></data>
-<data name="RecruitRetirement" xml:space="preserve"><value>Ritiro programmato letto: {0}. Escluso dalle alternative plausibili.</value></data>
-<data name="RecruitIncludeRecovered" xml:space="preserve"><value>Includi senza club (incarico da verificare)</value></data>
-<data name="OptionsShowNotes" xml:space="preserve"><value>Mostra note esplicative</value></data>
-<data name="RecruitPossibleBoardReference" xml:space="preserve"><value>Il profilo indica un incarico dirigenziale oppure un possibile riferimento dirigenziale di club: nel secondo caso l’incarico attuale non è verificato. Escluso prudenzialmente dalle alternative plausibili; resta visibile con Ignora interesse.</value></data>
+Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio o ne inverte il verso mantenendone la priorità. [1], [2] indicano la precedenza. Se attiva, la preferenza per incarichi nelle sottosquadre resta prioritaria. I filtri ruolo e squadra incarico agiscono sull’elenco dello staff attuale, non sul bacino delle alternative. Le stelle degli attributi mostrano semplicemente valore/4 su una scala di cinque stelle.</value>
+  </data>
+  <data name="PlanFindStaff" xml:space="preserve">
+    <value>Trova staff per questo criterio</value>
+  </data>
+  <data name="PlanReplacementStars" xml:space="preserve">
+    <value>Stelle alternativa proposta</value>
+  </data>
+  <data name="StaffTeam" xml:space="preserve">
+    <value>Squadra incarico</value>
+  </data>
+  <data name="StaffTeamUnknown" xml:space="preserve">
+    <value>Squadra non identificata</value>
+  </data>
+  <data name="StaffSubteamSlot" xml:space="preserve">
+    <value>Sottosquadra · slot {0}</value>
+  </data>
+  <data name="StaffTeamContext" xml:space="preserve">
+    <value>Squadra incarico: {0} · ID squadra: {1}</value>
+  </data>
+  <data name="StaffTeamNote" xml:space="preserve">
+    <value>Riferimento alla squadra nel contratto o nell’incarico senza contratto letto (FM27), distinto dall’assegnazione degli allenamenti. U20/U18 e altri gruppi vengono identificati dai record squadra, controllando club, ID e coerenza del tipo su più club. In assenza di riscontri sufficienti resta lo slot generico; lo slot da solo non determina l’età.</value>
+  </data>
+  <data name="PlanReplacementTeam" xml:space="preserve">
+    <value>Squadra alternativa proposta</value>
+  </data>
+  <data name="StaffFirstTeam" xml:space="preserve">
+    <value>Prima squadra</value>
+  </data>
+  <data name="StaffSquad_any" xml:space="preserve">
+    <value>Qualsiasi</value>
+  </data>
+  <data name="StaffSquad_first" xml:space="preserve">
+    <value>Prima squadra</value>
+  </data>
+  <data name="StaffSquad_subteam" xml:space="preserve">
+    <value>Sottosquadre</value>
+  </data>
+  <data name="StaffSquad_reserves" xml:space="preserve">
+    <value>Riserve / B</value>
+  </data>
+  <data name="StaffSquad_youth" xml:space="preserve">
+    <value>Giovanili</value>
+  </data>
+  <data name="StaffSquad_unknown" xml:space="preserve">
+    <value>Non identificata</value>
+  </data>
+  <data name="RecruitTargetSquad" xml:space="preserve">
+    <value>Squadra destinazione</value>
+  </data>
+  <data name="RecruitCurrentSquad" xml:space="preserve">
+    <value>Squadra attuale</value>
+  </data>
+  <data name="RecruitYouthMinimum" xml:space="preserve">
+    <value>Giovani ≥</value>
+  </data>
+  <data name="RecruitSquadHelp" xml:space="preserve">
+    <value>La destinazione indica l’incarico che cerchi: scegli per esempio Allenatore + U20 o Preparatore + U18. Il filtro squadra attuale usa soltanto l’associazione leggibile nel contratto: uno slot senza nome non prova che si tratti di U20/U18.</value>
+  </data>
+  <data name="RecruitYouthHelp" xml:space="preserve">
+    <value>Per allenatori e preparatori delle giovanili richiede il valore minimo di Lavoro con i giovani (predefinito 12/20). Non cambia le stelle di allenamento e non garantisce interesse. Non viene applicato a incarichi medici o amministrativi.</value>
+  </data>
+  <data name="RecruitTargetContext" xml:space="preserve">
+    <value>Destinazione: {0}.</value>
+  </data>
+  <data name="RecruitYouthContext" xml:space="preserve">
+    <value>Lavoro con i giovani minimo: {0}/20.</value>
+  </data>
+  <data name="RecruitSquadInterestNote" xml:space="preserve">
+    <value>Ricerca per {0}: disponibilità per questa sottosquadra non letta dal salvataggio. La capacità di lavorare con i giovani è distinta dall’interesse a trattare.</value>
+  </data>
+  <data name="RecruitFirstToSubteam" xml:space="preserve">
+    <value>Incarico attuale in prima squadra: il passaggio a una sottosquadra non viene considerato automaticamente un avanzamento; interesse al massimo al limite.</value>
+  </data>
+  <data name="StaffSquad_u18" xml:space="preserve">
+    <value>U18</value>
+  </data>
+  <data name="StaffSquad_u19" xml:space="preserve">
+    <value>U19</value>
+  </data>
+  <data name="StaffSquad_u20" xml:space="preserve">
+    <value>U20</value>
+  </data>
+  <data name="StaffSquad_u21" xml:space="preserve">
+    <value>U21</value>
+  </data>
+  <data name="StaffSquad_u23" xml:space="preserve">
+    <value>U23</value>
+  </data>
+  <data name="StaffAdditionalSquad" xml:space="preserve">
+    <value>Altra squadra</value>
+  </data>
+  <data name="StaffTypeEvidence" xml:space="preserve">
+    <value>Tipo squadra letto: {0} · Campo limite età: {1}.</value>
+  </data>
+  <data name="AnalystCategoryNote" xml:space="preserve">
+    <value>Valutazione generica della categoria Analista, non di una specializzazione identificata. Per i rinnovi si confrontano solo candidati con la stessa variante contrattuale.</value>
+  </data>
+  <data name="AnalystVariantContext" xml:space="preserve">
+    <value>Variante dell’incarico analista: {0}; nome esatto non ancora identificato.</value>
+  </data>
+  <data name="RecruitAnalystVariantChoice" xml:space="preserve">
+    <value>Analista · variante {0}</value>
+  </data>
+  <data name="PlanMissingAttributes" xml:space="preserve">
+    <value>Valutazione incompleta: mancano attributi validi per {0}.</value>
+  </data>
+  <data name="PlanExpiry" xml:space="preserve">
+    <value>Scadenza contratto</value>
+  </data>
+  <data name="PlanWindow_Expired" xml:space="preserve">
+    <value>Scaduti / &lt;3 giorni</value>
+  </data>
+  <data name="PlanWindow_SixMonths" xml:space="preserve">
+    <value>In scadenza (&lt;6 mesi)</value>
+  </data>
+  <data name="PlanWindow_TwelveMonths" xml:space="preserve">
+    <value>Quasi in scadenza (&lt;12 mesi)</value>
+  </data>
+  <data name="PlanWindow_All" xml:space="preserve">
+    <value>Tutti</value>
+  </data>
+  <data name="PlanExpiryHint" xml:space="preserve">
+    <value>Usa la data del salvataggio. Scaduti / &lt;3 giorni include i contratti già scaduti e quelli con meno di 3 giorni rimasti. Le finestre 6/12 mesi escludono quelli già scaduti. Tutti include i contratti leggibili attuali o scaduti, escludendo incarichi con inizio futuro e allenatori umani.</value>
+  </data>
+  <data name="StaffPreferSubteams" xml:space="preserve">
+    <value>Privilegia staff già nelle sottosquadre</value>
+  </data>
+  <data name="StaffPreferSubteamsHint" xml:space="preserve">
+    <value>Per una destinazione giovanile: prima staff delle giovanili, poi altre sottosquadre, incarichi non identificati e prime squadre. Per le altre sottosquadre hanno precedenza gli incarichi corrispondenti. Le colonne ordinano entro ciascun gruppo, prima del limite dei risultati. Disattiva per ordinare tutti insieme. La squadra attuale compare in Squadra incarico; non garantisce l’accettazione e non modifica punteggi e stelle.</value>
+  </data>
+  <data name="PlayerModificationTab" xml:space="preserve">
+    <value>Modifica</value>
+  </data>
+  <data name="HistoryCA" xml:space="preserve">
+    <value>CA · Abilità attuale</value>
+  </data>
+  <data name="HistoryCAHint" xml:space="preserve">
+    <value>Grafico CA: valori reali dei salvataggi confrontati, su scala separata 1–200. Nei campioni interni degli attributi la CA storica non è decodificata.</value>
+  </data>
+  <data name="HistoryCANeedSaves" xml:space="preserve">
+    <value>Usa Aggiungi salvataggi per confrontare la CA a date diverse.</value>
+  </data>
+  <data name="PlanMultiSortHint" xml:space="preserve">
+    <value>Ctrl/Shift + clic: aggiungi colonne di ordinamento</value>
+  </data>
+  <data name="PlanCurrentAttributeStars" xml:space="preserve">
+    <value>Attributo attuale ★</value>
+  </data>
+  <data name="PlanAlternativeAttributeStars" xml:space="preserve">
+    <value>Attributo alternativa ★</value>
+  </data>
+  <data name="PlanAttributeStarsHint" xml:space="preserve">
+    <value>Scala visiva dell’attributo: valore / 4, fino a 5 stelle (20/20 = 5 stelle). Non sono stelle di allenamento né una valutazione del gioco.</value>
+  </data>
+  <data name="ExperimentalFormat" xml:space="preserve">
+    <value>sperimentale</value>
+  </data>
+  <data name="FormatReadOnly" xml:space="preserve">
+    <value>Questa build è in sola lettura.</value>
+  </data>
+  <data name="FM27FormatNote" xml:space="preserve">
+    <value>Build FM27 {0} non verificata: modifica e salvataggio disabilitati. Build supportata: 27.0.0+2493426.</value>
+  </data>
+  <data name="FM27StaffNote" xml:space="preserve">
+    <value>Staff FM27 sperimentale: verifica nel gioco gli incarichi e le assegnazioni a club/squadre prima di basarti sui suggerimenti.</value>
+  </data>
+  <data name="StaffJob_chairperson" xml:space="preserve">
+    <value>Presidente</value>
+  </data>
+  <data name="StaffJob_director" xml:space="preserve">
+    <value>Dirigente</value>
+  </data>
+  <data name="StaffJob_head_performance_analyst" xml:space="preserve">
+    <value>Capo analista delle performance</value>
+  </data>
+  <data name="StaffJob_fm27_coach" xml:space="preserve">
+    <value>Collaboratore tecnico</value>
+  </data>
+  <data name="StaffJob_fm27_goalkeeping_coach" xml:space="preserve">
+    <value>Allenatore dei portieri</value>
+  </data>
+  <data name="StaffJob_fm27_club_doctor" xml:space="preserve">
+    <value>Medico sociale</value>
+  </data>
+  <data name="StaffJob_fm27_head_sports_science" xml:space="preserve">
+    <value>Capo preparatore recupero infortunati</value>
+  </data>
+  <data name="StaffJob_fm27_performance_analyst" xml:space="preserve">
+    <value>Analista delle performance</value>
+  </data>
+  <data name="RecruitRecentSignature" xml:space="preserve">
+    <value>Contratto iniziato negli ultimi 3 mesi: escluso prudenzialmente dalle alternative plausibili per possibile firma o rinnovo recente. Soglia dell’editor, non durata ufficiale del blocco FM. La data d’inizio non prova da sola un rinnovo.</value>
+  </data>
+  <data name="RecruitNoClubRecord" xml:space="preserve">
+    <value>Nessun club rilevato</value>
+  </data>
+  <data name="RecruitNoClubEvidence" xml:space="preserve">
+    <value>Profilo recuperato senza incarico di club rilevato. Possibile svincolato o incarico in nazionale; disponibilità, preferenze di ruolo e stato di ritiro non integralmente decodificati. Da verificare nel gioco.</value>
+  </data>
+  <data name="RecruitRetirement" xml:space="preserve">
+    <value>Ritiro programmato letto: {0}. Escluso dalle alternative plausibili.</value>
+  </data>
+  <data name="RecruitIncludeRecovered" xml:space="preserve">
+    <value>Includi senza club (incarico da verificare)</value>
+  </data>
+  <data name="OptionsShowNotes" xml:space="preserve">
+    <value>Mostra note esplicative</value>
+  </data>
+  <data name="RecruitPossibleBoardReference" xml:space="preserve">
+    <value>Il profilo indica un incarico dirigenziale oppure un possibile riferimento dirigenziale di club: nel secondo caso l’incarico attuale non è verificato. Escluso prudenzialmente dalle alternative plausibili; resta visibile con Ignora interesse.</value>
+  </data>
+  <data name="ClubBalance" xml:space="preserve">
+    <value>Saldo attuale (valuta base): {0}</value>
+  </data>
 </root>

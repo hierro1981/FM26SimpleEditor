@@ -10,6 +10,7 @@ public sealed class MySquadPanel : UserControl
     private readonly CheckBox includeLoans = new() { Name = "MySquadIncludeLoans", Text = L10n.Get("IncludeOutgoingLoans"), AutoSize = true };
     private readonly TextBox search = new() { Name = "MySquadSearch", Dock = DockStyle.Fill, PlaceholderText = L10n.Get("MySquadSearch") };
     private readonly Label status = new() { Name = "MySquadStatus", AutoSize = true, ForeColor = Color.DimGray };
+    private readonly Label balance = new() { Name = "MySquadBalance", AutoSize = true, Margin = new Padding(10, 6, 0, 0) };
     private readonly Label count = new() { AutoSize = true, Anchor = AnchorStyles.Left };
     private readonly DataGridView roster = Grid("MySquadRoster");
     private readonly DataGridView ranking = Grid("MySquadRanking");
@@ -75,7 +76,7 @@ public sealed class MySquadPanel : UserControl
         var reload = new Button { Name = "MySquadReload", Text = L10n.Get("MySquadReload"), AutoSize = true };
         reload.Click += (_, _) => ReloadRequested?.Invoke(); selection.Controls.Add(reload, 2, 0);
         var squadFilters = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true, Margin = Padding.Empty };
-        squadFilters.Controls.AddRange([scope, includeLoans]);
+        squadFilters.Controls.AddRange([scope, includeLoans, balance]);
         root.Controls.Add(selection, 0, 0); root.Controls.Add(squadFilters, 0, 1); root.Controls.Add(status, 0, 2);
         var tabs = views;
         var listTab = new TabPage(L10n.Get("MySquadRoster")); var roleTab = new TabPage(L10n.Get("MySquadBest"));
@@ -282,6 +283,7 @@ public sealed class MySquadPanel : UserControl
     }
     private void RefreshView()
     {
+        balance.Text = L10n.Format("ClubBalance", SelectedClub?.Balance?.ToString("N0", L10n.Culture) ?? "—");
         status.Text = !hasSave ? L10n.Get("MySquadOpen") : data.Status == "unavailable" ? L10n.Format("MySquadUnavailable", data.Error ?? "—") :
             data.Status != "ready" ? L10n.Get("MySquadNone") : "";
         status.Visible = status.Text.Length > 0;

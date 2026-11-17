@@ -34,7 +34,7 @@ def read_my_squad(store, progress=None):
                 choices.append(dict(teamId=team.team_id, slot=team.slot, name=name,
                                     **({'typeMethod': types[team.team_id]['teamTypeMethod']} if team.team_id in types else {})))
             wanted.update(ids)
-            result_clubs.append(dict(clubUid=club.uid, clubName=club.name,
+            result_clubs.append(dict(clubUid=club.uid, clubName=club.name, balance=getattr(manager, "balance", None),
                                      managerName=manager.manager_name,
                                      firstTeamId=first[0], teamIds=ids, teams=choices))
         # Load outgoing loans too, by confirmed owner ID; the UI filters them.

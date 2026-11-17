@@ -1,4 +1,4 @@
-# FM Simple Editor · v16.2.1
+# FM Simple Editor · v16.3.0
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -18,7 +18,7 @@ La build viene controllata all’apertura e prima del salvataggio. Per altre bui
 
 ## Scarica e avvia
 
-Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione corrente è la **v16.2.0**.
+Scarica l’ultima versione dalla pagina [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). La versione corrente è la **v16.3.0**.
 
 - **Setup, quando presente nella release:** installazione guidata dell’editor, con opzioni per installare anche Python e il runtime .NET se necessari. Le installazioni aggiuntive richiedono il tuo consenso e una connessione Internet.
 - **ZIP portatile:** estrai tutto il contenuto in una cartella e avvia **FM26SimpleEditor.exe**. Conserva insieme tutti i file del pacchetto.
@@ -95,7 +95,14 @@ Apri **Opzioni** per scegliere **Italiano**, **English**, **Français** o **Deut
 
 ## Novità, dalla versione più recente
 
-### v16.2.1 (in sviluppo)
+### v16.3.0
+
+- FM27 **27.1.0+2505117**: libreria fmsave aggiornata a **0.12.6**; lettura verificata e caricamento della copia modificata confermato dall’utilizzatore.
+- **La mia squadra**: visualizzazione e modifica del saldo corrente del club nella valuta base del salvataggio. **Salva saldo in una copia** crea una nuova copia e la usa per le modifiche successive. Budget trasferimenti e stipendi non sono modificabili.
+- Il salvataggio resta abilitato anche sulle build non ancora verificate, con avvisi e controlli di integrità. Le funzioni opzionali possono avere copertura diversa tra le build.
+- Francese e tedesco: aggiunte le traduzioni dei messaggi di caricamento, verifica e salvataggio. Le traduzioni restano parziali con ripiego sull’inglese.
+
+### v16.2.1
 
 - Nuovo nome **FM Simple Editor**, per riflettere il supporto a più versioni di Football Manager.
 - Sito spostato su **https://fmeditor.ramaya.org/**.

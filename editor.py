@@ -350,6 +350,59 @@ class PlayerStore:
         return dict(player=player_row(player, self.save.info.game_date), attributes=attributes, positions=positions,
                     birthEditable=birth_at is not None, birthWarning=warning, rawPa=raw_pa, league=league)
 
+    def save_balance(self, request, progress=None):
+        from fmsave.readers.finances import find_finance_layouts, locate_finance_chain, _inspect_sponsor_chain, read_current_balance
+        from fmsave.readers.clubs import own_record_spans
+        from fmsave._layouts import ClubRecordLayout
+        uid = integer(request.get('clubUid'), 0, 4294967295, 'Club ID')
+        managed = [m for m in self.save.managed_clubs() if m.club_uid == uid]
+        if len(managed) != 1:
+            raise ValueError('Managed club is not uniquely identified')
+        index = self.save._context.club_index()
+        layout = find_layout(ClubRecordLayout, 'game_db', self.save.info.section_schemas.get('game_db'), self.save.info.build).layout
+        spans = [s for s in own_record_spans(self.raw, index, layout) if s.club_uid == uid]
+        if len(spans) != 1:
+            raise ValueError('Club record is ambiguous')
+        span = spans[0]
+        layouts = find_finance_layouts(self.save.info.section_schemas.get('game_db'), self.save.info.build).for_clubs(index)
+        current = read_current_balance(self.raw, span, layouts)
+        if current is None or current != managed[0].balance or request.get('expectedBalance') != current:
+            raise ValueError('Current balance is unavailable or has changed')
+        value = integer(request.get('balance'), *layouts.chains.balance_range, 'Balance')
+        chain = locate_finance_chain(self.raw, span, layouts.chains)
+        if chain is None or layouts.sponsors.balance_offset is None:
+            raise ValueError('Finance layout unavailable')
+        head, count, _ = chain
+        sponsor = _inspect_sponsor_chain(self.raw, head + layouts.chains.row_bytes * count, span.record_end, layouts.sponsors)
+        if sponsor is None or not sponsor.valid:
+            raise ValueError('Finance suffix failed validation')
+        at = sponsor.suffix_start + layouts.sponsors.balance_offset
+        if not span.record_start <= at <= span.record_end - 4 or struct.unpack_from('<i', self.raw, at)[0] != current:
+            raise ValueError('Finance field mismatch')
+        target = Path(request['output']).resolve()
+        if target == self.path:
+            raise ValueError('Choose a new copy name')
+        st = self.path.stat()
+        if st.st_size != self.index.fingerprint.file_size or st.st_mtime_ns != self.index.fingerprint.mtime_ns:
+            raise ValueError('Source file changed')
+        data = bytearray(self.raw)
+        struct.pack_into('<i', data, at, value)
+        rewrite(self.path, target, data, self.index, scaled(progress, 0, 70))
+        verified = PlayerStore(target, scaled(progress, 70, 95))
+        try:
+            if verified.raw != bytes(data):
+                raise ValueError('Saved database differs from the expected copy')
+            club = [m for m in verified.save.managed_clubs() if m.club_uid == uid]
+            if len(club) != 1 or club[0].balance != value:
+                raise ValueError('Saved balance verification failed')
+            for section in self.index.sections:
+                if section != 'game_db' and read_section(self.index, section) != read_section(verified.index, section):
+                    raise ValueError('Unrelated section changed: ' + section)
+        except Exception:
+            verified.close()
+            raise
+        return verified, dict(source=str(target), balance=value)
+
     def save_player(self, request, progress=None):
         require_writable(self.save.info)
         report(progress, 0, "Controllo dei dati modificati")
@@ -422,7 +475,7 @@ def serve():
             try:
                 request = json.loads(line)
                 command = request.get("command")
-                progress = ProgressReporter() if command in {"open", "save", "inspect", "my_squad", "my_staff", "my_tactics", "staff_recruitment"} else None
+                progress = ProgressReporter() if command in {"open", "save", "save_balance", "inspect", "my_squad", "my_staff", "my_tactics", "staff_recruitment"} else None
                 if command == "open":
                     new_store = PlayerStore(request["source"], scaled(progress, 0, 95))
                     if store is not None:
@@ -447,6 +500,10 @@ def serve():
                     result = read_my_squad(store, scaled(progress, 0, 95))
                 elif command == "history":
                     result = history(store, request)
+                elif command == "save_balance":
+                    new_store, result = store.save_balance(request, progress)
+                    store.close()
+                    store = new_store
                 elif command == "save":
                     new_store, result = store.save_player(request, progress)
                     store.close()

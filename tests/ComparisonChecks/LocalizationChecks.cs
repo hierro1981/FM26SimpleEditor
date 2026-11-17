@@ -10,6 +10,22 @@ internal static class LocalizationChecks
     private static IEnumerable<Control> All(Control c) => c.Controls.Cast<Control>().SelectMany(x => new[] { x }.Concat(All(x)));
     public static void Run(Action<bool, string> check)
     {
+        using (var host = new Form())
+        using (var squad = new MySquadPanel())
+        {
+            host.Controls.Add(squad); host.Show(); Application.DoEvents();
+            squad.SetData(new MySquadResult { Status = "ready", Clubs = [new ManagedSquad { ClubUid = 2229, ClubName = "Test", Balance = 112036341 }] });
+            var input = All(squad).OfType<NumericUpDown>().Single(n => n.Maximum == int.MaxValue);
+            var button = All(squad).OfType<Button>().Single(b => b.Name == "SaveClubBalance");
+            check(input.Enabled && input.Value == 112036341 && button.Enabled, "current club balance initializes editable input");
+            bool requested = false;
+            squad.BalanceSaveRequested += (uid, old, value) => requested = uid == 2229 && old == 112036341 && value == 112037341;
+            input.Value += 1000; button.PerformClick();
+            check(requested, "balance save requests carry club identity, original and new values");
+            squad.SetData(new MySquadResult { Status = "ready", Clubs = [new ManagedSquad { ClubUid = 2229, ClubName = "Test" }] });
+            check(!input.Enabled && !button.Enabled, "unreadable balances cannot be edited");
+            host.Close();
+        }
         var resource = new ResourceManager("FM26SimpleEditor.Resources.Strings", typeof(L10n).Assembly);
         var english = resource.GetResourceSet(System.Globalization.CultureInfo.GetCultureInfo("en"), true, false)!;
         check(english is not null && english.Cast<DictionaryEntry>().Count() == L10n.Keys.Count, "English satellite contains every resource key");

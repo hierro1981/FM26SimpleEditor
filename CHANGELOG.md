@@ -1,5 +1,21 @@
 # Changelog
 
+### v16.3.0
+
+- FM27 **27.1.0+2505117**: libreria fmsave aggiornata a **0.12.6**; lettura verificata e caricamento della copia modificata confermato dall’utilizzatore.
+- **La mia squadra**: visualizzazione e modifica del saldo corrente del club nella valuta base del salvataggio. **Salva saldo in una copia** crea una nuova copia e la usa per le modifiche successive. Budget trasferimenti e stipendi non sono modificabili.
+- Il salvataggio resta abilitato anche sulle build non ancora verificate, con avvisi e controlli di integrità. Le funzioni opzionali possono avere copertura diversa tra le build.
+- Francese e tedesco: aggiunte le traduzioni dei messaggi di caricamento, verifica e salvataggio. Le traduzioni restano parziali con ripiego sull’inglese.
+
+### v16.3.0
+
+- FM27 **27.1.0+2505117**: updated to **fmsave 0.12.6**; reading checked and the user confirmed loading a modified copy in the game.
+- **My squad**: view and edit the club’s current balance in the save’s base currency. **Save balance to a copy** writes a new working copy. Transfer and wage budgets are not editable.
+- Saving remains enabled on unverified builds, retaining warnings and integrity checks. Optional-reader coverage may vary between builds.
+- French and German: translated loading, verification and saving messages. Translations remain partial with English fallback.
+
+
+
 ## v16.2.1
 
 - **FM Simple Editor** è il nuovo nome dell’app e del sito / New application and website name.

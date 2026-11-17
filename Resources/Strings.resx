@@ -2677,7 +2677,7 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
     <value>Questa build è in sola lettura.</value>
   </data>
   <data name="FM27FormatNote" xml:space="preserve">
-    <value>Build FM27 {0} non verificata: modifica e salvataggio disabilitati. Build supportata: 27.0.0+2493426.</value>
+    <value>Build FM27 non verificata {0}: salvataggio abilitato con controlli di integrità. Alcune funzioni opzionali potrebbero non essere disponibili.</value>
   </data>
   <data name="FM27StaffNote" xml:space="preserve">
     <value>Staff FM27 sperimentale: verifica nel gioco gli incarichi e le assegnazioni a club/squadre prima di basarti sui suggerimenti.</value>
@@ -2729,5 +2729,8 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
   </data>
   <data name="ClubBalance" xml:space="preserve">
     <value>Saldo attuale (valuta base): {0}</value>
+  </data>
+  <data name="SaveClubBalance" xml:space="preserve">
+    <value>Salva saldo in una copia…</value>
   </data>
 </root>

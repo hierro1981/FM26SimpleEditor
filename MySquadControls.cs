@@ -44,6 +44,9 @@ public sealed class MySquadPanel : UserControl
     private bool defaultOrder = true;
     private bool descending;
     public event Action<uint>? StaffRequested;
+    public event Action<uint, long, long>? BalanceSaveRequested;
+    private readonly NumericUpDown balanceValue = new() { Minimum = int.MinValue, Maximum = int.MaxValue, ThousandsSeparator = true, Width = 155 };
+    private readonly Button balanceSave = new() { Name = "SaveClubBalance", AutoSize = true };
     public event Action<uint>? RecruitmentRequested;
     public event Action<uint>? TacticsRequested;
     public event Action? ReloadRequested;
@@ -76,7 +79,8 @@ public sealed class MySquadPanel : UserControl
         var reload = new Button { Name = "MySquadReload", Text = L10n.Get("MySquadReload"), AutoSize = true };
         reload.Click += (_, _) => ReloadRequested?.Invoke(); selection.Controls.Add(reload, 2, 0);
         var squadFilters = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true, Margin = Padding.Empty };
-        squadFilters.Controls.AddRange([scope, includeLoans, balance]);
+        squadFilters.Controls.AddRange([scope, includeLoans, balance, balanceValue, balanceSave]);
+        balanceSave.Click += (_, _) => { if (SelectedClub is { Balance: long old } c) BalanceSaveRequested?.Invoke(c.ClubUid, old, (long)balanceValue.Value); };
         root.Controls.Add(selection, 0, 0); root.Controls.Add(squadFilters, 0, 1); root.Controls.Add(status, 0, 2);
         var tabs = views;
         var listTab = new TabPage(L10n.Get("MySquadRoster")); var roleTab = new TabPage(L10n.Get("MySquadBest"));
@@ -284,6 +288,9 @@ public sealed class MySquadPanel : UserControl
     private void RefreshView()
     {
         balance.Text = L10n.Format("ClubBalance", SelectedClub?.Balance?.ToString("N0", L10n.Culture) ?? "—");
+        balanceSave.Text = L10n.Get("SaveClubBalance");
+        balanceValue.Enabled = balanceSave.Enabled = SelectedClub?.Balance is not null;
+        balanceValue.Value = Math.Clamp((decimal)(SelectedClub?.Balance ?? 0), balanceValue.Minimum, balanceValue.Maximum);
         status.Text = !hasSave ? L10n.Get("MySquadOpen") : data.Status == "unavailable" ? L10n.Format("MySquadUnavailable", data.Error ?? "—") :
             data.Status != "ready" ? L10n.Get("MySquadNone") : "";
         status.Visible = status.Text.Length > 0;

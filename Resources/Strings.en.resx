@@ -2677,7 +2677,7 @@ Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses a
     <value>This build is read-only.</value>
   </data>
   <data name="FM27FormatNote" xml:space="preserve">
-    <value>Unverified FM27 build {0}: editing and saving disabled. Supported build: 27.0.0+2493426.</value>
+    <value>Unverified FM27 build {0}: saving is enabled with integrity checks. Some optional features may be unavailable.</value>
   </data>
   <data name="FM27StaffNote" xml:space="preserve">
     <value>Experimental FM27 staff: check current jobs and club/squad assignments in-game before relying on suggestions.</value>
@@ -2729,5 +2729,8 @@ Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses a
   </data>
   <data name="ClubBalance" xml:space="preserve">
     <value>Current balance (base currency): {0}</value>
+  </data>
+  <data name="SaveClubBalance" xml:space="preserve">
+    <value>Save balance to a copy…</value>
   </data>
 </root>

@@ -309,3 +309,5 @@ public sealed class ManagedSquadTeam
     public string? Name { get; set; }
     public string? TypeMethod { get; set; }
 }
+
+public sealed class ClubBalanceSaved { public string Source { get; set; } = ""; public long Balance { get; set; } }

@@ -1,4 +1,4 @@
-# FM Simple Editor · v16.2.1
+# FM Simple Editor · v16.3.0
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -18,7 +18,7 @@ The build is checked when opening and before saving. Other FM27 builds, when rea
 
 ## Download and launch
 
-Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v16.2.0**.
+Download the latest version from [Releases](https://github.com/hierro1981/FM26SimpleEditor/releases). The current version is **v16.3.0**.
 
 - **Setup, when available in the release:** guided installation, with options to install Python and the .NET runtime if needed. Additional installations require your consent and an Internet connection.
 - **Portable ZIP:** extract the complete package into a folder and run **FM26SimpleEditor.exe**. Keep all package files together.
@@ -95,7 +95,14 @@ Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch
 
 ## Changes, newest first
 
-### v16.2.1 (in development)
+### v16.3.0
+
+- FM27 **27.1.0+2505117**: updated to **fmsave 0.12.6**; reading checked and the user confirmed loading a modified copy in the game.
+- **My squad**: view and edit the club’s current balance in the save’s base currency. **Save balance to a copy** writes a new working copy. Transfer and wage budgets are not editable.
+- Saving remains enabled on unverified builds, retaining warnings and integrity checks. Optional-reader coverage may vary between builds.
+- French and German: translated loading, verification and saving messages. Translations remain partial with English fallback.
+
+### v16.2.1
 
 - Renamed to **FM Simple Editor**, reflecting support for multiple Football Manager versions.
 - Project website moved to **https://fmeditor.ramaya.org/**.

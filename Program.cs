@@ -158,6 +158,7 @@ public sealed class MainForm : Form
         mySquad.PlayerOpenRequested += async uid => await LoadPlayer(uid);
         mySquad.AddComparisonRequested += AddComparison;
         mySquad.QuickComparisonRequested += async (first, second) => await ComparePair(first, second);
+        mySquad.BalanceSaveRequested += async (uid, old, value) => await SaveClubBalance(uid, old, value);
         mySquad.StaffRequested += async uid => await RefreshStaff(uid);
         mySquad.RecruitmentRequested += async uid => await RefreshStaffRecruitment(uid);
         mySquad.TacticsRequested += async uid => await RefreshTactics(uid);
@@ -796,6 +797,25 @@ public sealed class MainForm : Form
         DateTime? birthday = changeBirth.Checked ? birth.Value.Date : DateTime.TryParseExact(player.Birth, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var original) ? original : null;
         preview.ShowPlayer(detail, (int)ca.Value, (int)pa.Value, birthday, UseItalian, mean, cohort.Count);
         emptyPreview.Visible = false; preview.Visible = true; preview.BringToFront(); previewStale = false;
+    }
+
+    private async Task SaveClubBalance(uint uid, long old, long value)
+    {
+        if (busy || !ConfirmDiscard()) return;
+        using var dialog = new SaveFileDialog { Filter = L10n.Get("Text_b67eeb7fa174"), FileName = Path.GetFileNameWithoutExtension(file.Text) + "_finance.fm" };
+        if (dialog.ShowDialog() != DialogResult.OK) return;
+        ResetEdits();
+        SetBusy(true, L10n.Get("Text_55b0f70b6858"), determinate: true);
+        try
+        {
+            var result = await backend.Send<ClubBalanceSaved>(new { command = "save_balance", clubUid = uid, expectedBalance = old, balance = value, output = dialog.FileName }, ReportProgress);
+            file.Text = result.Source;
+            mySquadLoaded = false; mySquad.ClearForSave(true);
+            state.Text = L10n.Get("Text_514019445ab2");
+        }
+        catch (Exception exc) { Error(L10n.Get("Text_9b6ca71eb272"), exc); }
+        finally { SetBusy(false); Changed(); }
+        await RefreshMySquad();
     }
 
     private async Task SaveFile()

@@ -1035,4 +1035,10 @@
   <data name="Backend_f8e2b6726d8b" xml:space="preserve">
     <value>Änderung hat die Länge der Datenbank verändert</value>
   </data>
+  <data name="SaveClubBalance" xml:space="preserve">
+    <value>Kontostand in einer Kopie speichern…</value>
+  </data>
+  <data name="FM27FormatNote" xml:space="preserve">
+    <value>Ungeprüfter FM27-Build {0}: Speichern mit Integritätsprüfungen aktiviert. Einige Zusatzfunktionen sind möglicherweise nicht verfügbar.</value>
+  </data>
 </root>

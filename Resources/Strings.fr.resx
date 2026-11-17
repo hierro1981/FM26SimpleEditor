@@ -1035,4 +1035,10 @@
   <data name="Backend_f8e2b6726d8b" xml:space="preserve">
     <value>La modification a changé la longueur de la base</value>
   </data>
+  <data name="SaveClubBalance" xml:space="preserve">
+    <value>Enregistrer le solde dans une copie…</value>
+  </data>
+  <data name="FM27FormatNote" xml:space="preserve">
+    <value>Version FM27 non vérifiée {0} : enregistrement activé avec contrôles d’intégrité. Certaines fonctions peuvent être indisponibles.</value>
+  </data>
 </root>

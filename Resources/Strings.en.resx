@@ -1466,7 +1466,7 @@ Hover over a position for its rating.</value>
     <value>Could not check for updates. Check your connection and retry; you can open the repository using the link above.</value>
   </data>
   <data name="UpdatePrivacy" xml:space="preserve">
-    <value>Opening this window checks the public release only. No save data is sent; updates are not installed automatically.</value>
+    <value>The check reads the public GitHub release. It does not send saves or install updates.</value>
   </data>
   <data name="UpdateRateLimit" xml:space="preserve">
     <value>GitHub has rate-limited requests. Retry later or open the repository using the link above.</value>
@@ -2735,5 +2735,8 @@ Click a column to sort it alone; Ctrl/Shift+click adds a criterion or reverses a
   </data>
   <data name="ClubFinancesTab" xml:space="preserve">
     <value>Finances</value>
+  </data>
+  <data name="OptionsCheckUpdates" xml:space="preserve">
+    <value>Check for updates at startup (once a day)</value>
   </data>
 </root>

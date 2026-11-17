@@ -1,5 +1,9 @@
 # Changelog
 
+### v16.3.2
+
+- Aggiunto il controllo giornaliero degli aggiornamenti all’avvio, con un avviso accanto a Informazioni.
+
 ### v16.3.1
 
 - Ripristinati i migliori per tattica e la Top 11 attuale/futura su FM27 27.1.0.

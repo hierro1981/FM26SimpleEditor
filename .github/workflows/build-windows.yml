@@ -170,8 +170,8 @@ jobs:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: gh release upload "$RELEASE_TAG" dist/FM26SimpleEditor-win-x64.zip dist/FM26SimpleEditor-*-Setup-win-x64.exe
 
-  publish-v16-3-1:
-    name: Publish v16.3.1 after successful Windows checks
+  publish-v16-3-2:
+    name: Publish v16.3.2 after successful Windows checks
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
@@ -194,6 +194,6 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           version=$(python -c "import xml.etree.ElementTree as E; print(E.parse('FM26SimpleEditor.csproj').findtext('./PropertyGroup/Version'))")
-          if [ "$version" != "16.3.1" ]; then exit 0; fi
-          if gh release view v16.3.1 >/dev/null 2>&1; then exit 0; fi
-          gh release create v16.3.1 dist/FM26SimpleEditor-win-x64.zip dist/FM26SimpleEditor-16.3.1-Setup-win-x64.exe --target "$GITHUB_SHA" --title "v16.3.1 · FM27 tactics, history and staff restored" --notes-file .github/release-notes/v16.3.1.md --latest
+          if [ "$version" != "16.3.2" ]; then exit 0; fi
+          if gh release view v16.3.2 >/dev/null 2>&1; then exit 0; fi
+          gh release create v16.3.2 dist/FM26SimpleEditor-win-x64.zip dist/FM26SimpleEditor-16.3.2-Setup-win-x64.exe --target "$GITHUB_SHA" --title "v16.3.2 · Automatic update checks" --notes-file .github/release-notes/v16.3.2.md --latest

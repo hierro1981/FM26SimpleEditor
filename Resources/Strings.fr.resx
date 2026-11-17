@@ -1044,4 +1044,10 @@
   <data name="ClubFinancesTab" xml:space="preserve">
     <value>Finances</value>
   </data>
+  <data name="OptionsCheckUpdates" xml:space="preserve">
+    <value>Vérifier les mises à jour au démarrage (une fois par jour)</value>
+  </data>
+  <data name="UpdatePrivacy" xml:space="preserve">
+    <value>La vérification consulte la version publique sur GitHub. Elle n’envoie aucune sauvegarde et n’installe aucune mise à jour.</value>
+  </data>
 </root>

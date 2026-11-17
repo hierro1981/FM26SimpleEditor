@@ -13,7 +13,7 @@ public sealed class AboutForm : Form
     private readonly Func<CancellationToken, Task<ReleaseUpdate?>> lookup;
     private Uri? releaseUrl;
     private bool disposedResources;
-    public AboutForm(Func<CancellationToken, Task<ReleaseUpdate?>>? lookup = null)
+    public AboutForm(Func<CancellationToken, Task<ReleaseUpdate?>>? lookup = null, ReleaseUpdate? knownUpdate = null)
     {
         this.lookup = lookup ?? new UpdateChecker().LatestAsync;
         Text = L10n.Get("AboutTitle"); Font = new Font("Segoe UI", 10);
@@ -54,7 +54,7 @@ public sealed class AboutForm : Form
         Shown += (_, _) => FitHeight();
         check.Click += async (_, _) => await CheckAsync();
         release.LinkClicked += (_, _) => { if (releaseUrl is not null) Open(releaseUrl); };
-        Shown += async (_, _) => await CheckAsync();
+        if (knownUpdate is not null) ShowRelease(knownUpdate);
         FormClosed += (_, _) => { if (!disposedResources) cancellation.Cancel(); };
     }
     private async Task CheckAsync()
@@ -65,13 +65,7 @@ public sealed class AboutForm : Form
         {
             var latest = await lookup(cancellation.Token);
             if (IsDisposed || cancellation.IsCancellationRequested) return;
-            if (latest is null) updateStatus.Text = L10n.Get("NoReleaseInfo");
-            else if (latest.Version > AppInfo.Version)
-            {
-                releaseUrl = latest.Url; release.Enabled = true;
-                updateStatus.Text = L10n.Format("UpdateAvailable", latest.Tag);
-            }
-            else updateStatus.Text = L10n.Format("UpToDate", latest.Tag);
+            ShowRelease(latest);
         }
         catch (OperationCanceledException) when (cancellation.IsCancellationRequested) { }
         catch (Exception exc) when (exc is HttpRequestException or OperationCanceledException or JsonException or KeyNotFoundException or InvalidOperationException)
@@ -79,6 +73,16 @@ public sealed class AboutForm : Form
             if (!IsDisposed) updateStatus.Text = exc.Message == "RateLimit" ? L10n.Get("UpdateRateLimit") : L10n.Get("UpdateFailed");
         }
         finally { if (!IsDisposed) check.Enabled = true; }
+    }
+    private void ShowRelease(ReleaseUpdate? latest)
+    {
+        if (latest is null) updateStatus.Text = L10n.Get("NoReleaseInfo");
+        else if (latest.Version > AppInfo.Version)
+        {
+            releaseUrl = latest.Url; release.Enabled = true;
+            updateStatus.Text = L10n.Format("UpdateAvailable", latest.Tag);
+        }
+        else updateStatus.Text = L10n.Format("UpToDate", latest.Tag);
     }
     private void Open(Uri url)
     {

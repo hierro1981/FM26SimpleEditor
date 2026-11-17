@@ -1466,7 +1466,7 @@ Passa sul punto per il valore.</value>
     <value>Impossibile controllare gli aggiornamenti. Verifica la connessione e riprova; puoi aprire il repository dal link sopra.</value>
   </data>
   <data name="UpdatePrivacy" xml:space="preserve">
-    <value>Il controllo avviene aprendo questa finestra e legge solo la release pubblica. Nessun salvataggio viene inviato; gli aggiornamenti non vengono installati automaticamente.</value>
+    <value>Il controllo consulta la release pubblica su GitHub. Non invia salvataggi e non installa aggiornamenti.</value>
   </data>
   <data name="UpdateRateLimit" xml:space="preserve">
     <value>GitHub ha limitato le richieste. Riprova più tardi oppure apri il repository dal link sopra.</value>
@@ -2735,5 +2735,8 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
   </data>
   <data name="ClubFinancesTab" xml:space="preserve">
     <value>Finanze</value>
+  </data>
+  <data name="OptionsCheckUpdates" xml:space="preserve">
+    <value>Verifica aggiornamenti all’avvio (una volta al giorno)</value>
   </data>
 </root>

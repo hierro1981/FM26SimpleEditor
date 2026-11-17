@@ -53,3 +53,49 @@ public sealed class UpdateChecker
         return Parse(await response.Content.ReadAsStringAsync(token));
     }
 }
+
+public sealed class DailyUpdateCheck(string directory, Func<CancellationToken, Task<ReleaseUpdate?>> lookup)
+{
+    private sealed record Cache(DateOnly Date, string? Tag);
+
+    public async Task<ReleaseUpdate?> CheckAsync(DateOnly today, CancellationToken token)
+    {
+        ReleaseUpdate? cached = null;
+        try
+        {
+            token.ThrowIfCancellationRequested();
+            Directory.CreateDirectory(directory);
+            // Hold the file exclusively so simultaneous launches cannot both query GitHub.
+            using var file = new FileStream(Path.Combine(directory, "update-check.json"),
+                FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+            Cache? state = null;
+            if (file.Length is > 0 and <= 4096)
+            {
+                try { state = JsonSerializer.Deserialize<Cache>(file); }
+                catch (JsonException) { }
+            }
+            if (state is not null && UpdateChecker.TryVersion(state.Tag, out var version) && version! > AppInfo.Version)
+                cached = new(version!, state.Tag!, new Uri(AppInfo.RepositoryUrl + "/releases/tag/" + state.Tag));
+
+            if (state?.Date == today) return cached;
+            void Write(string? tag)
+            {
+                file.Position = 0;
+                JsonSerializer.Serialize(file, new Cache(today, tag));
+                file.SetLength(file.Position);
+                file.Flush();
+            }
+            // Record the attempt before requesting so offline launches do not retry all day.
+            Write(cached?.Tag);
+            var latest = await lookup(token);
+            cached = latest?.Version > AppInfo.Version ? latest : null;
+            Write(cached?.Tag);
+        }
+        catch (Exception exc) when (exc is IOException or UnauthorizedAccessException or HttpRequestException
+            or OperationCanceledException or JsonException or KeyNotFoundException or InvalidOperationException)
+        {
+            // A startup update check must not interrupt normal use.
+        }
+        return cached;
+    }
+}

@@ -24,7 +24,11 @@ internal static class Program
         L10n.SetLanguage(AppSettings.Load(configDirectory).Language);
         using var setup = new RuntimeSetupForm();
         if (setup.ShowDialog() != DialogResult.OK || setup.PythonExecutable is null) return;
-        Application.Run(new MainForm(setup.PythonExecutable));
+        using var main = new MainForm(setup.PythonExecutable);
+        using var updateCancellation = new CancellationTokenSource();
+        main.FormClosed += (_, _) => updateCancellation.Cancel();
+        main.Shown += async (_, _) => await main.CheckStartupUpdateAsync(updateCancellation.Token);
+        Application.Run(main);
     }
 }
 
@@ -53,6 +57,8 @@ public sealed class MainForm : Form
     private readonly TextBox file = new() { ReadOnly = true, Dock = DockStyle.Fill };
     private readonly Button settingsButton = new() { Name = "OptionsButton", Text = L10n.Get("OptionsButton"), AutoSize = true };
     private AppSettings settings = new();
+    private ReleaseUpdate? startupUpdate;
+    private readonly LinkLabel updateNotice = new() { Name = "UpdateNotice", AutoSize = true, Visible = false, Margin = new Padding(5, 8, 5, 0) };
     private readonly Button about = new() { Text = L10n.Get("AboutButton"), AutoSize = true };
     private readonly string configurationDirectory;
     private bool changingLanguage;
@@ -143,7 +149,7 @@ public sealed class MainForm : Form
         toolbar.Controls.Add(open, 0, 0); toolbar.Controls.Add(save, 1, 0);
         toolbar.Controls.Add(changes, 2, 0);
         var languageTools = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Dock = DockStyle.Fill, WrapContents = false, Margin = Padding.Empty };
-        languageTools.Controls.AddRange([settingsButton, about, editionLabel]);
+        languageTools.Controls.AddRange([settingsButton, about, updateNotice, editionLabel]);
         toolbar.Controls.Add(languageTools, 3, 0);
         toolbar.Controls.Add(file, 0, 1); toolbar.SetColumnSpan(file, 4);
         var status = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, ColumnCount = 3, Padding = new Padding(5, 7, 5, 0) };
@@ -184,7 +190,8 @@ public sealed class MainForm : Form
             using var dialog = new OptionsForm(settings);
             if (dialog.ShowDialog(this) == DialogResult.OK) ApplySettings(dialog.Settings);
         };
-        about.Click += (_, _) => { using var dialog = new AboutForm(); dialog.ShowDialog(this); };
+        about.Click += (_, _) => OpenAbout();
+        updateNotice.LinkClicked += (_, _) => OpenAbout();
         ca.ValueChanged += (_, _) => Changed(); pa.ValueChanged += (_, _) => Changed(); birth.ValueChanged += (_, _) => Changed();
         changeBirth.CheckedChanged += (_, _) => { birth.Enabled = changeBirth.Checked && detail?.BirthEditable == true && !busy; Changed(); };
         save.Click += async (_, _) => await SaveFile();
@@ -219,6 +226,28 @@ public sealed class MainForm : Form
         L10n.Capture(this, tips);
     }
 
+    private void OpenAbout()
+    {
+        using var dialog = new AboutForm(knownUpdate: settings.CheckUpdates ? startupUpdate : null);
+        dialog.ShowDialog(this);
+    }
+
+    internal async Task CheckStartupUpdateAsync(CancellationToken token)
+    {
+        if (!settings.CheckUpdates) return;
+        string directory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        if (string.IsNullOrEmpty(directory)) return;
+        startupUpdate = await new DailyUpdateCheck(Path.Combine(directory, "FM26SimpleEditor"), new UpdateChecker().LatestAsync)
+            .CheckAsync(DateOnly.FromDateTime(DateTime.Today), token);
+        if (!IsDisposed && !token.IsCancellationRequested) RefreshUpdateNotice();
+    }
+
+    private void RefreshUpdateNotice()
+    {
+        updateNotice.Visible = settings.CheckUpdates && startupUpdate is not null;
+        updateNotice.Text = startupUpdate is null ? "" : L10n.Format("UpdateAvailable", startupUpdate.Tag);
+    }
+
     private void ApplySettings(AppSettings selected)
     {
         if (changingLanguage) return;
@@ -236,6 +265,7 @@ public sealed class MainForm : Form
             settings = selected; SquadSelection.ResultLimit = selected.RecommendationCount; UiNotes.Show = selected.ShowNotes;
             L10n.SetLanguage(selected.Language);
             L10n.Apply(this);
+            RefreshUpdateNotice();
             options.SetLanguage(UseItalian); mySquad.SetLanguage();
             state.Text = L10n.Translate(state.Text);
             UpdatePlayerIdentity();

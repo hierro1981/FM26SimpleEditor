@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace FM26SimpleEditor;
 
-public sealed record AppSettings(string Language = "it", int RecommendationCount = 10, bool ShowNotes = true)
+public sealed record AppSettings(string Language = "it", int RecommendationCount = 10, bool ShowNotes = true, bool CheckUpdates = true)
 {
     public const string FileName = "FM26SimpleEditor.config.json";
     public static bool HasLanguage(string directory)
@@ -27,7 +27,8 @@ public sealed record AppSettings(string Language = "it", int RecommendationCount
                 string language = root.TryGetProperty("language", out var value) && value.ValueKind == JsonValueKind.String && value.GetString() is "it" or "en" or "fr" or "de" ? value.GetString()! : "it";
                 int count = root.TryGetProperty("recommendationCount", out var number) && number.ValueKind == JsonValueKind.Number && number.TryGetInt32(out int n) && n is >= 1 and <= 100 ? n : 10;
                 bool notes = !root.TryGetProperty("showNotes", out var nvalue) || nvalue.ValueKind != JsonValueKind.False;
-                return new(language, count, notes);
+                bool updates = !root.TryGetProperty("checkUpdates", out var uvalue) || uvalue.ValueKind != JsonValueKind.False;
+                return new(language, count, notes, updates);
             }
         }
         catch (Exception exc) when (exc is IOException or UnauthorizedAccessException or JsonException) { }
@@ -44,7 +45,7 @@ public sealed record AppSettings(string Language = "it", int RecommendationCount
         string temporary = destination + "." + Guid.NewGuid().ToString("N") + ".tmp";
         try
         {
-            File.WriteAllText(temporary, JsonSerializer.Serialize(new { language, recommendationCount = settings.RecommendationCount, showNotes = settings.ShowNotes }, new JsonSerializerOptions { WriteIndented = true }));
+            File.WriteAllText(temporary, JsonSerializer.Serialize(new { language, recommendationCount = settings.RecommendationCount, showNotes = settings.ShowNotes, checkUpdates = settings.CheckUpdates }, new JsonSerializerOptions { WriteIndented = true }));
             File.Move(temporary, destination, overwrite: true);
         }
         finally { if (File.Exists(temporary)) File.Delete(temporary); }

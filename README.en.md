@@ -1,4 +1,4 @@
-# FM Simple Editor · v16.3.1
+# FM Simple Editor · v16.3.2
 
 [![Total downloads](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -10,7 +10,7 @@ A free **Football Manager 26 and 27** editor for Windows. Open a save, find a pl
 
 ## FM26 and FM27 compatibility
 
-FM Simple Editor **16.3.1** supports local saves from **Football Manager 26 and Football Manager 27**, including version **27.1.0**.
+FM Simple Editor **16.3.2** supports local saves from **Football Manager 26 and Football Manager 27**, including version **27.1.0**.
 
 Use **My squad → Finances** to view and edit the club’s current balance in the save’s base currency. Transfer and wage budgets are not editable. Edits are saved to a new file so you can keep the original.
 
@@ -88,6 +88,8 @@ Choose your language on first launch. French and German are partially translated
 
 Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch** and the number of position/tactic recommendations (10 by default). Your choice is remembered automatically. **About** shows the editor version and lets you check for updates with a link to the release.
 
+Use **Options → Check for updates at startup** to turn automatic checks on or off (on by default). The editor checks GitHub at startup at most once a day and shows a notice next to **About** when a newer version is available. You can still check manually in **About**.
+
 ## Compatibility and limitations
 
 - Use working local saves and keep an original copy. Support depends on the game version and save contents; unavailable features are explained in the interface.
@@ -96,6 +98,10 @@ Open **Options** to choose **Italiano**, **English**, **Français** or **Deutsch
 - Creating players, moving them between clubs, editing staff or tactics, and live editing are not available.
 
 ## Changes, newest first
+
+### v16.3.2
+
+- Added an optional daily update check at startup, with a release notice next to About.
 
 ### v16.3.1
 

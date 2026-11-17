@@ -89,6 +89,11 @@ internal static class LocalizationChecks
             try { AppSettings.Save(directory, "en"); } catch (Exception exc) when (exc is IOException or UnauthorizedAccessException) { denied = true; }
             check(denied && AppSettings.Load(directory).Language == "it" && Directory.GetFiles(directory, "*.tmp").Length == 0, "unwritable configuration preserves previous preference");
             File.SetAttributes(Path.Combine(directory, AppSettings.FileName), FileAttributes.Normal);
+            check(AppSettings.Load(directory).CheckUpdates, "automatic update checks default to enabled");
+            AppSettings.Save(directory, AppSettings.Load(directory) with { CheckUpdates = false });
+            AppSettings.Save(directory, "it");
+            check(!AppSettings.Load(directory).CheckUpdates, "opting out persists when other options change");
+            CheckDailyUpdates(check, directory);
             Ui(check, directory);
         }
         finally { L10n.SetLanguage("it"); Directory.Delete(directory, recursive: true); }
@@ -102,12 +107,14 @@ internal static class LocalizationChecks
         using (var about = new AboutForm(_ => Task.FromResult<ReleaseUpdate?>(new(new Version(99, 0, 0), "v99", new Uri(AppInfo.RepositoryUrl + "/releases/tag/v99")))))
         {
             about.Show(); Application.DoEvents();
+            All(about).OfType<Button>().Single(b => b.Text == L10n.Get("CheckUpdates")).PerformClick(); Application.DoEvents();
             check(All(about).OfType<Label>().Any(l => l.Text.Contains(AppInfo.Version.ToString(3))) && All(about).OfType<LinkLabel>().Any(l => l.Text == L10n.Get("OpenRelease") && l.Enabled), "about dialog shows assembly version and newer release link");
             about.Close();
         }
         using (var about = new AboutForm(_ => Task.FromException<ReleaseUpdate?>(new HttpRequestException("Offline"))))
         {
             about.Show(); Application.DoEvents();
+            All(about).OfType<Button>().Single(b => b.Text == L10n.Get("CheckUpdates")).PerformClick(); Application.DoEvents();
             check(All(about).OfType<Label>().Any(l => l.Text == L10n.Get("UpdateFailed")) && All(about).OfType<Button>().Any(b => b.Text == L10n.Get("CheckUpdates") && b.Enabled), "offline update check remains retryable without blocking the app");
             about.Close();
         }
@@ -116,6 +123,27 @@ internal static class LocalizationChecks
         check(L10n.Backend("Test.fm: Identita' non verificata univocamente (ID, nome e nascita)") == "Test.fm: Identity could not be uniquely verified (ID, name and birth date)", "history warning translation preserves filenames");
         L10n.SetLanguage("it");
     }
+    private static void CheckDailyUpdates(Action<bool, string> check, string directory)
+    {
+        var today = new DateOnly(2026, 11, 17);
+        var newer = new ReleaseUpdate(new Version(99, 0, 0), "v99", new Uri(AppInfo.RepositoryUrl + "/releases/tag/v99"));
+        var current = new ReleaseUpdate(AppInfo.Version, "v" + AppInfo.Version, new Uri(AppInfo.RepositoryUrl + "/releases/tag/v" + AppInfo.Version));
+        int requests = 0;
+        ReleaseUpdate? Query(DateOnly date, Func<Task<ReleaseUpdate?>> response) =>
+            new DailyUpdateCheck(directory, _ => { requests++; return response(); })
+                .CheckAsync(date, CancellationToken.None).GetAwaiter().GetResult();
+        check(Query(today, () => Task.FromResult<ReleaseUpdate?>(newer)) == newer && requests == 1, "first startup finds a newer release");
+        var offline = () => Task.FromException<ReleaseUpdate?>(new HttpRequestException("Offline"));
+        check(Query(today, offline) == newer && requests == 1, "same-day restarts reuse the release without a network request");
+        check(Query(today.AddDays(1), offline) == newer && requests == 2, "offline startup preserves the known update");
+        check(Query(today.AddDays(1), offline) == newer && requests == 2, "an offline attempt is not repeated on the same day");
+        check(Query(today.AddDays(2), () => Task.FromResult<ReleaseUpdate?>(current)) is null && requests == 3, "a current release clears the notice");
+        using var about = new AboutForm(_ => throw new InvalidOperationException("Opening About must not query"), knownUpdate: newer);
+        about.Show(); Application.DoEvents();
+        check(All(about).OfType<LinkLabel>().Any(l => l.Text == L10n.Get("OpenRelease") && l.Enabled), "About opens with the cached download link");
+        about.Close();
+    }
+
     private static void Ui(Action<bool, string> check, string directory)
     {
         L10n.SetLanguage("it");
@@ -131,6 +159,11 @@ internal static class LocalizationChecks
             var language = All(dialog).OfType<ComboBox>().Single(c => c.Name == "LanguageSelector");
             var count = All(dialog).OfType<NumericUpDown>().Single();
             check(language.SelectedIndex == 1 && count.Value == 23 && count.Minimum == 1 && count.Maximum == 100, "options dialog initializes both settings and bounds");
+            var updates = All(dialog).OfType<CheckBox>().Single(c => c.Name == "CheckUpdatesOnStartup");
+            check(updates.Checked, "automatic update checks are selected by default in Options");
+            updates.Checked = false;
+            check(!dialog.Settings.CheckUpdates, "the update checkbox controls the saved option");
+            updates.Checked = true;
             language.SelectedIndex = 0; count.Value = 10;
             check(dialog.Settings == new AppSettings("it", 10) && AppSettings.Load(directory).Language == "it", "editing options alone does not write configuration");
         }

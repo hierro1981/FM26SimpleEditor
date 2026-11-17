@@ -1,4 +1,4 @@
-# FM Simple Editor · v16.3.1
+# FM Simple Editor · v16.3.2
 
 [![Download totali](https://img.shields.io/github/downloads/hierro1981/FM26SimpleEditor/total.svg)](https://github.com/hierro1981/FM26SimpleEditor/releases)
 
@@ -10,7 +10,7 @@ Editor gratuito per **Football Manager 26 e 27** su Windows. Apri un salvataggio
 
 ## Compatibilità FM26 e FM27
 
-FM Simple Editor **16.3.1** supporta i salvataggi locali di **Football Manager 26 e Football Manager 27**, inclusa la versione **27.1.0**.
+FM Simple Editor **16.3.2** supporta i salvataggi locali di **Football Manager 26 e Football Manager 27**, inclusa la versione **27.1.0**.
 
 **La mia squadra → Finanze** permette di consultare e modificare il saldo corrente del club nella valuta base del salvataggio. I budget per trasferimenti e stipendi non sono modificabili. Le modifiche vengono salvate in un nuovo file, così puoi conservare l’originale.
 
@@ -88,6 +88,8 @@ Al primo avvio puoi scegliere la lingua. Francese e tedesco sono disponibili con
 
 Apri **Opzioni** per scegliere **Italiano**, **English**, **Français** o **Deutsch** e il numero di giocatori consigliati per posizione o tattica (10 predefiniti). La scelta viene ricordata automaticamente. La finestra **Informazioni** mostra la versione dell’editor e consente di verificare la presenza di aggiornamenti con un collegamento alla release.
 
+In **Opzioni → Verifica aggiornamenti all’avvio**, puoi attivare o disattivare il controllo automatico (attivo per impostazione predefinita). All’avvio l’editor controlla GitHub al massimo una volta al giorno; se trova una nuova versione, mostra un avviso accanto a **Informazioni**. Il controllo manuale resta disponibile in **Informazioni**.
+
 ## Compatibilità e limiti
 
 - Usa salvataggi locali funzionanti e conserva una copia originale. Il supporto dipende dalla versione e dal contenuto del salvataggio; una funzione non disponibile viene segnalata nell’interfaccia.
@@ -98,6 +100,10 @@ Apri **Opzioni** per scegliere **Italiano**, **English**, **Français** o **Deut
 ## Storico delle release
 
 Le voci seguenti descrivono le funzionalità al momento di ciascun rilascio; per il supporto attuale consulta la sezione di compatibilità iniziale.
+
+### v16.3.2
+
+- Aggiunto il controllo giornaliero degli aggiornamenti all’avvio, con un avviso accanto a Informazioni.
 
 ### v16.3.1
 

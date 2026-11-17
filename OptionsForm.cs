@@ -6,18 +6,20 @@ public sealed class OptionsForm : Form
     private readonly ComboBox language = new() { Name = "LanguageSelector", DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
     private readonly NumericUpDown count = new() { Name = "RecommendationCount", Minimum = 1, Maximum = 100, Dock = DockStyle.Fill };
     private readonly CheckBox notes = new() { Name = "ShowNotes", AutoSize = true };
-    public AppSettings Settings => new((language.SelectedItem as LanguageChoice)?.Id ?? "it", (int)count.Value, notes.Checked);
+    private readonly CheckBox updates = new() { Name = "CheckUpdatesOnStartup", AutoSize = true };
+    public AppSettings Settings => new((language.SelectedItem as LanguageChoice)?.Id ?? "it", (int)count.Value, notes.Checked, updates.Checked);
     public OptionsForm(AppSettings settings)
     {
         Text = L10n.Get("OptionsTitle"); Font = new Font("Segoe UI", 10);
         AutoScaleMode = AutoScaleMode.Dpi; FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterParent; MinimizeBox = MaximizeBox = false;
-        ClientSize = new Size(510, 225);
+        ClientSize = new Size(510, 255);
         language.Items.AddRange([new LanguageChoice("it", "Italiano"), new LanguageChoice("en", "English"), new LanguageChoice("fr", "Français"), new LanguageChoice("de", "Deutsch")]);
         language.SelectedIndex = settings.Language switch { "en" => 1, "fr" => 2, "de" => 3, _ => 0 };
         count.Value = Math.Clamp(settings.RecommendationCount, 1, 100);
         notes.Text = L10n.Get("OptionsShowNotes"); notes.Checked = settings.ShowNotes;
-        var root = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(14), ColumnCount = 2, RowCount = 5 };
+        updates.Text = L10n.Get("OptionsCheckUpdates"); updates.Checked = settings.CheckUpdates;
+        var root = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(14), ColumnCount = 2, RowCount = 6 };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65)); root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -29,10 +31,12 @@ public sealed class OptionsForm : Form
         root.Controls.Add(hint, 0, 2); root.SetColumnSpan(hint, 2);
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         root.Controls.Add(notes, 0, 3); root.SetColumnSpan(notes, 2);
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        root.Controls.Add(updates, 0, 4); root.SetColumnSpan(updates, 2);
         var buttons = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, FlowDirection = FlowDirection.RightToLeft };
         var cancel = new Button { Name = "CancelOptions", Text = L10n.Get("OptionsCancel"), AutoSize = true, DialogResult = DialogResult.Cancel };
         var save = new Button { Name = "SaveOptions", Text = L10n.Get("OptionsSave"), AutoSize = true, DialogResult = DialogResult.OK };
-        buttons.Controls.AddRange([cancel, save]); root.Controls.Add(buttons, 0, 4); root.SetColumnSpan(buttons, 2);
+        buttons.Controls.AddRange([cancel, save]); root.Controls.Add(buttons, 0, 5); root.SetColumnSpan(buttons, 2);
         AcceptButton = save; CancelButton = cancel; Controls.Add(root);
     }
 }

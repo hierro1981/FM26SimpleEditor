@@ -79,7 +79,7 @@ public sealed class MySquadPanel : UserControl
         var reload = new Button { Name = "MySquadReload", Text = L10n.Get("MySquadReload"), AutoSize = true };
         reload.Click += (_, _) => ReloadRequested?.Invoke(); selection.Controls.Add(reload, 2, 0);
         var squadFilters = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true, Margin = Padding.Empty };
-        squadFilters.Controls.AddRange([scope, includeLoans, balance, balanceValue, balanceSave]);
+        squadFilters.Controls.AddRange([scope, includeLoans]);
         balanceSave.Click += (_, _) => { if (SelectedClub is { Balance: long old } c) BalanceSaveRequested?.Invoke(c.ClubUid, old, (long)balanceValue.Value); };
         root.Controls.Add(selection, 0, 0); root.Controls.Add(squadFilters, 0, 1); root.Controls.Add(status, 0, 2);
         var tabs = views;
@@ -103,7 +103,10 @@ public sealed class MySquadPanel : UserControl
             planning.ClearForClub(SelectedClub?.ClubUid); EnsureStaffLoaded(); EnsureRecruitmentLoaded();
         };
         tabs.SelectedIndexChanged += (_, _) => { scope.Enabled = includeLoans.Enabled = data.Status == "ready" && data.Clubs.Count > 0 && tabs.SelectedTab != staffTab && tabs.SelectedTab != recruitmentTab && tabs.SelectedTab != planningTab; EnsureStaffLoaded(); EnsureTacticsLoaded(); EnsureRecruitmentLoaded(); };
-        tabs.TabPages.AddRange([listTab, roleTab, staffTab, tacticsTab, recruitmentTab, planningTab]); root.Controls.Add(tabs, 0, 3);
+        var financesTab = new TabPage(L10n.Get("ClubFinancesTab"));
+        var financeTools = new FlowLayoutPanel { Dock = DockStyle.Top, AutoSize = true, WrapContents = true, Padding = new Padding(12) };
+        financeTools.Controls.AddRange([balance, balanceValue, balanceSave]); financesTab.Controls.Add(financeTools);
+        tabs.TabPages.AddRange([listTab, roleTab, staffTab, tacticsTab, recruitmentTab, planningTab, financesTab]); root.Controls.Add(tabs, 0, 3);
         var list = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3, Padding = new Padding(6) };
         list.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         list.RowStyles.Add(new RowStyle(SizeType.AutoSize)); list.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); list.RowStyles.Add(new RowStyle(SizeType.AutoSize));

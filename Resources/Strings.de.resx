@@ -1041,4 +1041,7 @@
   <data name="FM27FormatNote" xml:space="preserve">
     <value>Ungeprüfter FM27-Build {0}: Speichern mit Integritätsprüfungen aktiviert. Einige Zusatzfunktionen sind möglicherweise nicht verfügbar.</value>
   </data>
+  <data name="ClubFinancesTab" xml:space="preserve">
+    <value>Finanzen</value>
+  </data>
 </root>

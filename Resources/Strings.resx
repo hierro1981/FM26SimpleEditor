@@ -2733,4 +2733,7 @@ Clic su una colonna per ordinarla da sola; Ctrl/Shift+clic aggiunge un criterio 
   <data name="SaveClubBalance" xml:space="preserve">
     <value>Salva saldo in una copia…</value>
   </data>
+  <data name="ClubFinancesTab" xml:space="preserve">
+    <value>Finanze</value>
+  </data>
 </root>

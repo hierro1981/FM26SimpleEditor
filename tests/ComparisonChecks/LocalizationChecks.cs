@@ -15,6 +15,7 @@ internal static class LocalizationChecks
         {
             host.Controls.Add(squad); host.Show(); Application.DoEvents();
             squad.SetData(new MySquadResult { Status = "ready", Clubs = [new ManagedSquad { ClubUid = 2229, ClubName = "Test", Balance = 112036341 }] });
+            All(squad).OfType<TabControl>().First().SelectedIndex = 6; Application.DoEvents();
             var input = All(squad).OfType<NumericUpDown>().Single(n => n.Maximum == int.MaxValue);
             var button = All(squad).OfType<Button>().Single(b => b.Name == "SaveClubBalance");
             check(input.Enabled && input.Value == 112036341 && button.Enabled, "current club balance initializes editable input");

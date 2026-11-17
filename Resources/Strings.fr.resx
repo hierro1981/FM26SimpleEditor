@@ -1041,4 +1041,7 @@
   <data name="FM27FormatNote" xml:space="preserve">
     <value>Version FM27 non vérifiée {0} : enregistrement activé avec contrôles d’intégrité. Certaines fonctions peuvent être indisponibles.</value>
   </data>
+  <data name="ClubFinancesTab" xml:space="preserve">
+    <value>Finances</value>
+  </data>
 </root>

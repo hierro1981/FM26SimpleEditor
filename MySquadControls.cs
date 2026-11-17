@@ -158,7 +158,7 @@ public sealed class MySquadPanel : UserControl
         var criteria = new Button { Name = "MySquadCriteria", Text = L10n.Get("TacticalCriteria"), AutoSize = true };
         criteria.Click += (_, _) => { using var dialog = new TacticalCriteriaForm(SelectedTargets); dialog.ShowDialog(this); };
         rankingActions.Controls.AddRange([openRanked, criteria]); right.Controls.Add(rankingActions, 0, 3);
-        roleLayout.Controls.Add(field, 0, 0); roleLayout.Controls.Add(right, 1, 0); roleTab.Controls.Add(roleLayout);
+        roleLayout.Controls.Add(field, 0, 0); roleLayout.Controls.Add(right, 1, 0); roleTab.Controls.Add(new ContentViewport(roleLayout, new Size(680, 500)));
         string[] rankHeaders = ["#", L10n.Get("Text_f537c6bd038e"), L10n.Get("Text_045cb480645d"), L10n.Get("MySquadScore"), L10n.Get("MySquadStars"), L10n.Get("MySquadFamiliarity"), "CA", "PA"];
         int[] rankWidths = [45, 180, 135, 100, 130, 165, 60, 60];
         for (int i = 0; i < rankHeaders.Length; i++) ranking.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = rankHeaders[i], Width = rankWidths[i], SortMode = DataGridViewColumnSortMode.NotSortable, DefaultCellStyle = new DataGridViewCellStyle { Alignment = i is 0 or >= 3 ? DataGridViewContentAlignment.MiddleRight : DataGridViewContentAlignment.MiddleLeft } });
